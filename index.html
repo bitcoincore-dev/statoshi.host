@@ -41,7 +41,7 @@
 <p>2) Install <a href="https://github.com/etsy/statsd">StatsD</a>.</p>
 
 <pre><code>Create a config file copied from exampleConfig.js
-Start the daemon: **node stats.js /path/to/your/config.js**
+Start the daemon: node stats.js /path/to/your/config.js
 </code></pre>
 
 <p>3) <a href="https://httpd.apache.org/download.cgi">Download</a> and install Apache HTTPD Server. If you’re running Linux, it’s probably easier to install via your package manager.</p>
@@ -59,12 +59,10 @@ Start the daemon: **node stats.js /path/to/your/config.js**
     Checking connectivity… done
 </code></pre>
 
-<p>6) Compile the project. This can be a bit tricky if it's your first time due to the dependencies; you'll likely want to read the documentation:</p>
-
-<pre><code>    Linux build notes are [here](https://github.com/bitcoin/bitcoin/blob/master/doc/build-unix.md)
-    OSX build notes are [here](https://github.com/bitcoin/bitcoin/blob/master/doc/build-osx.md)
-    Windows build notes are [here](https://github.com/bitcoin/bitcoin/blob/master/doc/build-msw.md)
-</code></pre>
+<p>6) Compile the project. This can be a bit tricky if it's your first time due to the dependencies; you'll likely want to read the documentation:
+    Linux build notes are <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-unix.md">here</a>
+    OSX build notes are <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-osx.md">here</a>
+    Windows build notes are <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-msw.md">here</a></p>
 
 <p>Once you think you have all of the dependencies installed, build the project. For Linux, the commands are:</p>
 
@@ -76,7 +74,7 @@ Start the daemon: **node stats.js /path/to/your/config.js**
 
 <p>It may take 20+ minutes to build, depending upon the speed of your computer. If you’re missing a dependency, you should receive an error noting what is missing.</p>
 
-<p>Note that the Statoshi project assumes that you are running StatsD on the same machine as your Bitcoin Node. If you wish to run StatsD on a different machine or non-default port, you’ll need to edit the default configuration on line 16 of /statoshi/src/statsd_client.h before building the project.</p>
+<p>Note that the Statoshi project assumes that you are running StatsD on the same machine as your Bitcoin Node. If you wish to run StatsD on a different machine or non-default port, you’ll need to edit the default configuration on line 16 of <strong>/statoshi/src/statsd_client.h</strong> before building the project.</p>
 
 <p>7) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:</p>
 
