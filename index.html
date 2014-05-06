@@ -38,12 +38,15 @@
 
 <p>Install node.js <a href="http://nodejs.org/download/">http://nodejs.org/download/</a></p>
 
-<p>Download / clone the statsd project <a href="https://github.com/etsy/statsd">https://github.com/etsy/statsd</a>
-Create a config file copied from exampleConfig.js
-Start the Daemon: node stats.js /path/to/your/config.js</p>
+<p>Download / clone the statsd project from <a href="https://github.com/etsy/statsd">https://github.com/etsy/statsd</a></p>
 
-<p>Download and install Apache HTTPD Server. <a href="https://httpd.apache.org/download.cgi">https://httpd.apache.org/download.cgi</a>
-If you’re running Linux, it’s probably easier to install via your package manager.</p>
+<p>Create a config file copied from exampleConfig.js</p>
+
+<p>Start the Daemon: <strong>node stats.js /path/to/your/config.js</strong></p>
+
+<p>Download and install Apache HTTPD Server from <a href="https://httpd.apache.org/download.cgi">https://httpd.apache.org/download.cgi</a></p>
+
+<p>If you’re running Linux, it’s probably easier to install via your package manager.</p>
 
 <p>Now you’ll need to install software to made use of the stats collected by statsd. I recommend Graphite: <a href="http://graphite.wikidot.com/installation">http://graphite.wikidot.com/installation</a></p>
 
@@ -58,7 +61,15 @@ Resolving deltas: 100% (25766/25766), done.
 Checking connectivity… done
 </code></pre>
 
-<p>Now you need to make sure you have the dependencies required to build Bitcoin Core. Run the appropriate commands for your Linux distribution that are listed here. These instructions are most helpful if you are running Ubuntu or Debian; if you run a different distributions of Linux then you’ll need to navigate your package manager on your own. Once you think you have all of the dependencies installed, build the project just to make sure.</p>
+<p>Now you need to make sure you have the dependencies required to build Bitcoin Core. </p>
+
+<p>Linux build notes: are <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-unix.md">listed here</a></p>
+
+<p>OSX build notes: are <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-osx.md">listed here</a></p>
+
+<p>Windows build notes: are <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-msw.md">listed here</a></p>
+
+<p>Once you think you have all of the dependencies installed, build the project.</p>
 
 <pre><code>jameson@lopp:~/$ cd /path/to/statoshi/
 jameson@lopp:~/workspace/bitcoin/$ ./autogen.sh
@@ -68,7 +79,7 @@ jameson@lopp:~/workspace/bitcoin/$ make
 
 <p>It may take 20+ minutes to build, depending upon your computer’s specs. If you’re missing a dependency, you should receive an error noting what is missing.</p>
 
-<p>Note that the Statoshi project assumes that you are running StatsD on the same machine as the Bitcoin Node. If you wish to run StatsD on a different machine or non-default port, you’ll need to edit the default configuration on line 16 of /src/statsd_client.h before building the project.</p>
+<p>Note that the Statoshi project assumes that you are running StatsD on the same machine as the Bitcoin Node. If you wish to run StatsD on a different machine or non-default port, you’ll need to edit the default configuration on line 16 of /statoshi/src/statsd_client.h before building the project.</p>
 
 <p>Start your Statoshi node (either the GUI or the command line daemon)</p>
 
