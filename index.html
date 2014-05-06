@@ -63,18 +63,18 @@ Checking connectivity… done
 
 <p>Now you need to make sure you have the dependencies required to build Bitcoin Core. </p>
 
-<p>Linux build notes: are <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-unix.md">listed here</a></p>
+<p>Linux build notes can be found <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-unix.md">here</a></p>
 
-<p>OSX build notes: are <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-osx.md">listed here</a></p>
+<p>OSX build notes can be found <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-osx.md">here</a></p>
 
-<p>Windows build notes: are <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-msw.md">listed here</a></p>
+<p>Windows build notes can be found <a href="https://github.com/bitcoin/bitcoin/blob/master/doc/build-msw.md">here</a></p>
 
 <p>Once you think you have all of the dependencies installed, build the project.</p>
 
 <pre><code>jameson@lopp:~/$ cd /path/to/statoshi/
-jameson@lopp:~/workspace/bitcoin/$ ./autogen.sh
-jameson@lopp:~/workspace/bitcoin/$ ./configure
-jameson@lopp:~/workspace/bitcoin/$ make
+jameson@lopp:~/workspace/statoshi/$ ./autogen.sh
+jameson@lopp:~/workspace/statoshi/$ ./configure
+jameson@lopp:~/workspace/statoshi/$ make
 </code></pre>
 
 <p>It may take 20+ minutes to build, depending upon your computer’s specs. If you’re missing a dependency, you should receive an error noting what is missing.</p>
@@ -83,8 +83,8 @@ jameson@lopp:~/workspace/bitcoin/$ make
 
 <p>Start your Statoshi node (either the GUI or the command line daemon)</p>
 
-<pre><code>/path/to/bitcoin-metrics/src/qt/bitcoin-qt &amp;
-/path/to/bitcoin-metrics/src/bitcoind &amp;
+<pre><code>/path/to/statoshi/src/qt/bitcoin-qt &amp;
+/path/to/statoshi/src/bitcoind &amp;
 </code></pre>
 
 <p>Now you can check out the stats as they roll in to Graphite; you should see graphs begin to be populated within 30 seconds!</p>
