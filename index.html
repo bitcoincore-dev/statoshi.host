@@ -46,7 +46,18 @@ Start the daemon: node stats.js /path/to/your/config.js
 
 <p>3) <a href="https://httpd.apache.org/download.cgi">Download</a> and install Apache HTTPD Server. If you’re running Linux, it’s probably easier to install via your package manager.</p>
 
-<p>4) Install software to visualize the stats collected by StatsD. We recommend <a href="http://graphite.wikidot.com/installation">Graphite</a>.</p>
+<p>4) Install software to visualize the stats collected by StatsD. We recommend <a href="http://graphite.wikidot.com/installation">Graphite</a>.
+For Graphite, once you have it installed you’ll want to configure how it stores the data from StatsD, in the graphite/conf/storage-schemas.conf:</p>
+
+<pre><code>[carbon]
+pattern = ^carbon\.
+retentions = 60:90d
+
+[stats]
+priority = 110
+pattern = ^stats\..*
+retentions = 10:2160,60:10080,600:262974
+</code></pre>
 
 <p>5) Download (or git clone) the Statoshi fork:</p>
 
