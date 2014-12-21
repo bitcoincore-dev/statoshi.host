@@ -63,13 +63,14 @@ pattern = .*
 retentions = 10:2160,60:10080,600:262974
 </code></pre>
 
-<p>To prevent loss of sparse data you'll also need to modify Graphite's graphite/conf/storage-aggregation.conf:
-    [min]
-    pattern = .min$
-    xFilesFactor = 0.0
-    aggregationMethod = min</p>
+<p>To prevent loss of sparse data you'll also need to modify Graphite's graphite/conf/storage-aggregation.conf:</p>
 
-<pre><code>[max]
+<pre><code>[min]
+pattern = \.min$
+xFilesFactor = 0.0
+aggregationMethod = min
+
+[max]
 pattern = \.max$
 xFilesFactor = 0.0
 aggregationMethod = max
