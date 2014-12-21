@@ -51,12 +51,38 @@ For Graphite, once you have it installed you’ll want to configure how it store
 
 <pre><code>[carbon]
 pattern = ^carbon\.
-retentions = 60:90d
+retentions = 10:2160,60:10080,600:262974
 
 [stats]
 priority = 110
 pattern = ^stats\..*
 retentions = 10:2160,60:10080,600:262974
+
+[default]
+pattern = .*
+retentions = 10:2160,60:10080,600:262974
+</code></pre>
+
+<p>To prevent loss of sparse data you'll also need to modify Graphite's graphite/conf/storage-aggregation.conf:
+    [min]
+    pattern = .min$
+    xFilesFactor = 0.0
+    aggregationMethod = min</p>
+
+<pre><code>[max]
+pattern = \.max$
+xFilesFactor = 0.0
+aggregationMethod = max
+
+[sum]
+pattern = \.count$
+xFilesFactor = 0.0
+aggregationMethod = sum
+
+[default_average]
+pattern = .*
+xFilesFactor = 0.0
+aggregationMethod = average
 </code></pre>
 
 <p>5) Download (or git clone) the Statoshi fork:</p>
