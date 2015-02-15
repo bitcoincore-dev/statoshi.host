@@ -120,7 +120,14 @@ aggregationMethod = average
 
 <p>Note that the Statoshi project assumes that you are running StatsD on the same machine as your Bitcoin Node. If you wish to run StatsD on a different machine or non-default port, you’ll need to edit the default configuration on line 16 of <strong>/statoshi/src/statsd_client.h</strong> before building the project.</p>
 
-<p>7) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:</p>
+<p>7) Set some values in your bitcoin.conf file; the 'gettxoutsetinfo' command ensures that UTXO metrics get populated after each new block arrives</p>
+
+<pre><code>rpcuser=unguessableUser3256
+rpcpassword=someRandomPasswordWithEntropyHere
+blocknotify=sleep 30 &amp;&amp; /path/to/statoshi/src/bitcoin-cli gettxoutsetinfo
+</code></pre>
+
+<p>8) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:</p>
 
 <pre><code>    GUI: /path/to/statoshi/src/qt/bitcoin-qt &amp;
     Daemon: /path/to/statoshi/src/bitcoind &amp;
