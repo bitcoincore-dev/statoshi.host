@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -31,22 +31,35 @@
         <hr>
 
         <section id="main_content">
-          <p><img src="http://lopp.net/images/statoshi.png" alt=""></p>
+          <p><img src="http://lopp.net/images/statoshi.png" alt="Statoshi"></p>
 
 <h1>
 <a id="installation-and-dependencies" class="anchor" href="#installation-and-dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation and Dependencies</h1>
 
+<p><em>NOTE: This guide has only been tested on Ubuntu; if you run into issues installing, please contact <a href="https://github.com/jlopp" class="user-mention">@jlopp</a></em></p>
+
 <p>1) Install <a href="http://nodejs.org/download/">node.js</a></p>
 
-<p>2) Install <a href="https://github.com/etsy/statsd">StatsD</a>.</p>
+<p>2) Install <a href="http://blog.nodejitsu.com/keep-a-nodejs-server-up-with-forever/">Forever</a>: sudo npm install forever</p>
 
-<pre><code>Create a config file copied from exampleConfig.js
-Start the daemon: node stats.js /path/to/your/config.js
+<p>3) Install <a href="https://github.com/etsy/statsd">StatsD</a>.</p>
+
+<p>Create a config.js file copied from /opt/statsd/exampleConfig.js; at the minimum it should contain:</p>
+
+<pre><code>    {
+        graphitePort: 2003
+        , graphiteHost: "127.0.0.1"
+        , port: 8125
+        , backends: [ "./backends/graphite" ]
+    }
 </code></pre>
 
-<p>3) <a href="https://httpd.apache.org/download.cgi">Download</a> and install Apache HTTPD Server. If you’re running Linux, it’s probably easier to install via your package manager.</p>
+<p>Start statsd:
+    forever start /usr/bin/nodejs /opt/statsd/stats.js /opt/statsd/config.js</p>
 
-<p>4) Install software to visualize the stats collected by StatsD. We recommend <a href="http://graphite.wikidot.com/installation">Graphite</a>. Make sure you install a version newer than 0.9.12 for <a href="http://grafana.org/docs/performance/">maximum Grafana performance.</a>
+<p>4) <a href="https://httpd.apache.org/download.cgi">Download</a> and install Apache HTTPD Server. If you’re running Linux, it’s probably easier to install via your package manager.</p>
+
+<p>5) Install software to visualize the stats collected by StatsD. We recommend <a href="http://graphite.wikidot.com/installation">Graphite</a>. Make sure you install a version newer than 0.9.12 for <a href="http://grafana.org/docs/performance/">maximum Grafana performance.</a>
 For Graphite, once you have it installed you’ll want to configure how it stores the data from StatsD, in the graphite/conf/storage-schemas.conf:</p>
 
 <pre><code>[carbon]
@@ -86,7 +99,7 @@ xFilesFactor = 0.0
 aggregationMethod = average
 </code></pre>
 
-<p>5) Download (or git clone) the Statoshi fork:</p>
+<p>6) Download (or git clone) the Statoshi fork:</p>
 
 <pre><code>    jameson@lopp:~/workspace/$ git clone https://github.com/jlopp/statoshi.git
     Cloning into ‘statoshi’…
@@ -97,7 +110,7 @@ aggregationMethod = average
     Checking connectivity… done
 </code></pre>
 
-<p>6) Compile the project. This can be a bit tricky if it's your first time due to the dependencies; you'll likely want to read the documentation:</p>
+<p>7) Compile the project. This can be a bit tricky if it's your first time due to the dependencies; you'll likely want to read the documentation:</p>
 
 <ul>
 <li>Linux build notes are <a href="https://github.com/jlopp/statoshi/blob/master/doc/build-unix.md">here</a>
@@ -118,27 +131,51 @@ aggregationMethod = average
 
 <p>It may take 20+ minutes to build, depending upon the speed of your computer. If you’re missing a dependency, you should receive an error noting what is missing.</p>
 
-<p>Note that the Statoshi project assumes that you are running StatsD on the same machine as your Bitcoin Node. If you wish to run StatsD on a different machine or non-default port, you’ll need to edit the default configuration on line 16 of <strong>/statoshi/src/statsd_client.h</strong> before building the project.</p>
+<p>Note that the Statoshi project assumes that you are running StatsD on the same machine as your Bitcoin node. If you wish to run StatsD on a different machine or non-default port, you’ll need to edit the default configuration on line 16 of <strong>/statoshi/src/statsd_client.h</strong> before building the project.</p>
 
-<p>7) Set some values in your bitcoin.conf file; the 'gettxoutsetinfo' command ensures that UTXO metrics get populated after each new block arrives</p>
+<p>8) Set some values in your bitcoin.conf file; the 'gettxoutsetinfo' command ensures that UTXO metrics get populated after each new block arrives. Note that you probably don't want to set the blocknotify command until your node is synced to the chain tip, otherwise it will slow down the node's syncing.</p>
 
 <pre><code>rpcuser=unguessableUser3256
 rpcpassword=someRandomPasswordWithEntropyHere
 blocknotify=sleep 30 &amp;&amp; /path/to/statoshi/src/bitcoin-cli gettxoutsetinfo
 </code></pre>
 
-<p>8) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:</p>
+<p>9) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:</p>
 
 <pre><code>    GUI: /path/to/statoshi/src/qt/bitcoin-qt &amp;
     Daemon: /path/to/statoshi/src/bitcoind &amp;
 </code></pre>
 
 <p>Now you can check out the stats as they roll in to Graphite; you should see graphs begin to be populated within 30 seconds!</p>
+
+<p>10) If you wish to duplicate the UI on <a href="http://statoshi.info">statoshi.info</a>, you'll also need to install Grafana. You can find <a href="http://docs.grafana.org/installation/">installation instructions here</a>.</p>
+
+<p>At a minimum, you'll want /opt/grafana/config.js to contain:</p>
+
+<pre><code>      datasources: {
+        graphite: {
+          type: 'graphite',
+          url: "http://yourserver:8080",
+        },
+      },
+</code></pre>
+
+<p>The default dashboard file is located at /opt/grafana/dashboard/file/default.json - you can load the main dashboard from <a href="http://statoshi.info">statoshi.info</a> by clicking on the 'save' icon in the upper right of statoshi.info and selecting "Dashboard JSON." Overwrite the contents of default.json with this payload.</p>
+
+<p>Optionally, you may also wish to <a href="https://www.elastic.co/downloads/elasticsearch">install Elasticsearch</a> in order to support saving and loading custom dashboards. In this case you should then add it to the "datasources" in config.js:</p>
+
+<pre><code>        elasticsearch: {
+          type: 'elasticsearch',
+          url: "http://yourserver:9200",
+          index: 'grafana-dash',
+          grafanaDB: true,
+        }
+</code></pre>
         </section>
 
         <footer>
           Statoshi is maintained by <a href="https://github.com/jlopp">jlopp</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
         
