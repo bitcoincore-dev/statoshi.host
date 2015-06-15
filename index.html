@@ -151,27 +151,25 @@ blocknotify=sleep 30 &amp;&amp; /path/to/statoshi/src/bitcoin-cli gettxoutsetinf
 
 <p>10) If you wish to duplicate the UI on <a href="http://statoshi.info">statoshi.info</a>, you'll also need to install Grafana. You can find <a href="http://docs.grafana.org/installation/">installation instructions here</a>.</p>
 
-<p>At a minimum, you'll want /opt/grafana/config.js to contain:</p>
+<p>Once you install Grafana, you can load the dashboards from <a href="http://statoshi.info">statoshi.info</a> by clicking on the 'settings' icon in the upper left of statoshi.info and selecting "View JSON." Then import the JSON into your own Statoshi instance.</p>
 
-<pre><code>      datasources: {
-        graphite: {
-          type: 'graphite',
-          url: "http://yourserver:8080",
-        },
-      },
+<p>Since Graphite runs on port 3000, you can have Apache proxy requests to it by</p>
+
+<pre><code>    jameson@lopp:~/$ sudo a2enmod proxy 
+    jameson@lopp:~/$ sudo a2enmod proxy_http
 </code></pre>
 
-<p>The default dashboard file is located at /opt/grafana/dashboard/file/default.json - you can load the main dashboard from <a href="http://statoshi.info">statoshi.info</a> by clicking on the 'save' icon in the upper right of statoshi.info and selecting "Dashboard JSON." Overwrite the contents of default.json with this payload.</p>
+<p>Add to apache2.conf:</p>
 
-<p>Optionally, you may also wish to <a href="https://www.elastic.co/downloads/elasticsearch">install Elasticsearch</a> in order to support saving and loading custom dashboards. In this case you should then add it to the "datasources" in config.js:</p>
-
-<pre><code>        elasticsearch: {
-          type: 'elasticsearch',
-          url: "http://yourserver:9200",
-          index: 'grafana-dash',
-          grafanaDB: true,
-        }
+<pre><code>    &lt;VirtualHost *:80&gt;
+    ProxyPreserveHost On
+    ProxyRequests Off
+    ProxyPass / http://localhost:3000/
+    ProxyPassReverse / http://localhost:3000/
+    &lt;/VirtualHost&gt;
 </code></pre>
+
+<p>Restart Apache: sudo service apache2 restart</p>
         </section>
 
         <footer>
