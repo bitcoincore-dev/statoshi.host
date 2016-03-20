@@ -180,7 +180,8 @@ blocknotify=/path/to/bitcoin-cli getmininginfo &amp;&amp; sleep 30 &amp;&amp; /p
 
 <p>Restart Apache: sudo service apache2 restart</p>
 
-<p>Once you install Grafana, you can load the dashboards from <a href="http://statoshi.info">statoshi.info</a> by clicking on the 'settings' icon in the upper left of statoshi.info and selecting "View JSON." Then import the JSON into your own Statoshi instance.</p>
+<p>Once you install Grafana, you can load the dashboards from <a href="http://statoshi.info">statoshi.info</a> by clicking on the 'settings' icon in the upper left of statoshi.info and selecting "View JSON." Then import the JSON into your own Statoshi instance. The home dashboard is a special case - it can only be modified by updating the json file located at
+/usr/share/grafana/public/dashboards/home.json</p>
         </section>
 
         <footer>
