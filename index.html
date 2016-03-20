@@ -34,7 +34,7 @@
           <p><img src="http://lopp.net/images/statoshi.png" alt="Statoshi"></p>
 
 <h1>
-<a id="installation-and-dependencies" class="anchor" href="#installation-and-dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation and Dependencies</h1>
+<a id="installation-and-dependencies" class="anchor" href="#installation-and-dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation and Dependencies</h1>
 
 <p><em>NOTE: This guide has only been tested on Ubuntu; if you run into issues installing, please contact <a href="https://github.com/jlopp" class="user-mention">@jlopp</a></em></p>
 
@@ -145,11 +145,11 @@ DEFAULT_CACHE_DURATION = 600
 
 <p>Note that the Statoshi project assumes that you are running StatsD on the same machine as your Bitcoin node. If you wish to run StatsD on a different machine or non-default port, you’ll need to edit the default configuration on line 16 of <strong>/statoshi/src/statsd_client.h</strong> before building the project.</p>
 
-<p>8) Set some values in your bitcoin.conf file; the 'gettxoutsetinfo' command ensures that UTXO metrics get populated after each new block arrives. Note that you probably don't want to set the blocknotify command until your node is synced to the chain tip, otherwise it will slow down the node's syncing.</p>
+<p>8) Set some values in your bitcoin.conf file; the 'gettxoutsetinfo' command ensures that UTXO metrics get populated after each new block arrives. The same goes for the 'getmininginfo' command. Note that you probably don't want to set the blocknotify command until your node is synced to the chain tip, otherwise it will slow down the node's initial sync.</p>
 
 <pre><code>rpcuser=unguessableUser3256
 rpcpassword=someRandomPasswordWithEntropyHere
-blocknotify=sleep 30 &amp;&amp; /path/to/statoshi/src/bitcoin-cli gettxoutsetinfo
+blocknotify=bitcoin-cli getmininginfo &amp;&amp; sleep 30 &amp;&amp; /path/to/statoshi/src/bitcoin-cli gettxoutsetinfo
 </code></pre>
 
 <p>9) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:</p>
