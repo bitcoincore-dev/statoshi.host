@@ -149,7 +149,7 @@ DEFAULT_CACHE_DURATION = 600
 
 <pre><code>rpcuser=unguessableUser3256
 rpcpassword=someRandomPasswordWithEntropyHere
-blocknotify=bitcoin-cli getmininginfo &amp;&amp; sleep 30 &amp;&amp; /path/to/statoshi/src/bitcoin-cli gettxoutsetinfo
+blocknotify=/path/to/bitcoin-cli getmininginfo &amp;&amp; sleep 30 &amp;&amp; /path/to/bitcoin-cli gettxoutsetinfo
 </code></pre>
 
 <p>9) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:</p>
