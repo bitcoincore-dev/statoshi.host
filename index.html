@@ -157,7 +157,11 @@ rpcpassword=someRandomPasswordWithEntropyHere
 blocknotify=/path/to/bitcoin-cli getmininginfo &amp;&amp; sleep 30 &amp;&amp; /path/to/bitcoin-cli gettxoutsetinfo
 </code></pre>
 
-<p>9) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:</p>
+<p>9) If on Linux, open /etc/crontab and add a line to ensure that the kernel doesn't kill bitcoind if the system runs low on RAM
+
+<pre><code>0 * * * * root pgrep -f "bitcoind" | while read PID; do echo -17 > /proc/$PID/oom_adj; done</code></pre>
+
+<p>10) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:</p>
 
 <pre><code>    GUI: /path/to/statoshi/src/qt/bitcoin-qt &amp;
     Daemon: /path/to/statoshi/src/bitcoind -daemon
@@ -165,7 +169,7 @@ blocknotify=/path/to/bitcoin-cli getmininginfo &amp;&amp; sleep 30 &amp;&amp; /p
 
 <p>Now you can check out the stats as they roll in to Graphite; you should see graphs begin to be populated within 30 seconds!</p>
 
-<p>10) If you wish to duplicate the UI on <a href="http://statoshi.info">statoshi.info</a>, you'll also need to install Grafana. You can find <a href="http://docs.grafana.org/installation/">installation instructions here</a>.</p>
+<p>11) If you wish to duplicate the UI on <a href="http://statoshi.info">statoshi.info</a>, you'll also need to install Grafana. You can find <a href="http://docs.grafana.org/installation/">installation instructions here</a>.</p>
 
 <p>Since Graphite runs on port 3000, you can have Apache proxy requests to it by:</p>
 
