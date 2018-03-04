@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2016 The Bitcoin Core developers
+# Copyright (c) 2014-2017 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test descendant package tracking code."""
@@ -25,7 +25,7 @@ class MempoolPackagesTest(BitcoinTestFramework):
         for i in range(num_outputs):
             outputs[node.getnewaddress()] = send_value
         rawtx = node.createrawtransaction(inputs, outputs)
-        signedtx = node.signrawtransaction(rawtx)
+        signedtx = node.signrawtransactionwithwallet(rawtx)
         txid = node.sendrawtransaction(signedtx['hex'])
         fulltx = node.getrawtransaction(txid, 1)
         assert(len(fulltx['vout']) == num_outputs) # make sure we didn't generate a change output
@@ -115,7 +115,7 @@ class MempoolPackagesTest(BitcoinTestFramework):
             assert_equal(mempool[x]['descendantfees'], descendant_fees * COIN + 1000)
 
         # Adding one more transaction on to the chain should fail.
-        assert_raises_jsonrpc(-26, "too-long-mempool-chain", self.chain_transaction, self.nodes[0], txid, vout, value, fee, 1)
+        assert_raises_rpc_error(-26, "too-long-mempool-chain", self.chain_transaction, self.nodes[0], txid, vout, value, fee, 1)
 
         # Check that prioritising a tx before it's added to the mempool works
         # First clear the mempool by mining a block.
@@ -167,7 +167,7 @@ class MempoolPackagesTest(BitcoinTestFramework):
 
         # Sending one more chained transaction will fail
         utxo = transaction_package.pop(0)
-        assert_raises_jsonrpc(-26, "too-long-mempool-chain", self.chain_transaction, self.nodes[0], utxo['txid'], utxo['vout'], utxo['amount'], fee, 10)
+        assert_raises_rpc_error(-26, "too-long-mempool-chain", self.chain_transaction, self.nodes[0], utxo['txid'], utxo['vout'], utxo['amount'], fee, 10)
 
         # TODO: check that node1's mempool is as expected
 
@@ -205,7 +205,7 @@ class MempoolPackagesTest(BitcoinTestFramework):
         for i in range(2):
             outputs[self.nodes[0].getnewaddress()] = send_value
         rawtx = self.nodes[0].createrawtransaction(inputs, outputs)
-        signedtx = self.nodes[0].signrawtransaction(rawtx)
+        signedtx = self.nodes[0].signrawtransactionwithwallet(rawtx)
         txid = self.nodes[0].sendrawtransaction(signedtx['hex'])
         tx0_id = txid
         value = send_value
@@ -229,7 +229,7 @@ class MempoolPackagesTest(BitcoinTestFramework):
         inputs = [ {'txid' : tx1_id, 'vout': 0}, {'txid' : txid, 'vout': 0} ]
         outputs = { self.nodes[0].getnewaddress() : send_value + value - 4*fee }
         rawtx = self.nodes[0].createrawtransaction(inputs, outputs)
-        signedtx = self.nodes[0].signrawtransaction(rawtx)
+        signedtx = self.nodes[0].signrawtransactionwithwallet(rawtx)
         txid = self.nodes[0].sendrawtransaction(signedtx['hex'])
         sync_mempools(self.nodes)
         

@@ -1,15 +1,15 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2009-2017 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_WALLET_WALLETDB_H
 #define BITCOIN_WALLET_WALLETDB_H
 
-#include "amount.h"
-#include "primitives/transaction.h"
-#include "wallet/db.h"
-#include "key.h"
+#include <amount.h>
+#include <primitives/transaction.h>
+#include <wallet/db.h>
+#include <key.h>
 
 #include <list>
 #include <stdint.h>
@@ -167,6 +167,8 @@ public:
         m_dbw(dbw)
     {
     }
+    CWalletDB(const CWalletDB&) = delete;
+    CWalletDB& operator=(const CWalletDB&) = delete;
 
     bool WriteName(const std::string& strAddress, const std::string& strName);
     bool EraseName(const std::string& strAddress);
@@ -224,9 +226,9 @@ public:
     /* Function to determine if a certain KV/key-type is a key (cryptographical key) type */
     static bool IsKeyType(const std::string& strType);
     /* verifies the database environment */
-    static bool VerifyEnvironment(const std::string& walletFile, const fs::path& dataDir, std::string& errorStr);
+    static bool VerifyEnvironment(const std::string& walletFile, const fs::path& walletDir, std::string& errorStr);
     /* verifies the database file */
-    static bool VerifyDatabaseFile(const std::string& walletFile, const fs::path& dataDir, std::string& warningStr, std::string& errorStr);
+    static bool VerifyDatabaseFile(const std::string& walletFile, const fs::path& walletDir, std::string& warningStr, std::string& errorStr);
 
     //! write the hdchain model (external chain child index counter)
     bool WriteHDChain(const CHDChain& chain);
@@ -244,9 +246,6 @@ public:
 private:
     CDB batch;
     CWalletDBWrapper& m_dbw;
-
-    CWalletDB(const CWalletDB&);
-    void operator=(const CWalletDB&);
 };
 
 //! Compacts BDB state so that wallet.dat is self-contained (if there are changes)

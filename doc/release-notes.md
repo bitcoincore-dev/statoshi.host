@@ -3,12 +3,12 @@ release-notes at release time)
 
 Bitcoin Core version *version* is now available from:
 
-  <https://bitcoin.org/bin/bitcoin-core-*version*/>
+  <https://bitcoincore.org/bin/bitcoin-core-*version*/>
 
 This is a new major version release, including new features, various bugfixes
 and performance improvements, as well as updated translations.
 
-Please report bugs using the issue tracker at github:
+Please report bugs using the issue tracker at GitHub:
 
   <https://github.com/bitcoin/bitcoin/issues>
 
@@ -20,8 +20,8 @@ How to Upgrade
 ==============
 
 If you are running an older version, shut it down. Wait until it has completely
-shut down (which might take a few minutes for older versions), then run the 
-installer (on Windows) or just copy over /Applications/Bitcoin-Qt (on Mac)
+shut down (which might take a few minutes for older versions), then run the
+installer (on Windows) or just copy over `/Applications/Bitcoin-Qt` (on Mac)
 or `bitcoind`/`bitcoin-qt` (on Linux).
 
 The first time you run version 0.15.0, your chainstate database will be converted to a
@@ -55,6 +55,13 @@ frequently tested on them.
 
 Notable changes
 ===============
+
+RPC changes
+------------
+
+### Low-level changes
+
+- The `fundrawtransaction` rpc will reject the previously deprecated `reserveChangeKey` option.
 
 Credits
 =======

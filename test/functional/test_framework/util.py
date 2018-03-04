@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2016 The Bitcoin Core developers
+# Copyright (c) 2014-2017 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Helpful routines for regression testing."""
@@ -7,11 +7,13 @@
 from base64 import b64encode
 from binascii import hexlify, unhexlify
 from decimal import Decimal, ROUND_DOWN
+import hashlib
 import json
 import logging
 import os
 import random
 import re
+from subprocess import CalledProcessError
 import time
 
 from . import coverage
@@ -24,7 +26,7 @@ logger = logging.getLogger("TestFramework.utils")
 
 def assert_fee_amount(fee, tx_size, fee_per_kB):
     """Assert the fee was in range"""
-    target_fee = tx_size * fee_per_kB / 1000
+    target_fee = round(tx_size * fee_per_kB / 1000, 8)
     if fee < target_fee:
         raise AssertionError("Fee of %s BTC too low! (Should be %s BTC)" % (str(fee), str(target_fee)))
     # allow the wallet's estimation to be at most 2 bytes off
@@ -49,6 +51,8 @@ def assert_raises(exc, fun, *args, **kwds):
 def assert_raises_message(exc, message, fun, *args, **kwds):
     try:
         fun(*args, **kwds)
+    except JSONRPCException:
+        raise AssertionError("Use assert_raises_rpc_error() to test RPC failures")
     except exc as e:
         if message is not None and message not in e.error['message']:
             raise AssertionError("Expected substring not found:" + e.error['message'])
@@ -57,22 +61,53 @@ def assert_raises_message(exc, message, fun, *args, **kwds):
     else:
         raise AssertionError("No exception raised")
 
-def assert_raises_jsonrpc(code, message, fun, *args, **kwds):
+def assert_raises_process_error(returncode, output, fun, *args, **kwds):
+    """Execute a process and asserts the process return code and output.
+
+    Calls function `fun` with arguments `args` and `kwds`. Catches a CalledProcessError
+    and verifies that the return code and output are as expected. Throws AssertionError if
+    no CalledProcessError was raised or if the return code and output are not as expected.
+
+    Args:
+        returncode (int): the process return code.
+        output (string): [a substring of] the process output.
+        fun (function): the function to call. This should execute a process.
+        args*: positional arguments for the function.
+        kwds**: named arguments for the function.
+    """
+    try:
+        fun(*args, **kwds)
+    except CalledProcessError as e:
+        if returncode != e.returncode:
+            raise AssertionError("Unexpected returncode %i" % e.returncode)
+        if output not in e.output:
+            raise AssertionError("Expected substring not found:" + e.output)
+    else:
+        raise AssertionError("No exception raised")
+
+def assert_raises_rpc_error(code, message, fun, *args, **kwds):
     """Run an RPC and verify that a specific JSONRPC exception code and message is raised.
 
     Calls function `fun` with arguments `args` and `kwds`. Catches a JSONRPCException
     and verifies that the error code and message are as expected. Throws AssertionError if
-    no JSONRPCException was returned or if the error code/message are not as expected.
+    no JSONRPCException was raised or if the error code/message are not as expected.
 
     Args:
         code (int), optional: the error code returned by the RPC call (defined
             in src/rpc/protocol.h). Set to None if checking the error code is not required.
         message (string), optional: [a substring of] the error string returned by the
-            RPC call. Set to None if checking the error string is not required
+            RPC call. Set to None if checking the error string is not required.
         fun (function): the function to call. This should be the name of an RPC.
         args*: positional arguments for the function.
         kwds**: named arguments for the function.
     """
+    assert try_rpc(code, message, fun, *args, **kwds), "No exception raised"
+
+def try_rpc(code, message, fun, *args, **kwds):
+    """Tries to run an rpc command.
+
+    Test against error code and message if the rpc fails.
+    Returns whether a JSONRPCException was raised."""
     try:
         fun(*args, **kwds)
     except JSONRPCException as e:
@@ -81,10 +116,11 @@ def assert_raises_jsonrpc(code, message, fun, *args, **kwds):
             raise AssertionError("Unexpected JSONRPC error code %i" % e.error["code"])
         if (message is not None) and (message not in e.error['message']):
             raise AssertionError("Expected substring not found:" + e.error['message'])
+        return True
     except Exception as e:
         raise AssertionError("Unexpected exception raised: " + type(e).__name__)
     else:
-        raise AssertionError("No exception raised")
+        return False
 
 def assert_is_hex_string(string):
     try:
@@ -147,6 +183,13 @@ def count_bytes(hex_string):
 
 def bytes_to_hex_str(byte_str):
     return hexlify(byte_str).decode('ascii')
+
+def hash256(byte_str):
+    sha256 = hashlib.sha256()
+    sha256.update(byte_str)
+    sha256d = hashlib.sha256()
+    sha256d.update(sha256.digest())
+    return sha256d.digest()[::-1]
 
 def hex_str_to_bytes(hex_str):
     return unhexlify(hex_str.encode('ascii'))
@@ -248,6 +291,9 @@ def initialize_datadir(dirname, n):
         f.write("regtest=1\n")
         f.write("port=" + str(p2p_port(n)) + "\n")
         f.write("rpcport=" + str(rpc_port(n)) + "\n")
+        f.write("server=1\n")
+        f.write("keypool=1\n")
+        f.write("discover=0\n")
         f.write("listenonion=0\n")
     return datadir
 
@@ -347,7 +393,7 @@ def sync_chain(rpc_connections, *, wait=1, timeout=60):
         timeout -= wait
     raise AssertionError("Chain sync failed: Best block hashes don't match")
 
-def sync_mempools(rpc_connections, *, wait=1, timeout=60):
+def sync_mempools(rpc_connections, *, wait=1, timeout=60, flush_scheduler=True):
     """
     Wait until everybody has the same transactions in their memory
     pools
@@ -359,6 +405,9 @@ def sync_mempools(rpc_connections, *, wait=1, timeout=60):
             if set(rpc_connections[i].getrawmempool()) == pool:
                 num_match = num_match + 1
         if num_match == len(rpc_connections):
+            if flush_scheduler:
+                for r in rpc_connections:
+                    r.syncwithvalidationinterfacequeue()
             return
         time.sleep(wait)
         timeout -= wait
@@ -426,7 +475,7 @@ def random_transaction(nodes, amount, min_fee, fee_increment, fee_variants):
     outputs[to_node.getnewaddress()] = float(amount)
 
     rawtx = from_node.createrawtransaction(inputs, outputs)
-    signresult = from_node.signrawtransaction(rawtx)
+    signresult = from_node.signrawtransactionwithwallet(rawtx)
     txid = from_node.sendrawtransaction(signresult["hex"], True)
 
     return (txid, signresult["hex"], fee)
@@ -453,7 +502,7 @@ def create_confirmed_utxos(fee, node, count):
         outputs[addr1] = satoshi_round(send_value / 2)
         outputs[addr2] = satoshi_round(send_value / 2)
         raw_tx = node.createrawtransaction(inputs, outputs)
-        signed_tx = node.signrawtransaction(raw_tx)["hex"]
+        signed_tx = node.signrawtransactionwithwallet(raw_tx)["hex"]
         node.sendrawtransaction(signed_tx)
 
     while (node.getmempoolinfo()['size'] > 0):
@@ -487,7 +536,7 @@ def create_tx(node, coinbase, to_address, amount):
     inputs = [{"txid": coinbase, "vout": 0}]
     outputs = {to_address: amount}
     rawtx = node.createrawtransaction(inputs, outputs)
-    signresult = node.signrawtransaction(rawtx)
+    signresult = node.signrawtransactionwithwallet(rawtx)
     assert_equal(signresult["complete"], True)
     return signresult["hex"]
 
@@ -506,7 +555,7 @@ def create_lots_of_big_transactions(node, txouts, utxos, num, fee):
         newtx = rawtx[0:92]
         newtx = newtx + txouts
         newtx = newtx + rawtx[94:]
-        signresult = node.signrawtransaction(newtx, None, None, "NONE")
+        signresult = node.signrawtransactionwithwallet(newtx, None, "NONE")
         txid = node.sendrawtransaction(signresult["hex"], True)
         txids.append(txid)
     return txids

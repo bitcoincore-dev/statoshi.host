@@ -132,6 +132,8 @@ Not OK (used plenty in the current source, but not picked up):
 A full list of comment syntaxes picked up by doxygen can be found at http://www.stack.nl/~dimitri/doxygen/manual/docblocks.html,
 but if possible use one of the above styles.
 
+Documentation can be generated with `make docs` and cleaned up with `make clean-docs`.
+
 Development tips and tricks
 ---------------------------
 
@@ -166,6 +168,37 @@ Bitcoin Core is a multithreaded application, and deadlocks or other multithreadi
 can be very difficult to track down. Compiling with -DDEBUG_LOCKORDER (configure
 CXXFLAGS="-DDEBUG_LOCKORDER -g") inserts run-time checks to keep track of which locks
 are held, and adds warnings to the debug.log file if inconsistencies are detected.
+
+**Valgrind suppressions file**
+
+Valgrind is a programming tool for memory debugging, memory leak detection, and
+profiling. The repo contains a Valgrind suppressions file
+([`valgrind.supp`](https://github.com/bitcoin/bitcoin/blob/master/contrib/valgrind.supp))
+which includes known Valgrind warnings in our dependencies that cannot be fixed
+in-tree. Example use:
+
+```shell
+$ valgrind --suppressions=contrib/valgrind.supp src/test/test_bitcoin
+$ valgrind --suppressions=contrib/valgrind.supp --leak-check=full \
+      --show-leak-kinds=all src/test/test_bitcoin --log_level=test_suite
+$ valgrind -v --leak-check=full src/bitcoind -printtoconsole
+```
+
+**compiling for test coverage**
+
+LCOV can be used to generate a test coverage report based upon `make check`
+execution. LCOV must be installed on your system (e.g. the `lcov` package
+on Debian/Ubuntu).
+
+To enable LCOV report generation during test runs:
+
+```shell
+./configure --enable-lcov
+make
+make cov
+
+# A coverage report will now be accessible at `./test_bitcoin.coverage/index.html`.
+```
 
 Locking/mutex usage notes
 -------------------------
@@ -461,6 +494,14 @@ namespace {
 
   - *Rationale*: Avoids confusion about the namespace context
 
+- Prefer `#include <primitives/transaction.h>` bracket syntax instead of
+  `#include "primitives/transactions.h"` quote syntax when possible.
+
+  - *Rationale*: Bracket syntax is less ambiguous because the preprocessor
+    searches a fixed list of include directories without taking location of the
+    source file into account. This allows quoted includes to stand out more when
+    the location of the source file actually is relevant.
+
 GUI
 -----
 
@@ -549,6 +590,26 @@ Git and GitHub tips
   or `git fetch upstream-pull`. Afterwards, you can use `upstream-pull/NUMBER/head` in arguments to `git show`,
   `git checkout` and anywhere a commit id would be acceptable to see the changes from pull request NUMBER.
 
+Scripted diffs
+--------------
+
+For reformatting and refactoring commits where the changes can be easily automated using a bash script, we use
+scripted-diff commits. The bash script is included in the commit message and our Travis CI job checks that
+the result of the script is identical to the commit. This aids reviewers since they can verify that the script
+does exactly what it's supposed to do. It is also helpful for rebasing (since the same script can just be re-run
+on the new master commit).
+
+To create a scripted-diff:
+
+- start the commit message with `scripted-diff:` (and then a description of the diff on the same line)
+- in the commit message include the bash script between lines containing just the following text:
+    - `-BEGIN VERIFY SCRIPT-`
+    - `-END VERIFY SCRIPT-`
+
+The scripted-diff is verified by the tool `contrib/devtools/commit-script-check.sh`
+
+Commit `bb81e173` is an example of a scripted-diff.
+
 RPC interface guidelines
 --------------------------
 
@@ -613,9 +674,27 @@ A few guidelines for introducing and reviewing new RPC interfaces:
     from there.
 
 - A RPC method must either be a wallet method or a non-wallet method. Do not
-  introduce new methods such as `getinfo` and `signrawtransaction` that differ
-  in behavior based on presence of a wallet.
+  introduce new methods such as `signrawtransaction` that differ in behavior
+  based on presence of a wallet.
 
   - *Rationale*: as well as complicating the implementation and interfering
     with the introduction of multi-wallet, wallet and non-wallet code should be
     separated to avoid introducing circular dependencies between code units.
+
+- Try to make the RPC response a JSON object.
+
+  - *Rationale*: If a RPC response is not a JSON object then it is harder to avoid API breakage if
+    new data in the response is needed.
+
+- Wallet RPCs call BlockUntilSyncedToCurrentChain to maintain consistency with
+  `getblockchaininfo`'s state immediately prior to the call's execution. Wallet
+  RPCs whose behavior does *not* depend on the current chainstate may omit this
+  call.
+
+  - *Rationale*: In previous versions of Bitcoin Core, the wallet was always
+    in-sync with the chainstate (by virtue of them all being updated in the
+    same cs_main lock). In order to maintain the behavior that wallet RPCs
+    return results as of at least the highest best-known block an RPC
+    client may be aware of prior to entering a wallet RPC call, we must block
+    until the wallet is caught up to the chainstate as of the RPC call's entry.
+    This also makes the API much easier for RPC clients to reason about.
