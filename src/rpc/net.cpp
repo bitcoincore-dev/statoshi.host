@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2017 The Bitcoin Core developers
+// Copyright (c) 2009-2018 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -23,7 +23,7 @@
 
 #include <univalue.h>
 
-UniValue getconnectioncount(const JSONRPCRequest& request)
+static UniValue getconnectioncount(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
@@ -42,7 +42,7 @@ UniValue getconnectioncount(const JSONRPCRequest& request)
     return (int)g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL);
 }
 
-UniValue ping(const JSONRPCRequest& request)
+static UniValue ping(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
@@ -65,7 +65,7 @@ UniValue ping(const JSONRPCRequest& request)
     return NullUniValue;
 }
 
-UniValue getpeerinfo(const JSONRPCRequest& request)
+static UniValue getpeerinfo(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
@@ -102,6 +102,7 @@ UniValue getpeerinfo(const JSONRPCRequest& request)
             "       ...\n"
             "    ],\n"
             "    \"whitelisted\": true|false, (boolean) Whether the peer is whitelisted\n"
+            "    \"minfeefilter\": n,         (numeric) The minimum fee rate for transactions this peer accepts\n"
             "    \"bytessent_per_msg\": {\n"
             "       \"addr\": n,              (numeric) The total bytes sent aggregated by message type\n"
             "       ...\n"
@@ -163,12 +164,13 @@ UniValue getpeerinfo(const JSONRPCRequest& request)
             obj.pushKV("synced_headers", statestats.nSyncHeight);
             obj.pushKV("synced_blocks", statestats.nCommonHeight);
             UniValue heights(UniValue::VARR);
-            for (int height : statestats.vHeightInFlight) {
+            for (const int height : statestats.vHeightInFlight) {
                 heights.push_back(height);
             }
             obj.pushKV("inflight", heights);
         }
         obj.pushKV("whitelisted", stats.fWhitelisted);
+        obj.pushKV("minfeefilter", ValueFromAmount(stats.minFeeFilter));
 
         UniValue sendPerMsgCmd(UniValue::VOBJ);
         for (const mapMsgCmdSize::value_type &i : stats.mapSendBytesPerMsgCmd) {
@@ -190,7 +192,7 @@ UniValue getpeerinfo(const JSONRPCRequest& request)
     return ret;
 }
 
-UniValue addnode(const JSONRPCRequest& request)
+static UniValue addnode(const JSONRPCRequest& request)
 {
     std::string strCommand;
     if (!request.params[1].isNull())
@@ -237,7 +239,7 @@ UniValue addnode(const JSONRPCRequest& request)
     return NullUniValue;
 }
 
-UniValue disconnectnode(const JSONRPCRequest& request)
+static UniValue disconnectnode(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0 || request.params.size() >= 3)
         throw std::runtime_error(
@@ -280,7 +282,7 @@ UniValue disconnectnode(const JSONRPCRequest& request)
     return NullUniValue;
 }
 
-UniValue getaddednodeinfo(const JSONRPCRequest& request)
+static UniValue getaddednodeinfo(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw std::runtime_error(
@@ -347,7 +349,7 @@ UniValue getaddednodeinfo(const JSONRPCRequest& request)
     return ret;
 }
 
-UniValue getnettotals(const JSONRPCRequest& request)
+static UniValue getnettotals(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 0)
         throw std::runtime_error(
@@ -413,7 +415,7 @@ static UniValue GetNetworksInfo()
     return networks;
 }
 
-UniValue getnetworkinfo(const JSONRPCRequest& request)
+static UniValue getnetworkinfo(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
@@ -475,7 +477,7 @@ UniValue getnetworkinfo(const JSONRPCRequest& request)
     UniValue localAddresses(UniValue::VARR);
     {
         LOCK(cs_mapLocalHost);
-        for (const std::pair<CNetAddr, LocalServiceInfo> &item : mapLocalHost)
+        for (const std::pair<const CNetAddr, LocalServiceInfo> &item : mapLocalHost)
         {
             UniValue rec(UniValue::VOBJ);
             rec.pushKV("address", item.first.ToString());
@@ -489,7 +491,7 @@ UniValue getnetworkinfo(const JSONRPCRequest& request)
     return obj;
 }
 
-UniValue setban(const JSONRPCRequest& request)
+static UniValue setban(const JSONRPCRequest& request)
 {
     std::string strCommand;
     if (!request.params[1].isNull())
@@ -553,7 +555,7 @@ UniValue setban(const JSONRPCRequest& request)
     return NullUniValue;
 }
 
-UniValue listbanned(const JSONRPCRequest& request)
+static UniValue listbanned(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
@@ -586,7 +588,7 @@ UniValue listbanned(const JSONRPCRequest& request)
     return bannedAddresses;
 }
 
-UniValue clearbanned(const JSONRPCRequest& request)
+static UniValue clearbanned(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
@@ -604,7 +606,7 @@ UniValue clearbanned(const JSONRPCRequest& request)
     return NullUniValue;
 }
 
-UniValue setnetworkactive(const JSONRPCRequest& request)
+static UniValue setnetworkactive(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1) {
         throw std::runtime_error(
@@ -624,6 +626,59 @@ UniValue setnetworkactive(const JSONRPCRequest& request)
     return g_connman->GetNetworkActive();
 }
 
+static UniValue getnodeaddresses(const JSONRPCRequest& request)
+{
+    if (request.fHelp || request.params.size() > 1) {
+        throw std::runtime_error(
+            "getnodeaddresses ( count )\n"
+            "\nReturn known addresses which can potentially be used to find new nodes in the network\n"
+            "\nArguments:\n"
+            "1. \"count\"    (numeric, optional) How many addresses to return. Limited to the smaller of " + std::to_string(ADDRMAN_GETADDR_MAX) +
+                " or " + std::to_string(ADDRMAN_GETADDR_MAX_PCT) + "% of all known addresses. (default = 1)\n"
+            "\nResult:\n"
+            "[\n"
+            "  {\n"
+            "    \"time\": ttt,                (numeric) Timestamp in seconds since epoch (Jan 1 1970 GMT) keeping track of when the node was last seen\n"
+            "    \"services\": n,              (numeric) The services offered\n"
+            "    \"address\": \"host\",          (string) The address of the node\n"
+            "    \"port\": n                   (numeric) The port of the node\n"
+            "  }\n"
+            "  ,....\n"
+            "]\n"
+            "\nExamples:\n"
+            + HelpExampleCli("getnodeaddresses", "8")
+            + HelpExampleRpc("getnodeaddresses", "8")
+        );
+    }
+    if (!g_connman) {
+        throw JSONRPCError(RPC_CLIENT_P2P_DISABLED, "Error: Peer-to-peer functionality missing or disabled");
+    }
+
+    int count = 1;
+    if (!request.params[0].isNull()) {
+        count = request.params[0].get_int();
+        if (count <= 0) {
+            throw JSONRPCError(RPC_INVALID_PARAMETER, "Address count out of range");
+        }
+    }
+    // returns a shuffled list of CAddress
+    std::vector<CAddress> vAddr = g_connman->GetAddresses();
+    UniValue ret(UniValue::VARR);
+
+    int address_return_count = std::min<int>(count, vAddr.size());
+    for (int i = 0; i < address_return_count; ++i) {
+        UniValue obj(UniValue::VOBJ);
+        const CAddress& addr = vAddr[i];
+        obj.pushKV("time", (int)addr.nTime);
+        obj.pushKV("services", (uint64_t)addr.nServices);
+        obj.pushKV("address", addr.ToStringIP());
+        obj.pushKV("port", addr.GetPort());
+        ret.push_back(obj);
+    }
+    return ret;
+}
+
+// clang-format off
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
@@ -639,7 +694,9 @@ static const CRPCCommand commands[] =
     { "network",            "listbanned",             &listbanned,             {} },
     { "network",            "clearbanned",            &clearbanned,            {} },
     { "network",            "setnetworkactive",       &setnetworkactive,       {"state"} },
+    { "network",            "getnodeaddresses",       &getnodeaddresses,       {"count"} },
 };
+// clang-format on
 
 void RegisterNetRPCCommands(CRPCTable &t)
 {

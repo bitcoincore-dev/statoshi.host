@@ -1,10 +1,9 @@
-// Copyright (c) 2017 The Bitcoin Core developers
+// Copyright (c) 2017-2018 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <base58.h>
+#include <key_io.h>
 #include <keystore.h>
-#include <pubkey.h>
 #include <rpc/protocol.h>
 #include <rpc/util.h>
 #include <tinyformat.h>

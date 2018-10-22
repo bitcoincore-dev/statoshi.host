@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2016-2017 The Bitcoin Core developers
+# Copyright (c) 2016-2018 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test Wallet encryption"""
@@ -19,6 +19,9 @@ class WalletEncryptionTest(BitcoinTestFramework):
         self.setup_clean_chain = True
         self.num_nodes = 1
 
+    def skip_test_if_missing_module(self):
+        self.skip_if_no_wallet()
+
     def run_test(self):
         passphrase = "WalletPassphrase"
         passphrase2 = "SecondWalletPassphrase"
@@ -30,8 +33,7 @@ class WalletEncryptionTest(BitcoinTestFramework):
         assert_equal(len(privkey), 52)
 
         # Encrypt the wallet
-        self.nodes[0].node_encrypt_wallet(passphrase)
-        self.start_node(0)
+        self.nodes[0].encryptwallet(passphrase)
 
         # Test that the wallet is encrypted
         assert_raises_rpc_error(-13, "Please enter the wallet passphrase with walletpassphrase first", self.nodes[0].dumpprivkey, address)
@@ -64,14 +66,15 @@ class WalletEncryptionTest(BitcoinTestFramework):
         assert_raises_rpc_error(-8, "Timeout cannot be negative.", self.nodes[0].walletpassphrase, passphrase2, -10)
         # Check the timeout
         # Check a time less than the limit
-        expected_time = int(time.time()) + (1 << 30) - 600
-        self.nodes[0].walletpassphrase(passphrase2, (1 << 30) - 600)
+        MAX_VALUE = 100000000
+        expected_time = int(time.time()) + MAX_VALUE - 600
+        self.nodes[0].walletpassphrase(passphrase2, MAX_VALUE - 600)
         actual_time = self.nodes[0].getwalletinfo()['unlocked_until']
         assert_greater_than_or_equal(actual_time, expected_time)
         assert_greater_than(expected_time + 5, actual_time) # 5 second buffer
         # Check a time greater than the limit
-        expected_time = int(time.time()) + (1 << 30) - 1
-        self.nodes[0].walletpassphrase(passphrase2, (1 << 33))
+        expected_time = int(time.time()) + MAX_VALUE - 1
+        self.nodes[0].walletpassphrase(passphrase2, MAX_VALUE + 1000)
         actual_time = self.nodes[0].getwalletinfo()['unlocked_until']
         assert_greater_than_or_equal(actual_time, expected_time)
         assert_greater_than(expected_time + 5, actual_time) # 5 second buffer

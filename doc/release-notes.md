@@ -48,20 +48,29 @@ Compatibility
 ==============
 
 Bitcoin Core is extensively tested on multiple operating systems using
-the Linux kernel, macOS 10.8+, and Windows Vista and later. Windows XP is not supported.
+the Linux kernel, macOS 10.10+, and Windows 7 and newer (Windows XP is not supported).
 
 Bitcoin Core should also work on most other Unix-like systems but is not
 frequently tested on them.
 
+From 0.17.0 onwards macOS <10.10 is no longer supported. 0.17.0 is built using Qt 5.9.x, which doesn't
+support versions of macOS older than 10.10.
+
 Notable changes
 ===============
 
-RPC changes
+Command line option changes
+---------------------------
+
+The `-enablebip61` command line option (introduced in Bitcoin Core 0.17.0) is
+used to toggle sending of BIP 61 reject messages. Reject messages have no use
+case on the P2P network and are only logged for debugging by most network
+nodes. The option will now by default be off for improved privacy and security
+as well as reduced upload usage. The option can explicitly be turned on for
+local-network debugging purposes.
+
+Example item
 ------------
-
-### Low-level changes
-
-- The `fundrawtransaction` rpc will reject the previously deprecated `reserveChangeKey` option.
 
 Credits
 =======
