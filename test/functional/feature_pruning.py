@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2018 The Bitcoin Core developers
+# Copyright (c) 2014-2019 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the pruning code.
@@ -29,7 +29,7 @@ class PruneTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 6
-        self.rpc_timewait = 900
+        self.rpc_timeout = 900
 
         # Create nodes 0 and 1 to mine.
         # Create node 2 to test pruning.
@@ -63,6 +63,8 @@ class PruneTest(BitcoinTestFramework):
     def setup_nodes(self):
         self.add_nodes(self.num_nodes, self.extra_args)
         self.start_nodes()
+        for n in self.nodes:
+            n.importprivkey(privkey=n.get_deterministic_priv_key().key, label='coinbase', rescan=False)
 
     def create_big_chain(self):
         # Start by creating some coinbases we can spend later
@@ -149,7 +151,7 @@ class PruneTest(BitcoinTestFramework):
             self.nodes[1].invalidateblock(curhash)
             curhash = self.nodes[1].getblockhash(invalidheight - 1)
 
-        assert(self.nodes[1].getblockcount() == invalidheight - 1)
+        assert self.nodes[1].getblockcount() == invalidheight - 1
         self.log.info("New best height: %d" % self.nodes[1].getblockcount())
 
         # Reboot node1 to clear those giant tx's from mempool
@@ -189,6 +191,8 @@ class PruneTest(BitcoinTestFramework):
     def reorg_back(self):
         # Verify that a block on the old main chain fork has been pruned away
         assert_raises_rpc_error(-1, "Block not available (pruned data)", self.nodes[2].getblock, self.forkhash)
+        with self.nodes[2].assert_debug_log(expected_msgs=['block verification stopping at height', '(pruning, no data)']):
+            self.nodes[2].verifychain(checklevel=4, nblocks=0)
         self.log.info("Will need to redownload block %d" % self.forkheight)
 
         # Verify that we have enough history to reorg back to the fork point
@@ -215,17 +219,17 @@ class PruneTest(BitcoinTestFramework):
             blocks_to_mine = first_reorg_height + 1 - self.mainchainheight
             self.log.info("Rewind node 0 to prev main chain to mine longer chain to trigger redownload. Blocks needed: %d" % blocks_to_mine)
             self.nodes[0].invalidateblock(curchainhash)
-            assert(self.nodes[0].getblockcount() == self.mainchainheight)
-            assert(self.nodes[0].getbestblockhash() == self.mainchainhash2)
+            assert self.nodes[0].getblockcount() == self.mainchainheight
+            assert self.nodes[0].getbestblockhash() == self.mainchainhash2
             goalbesthash = self.nodes[0].generate(blocks_to_mine)[-1]
             goalbestheight = first_reorg_height + 1
 
         self.log.info("Verify node 2 reorged back to the main chain, some blocks of which it had to redownload")
         # Wait for Node 2 to reorg to proper height
         wait_until(lambda: self.nodes[2].getblockcount() >= goalbestheight, timeout=900)
-        assert(self.nodes[2].getbestblockhash() == goalbesthash)
+        assert self.nodes[2].getbestblockhash() == goalbesthash
         # Verify we can now have the data for a block previously pruned
-        assert(self.nodes[2].getblock(self.forkhash)["height"] == self.forkheight)
+        assert self.nodes[2].getblock(self.forkhash)["height"] == self.forkheight
 
     def manual_test(self, node_number, use_timestamp):
         # at this point, node has 995 blocks and has not yet run in prune mode
@@ -247,7 +251,7 @@ class PruneTest(BitcoinTestFramework):
                 return index
 
         def prune(index, expected_ret=None):
-            ret = node.pruneblockchain(height(index))
+            ret = node.pruneblockchain(height=height(index))
             # Check the return value. When use_timestamp is True, just check
             # that the return value is less than or equal to the expected
             # value, because when more than one block is generated per second,
@@ -316,7 +320,7 @@ class PruneTest(BitcoinTestFramework):
         if has_block(3):
             raise AssertionError("blk00003.dat is still there, should be pruned by now")
 
-        # stop node, start back up with auto-prune at 550MB, make sure still runs
+        # stop node, start back up with auto-prune at 550 MiB, make sure still runs
         self.stop_node(node_number)
         self.start_node(node_number, extra_args=["-prune=550"])
 

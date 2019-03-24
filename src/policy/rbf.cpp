@@ -7,14 +7,14 @@
 bool SignalsOptInRBF(const CTransaction &tx)
 {
     for (const CTxIn &txin : tx.vin) {
-        if (txin.nSequence < std::numeric_limits<unsigned int>::max()-1) {
+        if (txin.nSequence <= MAX_BIP125_RBF_SEQUENCE) {
             return true;
         }
     }
     return false;
 }
 
-RBFTransactionState IsRBFOptIn(const CTransaction &tx, CTxMemPool &pool)
+RBFTransactionState IsRBFOptIn(const CTransaction& tx, const CTxMemPool& pool)
 {
     AssertLockHeld(pool.cs);
 

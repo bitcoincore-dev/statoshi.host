@@ -2,13 +2,13 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <util.h>
+#include <util/system.h>
 
 #include <clientversion.h>
 #include <primitives/transaction.h>
 #include <sync.h>
-#include <utilstrencodings.h>
-#include <utilmoneystr.h>
+#include <util/strencodings.h>
+#include <util/moneystr.h>
 #include <test/test_bitcoin.h>
 
 #include <stdint.h>
@@ -78,32 +78,15 @@ BOOST_AUTO_TEST_CASE(util_HexStr)
         "04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f");
 
     BOOST_CHECK_EQUAL(
-        HexStr(ParseHex_expected, ParseHex_expected + 5, true),
-        "04 67 8a fd b0");
-
-    BOOST_CHECK_EQUAL(
         HexStr(ParseHex_expected + sizeof(ParseHex_expected),
                ParseHex_expected + sizeof(ParseHex_expected)),
-        "");
-
-    BOOST_CHECK_EQUAL(
-        HexStr(ParseHex_expected + sizeof(ParseHex_expected),
-               ParseHex_expected + sizeof(ParseHex_expected), true),
         "");
 
     BOOST_CHECK_EQUAL(
         HexStr(ParseHex_expected, ParseHex_expected),
         "");
 
-    BOOST_CHECK_EQUAL(
-        HexStr(ParseHex_expected, ParseHex_expected, true),
-        "");
-
     std::vector<unsigned char> ParseHex_vec(ParseHex_expected, ParseHex_expected + 5);
-
-    BOOST_CHECK_EQUAL(
-        HexStr(ParseHex_vec, true),
-        "04 67 8a fd b0");
 
     BOOST_CHECK_EQUAL(
         HexStr(ParseHex_vec.rbegin(), ParseHex_vec.rend()),
@@ -111,31 +94,14 @@ BOOST_AUTO_TEST_CASE(util_HexStr)
     );
 
     BOOST_CHECK_EQUAL(
-        HexStr(ParseHex_vec.rbegin(), ParseHex_vec.rend(), true),
-        "b0 fd 8a 67 04"
-    );
-
-    BOOST_CHECK_EQUAL(
         HexStr(std::reverse_iterator<const uint8_t *>(ParseHex_expected),
                std::reverse_iterator<const uint8_t *>(ParseHex_expected)),
         ""
     );
 
     BOOST_CHECK_EQUAL(
-        HexStr(std::reverse_iterator<const uint8_t *>(ParseHex_expected),
-               std::reverse_iterator<const uint8_t *>(ParseHex_expected), true),
-        ""
-    );
-
-    BOOST_CHECK_EQUAL(
         HexStr(std::reverse_iterator<const uint8_t *>(ParseHex_expected + 1),
                std::reverse_iterator<const uint8_t *>(ParseHex_expected)),
-        "04"
-    );
-
-    BOOST_CHECK_EQUAL(
-        HexStr(std::reverse_iterator<const uint8_t *>(ParseHex_expected + 1),
-               std::reverse_iterator<const uint8_t *>(ParseHex_expected), true),
         "04"
     );
 
@@ -143,12 +109,6 @@ BOOST_AUTO_TEST_CASE(util_HexStr)
         HexStr(std::reverse_iterator<const uint8_t *>(ParseHex_expected + 5),
                std::reverse_iterator<const uint8_t *>(ParseHex_expected)),
         "b0fd8a6704"
-    );
-
-    BOOST_CHECK_EQUAL(
-        HexStr(std::reverse_iterator<const uint8_t *>(ParseHex_expected + 5),
-               std::reverse_iterator<const uint8_t *>(ParseHex_expected), true),
-        "b0 fd 8a 67 04"
     );
 
     BOOST_CHECK_EQUAL(
@@ -169,11 +129,6 @@ BOOST_AUTO_TEST_CASE(util_FormatISO8601Date)
     BOOST_CHECK_EQUAL(FormatISO8601Date(1317425777), "2011-09-30");
 }
 
-BOOST_AUTO_TEST_CASE(util_FormatISO8601Time)
-{
-    BOOST_CHECK_EQUAL(FormatISO8601Time(1317425777), "23:36:17Z");
-}
-
 struct TestArgsManager : public ArgsManager
 {
     TestArgsManager() { m_network_only_args.clear(); }
@@ -185,9 +140,10 @@ struct TestArgsManager : public ArgsManager
         {
             LOCK(cs_args);
             m_config_args.clear();
+            m_config_sections.clear();
         }
         std::string error;
-        ReadConfigStream(streamConfig, error);
+        BOOST_REQUIRE(ReadConfigStream(streamConfig, "", error));
     }
     void SetNetworkOnlyArg(const std::string arg)
     {
@@ -210,13 +166,13 @@ BOOST_AUTO_TEST_CASE(util_ParseParameters)
 
     std::string error;
     testArgs.SetupArgs(4, avail_args);
-    testArgs.ParseParameters(0, (char**)argv_test, error);
+    BOOST_CHECK(testArgs.ParseParameters(0, (char**)argv_test, error));
     BOOST_CHECK(testArgs.GetOverrideArgs().empty() && testArgs.GetConfigArgs().empty());
 
-    testArgs.ParseParameters(1, (char**)argv_test, error);
+    BOOST_CHECK(testArgs.ParseParameters(1, (char**)argv_test, error));
     BOOST_CHECK(testArgs.GetOverrideArgs().empty() && testArgs.GetConfigArgs().empty());
 
-    testArgs.ParseParameters(7, (char**)argv_test, error);
+    BOOST_CHECK(testArgs.ParseParameters(7, (char**)argv_test, error));
     // expectation: -ignored is ignored (program name argument),
     // -a, -b and -ccc end up in map, -d ignored because it is after
     // a non-option argument (non-GNU option parsing)
@@ -242,7 +198,7 @@ BOOST_AUTO_TEST_CASE(util_GetBoolArg)
         "ignored", "-a", "-nob", "-c=0", "-d=1", "-e=false", "-f=true"};
     std::string error;
     testArgs.SetupArgs(6, avail_args);
-    testArgs.ParseParameters(7, (char**)argv_test, error);
+    BOOST_CHECK(testArgs.ParseParameters(7, (char**)argv_test, error));
 
     // Each letter should be set.
     for (const char opt : "abcdef")
@@ -278,7 +234,7 @@ BOOST_AUTO_TEST_CASE(util_GetBoolArgEdgeCases)
     const char *argv_test[] = {"ignored", "-nofoo", "-foo", "-nobar=0"};
     testArgs.SetupArgs(2, avail_args);
     std::string error;
-    testArgs.ParseParameters(4, (char**)argv_test, error);
+    BOOST_CHECK(testArgs.ParseParameters(4, (char**)argv_test, error));
 
     // This was passed twice, second one overrides the negative setting.
     BOOST_CHECK(!testArgs.IsArgNegated("-foo"));
@@ -290,7 +246,7 @@ BOOST_AUTO_TEST_CASE(util_GetBoolArgEdgeCases)
 
     // Config test
     const char *conf_test = "nofoo=1\nfoo=1\nnobar=0\n";
-    testArgs.ParseParameters(1, (char**)argv_test, error);
+    BOOST_CHECK(testArgs.ParseParameters(1, (char**)argv_test, error));
     testArgs.ReadConfigString(conf_test);
 
     // This was passed twice, second one overrides the negative setting,
@@ -305,7 +261,7 @@ BOOST_AUTO_TEST_CASE(util_GetBoolArgEdgeCases)
     // Combined test
     const char *combo_test_args[] = {"ignored", "-nofoo", "-bar"};
     const char *combo_test_conf = "foo=1\nnobar=1\n";
-    testArgs.ParseParameters(3, (char**)combo_test_args, error);
+    BOOST_CHECK(testArgs.ParseParameters(3, (char**)combo_test_args, error));
     testArgs.ReadConfigString(combo_test_conf);
 
     // Command line overrides, but doesn't erase old setting
@@ -557,38 +513,38 @@ BOOST_AUTO_TEST_CASE(util_GetChainName)
     const char* testnetconf = "testnet=1\nregtest=0\n[test]\nregtest=1";
     std::string error;
 
-    test_args.ParseParameters(0, (char**)argv_testnet, error);
+    BOOST_CHECK(test_args.ParseParameters(0, (char**)argv_testnet, error));
     BOOST_CHECK_EQUAL(test_args.GetChainName(), "main");
 
-    test_args.ParseParameters(2, (char**)argv_testnet, error);
+    BOOST_CHECK(test_args.ParseParameters(2, (char**)argv_testnet, error));
     BOOST_CHECK_EQUAL(test_args.GetChainName(), "test");
 
-    test_args.ParseParameters(2, (char**)argv_regtest, error);
+    BOOST_CHECK(test_args.ParseParameters(2, (char**)argv_regtest, error));
     BOOST_CHECK_EQUAL(test_args.GetChainName(), "regtest");
 
-    test_args.ParseParameters(3, (char**)argv_test_no_reg, error);
+    BOOST_CHECK(test_args.ParseParameters(3, (char**)argv_test_no_reg, error));
     BOOST_CHECK_EQUAL(test_args.GetChainName(), "test");
 
-    test_args.ParseParameters(3, (char**)argv_both, error);
+    BOOST_CHECK(test_args.ParseParameters(3, (char**)argv_both, error));
     BOOST_CHECK_THROW(test_args.GetChainName(), std::runtime_error);
 
-    test_args.ParseParameters(0, (char**)argv_testnet, error);
+    BOOST_CHECK(test_args.ParseParameters(0, (char**)argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_EQUAL(test_args.GetChainName(), "test");
 
-    test_args.ParseParameters(2, (char**)argv_testnet, error);
+    BOOST_CHECK(test_args.ParseParameters(2, (char**)argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_EQUAL(test_args.GetChainName(), "test");
 
-    test_args.ParseParameters(2, (char**)argv_regtest, error);
+    BOOST_CHECK(test_args.ParseParameters(2, (char**)argv_regtest, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_THROW(test_args.GetChainName(), std::runtime_error);
 
-    test_args.ParseParameters(3, (char**)argv_test_no_reg, error);
+    BOOST_CHECK(test_args.ParseParameters(3, (char**)argv_test_no_reg, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_EQUAL(test_args.GetChainName(), "test");
 
-    test_args.ParseParameters(3, (char**)argv_both, error);
+    BOOST_CHECK(test_args.ParseParameters(3, (char**)argv_both, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_THROW(test_args.GetChainName(), std::runtime_error);
 
@@ -596,23 +552,23 @@ BOOST_AUTO_TEST_CASE(util_GetChainName)
     // [test] regtest=1 potentially relevant) doesn't break things
     test_args.SelectConfigNetwork("test");
 
-    test_args.ParseParameters(0, (char**)argv_testnet, error);
+    BOOST_CHECK(test_args.ParseParameters(0, (char**)argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_EQUAL(test_args.GetChainName(), "test");
 
-    test_args.ParseParameters(2, (char**)argv_testnet, error);
+    BOOST_CHECK(test_args.ParseParameters(2, (char**)argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_EQUAL(test_args.GetChainName(), "test");
 
-    test_args.ParseParameters(2, (char**)argv_regtest, error);
+    BOOST_CHECK(test_args.ParseParameters(2, (char**)argv_regtest, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_THROW(test_args.GetChainName(), std::runtime_error);
 
-    test_args.ParseParameters(2, (char**)argv_test_no_reg, error);
+    BOOST_CHECK(test_args.ParseParameters(2, (char**)argv_test_no_reg, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_EQUAL(test_args.GetChainName(), "test");
 
-    test_args.ParseParameters(3, (char**)argv_both, error);
+    BOOST_CHECK(test_args.ParseParameters(3, (char**)argv_both, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_THROW(test_args.GetChainName(), std::runtime_error);
 }
@@ -1224,7 +1180,7 @@ BOOST_AUTO_TEST_CASE(test_ToLower)
     BOOST_CHECK_EQUAL(ToLower('Z'), 'z');
     BOOST_CHECK_EQUAL(ToLower('['), '[');
     BOOST_CHECK_EQUAL(ToLower(0), 0);
-    BOOST_CHECK_EQUAL(ToLower(255), 255);
+    BOOST_CHECK_EQUAL(ToLower('\xff'), '\xff');
 
     std::string testVector;
     Downcase(testVector);
@@ -1246,7 +1202,7 @@ BOOST_AUTO_TEST_CASE(test_ToUpper)
     BOOST_CHECK_EQUAL(ToUpper('z'), 'Z');
     BOOST_CHECK_EQUAL(ToUpper('{'), '{');
     BOOST_CHECK_EQUAL(ToUpper(0), 0);
-    BOOST_CHECK_EQUAL(ToUpper(255), 255);
+    BOOST_CHECK_EQUAL(ToUpper('\xff'), '\xff');
 }
 
 BOOST_AUTO_TEST_CASE(test_Capitalize)

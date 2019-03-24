@@ -3,10 +3,14 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <stdio.h>
-#include <util.h>
+#include <util/system.h>
 #include <walletinitinterface.h>
 
 class CWallet;
+
+namespace interfaces {
+class Chain;
+}
 
 class DummyWalletInit : public WalletInitInterface {
 public:
@@ -14,13 +18,7 @@ public:
     bool HasWalletSupport() const override {return false;}
     void AddWalletOptions() const override;
     bool ParameterInteraction() const override {return true;}
-    void RegisterRPC(CRPCTable &) const override {}
-    bool Verify() const override {return true;}
-    bool Open() const override {LogPrintf("No wallet support compiled in!\n"); return true;}
-    void Start(CScheduler& scheduler) const override {}
-    void Flush() const override {}
-    void Stop() const override {}
-    void Close() const override {}
+    void Construct(InitInterfaces& interfaces) const override {LogPrintf("No wallet support compiled in!\n");}
 };
 
 void DummyWalletInit::AddWalletOptions() const
@@ -45,6 +43,11 @@ std::vector<fs::path> ListWalletDir()
 }
 
 std::vector<std::shared_ptr<CWallet>> GetWallets()
+{
+    throw std::logic_error("Wallet function called in non-wallet build.");
+}
+
+std::shared_ptr<CWallet> LoadWallet(interfaces::Chain& chain, const std::string& name, std::string& error, std::string& warning)
 {
     throw std::logic_error("Wallet function called in non-wallet build.");
 }

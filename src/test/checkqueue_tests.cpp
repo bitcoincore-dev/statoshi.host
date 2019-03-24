@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <util.h>
-#include <utiltime.h>
+#include <util/system.h>
+#include <util/time.h>
 #include <validation.h>
 
 #include <test/test_bitcoin.h>
@@ -355,7 +355,8 @@ BOOST_AUTO_TEST_CASE(test_CheckQueue_FrozenCleanup)
         // would get called twice).
         vChecks[0].should_freeze = true;
         control.Add(vChecks);
-        control.Wait(); // Hangs here
+        bool waitResult = control.Wait(); // Hangs here
+        assert(waitResult);
     });
     {
         std::unique_lock<std::mutex> l(FrozenCleanupCheck::m);

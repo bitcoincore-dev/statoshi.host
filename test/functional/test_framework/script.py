@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2018 The Bitcoin Core developers
+# Copyright (c) 2015-2019 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Functionality to build scripts, as well as SignatureHash().
@@ -9,7 +9,6 @@ This file is modified from python-bitcoinlib.
 
 from .messages import CTransaction, CTxOut, sha256, hash256, uint256_from_str, ser_uint256, ser_string
 
-from binascii import hexlify
 import hashlib
 import struct
 
@@ -385,6 +384,22 @@ class CScriptNum:
             r[-1] |= 0x80
         return bytes([len(r)]) + r
 
+    @staticmethod
+    def decode(vch):
+        result = 0
+        # We assume valid push_size and minimal encoding
+        value = vch[1:]
+        if len(value) == 0:
+            return result
+        for i, byte in enumerate(value):
+            result |= int(byte) << 8*i
+        if value[-1] >= 0x80:
+            # Mask for all but the highest result bit
+            num_mask = (2**(len(value)*8) - 1) >> 1
+            result &= num_mask
+            result *= -1
+        return result
+
 
 class CScript(bytes):
     """Serialized script
@@ -525,7 +540,7 @@ class CScript(bytes):
     def __repr__(self):
         def _repr(o):
             if isinstance(o, bytes):
-                return "x('%s')" % hexlify(o).decode('ascii')
+                return "x('%s')" % o.hex()
             else:
                 return repr(o)
 
