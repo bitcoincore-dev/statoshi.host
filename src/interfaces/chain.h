@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2018-2019 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -43,20 +43,14 @@ class Wallet;
 //!   asynchronously
 //!   (https://github.com/bitcoin/bitcoin/pull/10973#issuecomment-380101269).
 //!
-//! * The isPotentialTip() and waitForNotifications() methods are too low-level
-//!   and should be replaced with a higher level
-//!   waitForNotificationsUpTo(block_hash) method that the wallet can call
-//!   instead
-//!   (https://github.com/bitcoin/bitcoin/pull/10973#discussion_r266995234).
-//!
-//! * The relayTransactions() and submitToMemoryPool() methods could be replaced
-//!   with a higher-level broadcastTransaction method
-//!   (https://github.com/bitcoin/bitcoin/pull/14978#issuecomment-459373984).
-//!
 //! * The initMessages() and loadWallet() methods which the wallet uses to send
 //!   notifications to the GUI should go away when GUI and wallet can directly
 //!   communicate with each other without going through the node
 //!   (https://github.com/bitcoin/bitcoin/pull/15288#discussion_r253321096).
+//!
+//! * The handleRpc, registerRpcs, rpcEnableDeprecated methods and other RPC
+//!   methods can go away if wallets listen for HTTP requests on their own
+//!   ports instead of registering to handle requests on the node HTTP port.
 class Chain
 {
 public:
@@ -101,62 +95,39 @@ public:
         virtual bool haveBlockOnDisk(int height) = 0;
 
         //! Return height of the first block in the chain with timestamp equal
-        //! or greater than the given time, or nullopt if there is no block with
-        //! a high enough timestamp. Also return the block hash as an optional
-        //! output parameter (to avoid the cost of a second lookup in case this
-        //! information is needed.)
-        virtual Optional<int> findFirstBlockWithTime(int64_t time, uint256* hash) = 0;
-
-        //! Return height of the first block in the chain with timestamp equal
         //! or greater than the given time and height equal or greater than the
-        //! given height, or nullopt if there is no such block.
-        //!
-        //! Calling this with height 0 is equivalent to calling
-        //! findFirstBlockWithTime, but less efficient because it requires a
-        //! linear instead of a binary search.
-        virtual Optional<int> findFirstBlockWithTimeAndHeight(int64_t time, int height) = 0;
+        //! given height, or nullopt if there is no block with a high enough
+        //! timestamp and height. Also return the block hash as an optional output parameter
+        //! (to avoid the cost of a second lookup in case this information is needed.)
+        virtual Optional<int> findFirstBlockWithTimeAndHeight(int64_t time, int height, uint256* hash) = 0;
 
         //! Return height of last block in the specified range which is pruned, or
         //! nullopt if no block in the range is pruned. Range is inclusive.
         virtual Optional<int> findPruned(int start_height = 0, Optional<int> stop_height = nullopt) = 0;
 
-        //! Return height of the highest block on the chain that is an ancestor
-        //! of the specified block, or nullopt if no common ancestor is found.
+        //! Return height of the specified block if it is on the chain, otherwise
+        //! return the height of the highest block on chain that's an ancestor
+        //! of the specified block, or nullopt if there is no common ancestor.
         //! Also return the height of the specified block as an optional output
         //! parameter (to avoid the cost of a second hash lookup in case this
         //! information is desired).
         virtual Optional<int> findFork(const uint256& hash, Optional<int>* height) = 0;
 
-        //! Return true if block hash points to the current chain tip, or to a
-        //! possible descendant of the current chain tip that isn't currently
-        //! connected.
-        virtual bool isPotentialTip(const uint256& hash) = 0;
-
         //! Get locator for the current chain tip.
         virtual CBlockLocator getTipLocator() = 0;
 
-        //! Return height of the latest block common to locator and chain, which
-        //! is guaranteed to be an ancestor of the block used to create the
-        //! locator.
+        //! Return height of the highest block on chain in common with the locator,
+        //! which will either be the original block used to create the locator,
+        //! or one of its ancestors.
         virtual Optional<int> findLocatorFork(const CBlockLocator& locator) = 0;
 
         //! Check if transaction will be final given chain height current time.
         virtual bool checkFinalTx(const CTransaction& tx) = 0;
-
-        //! Add transaction to memory pool if the transaction fee is below the
-        //! amount specified by absurd_fee. Returns false if the transaction
-        //! could not be added due to the fee or for another reason.
-        virtual bool submitToMemoryPool(const CTransactionRef& tx, CAmount absurd_fee, CValidationState& state) = 0;
     };
 
     //! Return Lock interface. Chain is locked when this is called, and
     //! unlocked when the returned interface is freed.
     virtual std::unique_ptr<Lock> lock(bool try_lock = false) = 0;
-
-    //! Return Lock interface assuming chain is already locked. This
-    //! method is temporary and is only used in a few places to avoid changing
-    //! behavior while code is transitioned to use the Chain::Lock interface.
-    virtual std::unique_ptr<Lock> assumeLocked() = 0;
 
     //! Return whether node has the block and optionally return block metadata
     //! or contents.
@@ -184,11 +155,18 @@ public:
     //! Check if transaction has descendants in mempool.
     virtual bool hasDescendantsInMempool(const uint256& txid) = 0;
 
-    //! Relay transaction.
-    virtual void relayTransaction(const uint256& txid) = 0;
+    //! Transaction is added to memory pool, if the transaction fee is below the
+    //! amount specified by max_tx_fee, and broadcast to all peers if relay is set to true.
+    //! Return false if the transaction could not be added due to the fee or for another reason.
+    virtual bool broadcastTransaction(const CTransactionRef& tx, std::string& err_string, const CAmount& max_tx_fee, bool relay) = 0;
 
     //! Calculate mempool ancestor and descendant counts for the given transaction.
     virtual void getTransactionAncestry(const uint256& txid, size_t& ancestors, size_t& descendants) = 0;
+
+    //! Get the node's package limits.
+    //! Currently only returns the ancestor and descendant count limits, but could be enhanced to
+    //! return more policy settings.
+    virtual void getPackageLimits(unsigned int& limit_ancestor_count, unsigned int& limit_descendant_count) = 0;
 
     //! Check if transaction will pass the mempool's chain limits.
     virtual bool checkChainLimits(const CTransactionRef& tx) = 0;
@@ -211,17 +189,11 @@ public:
     //! Relay dust fee setting (-dustrelayfee), reflecting lowest rate it's economical to spend.
     virtual CFeeRate relayDustFee() = 0;
 
-    //! Node max tx fee setting (-maxtxfee).
-    //! This could be replaced by a per-wallet max fee, as proposed at
-    //! https://github.com/bitcoin/bitcoin/issues/15355
-    //! But for the time being, wallets call this to access the node setting.
-    virtual CAmount maxTxFee() = 0;
+    //! Check if any block has been pruned.
+    virtual bool havePruned() = 0;
 
-    //! Check if pruning is enabled.
-    virtual bool getPruneMode() = 0;
-
-    //! Check if p2p enabled.
-    virtual bool p2pEnabled() = 0;
+    //! Check if the node is ready to broadcast transactions.
+    virtual bool isReadyToBroadcast() = 0;
 
     //! Check if in IBD.
     virtual bool isInitialBlockDownload() = 0;
@@ -256,19 +228,40 @@ public:
         virtual void TransactionRemovedFromMempool(const CTransactionRef& ptx) {}
         virtual void BlockConnected(const CBlock& block, const std::vector<CTransactionRef>& tx_conflicted) {}
         virtual void BlockDisconnected(const CBlock& block) {}
+        virtual void UpdatedBlockTip() {}
         virtual void ChainStateFlushed(const CBlockLocator& locator) {}
-        virtual void ResendWalletTransactions(Lock& locked_chain, int64_t best_block_time) {}
     };
 
     //! Register handler for notifications.
     virtual std::unique_ptr<Handler> handleNotifications(Notifications& notifications) = 0;
 
-    //! Wait for pending notifications to be handled.
-    virtual void waitForNotifications() = 0;
+    //! Wait for pending notifications to be processed unless block hash points to the current
+    //! chain tip, or to a possible descendant of the current chain tip that isn't currently
+    //! connected.
+    virtual void waitForNotificationsIfNewBlocksConnected(const uint256& old_tip) = 0;
 
     //! Register handler for RPC. Command is not copied, so reference
     //! needs to remain valid until Handler is disconnected.
     virtual std::unique_ptr<Handler> handleRpc(const CRPCCommand& command) = 0;
+
+    //! Check if deprecated RPC is enabled.
+    virtual bool rpcEnableDeprecated(const std::string& method) = 0;
+
+    //! Run function after given number of seconds. Cancel any previous calls with same name.
+    virtual void rpcRunLater(const std::string& name, std::function<void()> fn, int64_t seconds) = 0;
+
+    //! Current RPC serialization flags.
+    virtual int rpcSerializationFlags() = 0;
+
+    //! Synchronously send TransactionAddedToMempool notifications about all
+    //! current mempool transactions to the specified handler and return after
+    //! the last one is sent. These notifications aren't coordinated with async
+    //! notifications sent by handleNotifications, so out of date async
+    //! notifications from handleNotifications can arrive during and after
+    //! synchronous notifications from requestMempoolTransactions. Clients need
+    //! to be prepared to handle this by ignoring notifications about unknown
+    //! removed transactions and already added new transactions.
+    virtual void requestMempoolTransactions(Notifications& notifications) = 0;
 };
 
 //! Interface to let node manage chain clients (wallets, or maybe tools for

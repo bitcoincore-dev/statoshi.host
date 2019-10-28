@@ -1,7 +1,8 @@
-// Copyright (c) 2009-2018 The Bitcoin Core developers
+// Copyright (c) 2009-2019 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <addrdb.h>
 #include <addrman.h>
 #include <blockencodings.h>
 #include <chain.h>
@@ -12,7 +13,6 @@
 #include <primitives/block.h>
 #include <protocol.h>
 #include <pubkey.h>
-#include <script/script.h>
 #include <streams.h>
 #include <undo.h>
 #include <version.h>
@@ -20,13 +20,17 @@
 #include <stdint.h>
 #include <unistd.h>
 
-#include <algorithm>
-#include <memory>
 #include <vector>
 
 #include <test/fuzz/fuzz.h>
 
-void test_one_input(std::vector<uint8_t> buffer)
+void initialize()
+{
+    // Fuzzers using pubkey must hold an ECCVerifyHandle.
+    static const auto verify_handle = MakeUnique<ECCVerifyHandle>();
+}
+
+void test_one_input(const std::vector<uint8_t>& buffer)
 {
     CDataStream ds(buffer, SER_NETWORK, INIT_PROTO_VERSION);
     try {
@@ -42,11 +46,6 @@ void test_one_input(std::vector<uint8_t> buffer)
             {
                 CBlock block;
                 ds >> block;
-            } catch (const std::ios_base::failure& e) {return;}
-#elif TRANSACTION_DESERIALIZE
-            try
-            {
-                CTransaction tx(deserialize, ds);
             } catch (const std::ios_base::failure& e) {return;}
 #elif BLOCKLOCATOR_DESERIALIZE
             try

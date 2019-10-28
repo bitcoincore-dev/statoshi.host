@@ -1,5 +1,4 @@
 Statoshi: Bitcoin Core + statistics logging
-=====================================
 
 What is Statoshi?
 ----------------

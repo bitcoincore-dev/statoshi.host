@@ -6,7 +6,6 @@
 #define BITCOIN_HTTPSERVER_H
 
 #include <string>
-#include <stdint.h>
 #include <functional>
 
 static const int DEFAULT_HTTP_THREADS=4;
@@ -147,7 +146,5 @@ public:
 private:
     struct event* ev;
 };
-
-std::string urlDecode(const std::string &urlEncoded);
 
 #endif // BITCOIN_HTTPSERVER_H
