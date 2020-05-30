@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+export DEBIAN_FRONTEND=noninteractive
+
+apt -q -y update && apt -q -y upgrade
+
+sudo apt-get -q -y install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
+
+sudo apt-get -q -y install libevent-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev
+
+sudo apt-get -q -y install libminiupnpc-dev
+
+sudo apt-get -q -y install libzmq3-dev
+
+sudo apt-get -q -y install libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools
+
+sudo apt-get -q -y install libqrencode-dev
+
+
+#fix locales in minimum linux .img
+apt-get clean && apt-get -y update && apt-get install -y locales && locale-gen en_US.UTF-8
+update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8
+sh -c "echo -e 'LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8' > /etc/default/locale"
+
+locale-gen en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+locale-gen en_US.UTF-8
+dpkg-reconfigure locales
+
+
+
+
+
+sudo apt-get -q -y install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev
+sudo apt-get -q -y install libssl-dev
+sudo apt-get -q -y install libevent-dev
+sudo apt-get -q -y install libtool
+sudo add-apt -q -y -repository ppa:bitcoin/bitcoin
+sudo apt-get -q -y update
+sudo apt-get -q -y install libdb4.8-dev libdb4.8++-dev
+
+
+
+
+
+
+sudo apt-get -q -y install curl autoconf
+apt-get -q -y install libtool
+apt-get -q -y install automake
+apt-get -q -y install g++
+apt-get -q -y install pkg-config
+apt-get -q -y install libboost-all-dev
+apt-get -q -y install libssl-dev
+apt-get -q -y install libevent-dev
+apt-get -q -y install bsdmainutils
+apt-get -q -y install make
+
+make download -C depends
+$(pwd)/contrib/install_db4.sh .
+$(pwd)/autogen.sh
+$(pwd)/./configure   --disable-wallet  --disable-tests --disable-hardening  --disable-man  --enable-util-cli --enable-util-tx  --with-gui=no --without-miniupnpc --prefix=$(pwd)/depends/x86_64-pc-linux-gnu
+
+ make

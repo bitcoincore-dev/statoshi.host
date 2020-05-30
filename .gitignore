@@ -137,3 +137,19 @@ db4/
 osx_volname
 dist/
 *.background.tiff
+
+
+.vagrant
+.idea
+
+# Vim
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+.project
+
+
+nbproject
