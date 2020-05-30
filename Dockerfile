@@ -4,55 +4,75 @@ ENV PATH "/statoshi:/statoshi/depends:/statoshi/src:/statoshi/depends/x86_64-pc-
 
 
 RUN apk update && apk upgrade && apk add \
+    autoconf \
     automake \
     binutils \
-    bsdmainutils \
+    #bsdmainutils \
     ca-certificates \
     cmake \
     curl \
-    diffoscope \
+    #diffoscope \
     doxygen \
-    g++-multilib \
+    #g++-multilib \
     git \
     libtool \
-    lbzip2 \
+    #lbzip2 \
     make \
-    nsis \
+    #nsis \
     patch \
-    pkg-config \
+    #pkg-config \
+    pkgconfig \
     python3 \
-    ripgrep \
-    vim \
-    xz-utils
+    #ripgrep \
+    vim
+    #\
+    #xz-utils
 # Split cross compile dependencies out.
 # apt cant seem to install everything at once
 RUN apk add \
-    libssl-dev \
+    g++ \
+    build-base \
+    boost-libs \
+    libgcc \
+    libstdc++ \
+    musl \
+    boost-system \
+    boost-build \
+    boost-dev \
+    #libssl-dev \
+    openssl-dev \
     libevent-dev \
-    libbz2-dev \
+    libzmq \
+    #libbz2-dev \
+    libbz2 \
     libcap-dev \
-    librsvg2-bin \
-    libtiff-tools \
-    libtinfo5 \
-    libz-dev \
-    python3-setuptools \
-    g++-aarch64-linux-gnu \
-    binutils-aarch64-linux-gnu \
-    g++-arm-linux-gnueabihf \
-    binutils-arm-linux-gnueabihf \
-    binutils-riscv64-linux-gnu \
-    g++-riscv64-linux-gnu \
-    g++-mingw-w64-x86-64
+    #librsvg2-bin \
+    librsvg \
+    #libtiff-tools \
+    tiff-tools \
+    #libtinfo5 \
+    #libz-dev \
+    zlib-dev \
+    #python3-setuptools \
+    py3-setuptools
+    #\
+    #g++-aarch64-linux-gnu \
+    #binutils-aarch64-linux-gnu \
+    #g++-arm-linux-gnueabihf \
+    #binutils-arm-linux-gnueabihf \
+    #binutils-riscv64-linux-gnu \
+    #g++-riscv64-linux-gnu \
+    #g++-mingw-w64-x86-64
 
 RUN git clone https://github.com/bitcoincore-dev/statoshi && mkdir statoshi/depends/SDKs
 
-RUN make download -C statoshi/depends
+#RUN make download -C statoshi/depends
 
-RUN cd /statoshi/depends && make
+#RUN cd /statoshi/depends && make
 
 RUN cd /statoshi && ./autogen.sh
 
-RUN cd /statoshi && ./configure   --disable-wallet  --disable-tests --disable-hardening  --disable-man  --enable-util-cli --enable-util-tx  --with-gui=no --without-miniupnpc --prefix=/statoshi/depends/x86_64-pc-linux-gnu
+RUN cd /statoshi && ./configure   --disable-wallet  --disable-tests --disable-hardening  --disable-man  --enable-util-cli --enable-util-tx  --with-gui=no --without-miniupnpc # --prefix=/statoshi/depends/x86_64-pc-linux-gnu
 
 
 
