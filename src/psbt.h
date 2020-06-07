@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2019 The Bitcoin Core developers
+// Copyright (c) 2009-2020 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -39,6 +39,10 @@ static constexpr uint8_t PSBT_OUT_BIP32_DERIVATION = 0x02;
 // The separator is 0x00. Reading this in means that the unserializer can interpret it
 // as a 0 length key which indicates that this is the separator. The separator has no value.
 static constexpr uint8_t PSBT_SEPARATOR = 0x00;
+
+// BIP 174 does not specify a maximum file size, but we set a limit anyway
+// to prevent reading a stream indefinitely and running out of memory.
+const std::streamsize MAX_FILE_SIZE_PSBT = 100000000; // 100 MiB
 
 /** A structure for PSBTs which contain per-input information */
 struct PSBTInput
@@ -171,7 +175,7 @@ struct PSBTInput
                 case PSBT_IN_PARTIAL_SIG:
                 {
                     // Make sure that the key is the size of pubkey + 1
-                    if (key.size() != CPubKey::PUBLIC_KEY_SIZE + 1 && key.size() != CPubKey::COMPRESSED_PUBLIC_KEY_SIZE + 1) {
+                    if (key.size() != CPubKey::SIZE + 1 && key.size() != CPubKey::COMPRESSED_SIZE + 1) {
                         throw std::ios_base::failure("Size of key was not the expected size for the type partial signature pubkey");
                     }
                     // Read in the pubkey from key
@@ -387,7 +391,7 @@ struct PSBTOutput
 /** A version of CTransaction with the PSBT format*/
 struct PartiallySignedTransaction
 {
-    boost::optional<CMutableTransaction> tx;
+    Optional<CMutableTransaction> tx;
     std::vector<PSBTInput> inputs;
     std::vector<PSBTOutput> outputs;
     std::map<std::vector<unsigned char>, std::vector<unsigned char>> unknown;
@@ -401,7 +405,6 @@ struct PartiallySignedTransaction
     bool AddInput(const CTxIn& txin, PSBTInput& psbtin);
     bool AddOutput(const CTxOut& txout, const PSBTOutput& psbtout);
     PartiallySignedTransaction() {}
-    PartiallySignedTransaction(const PartiallySignedTransaction& psbt_in) : tx(psbt_in.tx), inputs(psbt_in.inputs), outputs(psbt_in.outputs), unknown(psbt_in.unknown) {}
     explicit PartiallySignedTransaction(const CMutableTransaction& tx);
     /**
      * Finds the UTXO for a given input index
@@ -561,6 +564,7 @@ struct PartiallySignedTransaction
 };
 
 enum class PSBTRole {
+    CREATOR,
     UPDATER,
     SIGNER,
     FINALIZER,
@@ -584,7 +588,7 @@ void UpdatePSBTOutput(const SigningProvider& provider, PartiallySignedTransactio
 /**
  * Finalizes a PSBT if possible, combining partial signatures.
  *
- * @param[in,out] &psbtx reference to PartiallySignedTransaction to finalize
+ * @param[in,out] psbtx PartiallySignedTransaction to finalize
  * return True if the PSBT is now complete, false otherwise
  */
 bool FinalizePSBT(PartiallySignedTransaction& psbtx);
@@ -592,7 +596,7 @@ bool FinalizePSBT(PartiallySignedTransaction& psbtx);
 /**
  * Finalizes a PSBT if possible, and extracts it to a CMutableTransaction if it could be finalized.
  *
- * @param[in]  &psbtx reference to PartiallySignedTransaction
+ * @param[in]  psbtx PartiallySignedTransaction
  * @param[out] result CMutableTransaction representing the complete transaction, if successful
  * @return True if we successfully extracted the transaction, false otherwise
  */
@@ -601,7 +605,7 @@ bool FinalizeAndExtractPSBT(PartiallySignedTransaction& psbtx, CMutableTransacti
 /**
  * Combines PSBTs with the same underlying transaction, resulting in a single PSBT with all partial signatures from each input.
  *
- * @param[out] &out   the combined PSBT, if successful
+ * @param[out] out   the combined PSBT, if successful
  * @param[in]  psbtxs the PSBTs to combine
  * @return error (OK if we successfully combined the transactions, other error if they were not compatible)
  */
