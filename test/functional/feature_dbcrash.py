@@ -51,6 +51,7 @@ class ChainstateWriteCrashTest(BitcoinTestFramework):
         self.num_nodes = 4
         self.setup_clean_chain = False
         self.rpc_timeout = 480
+        self.supports_cli = False
 
         # Set -maxmempool=0 to turn off mempool memory sharing with dbcache
         # Set -rpcservertimeout=900 to reduce socket disconnects in this
@@ -255,7 +256,11 @@ class ChainstateWriteCrashTest(BitcoinTestFramework):
             self.log.debug("Mining longer tip")
             block_hashes = []
             while current_height + 1 > self.nodes[3].getblockcount():
-                block_hashes.extend(self.nodes[3].generate(min(10, current_height + 1 - self.nodes[3].getblockcount())))
+                block_hashes.extend(self.nodes[3].generatetoaddress(
+                    nblocks=min(10, current_height + 1 - self.nodes[3].getblockcount()),
+                    # new address to avoid mining a block that has just been invalidated
+                    address=self.nodes[3].getnewaddress(),
+                ))
             self.log.debug("Syncing %d new blocks...", len(block_hashes))
             self.sync_node3blocks(block_hashes)
             utxo_list = self.nodes[3].listunspent()
@@ -279,6 +284,7 @@ class ChainstateWriteCrashTest(BitcoinTestFramework):
         for i in range(3):
             if self.restart_counts[i] == 0:
                 self.log.warning("Node %d never crashed during utxo flush!", i)
+
 
 if __name__ == "__main__":
     ChainstateWriteCrashTest().main()

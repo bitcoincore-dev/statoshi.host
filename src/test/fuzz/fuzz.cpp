@@ -1,24 +1,28 @@
-// Copyright (c) 2009-2019 The Bitcoin Core developers
+// Copyright (c) 2009-2020 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <test/fuzz/fuzz.h>
 
+#include <test/util/setup_common.h>
+
 #include <cstdint>
 #include <unistd.h>
 #include <vector>
 
+const std::function<void(const std::string&)> G_TEST_LOG_FUN{};
+
+#if defined(__AFL_COMPILER)
 static bool read_stdin(std::vector<uint8_t>& data)
 {
     uint8_t buffer[1024];
     ssize_t length = 0;
     while ((length = read(STDIN_FILENO, buffer, 1024)) > 0) {
         data.insert(data.end(), buffer, buffer + length);
-
-        if (data.size() > (1 << 20)) return false;
     }
     return length == 0;
 }
+#endif
 
 // Default initialization: Override using a non-weak initialize().
 __attribute__((weak)) void initialize()
@@ -40,9 +44,9 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
     return 0;
 }
 
-// Declare main(...) "weak" to allow for libFuzzer linking. libFuzzer provides
-// the main(...) function.
-__attribute__((weak)) int main(int argc, char** argv)
+// Generally, the fuzzer will provide main(), except for AFL
+#if defined(__AFL_COMPILER)
+int main(int argc, char** argv)
 {
     initialize();
 #ifdef __AFL_INIT
@@ -70,3 +74,4 @@ __attribute__((weak)) int main(int argc, char** argv)
 #endif
     return 0;
 }
+#endif
