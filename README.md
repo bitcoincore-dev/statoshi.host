@@ -1,7 +1,6 @@
-Statoshi: Bitcoin Core + statistics logging
+## Statoshi: Bitcoin Core + statistics logging
 
-What is Statoshi?
-----------------
+## What is Statoshi?
 
 Statoshi's objective is to protect Bitcoin by bringing transparency to the activity 
 occurring on the node network. By making this data available, Bitcoin developers can 
@@ -10,14 +9,12 @@ the community can be informed about attacks and aberrant behavior in a timely fa
 
 There is a live Grafana dashboard at [statoshi.info](http://statoshi.info)
 
-License
--------
+## License
 
 Statoshi is released under the terms of the MIT license. See [COPYING](COPYING) for more
 information or see http://opensource.org/licenses/MIT.
 
-Development Process
--------
+## Development Process
 
 Statoshi's changeset to Bitcoin Core is applied in the `master` branch and is
 built and tested after each merge from upstream or from a pull request. However,
@@ -26,10 +23,59 @@ as a Bitcoin wallet.
 
 A guide for Statoshi developers is available [here](https://medium.com/@lopp/statoshi-developer-s-guide-241ac9ab9993#.s1rfi3fv6)
 
-Other Notes
--------
+## Other Notes
+
 A system metrics daemon is available [here](https://github.com/jlopp/bitcoin-utils/blob/master/systemMetricsDaemon.py)
 
 Statoshi also supports running multiple nodes that emit metrics to a single graphite instance. 
 In order to facilitate this, you can add a line to bitcoin.conf that will partition each 
 metric by the name of the host: statshostname=yourNodeName
+
+## Docker Notes
+
+* test grafana config
+
+```
+docker build -f grafana.dockerfile --rm -t grafana .
+```
+
+* test grafana and statsd config
+
+```
+docker build -f grafana-statsd.dockerfile --rm -t grafana-statsd .
+```
+
+```
+docker run -it --network host grafana-statsd .
+
+```
+
+* build
+
+```
+docker build -f statoshi.dockerfile --rm -t statoshi .
+
+```
+
+* run
+
+```
+docker run -it --network host statoshi .
+
+```
+
+* build and run
+
+```
+docker build -f Dockerfile --rm -t statoshi . && docker run -it --network host statoshi .
+
+```
+
+* DESTROY ALL CONTAINERS AND IMAGES (VERY DESTRUCTIVE)
+
+```
+docker ps -aq && \
+docker stop $(docker ps -aq) && \
+docker rm $(docker ps -aq) && \
+docker rmi $(docker images -q)
+```

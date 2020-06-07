@@ -1,0 +1,9 @@
+.git
+db-4.8.30.NC.tar.gz
+depends/*
+autom4te.cache/*
+build_msvc/*
+build-aux/*
+ci/
+db4/
+nbproject/
