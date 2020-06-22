@@ -1,0 +1,450 @@
+{
+  "id": 8,
+  "title": "Peers",
+  "originalTitle": "Peers",
+  "tags": [],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "hideControls": false,
+  "sharedCrosshair": true,
+  "rows": [
+    {
+      "collapsable": true,
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "notice": false,
+      "panels": [
+        {
+          "aliasColors": {
+            "stats.gauges.peers.knownAddresses": "#EAB839",
+            "stats.gauges.peers.totalConnections": "#629E51"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "max": null,
+            "min": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 2,
+          "interactive": true,
+          "leftYAxisLabel": "Peers",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "legend_counts": true,
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "options": false,
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "resolution": 100,
+          "rightYAxisLabel": "Addresses",
+          "scale": 1,
+          "seriesOverrides": [
+            {
+              "alias": "stats.gauges.peers.knownAddresses",
+              "yaxis": 2
+            },
+            {
+              "alias": "knownAddresses",
+              "yaxis": 2
+            }
+          ],
+          "span": 12,
+          "spyable": true,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "target": "aliasByMetric(stats.gauges.peers.fullNodeConnections)"
+            },
+            {
+              "target": "aliasByMetric(stats.gauges.peers.spvNodeConnections)"
+            },
+            {
+              "target": "aliasByMetric(stats.gauges.peers.inboundConnections)"
+            },
+            {
+              "target": "aliasByMetric(stats.gauges.peers.outboundConnections)"
+            },
+            {
+              "target": "aliasByMetric(stats.gauges.peers.knownAddresses)"
+            },
+            {
+              "target": "aliasByMetric(stats.gauges.peers.ipv4Connections)"
+            },
+            {
+              "target": "aliasByMetric(stats.gauges.peers.ipv6Connections)"
+            },
+            {
+              "target": "aliasByMetric(stats.gauges.peers.torConnections)"
+            },
+            {
+              "target": "aliasByMetric(stats.gauges.peers.totalConnections)"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "timezone": "browser",
+          "title": "Peers",
+          "tooltip": {
+            "query_as_alias": true,
+            "shared": true,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "none",
+            "none"
+          ],
+          "zerofill": true
+        }
+      ],
+      "title": "Connections"
+    },
+    {
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {
+            "lower": "#7EB26D",
+            "median": "#1F78C1",
+            "stats.gauges.peers.knownAddresses": "#EAB839",
+            "stats.gauges.peers.totalConnections": "#629E51",
+            "upper": "#890F02"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 10,
+            "leftMax": null,
+            "leftMin": null,
+            "max": null,
+            "min": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 9,
+          "interactive": true,
+          "leftYAxisLabel": "Ping Time",
+          "legend": {
+            "avg": true,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "legend_counts": true,
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "options": false,
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "resolution": 100,
+          "rightYAxisLabel": "",
+          "scale": 1,
+          "seriesOverrides": [
+            {
+              "alias": "stats.gauges.peers.knownAddresses",
+              "yaxis": 2
+            },
+            {
+              "alias": "knownAddresses",
+              "yaxis": 2
+            }
+          ],
+          "span": 12,
+          "spyable": true,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "target": "aliasByMetric(stats.timers.peers.ping_us.lower)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.timers.peers.ping_us.median)"
+            },
+            {
+              "target": "aliasByMetric(stats.timers.peers.ping_us.upper)"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "timezone": "browser",
+          "title": "Peer Pings",
+          "tooltip": {
+            "query_as_alias": true,
+            "shared": true,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "µs",
+            "none"
+          ],
+          "zerofill": true
+        }
+      ],
+      "title": "New row"
+    },
+    {
+      "collapsable": true,
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "notice": false,
+      "panels": [
+        {
+          "aliasColors": {
+            "banned": "#890F02",
+            "stats.message.sent.reject_tx_duplicate": "#E0F9D7",
+            "stats.misbehavior.amount": "#EAB839",
+            "stats.misbehavior.banned": "#890F02"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "bars": true,
+          "datasource": null,
+          "editable": true,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "max": null,
+            "min": 0,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 8,
+          "interactive": true,
+          "leftYAxisLabel": "Rejected Messages per sec",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "hideEmpty": true,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "legend_counts": true,
+          "lines": false,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": false,
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "resolution": 100,
+          "rightYAxisLabel": "Peer Misbehavior per sec",
+          "scale": 1,
+          "seriesOverrides": [
+            {
+              "alias": "stats.misbehavior.banned",
+              "yaxis": 2
+            },
+            {
+              "alias": "banned",
+              "yaxis": 2
+            }
+          ],
+          "span": 12,
+          "spyable": true,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject)"
+            },
+            {
+              "target": "aliasByMetric(stats.message.sent.reject_tx_duplicate)"
+            },
+            {
+              "target": "aliasByMetric(stats.message.sent.reject_tx_invalid)"
+            },
+            {
+              "target": "aliasByMetric(stats.message.sent.reject_tx_nonstandard)"
+            },
+            {
+              "target": "aliasByMetric(stats.misbehavior.banned)"
+            },
+            {
+              "target": "stats.message.sent.reject_addr_malformed"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_block_)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_block_invalid)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_block_obsolete)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_headers_malformed)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_ping_malformed)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_sendcmpct_malformed)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_tx_insufficientfee)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_tx_malformed)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_version_duplicate)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_version_nonstandard)"
+            },
+            {
+              "hide": false,
+              "target": "aliasByMetric(stats.message.sent.reject_version_obsolete)"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "timezone": "browser",
+          "title": "Peer Misbehavior",
+          "tooltip": {
+            "query_as_alias": true,
+            "shared": false,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "none",
+            "none"
+          ],
+          "zerofill": true
+        }
+      ],
+      "title": "Peer Misbehavior"
+    }
+  ],
+  "nav": [
+    {
+      "collapse": false,
+      "enable": true,
+      "notice": false,
+      "now": true,
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "status": "Stable",
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ],
+      "type": "timepicker"
+    }
+  ],
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "templating": {
+    "enable": false,
+    "list": []
+  },
+  "annotations": {
+    "enable": false,
+    "list": []
+  },
+  "refresh": "10m",
+  "schemaVersion": 6,
+  "version": 6,
+  "links": []
+}
