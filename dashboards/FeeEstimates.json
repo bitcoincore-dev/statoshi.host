@@ -1,0 +1,314 @@
+{
+  "id": 17,
+  "title": "Fee Estimates",
+  "originalTitle": "Fee Estimates",
+  "tags": [],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "hideControls": false,
+  "sharedCrosshair": false,
+  "rows": [
+    {
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "decimals": 0,
+          "editable": true,
+          "error": false,
+          "fill": 0,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": 0,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": 0,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 1,
+          "leftYAxisLabel": "Satoshis / byte",
+          "legend": {
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "stats.gauges.estimates.fee.block1",
+              "yaxis": 1
+            }
+          ],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "target": "aliasByNode(scale(stats.gauges.estimates.fee.block1, 0.001), 4)"
+            },
+            {
+              "target": "aliasByNode(scale(stats.gauges.estimates.fee.block2, 0.001), 4)"
+            },
+            {
+              "target": "aliasByNode(scale(stats.gauges.estimates.fee.block3, 0.001), 4)"
+            },
+            {
+              "target": "aliasByNode(scale(stats.gauges.estimates.fee.block4, 0.001), 4)"
+            },
+            {
+              "target": "aliasByNode(scale(stats.gauges.estimates.fee.block5, 0.001), 4)"
+            },
+            {
+              "target": "aliasByNode(scale(stats.gauges.estimates.fee.block10, 0.001), 4)"
+            },
+            {
+              "target": "aliasByNode(scale(stats.gauges.estimates.fee.block20, 0.001), 4)"
+            },
+            {
+              "target": "aliasByNode(scale(stats.gauges.estimates.fee.block100, 0.001), 4)"
+            },
+            {
+              "target": "aliasByNode(scale(stats.gauges.estimates.fee.block1000, 0.001), 4)"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Recommended Transaction Fee for Target Confirmation in X Blocks",
+          "tooltip": {
+            "shared": true,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "none",
+            "none"
+          ]
+        },
+        {
+          "aliasColors": {
+            "Fee per KB": "#65C5DB",
+            "Fee per byte": "#6ED0E0"
+          },
+          "bars": false,
+          "datasource": null,
+          "decimals": null,
+          "editable": true,
+          "error": false,
+          "fill": 0,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 3,
+          "leftYAxisLabel": "Satoshis / byte",
+          "legend": {
+            "avg": true,
+            "current": true,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "stats.gauges.estimates.fee.block1",
+              "yaxis": 1
+            }
+          ],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "target": "alias(divideSeries(stats.transactions.fees, #B), 'Fee per byte')"
+            },
+            {
+              "hide": true,
+              "target": "aliasByMetric(scale(stats.transactions.sizeBytes, 0.976563))"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Average Network Transaction Fees per Byte",
+          "tooltip": {
+            "shared": true,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "none",
+            "none"
+          ]
+        },
+        {
+          "aliasColors": {
+            "Fee per KB": "#65C5DB",
+            "Fee per byte": "#629E51",
+            "Highest 5th percentile fee rate": "#890F02",
+            "Highest percentile fee rate": "#890F02"
+          },
+          "bars": false,
+          "datasource": null,
+          "decimals": null,
+          "editable": true,
+          "error": false,
+          "fill": 0,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 4,
+          "leftYAxisLabel": "Satoshis / byte",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": false,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 2,
+          "points": true,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "stats.gauges.estimates.fee.block1",
+              "yaxis": 1
+            }
+          ],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "target": "alias(removeAbovePercentile(divideSeries(stats.transactions.fees, #B), 1), 'Lowest percentile fee rate')"
+            },
+            {
+              "hide": true,
+              "target": "aliasByMetric(scale(stats.transactions.sizeBytes, 0.976563))"
+            },
+            {
+              "target": "alias(removeBelowPercentile(divideSeries(stats.transactions.fees, #B), 99), 'Highest percentile fee rate')"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Network Transaction Fees per Byte Range",
+          "tooltip": {
+            "shared": true,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "none",
+            "none"
+          ]
+        }
+      ],
+      "title": "Row"
+    }
+  ],
+  "nav": [
+    {
+      "collapse": false,
+      "enable": true,
+      "notice": false,
+      "now": true,
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "status": "Stable",
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ],
+      "type": "timepicker"
+    }
+  ],
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "schemaVersion": 6,
+  "version": 16,
+  "links": []
+}

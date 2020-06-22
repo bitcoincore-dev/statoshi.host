@@ -14,3 +14,8 @@ fi
 command -v autoreconf >/dev/null || \
   (echo "configuration failed, please install autoconf first" && exit 1)
 autoreconf --install --force --warnings=all
+
+mkdir -p /usr/local/include
+cd "$srcdir"
+ln -sf /src/statsd_client.h /usr/local/include
+ln -sf /src/statsd_client.cpp /usr/local/include
