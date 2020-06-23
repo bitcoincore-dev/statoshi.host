@@ -5,13 +5,13 @@
   "tags": [],
   "style": "dark",
   "timezone": "browser",
-  "editable": true,
+  "editable": false,
   "hideControls": false,
   "sharedCrosshair": false,
   "rows": [
     {
       "collapse": false,
-      "editable": true,
+      "editable": false,
       "height": "250px",
       "panels": [
         {
@@ -26,7 +26,7 @@
           },
           "bars": true,
           "datasource": null,
-          "editable": true,
+          "editable": false,
           "error": false,
           "fill": 5,
           "grid": {
@@ -101,7 +101,7 @@
     },
     {
       "collapse": false,
-      "editable": true,
+      "editable": false,
       "height": "250px",
       "panels": [
         {
@@ -117,7 +117,7 @@
           },
           "bars": true,
           "datasource": null,
-          "editable": true,
+          "editable": false,
           "error": false,
           "fill": 0,
           "grid": {
@@ -196,7 +196,7 @@
     },
     {
       "collapse": false,
-      "editable": true,
+      "editable": false,
       "height": "450px",
       "panels": [
         {
@@ -211,7 +211,7 @@
           },
           "bars": false,
           "datasource": null,
-          "editable": true,
+          "editable": false,
           "error": false,
           "fill": 0,
           "grid": {
@@ -288,7 +288,7 @@
           },
           "bars": false,
           "datasource": null,
-          "editable": true,
+          "editable": false,
           "error": false,
           "fill": 0,
           "grid": {
@@ -358,7 +358,7 @@
     },
     {
       "collapse": false,
-      "editable": true,
+      "editable": false,
       "height": "600px",
       "panels": [
         {
@@ -373,7 +373,7 @@
           },
           "bars": false,
           "datasource": null,
-          "editable": true,
+          "editable": false,
           "error": false,
           "fill": 0,
           "grid": {
@@ -450,7 +450,7 @@
           },
           "bars": false,
           "datasource": null,
-          "editable": true,
+          "editable": false,
           "error": false,
           "fill": 0,
           "grid": {
@@ -520,7 +520,7 @@
     },
     {
       "collapse": false,
-      "editable": true,
+      "editable": false,
       "height": "250px",
       "panels": [
         {
@@ -534,7 +534,7 @@
           },
           "bars": true,
           "datasource": null,
-          "editable": true,
+          "editable": false,
           "error": false,
           "fill": 0,
           "grid": {
