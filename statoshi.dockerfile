@@ -251,50 +251,52 @@ RUN df -H
 # We build Statoshi last
 FROM production as clone-repo
 
+ARG STATS_BITCOINCORE_DEV=stats.bitcoincore.dev
+
 # Change to your fork
-RUN git clone https://github.com/bitcoincore-dev/statoshi --depth 1 /statoshi && mkdir -p /statoshi/depends/SDKs
+RUN git clone https://github.com/bitcoincore-dev/${STATS_BITCOINCORE_DEV} --depth 1 /${STATS_BITCOINCORE_DEV} && mkdir -p /${STATS_BITCOINCORE_DEV}/depends/SDKs
 
 FROM clone-repo as make-depends
 
-RUN cd /statoshi && make -j $(nproc) download -C /statoshi/depends
+RUN cd /${STATS_BITCOINCORE_DEV} && make -j $(nproc) download -C /${STATS_BITCOINCORE_DEV}/depends
 
 FROM make-depends as autogen
 
-RUN cd /statoshi && ./autogen.sh
+RUN cd /${STATS_BITCOINCORE_DEV} && ./autogen.sh
 
 FROM autogen as configure
 
-RUN cd /statoshi && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+RUN cd /${STATS_BITCOINCORE_DEV}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
 
 FROM configure as make
 
-RUN cd /statoshi && make -j $(nproc)
+RUN cd /${STATS_BITCOINCORE_DEV} && make -j $(nproc)
 
 FROM make as strip-copy
 
-RUN cp /statoshi/README.md /
+RUN strip /${STATS_BITCOINCORE_DEV}/src/bitcoind
 
-RUN strip /statoshi/src/bitcoind
+RUN strip /${STATS_BITCOINCORE_DEV}/src/bitcoin-cli
 
-RUN strip /statoshi/src/bitcoin-cli
+RUN strip /${STATS_BITCOINCORE_DEV}/src/bitcoin-tx
 
-RUN strip /statoshi/src/bitcoin-tx
+RUN cp    /${STATS_BITCOINCORE_DEV}/src/bitcoind /usr/bin
 
-RUN cp /statoshi/src/bitcoind /usr/bin
+RUN cp    /${STATS_BITCOINCORE_DEV}/src/bitcoin-cli /usr/bin
 
-RUN cp /statoshi/src/bitcoin-cli /usr/bin
+RUN cp    /${STATS_BITCOINCORE_DEV}/src/bitcoin-tx /usr/bin
 
-RUN cp /statoshi/src/bitcoin-tx /usr/bin
+RUN cp    /${STATS_BITCOINCORE_DEV}/check_synced.sh /usr/bin
 
-RUN cp /statoshi/check_synced.sh /usr/bin
+RUN cp    /${STATS_BITCOINCORE_DEV}/dashboards /usr/share/grafana
 
-RUN cp /statoshi/conf/run-grafana.sh /usr/bin
+RUN cp    /${STATS_BITCOINCORE_DEV}/conf/run-grafana.sh /usr/bin
 
 FROM strip-copy as cleanup
 
 RUN df -H
 
-RUN rm -rf /statoshi
+RUN rm -rf /${STATS_BITCOINCORE_DEV}
 
 RUN df -H
 
