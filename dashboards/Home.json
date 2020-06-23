@@ -78,7 +78,7 @@
       "type": "text"
     },
     {
-      "content": "<div style='margin:50px;overflow:hidden'><h2><a href='https://stats.bitcoincore.dev'>stats.bitcoincore.dev</a> - docker container</h2></br> <code>git clone https://github.com/bitcoincore-dev/statoshi.git</code>",
+      "content": "<div style='margin:50px;overflow:hidden'><h2><a href='http://stats.bitcoincore.dev'>stats.bitcoincore.dev</a> - docker container</h2></br> <code>git clone https://github.com/bitcoincore-dev/statoshi.git</code>",
       "datasource": null,
       "fieldConfig": {
         "defaults": {
