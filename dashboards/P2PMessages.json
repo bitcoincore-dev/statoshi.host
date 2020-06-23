@@ -1,20 +1,34 @@
 {
-  "id": 10,
-  "title": "P2P Messages",
-  "originalTitle": "P2P Messages",
-  "tags": [],
-  "style": "dark",
-  "timezone": "browser",
+  "annotations": {
+    "enable": false,
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
   "editable": true,
-  "hideControls": false,
-  "sharedCrosshair": true,
-  "rows": [
+  "gnetId": null,
+  "graphTooltip": 1,
+  "id": 24,
+  "links": [],
+  "panels": [
     {
-      "collapsable": true,
-      "collapse": true,
-      "editable": true,
-      "height": "500px",
-      "notice": false,
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 11,
       "panels": [
         {
           "aliasColors": {},
@@ -23,25 +37,20 @@
           },
           "bars": false,
           "datasource": null,
-          "editable": true,
+          "editable": false,
           "fill": 1,
           "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
             "max": null,
-            "min": 0,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            "min": 0
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 24,
+            "x": 0,
+            "y": 1
           },
           "id": 3,
           "interactive": true,
-          "leftYAxisLabel": "Messages Received per sec",
           "legend": {
             "alignAsTable": true,
             "avg": false,
@@ -65,7 +74,6 @@
           "resolution": 100,
           "scale": 1,
           "seriesOverrides": [],
-          "span": 12,
           "spyable": true,
           "stack": false,
           "steppedLine": false,
@@ -74,6 +82,7 @@
               "target": "aliasByNode(movingAverage(stats.message.received.*, 10), 3)"
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "timezone": "browser",
@@ -84,11 +93,25 @@
             "value_type": "individual"
           },
           "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "none",
-            "none"
+          "xaxis": {
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "none",
+              "label": "Messages Received per sec",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "none",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
           ],
           "zerofill": true
         },
@@ -99,26 +122,21 @@
           },
           "bars": false,
           "datasource": null,
-          "editable": true,
+          "editable": false,
           "fill": 1,
           "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
             "max": null,
-            "min": 0,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            "min": 0
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 24,
+            "x": 0,
+            "y": 15
           },
           "height": "",
           "id": 4,
           "interactive": true,
-          "leftYAxisLabel": "Messages Sent per sec",
           "legend": {
             "alignAsTable": true,
             "avg": false,
@@ -143,7 +161,6 @@
           "resolution": 100,
           "scale": 1,
           "seriesOverrides": [],
-          "span": 12,
           "spyable": true,
           "stack": false,
           "steppedLine": false,
@@ -152,6 +169,7 @@
               "target": "aliasByNode(movingAverage(stats.message.sent.*, 10), 3)"
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "timezone": "browser",
@@ -163,581 +181,798 @@
           },
           "transparent": false,
           "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "none",
-            "none"
+          "xaxis": {
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "none",
+              "label": "Messages Sent per sec",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "none",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
           ],
           "zerofill": true
         }
       ],
-      "title": "All Messages"
+      "title": "All Messages",
+      "type": "row"
     },
     {
-      "collapse": false,
-      "editable": true,
-      "height": "200px",
-      "panels": [
-        {
-          "aliasColors": {
-            "addr messages sent": "#890F02"
-          },
-          "annotate": {
-            "enable": false
-          },
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "max": null,
-            "min": 0,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 6,
-          "interactive": true,
-          "leftYAxisLabel": "Messages Per Second",
-          "legend": {
-            "alignAsTable": false,
-            "avg": true,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "legend_counts": true,
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
-          "options": false,
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "resolution": 100,
-          "scale": 1,
-          "seriesOverrides": [],
-          "span": 6,
-          "spyable": true,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "target": "alias(stats.message.received.addr, 'addr messages received')"
-            },
-            {
-              "target": "alias(stats.message.sent.addr, 'addr messages sent')"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "timezone": "browser",
-          "title": "addr",
-          "tooltip": {
-            "query_as_alias": true,
-            "shared": false,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "none",
-            "none"
-          ],
-          "zerofill": true
-        },
-        {
-          "aliasColors": {
-            "getData messages sent": "#890F02"
-          },
-          "annotate": {
-            "enable": false
-          },
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "max": null,
-            "min": 0,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 5,
-          "interactive": true,
-          "leftYAxisLabel": "Messages Per Second",
-          "legend": {
-            "alignAsTable": false,
-            "avg": true,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "legend_counts": true,
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
-          "options": false,
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "resolution": 100,
-          "scale": 1,
-          "seriesOverrides": [],
-          "span": 6,
-          "spyable": true,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "target": "alias(stats.message.received.getdata, 'getData messages received')"
-            },
-            {
-              "target": "alias(stats.message.sent.getdata, 'getData messages sent')"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "timezone": "browser",
-          "title": "getData",
-          "tooltip": {
-            "query_as_alias": true,
-            "shared": false,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "none",
-            "none"
-          ],
-          "zerofill": true
-        },
-        {
-          "aliasColors": {
-            "Ratio of tx sent:received": "#CFFAFF",
-            "getData messages sent": "#890F02",
-            "inv messages sent": "#890F02",
-            "tx messages sent": "#890F02"
-          },
-          "annotate": {
-            "enable": false
-          },
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "max": null,
-            "min": 0,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 9,
-          "interactive": true,
-          "leftYAxisLabel": "Messages Per Second",
-          "legend": {
-            "alignAsTable": false,
-            "avg": true,
-            "current": false,
-            "max": true,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "legend_counts": true,
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
-          "options": false,
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "resolution": 100,
-          "scale": 1,
-          "seriesOverrides": [],
-          "span": 6,
-          "spyable": true,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "target": "alias(stats.message.received.inv, 'inv messages received')"
-            },
-            {
-              "target": "alias(stats.message.sent.inv, 'inv messages sent')"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "timezone": "browser",
-          "title": "inv",
-          "tooltip": {
-            "query_as_alias": true,
-            "shared": false,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "none",
-            "none"
-          ],
-          "zerofill": true
-        },
-        {
-          "aliasColors": {
-            "Ratio of tx sent:received": "#CFFAFF",
-            "getData messages sent": "#890F02",
-            "tx messages sent": "#890F02"
-          },
-          "annotate": {
-            "enable": false
-          },
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "max": null,
-            "min": 0,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 8,
-          "interactive": true,
-          "leftYAxisLabel": "Messages Per Second",
-          "legend": {
-            "alignAsTable": false,
-            "avg": true,
-            "current": false,
-            "max": true,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "legend_counts": true,
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
-          "options": false,
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "resolution": 100,
-          "scale": 1,
-          "seriesOverrides": [],
-          "span": 6,
-          "spyable": true,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "target": "alias(stats.message.received.tx, 'tx messages received')"
-            },
-            {
-              "target": "alias(stats.message.sent.tx, 'tx messages sent')"
-            },
-            {
-              "target": "alias(divideSeries(stats.message.sent.tx, #A), 'ratio of tx sent:received')"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "timezone": "browser",
-          "title": "tx",
-          "tooltip": {
-            "query_as_alias": true,
-            "shared": false,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "none",
-            "none"
-          ],
-          "zerofill": true
-        },
-        {
-          "aliasColors": {
-            "ping messages sent": "#890F02"
-          },
-          "annotate": {
-            "enable": false
-          },
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "max": null,
-            "min": 0,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 7,
-          "interactive": true,
-          "leftYAxisLabel": "Messages Per Second",
-          "legend": {
-            "alignAsTable": false,
-            "avg": true,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "legend_counts": true,
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
-          "options": false,
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "resolution": 100,
-          "scale": 1,
-          "seriesOverrides": [],
-          "span": 6,
-          "spyable": true,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "target": "alias(stats.message.received.ping, 'ping messages received')"
-            },
-            {
-              "target": "alias(stats.message.sent.ping, 'ping messages sent')"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "timezone": "browser",
-          "title": "ping",
-          "tooltip": {
-            "query_as_alias": true,
-            "shared": true,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "none",
-            "none"
-          ],
-          "zerofill": true
-        },
-        {
-          "aliasColors": {
-            "ping messages sent": "#890F02",
-            "pong messages sent": "#890F02"
-          },
-          "annotate": {
-            "enable": false
-          },
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "max": null,
-            "min": 0,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 10,
-          "interactive": true,
-          "leftYAxisLabel": "Messages Per Second",
-          "legend": {
-            "alignAsTable": false,
-            "avg": true,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "legend_counts": true,
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
-          "options": false,
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "resolution": 100,
-          "scale": 1,
-          "seriesOverrides": [],
-          "span": 6,
-          "spyable": true,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "target": "alias(stats.message.received.pong, 'pong messages received')"
-            },
-            {
-              "target": "alias(stats.message.sent.pong, 'pong messages sent')"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "timezone": "browser",
-          "title": "ping",
-          "tooltip": {
-            "query_as_alias": true,
-            "shared": true,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "none",
-            "none"
-          ],
-          "zerofill": true
-        }
-      ],
-      "title": "New row"
-    },
-    {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 12,
       "panels": [],
-      "title": "New row"
-    }
-  ],
-  "nav": [
+      "title": "Detail",
+      "type": "row"
+    },
     {
-      "collapse": false,
-      "enable": true,
-      "notice": false,
-      "now": true,
-      "refresh_intervals": [
-        "5s",
-        "10s",
-        "30s",
-        "1m",
-        "5m",
-        "15m",
-        "30m",
-        "1h",
-        "2h",
-        "1d"
+      "aliasColors": {
+        "addr messages sent": "#890F02"
+      },
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "editable": false,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {
+        "max": null,
+        "min": 0
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 2
+      },
+      "hiddenSeries": false,
+      "id": 6,
+      "interactive": true,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "legend_counts": true,
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "spyable": true,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "alias(stats.message.received.addr, 'addr messages received')"
+        },
+        {
+          "refId": "B",
+          "target": "alias(stats.message.sent.addr, 'addr messages sent')"
+        }
       ],
-      "status": "Stable",
-      "time_options": [
-        "5m",
-        "15m",
-        "1h",
-        "6h",
-        "12h",
-        "24h",
-        "2d",
-        "7d",
-        "30d"
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "timezone": "browser",
+      "title": "addr",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": false,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "Messages Per Second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
       ],
-      "type": "timepicker"
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {
+        "getData messages sent": "#890F02"
+      },
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "editable": false,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {
+        "max": null,
+        "min": 0
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 2
+      },
+      "hiddenSeries": false,
+      "id": 5,
+      "interactive": true,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "legend_counts": true,
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "spyable": true,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "alias(stats.message.received.getdata, 'getData messages received')"
+        },
+        {
+          "refId": "B",
+          "target": "alias(stats.message.sent.getdata, 'getData messages sent')"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "timezone": "browser",
+      "title": "getData",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": false,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "Messages Per Second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {
+        "Ratio of tx sent:received": "#CFFAFF",
+        "getData messages sent": "#890F02",
+        "inv messages sent": "#890F02",
+        "tx messages sent": "#890F02"
+      },
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "editable": false,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {
+        "max": null,
+        "min": 0
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 9,
+      "interactive": true,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "legend_counts": true,
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "spyable": true,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "alias(stats.message.received.inv, 'inv messages received')"
+        },
+        {
+          "refId": "B",
+          "target": "alias(stats.message.sent.inv, 'inv messages sent')"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "timezone": "browser",
+      "title": "inv",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": false,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "Messages Per Second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {
+        "Ratio of tx sent:received": "#CFFAFF",
+        "getData messages sent": "#890F02",
+        "tx messages sent": "#890F02"
+      },
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "editable": false,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {
+        "max": null,
+        "min": 0
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 8,
+      "interactive": true,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "legend_counts": true,
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "spyable": true,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "alias(stats.message.received.tx, 'tx messages received')"
+        },
+        {
+          "refId": "B",
+          "target": "alias(stats.message.sent.tx, 'tx messages sent')"
+        },
+        {
+          "refId": "C",
+          "target": "alias(divideSeries(stats.message.sent.tx, #A), 'ratio of tx sent:received')"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "timezone": "browser",
+      "title": "tx",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": false,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "Messages Per Second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {
+        "ping messages sent": "#890F02"
+      },
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "editable": false,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {
+        "max": null,
+        "min": 0
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "hiddenSeries": false,
+      "id": 7,
+      "interactive": true,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "legend_counts": true,
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "spyable": true,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "alias(stats.message.received.ping, 'ping messages received')"
+        },
+        {
+          "refId": "B",
+          "target": "alias(stats.message.sent.ping, 'ping messages sent')"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "timezone": "browser",
+      "title": "ping",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "Messages Per Second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {
+        "ping messages sent": "#890F02",
+        "pong messages sent": "#890F02"
+      },
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "editable": false,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {
+        "max": null,
+        "min": 0
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "hiddenSeries": false,
+      "id": 10,
+      "interactive": true,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "legend_counts": true,
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "spyable": true,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "alias(stats.message.received.pong, 'pong messages received')"
+        },
+        {
+          "refId": "B",
+          "target": "alias(stats.message.sent.pong, 'pong messages sent')"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "timezone": "browser",
+      "title": "ping",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "Messages Per Second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
     }
   ],
+  "refresh": "10m",
+  "schemaVersion": 25,
+  "style": "dark",
+  "tags": [
+    "stats"
+  ],
+  "templating": {
+    "list": []
+  },
   "time": {
     "from": "now-7d",
     "to": "now"
   },
-  "templating": {
-    "enable": false,
-    "list": []
+  "timepicker": {
+    "collapse": false,
+    "enable": true,
+    "notice": false,
+    "now": true,
+    "refresh_intervals": [
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "status": "Stable",
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ],
+    "type": "timepicker"
   },
-  "annotations": {
-    "enable": false,
-    "list": []
-  },
-  "refresh": "10m",
-  "schemaVersion": 6,
-  "version": 8,
-  "links": []
+  "timezone": "browser",
+  "title": "P2P Messages",
+  "uid": "P2PMessages",
+  "version": 3
 }
