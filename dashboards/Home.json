@@ -13,7 +13,7 @@
     ]
   },
   "description": "Statoshi.info - Realtime Bitcoin Node Stats",
-  "editable": true,
+  "editable": false,
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
@@ -127,7 +127,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "editable": true,
+      "editable": false,
       "error": false,
       "fieldConfig": {
         "defaults": {
