@@ -2,20 +2,23 @@
 
 export LC_ALL=C
 
-su-exec root /usr/bin/./run-grafana.sh &
+start_bitcoind(){
+  BITCOIND=/usr/bin/bitcoind
+    if test -f "$BITCOIND"; then
+      /usr/bin/./bitcoind -daemon -prune=550 &
+    fi
+}
+stop_bitcoind(){
+  BITCOIN_CLI=/usr/bin/bitcoin-cli
+    if test -f "$BITCOIN_CLI"; then
+      /usr/bin/./bitcoin-cli stop &
+    fi
+}
+shutdown(){
 
-BITCOIND=/usr/bin/bitcoind
-if test -f "$BITCOIND"; then
-   /usr/bin/./bitcoind -daemon -prune=550 &
-fi
-
-#!/bin/sh
-
-## Inspired from the script found at
-##   https://sanjeevan.co.uk/blog/running-services-inside-a-container-using-runit-and-alpine-linux/
-
-shutdown() {
   echo "shutting down container"
+
+  stop_bitcoind
 
   # first shutdown any service started by runit
   for _srv in $(ls -1 /etc/service); do
@@ -39,7 +42,13 @@ shutdown() {
   exit
 }
 
+start_bitcoind &
+
+su-exec root /usr/local/bin/./run-grafana.sh &
+
 . /opt/graphite/bin/activate
+
+echo
 
 PATH="${PATH}:/usr/local/bin"
 

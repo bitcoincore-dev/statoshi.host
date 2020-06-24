@@ -1,16 +1,42 @@
-ARG BASE_IMAGE=alpine:3.11.5
+#BEGIN HEADER
+ARG BASE_IMAGE=alpine:3.11.6
+#####################################
+FROM ${BASE_IMAGE} as set-initial-env
+#####################################
 
-FROM ${BASE_IMAGE} as set-grafana-env
+LABEL dev.bitcoincore.stats="dev.bitcoincore.stats"
+LABEL version="v0.20.99.0"
+LABEL description="Statoshi Docker"
+LABEL github="https://github.com/bitcoincore-dev/statoshi"
+LABEL maintainer="admin@bitcoincore.dev"
 
-RUN apk update && apk upgrade && apk add musl busybox bash-completion
-#REF:https://github.com/orangesys/alpine-grafana/blob/master/Dockerfile
+RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git
+RUN apk -U add -v coreutils
+RUN apk add --update -v nodejs nodejs-npm
+
+#NOTE: simply exposing the ports in the dockerfile isnt enough
+#REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
+EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
+RUN git config --global advice.detachedHead false
+
+RUN df -H
+#########################################
+FROM set-initial-env as grafana-download
+#########################################
 
 ENV GRAFANA_VERSION=7.0.0
 RUN mkdir -p /tmp/grafana \
   && wget -P /tmp/ https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
   && tar xfz /tmp/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz --strip-components=1 -C /tmp/grafana
 
-ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+RUN df -H
+########################################
+FROM grafana-download as grafana-config
+########################################
+#REF:https://github.com/orangesys/alpine-grafana/blob/master/Dockerfile
+
+ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    GF_PATHS_CONFIG_DEFAULTS="/usr/share/grafana/conf/defaults.ini" \
     GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
     GF_PATHS_DATA="/var/lib/grafana" \
     GF_PATHS_HOME="/usr/share/grafana" \
@@ -18,16 +44,21 @@ ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
     GF_PATHS_PLUGINS="/var/lib/grafana/plugins" \
     GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
 
+RUN df -H
+######################################
+FROM grafana-config as set-grafana-env
+######################################
+
 WORKDIR $GF_PATHS_HOME
 
 RUN set -ex \
     && addgroup -S grafana \
     && adduser -S -G grafana grafana \
-    && apk add --no-cache libc6-compat ca-certificates su-exec bash
+    #&& apk add --no-cache libc6-compat ca-certificates su-exec bash
+    && apk add -v libc6-compat su-exec
 
-FROM set-grafana-env as grafana-config
-
-COPY --from=0 /tmp/grafana "$GF_PATHS_HOME"
+#NOTE Once /tmp/grafana is copied to GF_PATHS_HOME we are free to modify the default configuration
+COPY --from=grafana-config /tmp/grafana "$GF_PATHS_HOME"
 RUN mkdir -p "$GF_PATHS_HOME/.aws" \
     && mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
         "$GF_PATHS_PROVISIONING/dashboards" \
@@ -38,51 +69,48 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws" \
     && chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" \
     && chmod -R 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
 
-COPY ./config.docker/grafana.ini "$GF_PATHS_CONFIG"
-COPY ./conf/run-grafana.sh /run-grafana.sh
+#NOTE:/usr/share/grafana/conf/defaults.ini is read first
+COPY ./conf/defaults.ini "$GF_PATHS_CONFIG_DEFAULTS"
+COPY ./conf/grafana.ini "$GF_PATHS_CONFIG"
+COPY ./conf/run-grafana.sh /usr/local/bin/
+COPY ./conf/dashboards/* $GF_PATHS_PROVISIONING/dashboards/
+COPY ./conf/datasources/* $GF_PATHS_PROVISIONING/datasources/
 
-#exposing all ports for grafana bitcoin statsd graphite now...
-EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
+COPY ./conf/dashboards/* $GF_PATHS_HOME/dashboards/
 
-#RUN echo "TODO: More config for grafana here..."
-#RUN /run-grafana.sh &
-#CMD ["/run.sh"] <<- moved to /conf/entrypoint
+RUN rm -f $GF_PATHS_HOME/public/img/grafana_icon.svg
+RUN rm -f $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
 
-FROM grafana-config as set-env
+COPY ./src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_icon.svg
+COPY ./src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
+COPY ./src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
+
+RUN df -H
+#########################################
+FROM set-grafana-env as apk-add-packages1
+#########################################
 
 WORKDIR /
 
-ENV PATH "/statoshi:/statoshi/depends:/statoshi/src:/statoshi/depends/x86_64-pc-linux-gnu:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
-FROM set-env as apk-add-statoshi-depends
-
-RUN apk update && apk upgrade && apk add \
+RUN apk update && apk upgrade
+RUN apk add -v \
     autoconf \
     automake \
     binutils \
-    #bsdmainutils \
     ca-certificates \
     cmake \
     curl \
-    #diffoscope \
     doxygen \
-    #g++-multilib \
     git \
     libtool \
-    #lbzip2 \
     make \
-    #nsis \
     patch \
-    #pkg-config \
     pkgconfig \
     python3 \
-    #ripgrep \
+    py3-psutil \
     vim
-    #\
-    #xz-utils
-# Split cross compile dependencies out.
-# apt can't seem to install everything at once
-RUN apk add --no-cache \
+
+RUN apk add -v \
     g++ \
     build-base \
     boost-libs \
@@ -92,35 +120,25 @@ RUN apk add --no-cache \
     boost-system \
     boost-build \
     boost-dev \
-    #libssl-dev \
     openssl-dev \
     libevent-dev \
     libzmq \
     zeromq-dev \
     protobuf-dev \
     linux-headers \
-    #libbz2-dev \
     libbz2 \
     libcap-dev \
-    #librsvg2-bin \
     librsvg \
-    #libtiff-tools \
     tiff-tools \
-    #libtinfo5 \
-    #libz-dev \
     zlib-dev \
-    #python3-setuptools \
     py3-setuptools
 
-RUN git config --global advice.detachedHead false
+RUN df -H
+###########################################
+FROM apk-add-packages1 as apk-add-packages2
+###########################################
 
-#build statsd and graphite...
-FROM apk-add-statoshi-depends as base
-
-LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
-
-RUN true \
- && apk add --no-cache \
+RUN apk add -v \
       cairo \
       collectd \
       collectd-disk \
@@ -132,6 +150,7 @@ RUN true \
       nginx \
       nodejs \
       npm \
+      nodejs-npm \
       py3-pyldap \
       redis \
       runit \
@@ -143,17 +162,19 @@ RUN true \
       mysql-client \
       postgresql-dev \
       postgresql-client \
+      iptables \
  && rm -rf \
       /etc/nginx/conf.d/default.conf \
  && mkdir -p \
       /var/log/carbon \
       /var/log/graphite
 
-FROM base as build
-LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
+RUN df -H
+###########################################
+FROM apk-add-packages2 as apk-add-packages3
+###########################################
 
-RUN true \
- && apk add --update \
+RUN apk add -v \
       alpine-sdk \
       git \
       libffi-dev \
@@ -164,8 +185,14 @@ RUN true \
       openldap-dev \
       python3-dev \
       rrdtool-dev \
-      wget \
- && virtualenv /opt/graphite \
+      wget
+
+RUN df -H
+#################################
+FROM apk-add-packages3 as config1
+#################################
+
+RUN virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip3 install \
       django==2.2.12 \
@@ -178,11 +205,16 @@ RUN true \
       python-ldap \
       mysqlclient \
       psycopg2 \
+      twisted \
       django-cockroachdb==2.2.*
 
-ARG version=1.1.7
+RUN df -H
+#######################
+FROM config1 as config2
+#######################
 
 # install whisper
+ARG version=1.1.7
 ARG whisper_version=${version}
 ARG whisper_repo=https://github.com/graphite-project/whisper.git
 RUN git clone -b ${whisper_version} --depth 1 ${whisper_repo} /usr/local/src/whisper \
@@ -217,12 +249,19 @@ RUN git clone "${statsd_repo}" \
  && git checkout tags/v"${statsd_version}" \
  && npm install
 
+RUN df -H
+#######################
+FROM config2 as config3
+#######################
+
 COPY conf/opt/graphite/conf/                             /opt/defaultconf/graphite/
 COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/local_settings.py
+#COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/settings.py
 
 # config graphite
 COPY conf/opt/graphite/conf/*.conf /opt/graphite/conf/
 COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+#COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/settings.py
 WORKDIR /opt/graphite/webapp
 RUN mkdir -p /var/log/graphite/ \
   && PYTHONPATH=/opt/graphite/webapp /opt/graphite/bin/django-admin.py collectstatic --noinput --settings=graphite.settings
@@ -230,42 +269,32 @@ RUN mkdir -p /var/log/graphite/ \
 # config statsd
 COPY conf/opt/statsd/config/ /opt/defaultconf/statsd/config/
 
-FROM base as production
-LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
+RUN df -H
+#######################
+FROM config3 as config4
+#######################
 
 ENV STATSD_INTERFACE udp
+#ENV STATSD_INTERFACE tcp/udp
 
 COPY conf /
 
 # copy /opt from build image
-COPY --from=build /opt /opt
-
-# defaults
-EXPOSE 80 2003-2004 2013-2014 2023-2024 8080 8125 8125/udp 8126
+COPY --from=config3 /opt /opt
 
 VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd/config", "/etc/logrotate.d", "/var/log", "/var/lib/redis"]
 
+RUN df -H
+#######################
+FROM config4 as config-final
+#######################
 STOPSIGNAL SIGHUP
 
-# We build Statoshi last
-FROM production as git-clone-statoshi-repo
+#################
+#################
+#################
+#################
+#################
+#END HEADER
+#BEGIN INSERT
 
-# Change to your fork
-RUN git clone https://github.com/bitcoincore-dev/statoshi --depth 1 /statoshi && mkdir -p /statoshi/depends/SDKs
-
-FROM git-clone-statoshi-repo as build-statoshi
-
-RUN cd /statoshi && ./contrib/install_db4.sh .
-
-RUN make download -C /statoshi/depends
-
-RUN cd /statoshi && ./autogen.sh
-
-RUN cd /statoshi && ./configure --disable-wallet  --disable-tests --with-gui=no
-#RUN cd /statoshi && ./configure --disable-wallet  --disable-tests
-
-RUN cd /statoshi && make
-
-ENTRYPOINT ["/entrypoint"]
-
-#TODO Simplify and minimize all this shit if possible...

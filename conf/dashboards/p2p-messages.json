@@ -16,7 +16,7 @@
   "editable": false,
   "gnetId": null,
   "graphTooltip": 1,
-  "id": 24,
+  "id": 9,
   "links": [],
   "panels": [
     {
@@ -928,17 +928,18 @@
       "zerofill": true
     }
   ],
-  "refresh": "10m",
+  "refresh": "5s",
   "schemaVersion": 25,
   "style": "dark",
   "tags": [
-    "stats"
+    "stats",
+    "p2p"
   ],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-7d",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -971,8 +972,8 @@
     ],
     "type": "timepicker"
   },
-  "timezone": "browser",
+  "timezone": "utc",
   "title": "P2P Messages",
-  "uid": "P2PMessages",
-  "version": 3
+  "uid": "p2p-messages",
+  "version": 1
 }

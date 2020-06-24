@@ -69,8 +69,9 @@ Useful to clean out an isolated droplet - <span style="color:red">NEVER</span> u
 </center>
 
 ```
+docker image ls && \
 docker ps -aq && \
 docker stop $(docker ps -aq) && \
 docker rm $(docker ps -aq) && \
-docker rmi $(docker images -q)
+docker rmi -f $(docker images -q)
 ```
