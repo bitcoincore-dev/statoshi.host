@@ -37,9 +37,9 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws" \
     && chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" \
     && chmod -R 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
 
-COPY ./config.docker/grafana.ini "$GF_PATHS_CONFIG"
-COPY ./run.sh /run.sh
+COPY ./conf/grafana.ini "$GF_PATHS_CONFIG"
+COPY ./conf/run.grafana.sh /run.grafana.sh
 
 EXPOSE 3000
 
-CMD ["/run.sh"]
+CMD ["/run.grafana.sh"]
