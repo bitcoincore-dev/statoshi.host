@@ -12,6 +12,7 @@ FROM ${BASE_IMAGE}
 LABEL maintainer "gavin zhou <gavin.zhou@gmail.com>"
 
 ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    GF_PATHS_CONFIG_DEFAULTS="/usr/share/grafana/conf/defaults.ini" \
     GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
     GF_PATHS_DATA="/var/lib/grafana" \
     GF_PATHS_HOME="/usr/share/grafana" \
@@ -19,7 +20,7 @@ ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
     GF_PATHS_PLUGINS="/var/lib/grafana/plugins" \
     GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
 
-WORKDIR $GF_PATHS_HOME    
+WORKDIR $GF_PATHS_HOME
 
 RUN set -ex \
     && addgroup -S grafana \
@@ -39,6 +40,8 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws" \
 
 COPY ./conf/grafana.ini "$GF_PATHS_CONFIG"
 COPY ./conf/run.grafana.sh /run.grafana.sh
+COPY ./conf/dashboards/* $GF_PATHS_PROVISIONING/dashboards/
+COPY ./conf/datasources/* $GF_PATHS_PROVISIONING/datasources/
 
 EXPOSE 3000
 
