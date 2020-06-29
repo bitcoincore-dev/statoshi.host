@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-docker image rm -f stats.grafana
+#DO NOT USE UNLESS YOU REALLY WANT TO DESTROY EVERY CONTAINER AND IMAGE ON THIS DROPLET
+#docker ps -aq && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q)
+
+docker image rm -f stats.grafana:latest
 
 docker build -f stats.grafana.dockerfile --rm -t stats.grafana .
 docker run -p 3000:3000 stats.grafana
