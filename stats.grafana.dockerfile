@@ -9,7 +9,7 @@ RUN mkdir /tmp/grafana \
 
 ARG BASE_IMAGE=alpine:3.11.6
 FROM ${BASE_IMAGE}
-LABEL maintainer "gavin zhou <gavin.zhou@gmail.com>"
+LABEL stats.grafana="stats.grafana"
 
 ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     GF_PATHS_CONFIG_DEFAULTS="/usr/share/grafana/conf/defaults.ini" \
