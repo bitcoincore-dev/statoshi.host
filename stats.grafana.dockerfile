@@ -1,5 +1,7 @@
-ARG BASE_IMAGE=alpine:3.11.6
+#Build statoshi.bitcoincore.dev first https://github.com/bitcoincore-dev/statoshi.bitcoincore.dev.git
+ARG BASE_IMAGE=statoshi.bitcoincore.dev
 FROM ${BASE_IMAGE}
+#ARG BASE_IMAGE=alpine:3.11.6
 
 ENV GRAFANA_VERSION=7.0.0
 RUN mkdir /tmp/grafana \
