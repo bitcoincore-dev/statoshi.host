@@ -39,7 +39,7 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws" \
     && chmod -R 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
 
 COPY ./conf/grafana.ini "$GF_PATHS_CONFIG"
-COPY ./conf/run.grafana.sh /run.grafana.sh
+COPY ./conf/run.grafana.sh /usr/local/bin/run.grafana.sh
 COPY ./conf/dashboards/* $GF_PATHS_PROVISIONING/dashboards/
 COPY ./conf/datasources/* $GF_PATHS_PROVISIONING/datasources/
 COPY ./conf/dashboards/* $GF_PATHS_HOME/dashboards/
@@ -53,4 +53,4 @@ COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
 
 EXPOSE 3000
 
-CMD ["/run.grafana.sh"]
+CMD ["/usr/local/bin/run.grafana.sh"]
