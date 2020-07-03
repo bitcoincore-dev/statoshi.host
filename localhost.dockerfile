@@ -53,7 +53,7 @@ COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_icon.svg
 COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
 COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
 
-EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
+EXPOSE 80 3000
 
 CMD ["/run.grafana.sh"]
 
