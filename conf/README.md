@@ -1,0 +1,1 @@
+Location of these files are critical to rsyncing with statoshi.bitcoincore.dev during its build.
