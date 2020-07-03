@@ -1,0 +1,1 @@
+config stats.grafana for independent docker instance and allow for rsyncing into the statoshi.bitcoicnore.dev repo

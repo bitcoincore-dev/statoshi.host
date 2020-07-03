@@ -4,9 +4,9 @@
 [![](https://images.microbadger.com/badges/version/orangesys/alpine-grafana.svg)](https://microbadger.com/images/orangesys/alpine-grafana "Get your own version badge on microbadger.com")
 [![Docker Repository on Quay](https://quay.io/repository/orangesys/alpine-grafana/status?token=c0173c1e-b91b-4b74-a300-7114248255e8 "Docker Repository on Quay")](https://quay.io/repository/orangesys/alpine-grafana)
 
-# alpine-grafana
+# [stats.bitcoincore.dev](stats.bitcoincore.dev)
 
-## Container for Alpine Linux + Grafana
+## Grafana GUI layer
 
 >
 ```bash
