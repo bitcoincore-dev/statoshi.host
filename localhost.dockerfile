@@ -1,16 +1,16 @@
-#Build statoshi.bitcoincore.dev first https://github.com/bitcoincore-dev/statoshi.bitcoincore.dev.git
+#Stand alone docker image that pulls data from statoshi.bitcoincore.dev:8080 by default
+#Datasource config also has a http://localhost:8080 config as well - not default
 ARG BASE_IMAGE=alpine:3.11.6
 FROM ${BASE_IMAGE}
-
+#TODO We will pull from our own compiled package later
 ENV GRAFANA_VERSION=7.0.5
 RUN mkdir /tmp/grafana \
   && wget -P /tmp/ https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
   && tar xfz /tmp/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz --strip-components=1 -C /tmp/grafana
 
-ARG BASE_IMAGE=statoshi.base.image
-#ARG BASE_IMAGE=alpine:3.11.6
+ARG BASE_IMAGE=alpine:3.11.6
 FROM ${BASE_IMAGE}
-LABEL stats.grafana="stats.bitcoincore.dev"
+LABEL stats.bitcoincore.dev="stats.bitcoincore.dev"
 
 ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     GF_PATHS_CONFIG_DEFAULTS="/usr/share/grafana/conf/defaults.ini" \
@@ -56,6 +56,4 @@ COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
 EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
 
 CMD ["/run.grafana.sh"]
-RUN df -H
-ENTRYPOINT ["/entrypoint"]
 
