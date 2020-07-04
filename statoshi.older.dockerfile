@@ -59,6 +59,37 @@ RUN apk add --no-cache \
 
 RUN df -H
 
+RUN true \
+ && apk add --no-cache \
+      cairo \
+      collectd \
+      collectd-disk \
+      collectd-nginx \
+      findutils \
+      librrd \
+      logrotate \
+      memcached \
+      nginx \
+      nodejs \
+      npm \
+      nodejs-npm \
+      py3-pyldap \
+      redis \
+      runit \
+      sqlite \
+      expect \
+      dcron \
+      py3-mysqlclient \
+      mysql-dev \
+      mysql-client \
+      postgresql-dev \
+      postgresql-client \
+ && rm -rf \
+      /etc/nginx/conf.d/default.conf \
+ && mkdir -p \
+      /var/log/carbon \
+      /var/log/graphite
+
 
 RUN df -H
 FROM install-most-packages as build-statoshi
@@ -132,37 +163,6 @@ RUN df -H
 
 #build statsd and graphite...
 FROM apk-add-statoshi-depends as base
-
-RUN true \
- && apk add --no-cache \
-      cairo \
-      collectd \
-      collectd-disk \
-      collectd-nginx \
-      findutils \
-      librrd \
-      logrotate \
-      memcached \
-      nginx \
-      nodejs \
-      npm \
-      nodejs-npm \
-      py3-pyldap \
-      redis \
-      runit \
-      sqlite \
-      expect \
-      dcron \
-      py3-mysqlclient \
-      mysql-dev \
-      mysql-client \
-      postgresql-dev \
-      postgresql-client \
- && rm -rf \
-      /etc/nginx/conf.d/default.conf \
- && mkdir -p \
-      /var/log/carbon \
-      /var/log/graphite
 
 RUN df -H
 
