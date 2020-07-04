@@ -1,19 +1,29 @@
 ARG BASE_IMAGE=alpine:3.11.5
 
-FROM ${BASE_IMAGE} as set-initial-env
+FROM ${BASE_IMAGE} as labels
 
 LABEL dev.bitcoincore.statoshi="statoshi"
 LABEL version="v0.20.99.0"
-LABEL description="Statoshi Docker"
-LABEL github="https://github.com/bitcoincore-dev/statoshi"
+LABEL description="Statoshi - Bitcoin Node Statistics"
+LABEL github="https://github.com/bitcoincore-dev/statoshi.bitcoincore.dev"
 LABEL maintainer="admin@bitcoincore.dev"
 
-RUN apk update && apk upgrade && apk add musl busybox bash-completion
+FROM labels as install-most-packages
+
+RUN apk update && apk upgrade && apk add --no-cache musl busybox bash-completion
 RUN apk -U add coreutils
-RUN apk add --update nodejs nodejs-npm
+RUN apk add --update --no-cache nodejs nodejs-npm
+
+
 
 RUN df -H
+FROM install-most-packages as build-statoshi
 
+
+
+
+RUN df -H
+FROM build-statoshi as set-initial-env
 #REF:https://github.com/orangesys/alpine-grafana/blob/master/Dockerfile
 
 ENV GRAFANA_VERSION=7.0.0
