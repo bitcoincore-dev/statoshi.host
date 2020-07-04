@@ -90,6 +90,33 @@ RUN true \
       /var/log/carbon \
       /var/log/graphite
 
+RUN true \
+ && apk add --update --no-cache \
+      alpine-sdk \
+      git \
+      libffi-dev \
+      pkgconfig \
+      py3-cairo \
+      py3-pip \
+      py3-virtualenv==16.7.8-r0 \
+      openldap-dev \
+      python3-dev \
+      rrdtool-dev \
+      wget \
+ && virtualenv /opt/graphite \
+ && . /opt/graphite/bin/activate \
+ && pip3 install \
+      django==2.2.12 \
+      django-statsd-mozilla \
+      fadvise \
+      gunicorn==20.0.4 \
+      msgpack-python \
+      redis \
+      rrdtool \
+      python-ldap \
+      mysqlclient \
+      psycopg2 \
+      django-cockroachdb==2.2.*
 
 RUN df -H
 FROM install-most-packages as build-statoshi
@@ -167,34 +194,6 @@ FROM apk-add-statoshi-depends as base
 RUN df -H
 
 FROM base as build
-
-RUN true \
- && apk add --update \
-      alpine-sdk \
-      git \
-      libffi-dev \
-      pkgconfig \
-      py3-cairo \
-      py3-pip \
-      py3-virtualenv==16.7.8-r0 \
-      openldap-dev \
-      python3-dev \
-      rrdtool-dev \
-      wget \
- && virtualenv /opt/graphite \
- && . /opt/graphite/bin/activate \
- && pip3 install \
-      django==2.2.12 \
-      django-statsd-mozilla \
-      fadvise \
-      gunicorn==20.0.4 \
-      msgpack-python \
-      redis \
-      rrdtool \
-      python-ldap \
-      mysqlclient \
-      psycopg2 \
-      django-cockroachdb==2.2.*
 
 ARG version=1.1.7
 
