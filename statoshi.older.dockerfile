@@ -32,6 +32,8 @@ RUN apk add --no-cache \
     py3-psutil \
     vim
 
+RUN git config --global advice.detachedHead false
+
 RUN apk add --no-cache \
     g++ \
     build-base \
@@ -127,7 +129,6 @@ FROM set-env as apk-add-statoshi-depends
 
 RUN df -H
 
-RUN git config --global advice.detachedHead false
 
 #build statsd and graphite...
 FROM apk-add-statoshi-depends as base
