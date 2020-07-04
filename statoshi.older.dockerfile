@@ -222,13 +222,13 @@ RUN git clone "${statsd_repo}" \
  && npm install
 
 COPY conf/opt/graphite/conf/                             /opt/defaultconf/graphite/
-COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/local_settings.py
-#COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/settings.py
+#COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/local_settings.py
+COPY conf/opt/graphite/webapp/graphite/app_settings.py /opt/defaultconf/graphite/app_settings.py
 
 # config graphite
 COPY conf/opt/graphite/conf/*.conf /opt/graphite/conf/
-COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
-#COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/settings.py
+#COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+COPY conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graphite/app_settings.py
 WORKDIR /opt/graphite/webapp
 RUN mkdir -p /var/log/graphite/ \
   && PYTHONPATH=/opt/graphite/webapp /opt/graphite/bin/django-admin.py collectstatic --noinput --settings=graphite.settings
