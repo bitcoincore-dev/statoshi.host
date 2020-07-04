@@ -14,6 +14,48 @@ RUN apk update && apk upgrade && apk add --no-cache musl busybox bash-completion
 RUN apk -U add coreutils
 RUN apk add --update --no-cache nodejs nodejs-npm
 
+RUN apk update && apk upgrade
+RUN apk add --no-cache \
+    autoconf \
+    automake \
+    binutils \
+    ca-certificates \
+    cmake \
+    curl \
+    doxygen \
+    git \
+    libtool \
+    make \
+    patch \
+    pkgconfig \
+    python3 \
+    py3-psutil \
+    vim
+
+RUN apk add --no-cache \
+    g++ \
+    build-base \
+    boost-libs \
+    libgcc \
+    libstdc++ \
+    musl \
+    boost-system \
+    boost-build \
+    boost-dev \
+    openssl-dev \
+    libevent-dev \
+    libzmq \
+    zeromq-dev \
+    protobuf-dev \
+    linux-headers \
+    libbz2 \
+    libcap-dev \
+    librsvg \
+    tiff-tools \
+    zlib-dev \
+    py3-setuptools
+
+RUN df -H
 
 
 RUN df -H
@@ -82,47 +124,6 @@ FROM grafana-config as set-env
 WORKDIR /
 
 FROM set-env as apk-add-statoshi-depends
-
-RUN apk update && apk upgrade
-RUN apk add --no-cache \
-    autoconf \
-    automake \
-    binutils \
-    ca-certificates \
-    cmake \
-    curl \
-    doxygen \
-    git \
-    libtool \
-    make \
-    patch \
-    pkgconfig \
-    python3 \
-    py3-psutil \
-    vim
-
-RUN apk add --no-cache \
-    g++ \
-    build-base \
-    boost-libs \
-    libgcc \
-    libstdc++ \
-    musl \
-    boost-system \
-    boost-build \
-    boost-dev \
-    openssl-dev \
-    libevent-dev \
-    libzmq \
-    zeromq-dev \
-    protobuf-dev \
-    linux-headers \
-    libbz2 \
-    libcap-dev \
-    librsvg \
-    tiff-tools \
-    zlib-dev \
-    py3-setuptools
 
 RUN df -H
 
