@@ -286,11 +286,11 @@ RUN cp /statoshi/src/bitcoin-cli /usr/bin
 
 RUN cp /statoshi/src/bitcoin-tx /usr/bin
 
-RUN cp /statoshi/sys.daemon.py /usr/bin
+#RUN cp /statoshi/sys.daemon.py /usr/bin
 
-RUN cp /statoshi/check_synced.sh /usr/bin
+#RUN cp /statoshi/check_synced.sh /usr/bin
 
-RUN cp /statoshi/conf/run-grafana.sh /usr/bin
+COPY ./conf/run-grafana.sh /usr/bin
 
 FROM strip-copy as cleanup
 
