@@ -59,6 +59,12 @@ COPY ./config.docker/grafana.ini "$GF_PATHS_CONFIG"
 COPY ./config.docker/custom.ini "$GF_PATHS_CONFIG_CUSTOM"
 COPY ./conf/run-grafana.sh /run-grafana.sh
 
+COPY ./dashboards/* $GF_PATHS_PROVISIONING/dashboards/
+COPY ./datasources/* $GF_PATHS_PROVISIONING/datasources/
+COPY ./dashboards/* $GF_PATHS_HOME/dashboards/
+
+
+
 RUN df -H
 
 FROM grafana-config as set-env
@@ -256,7 +262,7 @@ RUN git clone https://github.com/bitcoincore-dev/statoshi --depth 1 /statoshi &&
 
 FROM clone-repo as make-depends
 
-RUN cd /statoshi && make -j $(nproc) download -C /statoshi/depends
+#RUN cd /statoshi && make -j $(nproc) download -C /statoshi/depends
 
 FROM make-depends as autogen
 

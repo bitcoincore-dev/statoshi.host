@@ -12,22 +12,18 @@
       }
     ]
   },
-  "editable": false,
+  "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 9,
   "links": [],
   "panels": [
     {
-      "aliasColors": {
-        "difficulty": "#F9D9F9"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "editable": true,
-      "error": false,
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -35,34 +31,37 @@
         "overrides": []
       },
       "fill": 1,
-      "fillGradient": 0,
-      "grid": {},
+      "fillGradient": 1,
       "gridPos": {
-        "h": 7,
+        "h": 11,
         "w": 24,
         "x": 0,
         "y": 0
       },
       "hiddenSeries": false,
-      "id": 1,
+      "id": 2,
       "legend": {
+        "alignAsTable": false,
         "avg": false,
-        "current": true,
+        "current": false,
+        "hideEmpty": true,
+        "hideZero": true,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
+        "sideWidth": null,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "connected",
+      "linewidth": 1,
+      "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
       "percentage": false,
-      "pointradius": 5,
+      "pointradius": 2,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
@@ -72,18 +71,27 @@
       "targets": [
         {
           "refId": "A",
-          "target": "aliasByMetric(stats.gauges.network.difficulty)"
+          "target": "stats.bandwidth.*.*.bytesSent"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
+      "timeRegions": [
+        {
+          "colorMode": "background6",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "line": false,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time"
+        }
+      ],
       "timeShift": null,
-      "title": "Mining Difficulty",
+      "title": "stats.bandwidth.*.*.bytesSent",
       "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "cumulative"
+        "shared": false,
+        "sort": 2,
+        "value_type": "individual"
       },
       "type": "graph",
       "xaxis": {
@@ -95,7 +103,8 @@
       },
       "yaxes": [
         {
-          "format": "none",
+          "format": "short",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
@@ -103,10 +112,11 @@
         },
         {
           "format": "short",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -115,16 +125,11 @@
       }
     },
     {
-      "aliasColors": {
-        "difficulty": "#F9D9F9",
-        "hashesPerSecond": "#962D82"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "editable": true,
-      "error": false,
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -132,34 +137,37 @@
         "overrides": []
       },
       "fill": 1,
-      "fillGradient": 0,
-      "grid": {},
+      "fillGradient": 1,
       "gridPos": {
-        "h": 7,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 7
+        "y": 11
       },
       "hiddenSeries": false,
-      "id": 2,
+      "id": 3,
       "legend": {
+        "alignAsTable": false,
         "avg": false,
-        "current": true,
+        "current": false,
+        "hideEmpty": true,
+        "hideZero": true,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
+        "sideWidth": null,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "connected",
+      "linewidth": 1,
+      "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
       "percentage": false,
-      "pointradius": 5,
+      "pointradius": 2,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
@@ -169,18 +177,27 @@
       "targets": [
         {
           "refId": "A",
-          "target": "aliasByMetric(stats.gauges.network.exahashesPerSecond)"
+          "target": "stats.bandwidth.*.*.bytesReceived"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
+      "timeRegions": [
+        {
+          "colorMode": "background6",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "line": false,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time"
+        }
+      ],
       "timeShift": null,
-      "title": "Estimated Network Hashrate (trailing 120 blocks)",
+      "title": "stats.bandwidth.*.*.bytesRecieved",
       "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "cumulative"
+        "shared": false,
+        "sort": 2,
+        "value_type": "individual"
       },
       "type": "graph",
       "xaxis": {
@@ -192,7 +209,8 @@
       },
       "yaxes": [
         {
-          "format": "none",
+          "format": "short",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
@@ -200,10 +218,11 @@
         },
         {
           "format": "short",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -216,21 +235,18 @@
   "schemaVersion": 25,
   "style": "dark",
   "tags": [
-    "stats",
-    "mining"
+    "stats ",
+    "bandwidth",
+    "overview"
   ],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
-    "collapse": false,
-    "enable": true,
-    "notice": false,
-    "now": true,
     "refresh_intervals": [
       "10s",
       "30s",
@@ -241,23 +257,10 @@
       "1h",
       "2h",
       "1d"
-    ],
-    "status": "Stable",
-    "time_options": [
-      "5m",
-      "15m",
-      "1h",
-      "6h",
-      "12h",
-      "24h",
-      "2d",
-      "7d",
-      "30d"
-    ],
-    "type": "timepicker"
+    ]
   },
   "timezone": "utc",
-  "title": "Mining",
-  "uid": "mining",
+  "title": "Bandwidth Overview",
+  "uid": "bandwidth-overview",
   "version": 1
 }

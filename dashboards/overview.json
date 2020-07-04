@@ -12,15 +12,14 @@
       }
     ]
   },
-  "description": "Statoshi.info - Realtime Bitcoin Node Stats",
+  "description": "Realtime Bitcoin Node Stats",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 14,
   "links": [],
   "panels": [
     {
-      "content": "<img style='margin:25px;' src=\"https://statoshi.info:3000/img/statoshi.png\">",
       "datasource": null,
       "fieldConfig": {
         "defaults": {
@@ -28,98 +27,26 @@
         },
         "overrides": []
       },
+      "folderId": null,
       "gridPos": {
-        "h": 9,
-        "w": 3,
+        "h": 15,
+        "w": 7,
         "x": 0,
         "y": 0
       },
-      "id": 6,
-      "mode": "html",
-      "targets": [
-        {
-          "refId": "A",
-          "target": ""
-        }
+      "headings": false,
+      "id": 2,
+      "limit": 100,
+      "links": [],
+      "query": "",
+      "recent": true,
+      "search": false,
+      "starred": false,
+      "tags": [
+        "stats"
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "content": "<div style='margin:50px;overflow:hidden'><h2>Statoshi.info - Realtime Bitcoin Node Stats</h2>To learn about the purpose of statoshi.info, <a href='https://blog.lopp.net/announcing-statoshi-info/'><u>read this</u>.</a><br/>To learn how to use Grafana, <a href='http://docs.grafana.org/guides/getting_started/'><u>RTFM</u></a> and <a href='http://docs.grafana.org/guides/screencasts/'><u>WTFV</u></a><br/>In order to create an account on statoshi.info, <a href='https://blog.lopp.net/statoshi-info-account-creation-guide/'><u>follow this guide</u>.</a><br/>Statoshi is open source; you can <a href='https://github.com/jlopp/statoshi'><u>find us on GitHub</u></a></div>",
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 9,
-        "x": 3,
-        "y": 0
-      },
-      "id": 8,
-      "mode": "html",
-      "targets": [
-        {
-          "refId": "A",
-          "target": ""
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "content": "<div style='margin:50px;overflow:hidden'><h2><a href='https://stats.bitcoincore.dev'>stats.bitcoincore.dev</a> - docker container</h2></br> <code>git clone https://github.com/bitcoincore-dev/statoshi.git</code>",
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 9,
-        "x": 12,
-        "y": 0
-      },
-      "id": 9,
-      "mode": "html",
-      "targets": [
-        {
-          "refId": "A",
-          "target": ""
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 9
-      },
-      "id": 4,
-      "panels": [],
-      "repeat": null,
-      "title": "",
-      "type": "row"
+      "type": "dashlist"
     },
     {
       "aliasColors": {},
@@ -127,7 +54,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "editable": true,
+      "editable": false,
       "error": false,
       "fieldConfig": {
         "defaults": {
@@ -140,9 +67,9 @@
       "grid": {},
       "gridPos": {
         "h": 15,
-        "w": 11,
-        "x": 0,
-        "y": 10
+        "w": 17,
+        "x": 7,
+        "y": 0
       },
       "hiddenSeries": false,
       "id": 1,
@@ -229,6 +156,22 @@
       }
     },
     {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 4,
+      "panels": [],
+      "repeat": null,
+      "title": "",
+      "type": "row"
+    },
+    {
+      "content": "<img style='height:15.0em;width:18.5em;margin:1.0em;' src=\"/public/img/bitcoin.svg\">\n<div style='margin:50px;overflow:hidden'><h2>Statoshi.info - Realtime Bitcoin Node Stats</h2>To learn about the purpose of statoshi.info, <a href='https://blog.lopp.net/announcing-statoshi-info/'><u>read this</u>.</a><br/>To learn how to use Grafana, <a href='http://docs.grafana.org/guides/getting_started/'><u>RTFM</u></a> and <a href='http://docs.grafana.org/guides/screencasts/'><u>WTFV</u></a><br/>In order to create an account on statoshi.info, <a href='https://blog.lopp.net/statoshi-info-account-creation-guide/'><u>follow this guide</u>.</a><br/>Statoshi is open source; you can <a href='https://github.com/jlopp/statoshi'><u>find us on GitHub</u></a></div>",
       "datasource": null,
       "fieldConfig": {
         "defaults": {
@@ -236,30 +179,32 @@
         },
         "overrides": []
       },
-      "folderId": null,
       "gridPos": {
-        "h": 15,
-        "w": 13,
-        "x": 11,
-        "y": 10
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 16
       },
-      "headings": false,
-      "id": 2,
-      "limit": 20,
-      "links": [],
-      "query": "",
-      "recent": false,
-      "search": true,
-      "starred": false,
-      "tags": [],
+      "id": 6,
+      "mode": "html",
+      "targets": [
+        {
+          "refId": "A",
+          "target": ""
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
       "title": "",
-      "type": "dashlist"
+      "type": "text"
     }
   ],
   "schemaVersion": 25,
   "style": "dark",
   "tags": [
-    "stats"
+    "overview",
+    "stats",
+    "welcome"
   ],
   "templating": {
     "list": []
@@ -298,8 +243,8 @@
     ],
     "type": "timepicker"
   },
-  "timezone": "browser",
-  "title": "Home",
-  "uid": "zmfhMxWMz",
-  "version": 9
+  "timezone": "utc",
+  "title": "Overview",
+  "uid": "overview",
+  "version": 1
 }

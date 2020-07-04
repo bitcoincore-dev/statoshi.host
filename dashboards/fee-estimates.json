@@ -1,6 +1,5 @@
 {
   "annotations": {
-    "enable": false,
     "list": [
       {
         "builtIn": 1,
@@ -15,35 +14,28 @@
   },
   "editable": false,
   "gnetId": null,
-  "graphTooltip": 1,
-  "id": 10,
+  "graphTooltip": 0,
+  "id": 5,
   "links": [],
   "panels": [
     {
-      "aliasColors": {
-        "stats.gauges.peers.knownAddresses": "#EAB839",
-        "stats.gauges.peers.totalConnections": "#629E51"
-      },
-      "annotate": {
-        "enable": false
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
+      "decimals": 0,
       "editable": true,
+      "error": false,
       "fieldConfig": {
         "defaults": {
           "custom": {}
         },
         "overrides": []
       },
-      "fill": 1,
+      "fill": 0,
       "fillGradient": 0,
-      "grid": {
-        "max": null,
-        "min": null
-      },
+      "grid": {},
       "gridPos": {
         "h": 7,
         "w": 24,
@@ -51,173 +43,16 @@
         "y": 0
       },
       "hiddenSeries": false,
-      "id": 2,
-      "interactive": true,
+      "id": 1,
       "legend": {
         "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "legend_counts": true,
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "resolution": 100,
-      "scale": 1,
-      "seriesOverrides": [
-        {
-          "alias": "stats.gauges.peers.knownAddresses",
-          "yaxis": 2
-        },
-        {
-          "alias": "knownAddresses",
-          "yaxis": 2
-        }
-      ],
-      "spaceLength": 10,
-      "spyable": true,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "refId": "A",
-          "target": "aliasByMetric(stats.gauges.peers.fullNodeConnections)"
-        },
-        {
-          "refId": "B",
-          "target": "aliasByMetric(stats.gauges.peers.spvNodeConnections)"
-        },
-        {
-          "refId": "C",
-          "target": "aliasByMetric(stats.gauges.peers.inboundConnections)"
-        },
-        {
-          "refId": "D",
-          "target": "aliasByMetric(stats.gauges.peers.outboundConnections)"
-        },
-        {
-          "refId": "E",
-          "target": "aliasByMetric(stats.gauges.peers.knownAddresses)"
-        },
-        {
-          "refId": "F",
-          "target": "aliasByMetric(stats.gauges.peers.ipv4Connections)"
-        },
-        {
-          "refId": "G",
-          "target": "aliasByMetric(stats.gauges.peers.ipv6Connections)"
-        },
-        {
-          "refId": "H",
-          "target": "aliasByMetric(stats.gauges.peers.torConnections)"
-        },
-        {
-          "refId": "I",
-          "target": "aliasByMetric(stats.gauges.peers.totalConnections)"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "timezone": "browser",
-      "title": "Peers",
-      "tooltip": {
-        "query_as_alias": true,
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": "Peers",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "none",
-          "label": "Addresses",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      },
-      "zerofill": true
-    },
-    {
-      "aliasColors": {
-        "lower": "#7EB26D",
-        "median": "#1F78C1",
-        "stats.gauges.peers.knownAddresses": "#EAB839",
-        "stats.gauges.peers.totalConnections": "#629E51",
-        "upper": "#890F02"
-      },
-      "annotate": {
-        "enable": false
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "editable": true,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "grid": {
-        "max": null,
-        "min": null
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 7
-      },
-      "hiddenSeries": false,
-      "id": 9,
-      "interactive": true,
-      "legend": {
-        "avg": true,
-        "current": false,
+        "current": true,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
         "values": true
       },
-      "legend_counts": true,
       "lines": true,
       "linewidth": 2,
       "links": [],
@@ -229,45 +64,59 @@
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
-      "resolution": 100,
-      "scale": 1,
       "seriesOverrides": [
         {
-          "alias": "stats.gauges.peers.knownAddresses",
-          "yaxis": 2
-        },
-        {
-          "alias": "knownAddresses",
-          "yaxis": 2
+          "alias": "stats.gauges.estimates.fee.block1",
+          "yaxis": 1
         }
       ],
       "spaceLength": 10,
-      "spyable": true,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
           "refId": "A",
-          "target": "aliasByMetric(stats.timers.peers.ping_us.lower)"
+          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block1, 0.001), 4)"
         },
         {
-          "hide": false,
           "refId": "B",
-          "target": "aliasByMetric(stats.timers.peers.ping_us.median)"
+          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block2, 0.001), 4)"
         },
         {
           "refId": "C",
-          "target": "aliasByMetric(stats.timers.peers.ping_us.upper)"
+          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block3, 0.001), 4)"
+        },
+        {
+          "refId": "D",
+          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block4, 0.001), 4)"
+        },
+        {
+          "refId": "E",
+          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block5, 0.001), 4)"
+        },
+        {
+          "refId": "F",
+          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block10, 0.001), 4)"
+        },
+        {
+          "refId": "G",
+          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block20, 0.001), 4)"
+        },
+        {
+          "refId": "H",
+          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block100, 0.001), 4)"
+        },
+        {
+          "refId": "I",
+          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block1000, 0.001), 4)"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "timezone": "browser",
-      "title": "Peer Pings",
+      "title": "Recommended Transaction Fee for Target Confirmation in X Blocks",
       "tooltip": {
-        "query_as_alias": true,
         "shared": true,
         "sort": 0,
         "value_type": "individual"
@@ -282,76 +131,65 @@
       },
       "yaxes": [
         {
-          "format": "µs",
-          "label": "Ping Time",
-          "logBase": 10,
+          "format": "none",
+          "label": "Satoshis / byte",
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": 0,
           "show": true
         },
         {
           "format": "none",
-          "label": "",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": 0,
           "show": true
         }
       ],
       "yaxis": {
         "align": false,
         "alignLevel": null
-      },
-      "zerofill": true
+      }
     },
     {
       "aliasColors": {
-        "banned": "#890F02",
-        "stats.message.sent.reject_tx_duplicate": "#E0F9D7",
-        "stats.misbehavior.amount": "#EAB839",
-        "stats.misbehavior.banned": "#890F02"
+        "Fee per KB": "#65C5DB",
+        "Fee per byte": "#6ED0E0"
       },
-      "annotate": {
-        "enable": false
-      },
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
+      "decimals": null,
       "editable": true,
+      "error": false,
       "fieldConfig": {
         "defaults": {
           "custom": {}
         },
         "overrides": []
       },
-      "fill": 1,
+      "fill": 0,
       "fillGradient": 0,
-      "grid": {
-        "max": null,
-        "min": 0
-      },
+      "grid": {},
       "gridPos": {
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 7
       },
       "hiddenSeries": false,
-      "id": 8,
-      "interactive": true,
+      "id": 3,
       "legend": {
-        "avg": false,
-        "current": false,
-        "hideEmpty": true,
+        "avg": true,
+        "current": true,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
-      "legend_counts": true,
-      "lines": false,
+      "lines": true,
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
@@ -362,113 +200,33 @@
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
-      "resolution": 100,
-      "scale": 1,
       "seriesOverrides": [
         {
-          "alias": "stats.misbehavior.banned",
-          "yaxis": 2
-        },
-        {
-          "alias": "banned",
-          "yaxis": 2
+          "alias": "stats.gauges.estimates.fee.block1",
+          "yaxis": 1
         }
       ],
       "spaceLength": 10,
-      "spyable": true,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "hide": false,
           "refId": "A",
-          "target": "aliasByMetric(stats.message.sent.reject)"
+          "target": "alias(divideSeries(stats.transactions.fees, #B), 'Fee per byte')"
         },
         {
+          "hide": true,
           "refId": "B",
-          "target": "aliasByMetric(stats.message.sent.reject_tx_duplicate)"
-        },
-        {
-          "refId": "C",
-          "target": "aliasByMetric(stats.message.sent.reject_tx_invalid)"
-        },
-        {
-          "refId": "D",
-          "target": "aliasByMetric(stats.message.sent.reject_tx_nonstandard)"
-        },
-        {
-          "refId": "E",
-          "target": "aliasByMetric(stats.misbehavior.banned)"
-        },
-        {
-          "refId": "F",
-          "target": "stats.message.sent.reject_addr_malformed"
-        },
-        {
-          "hide": false,
-          "refId": "G",
-          "target": "aliasByMetric(stats.message.sent.reject_block_)"
-        },
-        {
-          "hide": false,
-          "refId": "H",
-          "target": "aliasByMetric(stats.message.sent.reject_block_invalid)"
-        },
-        {
-          "hide": false,
-          "refId": "I",
-          "target": "aliasByMetric(stats.message.sent.reject_block_obsolete)"
-        },
-        {
-          "hide": false,
-          "refId": "J",
-          "target": "aliasByMetric(stats.message.sent.reject_headers_malformed)"
-        },
-        {
-          "hide": false,
-          "refId": "K",
-          "target": "aliasByMetric(stats.message.sent.reject_ping_malformed)"
-        },
-        {
-          "hide": false,
-          "refId": "L",
-          "target": "aliasByMetric(stats.message.sent.reject_sendcmpct_malformed)"
-        },
-        {
-          "hide": false,
-          "refId": "M",
-          "target": "aliasByMetric(stats.message.sent.reject_tx_insufficientfee)"
-        },
-        {
-          "hide": false,
-          "refId": "N",
-          "target": "aliasByMetric(stats.message.sent.reject_tx_malformed)"
-        },
-        {
-          "hide": false,
-          "refId": "O",
-          "target": "aliasByMetric(stats.message.sent.reject_version_duplicate)"
-        },
-        {
-          "hide": false,
-          "refId": "P",
-          "target": "aliasByMetric(stats.message.sent.reject_version_nonstandard)"
-        },
-        {
-          "hide": false,
-          "refId": "Q",
-          "target": "aliasByMetric(stats.message.sent.reject_version_obsolete)"
+          "target": "aliasByMetric(scale(stats.transactions.sizeBytes, 0.976563))"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "timezone": "browser",
-      "title": "Peer Misbehavior",
+      "title": "Average Network Transaction Fees per Byte",
       "tooltip": {
-        "query_as_alias": true,
-        "shared": false,
+        "shared": true,
         "sort": 0,
         "value_type": "individual"
       },
@@ -483,7 +241,7 @@
       "yaxes": [
         {
           "format": "none",
-          "label": "Rejected Messages per sec",
+          "label": "Satoshis / byte",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -491,7 +249,6 @@
         },
         {
           "format": "none",
-          "label": "Peer Misbehavior per sec",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -501,8 +258,122 @@
       "yaxis": {
         "align": false,
         "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "Fee per KB": "#65C5DB",
+        "Fee per byte": "#629E51",
+        "Highest 5th percentile fee rate": "#890F02",
+        "Highest percentile fee rate": "#890F02"
       },
-      "zerofill": true
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": null,
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 0,
+      "fillGradient": 0,
+      "grid": {},
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "hiddenSeries": false,
+      "id": 4,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "stats.gauges.estimates.fee.block1",
+          "yaxis": 1
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "alias(removeAbovePercentile(divideSeries(stats.transactions.fees, #B), 1), 'Lowest percentile fee rate')"
+        },
+        {
+          "hide": true,
+          "refId": "B",
+          "target": "aliasByMetric(scale(stats.transactions.sizeBytes, 0.976563))"
+        },
+        {
+          "refId": "C",
+          "target": "alias(removeBelowPercentile(divideSeries(stats.transactions.fees, #B), 99), 'Highest percentile fee rate')"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Network Transaction Fees per Byte Range",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "Satoshis / byte",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "refresh": "5s",
@@ -510,13 +381,13 @@
   "style": "dark",
   "tags": [
     "stats",
-    "peers"
+    "fees"
   ],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -550,7 +421,7 @@
     "type": "timepicker"
   },
   "timezone": "utc",
-  "title": "Peers",
-  "uid": "peers",
+  "title": "Fee Estimates",
+  "uid": "fee-estimates",
   "version": 1
 }

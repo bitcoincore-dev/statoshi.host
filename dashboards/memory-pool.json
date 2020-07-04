@@ -15,12 +15,12 @@
   "editable": false,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 7,
   "links": [],
   "panels": [
     {
       "aliasColors": {
-        "difficulty": "#F9D9F9"
+        "memoryUsageBytes": "#FCE2DE"
       },
       "bars": false,
       "dashLength": 10,
@@ -44,20 +44,20 @@
         "y": 0
       },
       "hiddenSeries": false,
-      "id": 1,
+      "id": 2,
       "legend": {
         "avg": false,
-        "current": true,
+        "current": false,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
@@ -65,21 +65,31 @@
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "totalTransactions",
+          "yaxis": 2
+        },
+        {}
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
           "refId": "A",
-          "target": "aliasByMetric(stats.gauges.network.difficulty)"
+          "target": "aliasByMetric(stats.gauges.transactions.mempool.totalTxBytes)"
+        },
+        {
+          "refId": "B",
+          "target": "aliasByMetric(stats.gauges.transactions.mempool.totalTransactions)"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Mining Difficulty",
+      "title": "Mempool Transactions",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -95,17 +105,17 @@
       },
       "yaxes": [
         {
-          "format": "none",
+          "format": "bytes",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": 0,
           "show": true
         },
         {
           "format": "short",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": 0,
           "show": true
         }
       ],
@@ -116,8 +126,7 @@
     },
     {
       "aliasColors": {
-        "difficulty": "#F9D9F9",
-        "hashesPerSecond": "#962D82"
+        "memoryUsageBytes": "#FCE2DE"
       },
       "bars": false,
       "dashLength": 10,
@@ -141,15 +150,112 @@
         "y": 7
       },
       "hiddenSeries": false,
-      "id": 2,
+      "id": 1,
       "legend": {
         "avg": false,
-        "current": true,
+        "current": false,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "aliasByMetric(stats.gauges.transactions.mempool.memoryUsageBytes)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Mempool Dynamic Memory Usage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "bytes",
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "memoryUsageBytes": "#FCE2DE",
+        "minFeePerKb": "#1F78C1"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {},
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "hiddenSeries": false,
+      "id": 3,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
       },
       "lines": true,
       "linewidth": 2,
@@ -169,14 +275,14 @@
       "targets": [
         {
           "refId": "A",
-          "target": "aliasByMetric(stats.gauges.network.exahashesPerSecond)"
+          "target": "aliasByMetric(stats.gauges.transactions.mempool.minFeePerKb)"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Estimated Network Hashrate (trailing 120 blocks)",
+      "title": "Minimum Mempool Transaction Fee",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -193,9 +299,10 @@
       "yaxes": [
         {
           "format": "none",
+          "label": "Satoshis Per KiloByte",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": 0,
           "show": true
         },
         {
@@ -217,7 +324,7 @@
   "style": "dark",
   "tags": [
     "stats",
-    "mining"
+    "mem-pool"
   ],
   "templating": {
     "list": []
@@ -257,7 +364,7 @@
     "type": "timepicker"
   },
   "timezone": "utc",
-  "title": "Mining",
-  "uid": "mining",
+  "title": "Memory Pool",
+  "uid": "mem-pool",
   "version": 1
 }
