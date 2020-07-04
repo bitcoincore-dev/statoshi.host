@@ -124,6 +124,7 @@ FROM install-most-packages as build-statoshi
 
 
 
+
 RUN df -H
 FROM build-statoshi as set-initial-env
 #REF:https://github.com/orangesys/alpine-grafana/blob/master/Dockerfile
@@ -179,21 +180,9 @@ COPY ./dashboards/* $GF_PATHS_HOME/dashboards/
 
 RUN df -H
 
-FROM grafana-config as set-env
+FROM grafana-config as base
 
 WORKDIR /
-
-FROM set-env as apk-add-statoshi-depends
-
-RUN df -H
-
-
-#build statsd and graphite...
-FROM apk-add-statoshi-depends as base
-
-RUN df -H
-
-FROM base as build
 
 ARG version=1.1.7
 
@@ -250,14 +239,13 @@ COPY conf/opt/statsd/config/ /opt/defaultconf/statsd/config/
 RUN df -H
 
 FROM base as production
-
 ENV STATSD_INTERFACE udp
 #ENV STATSD_INTERFACE tcp/udp
 
 COPY conf /
 
 # copy /opt from build image
-COPY --from=build /opt /opt
+#COPY --from=base /opt /opt
 
 VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd/config", "/etc/logrotate.d", "/var/log", "/var/lib/redis"]
 
