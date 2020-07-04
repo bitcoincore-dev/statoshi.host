@@ -1,15 +1,28 @@
-#!/bin/bash -e
-
-export LC_ALL=C
-
-su-exec root /usr/bin/./run-grafana.sh &
-
-BITCOIND=/usr/bin/bitcoind
-if test -f "$BITCOIND"; then
-   /usr/bin/./bitcoind -daemon -prune=550 &
-fi
-
 #!/bin/sh
+
+
+
+run_grafana(){
+  RUN_GRAFANA=/usr/bin/run.grafana.sh
+    if test -f "$RUN_GRAFANA"; then
+      /usr/share/grafana/./run.grafana.sh &
+    fi
+}
+start_bitcoind(){
+  BITCOIND=/usr/bin/bitcoind
+    if test -f "$BITCOIND"; then
+      /usr/bin/./bitcoind -daemon -prune=550 &
+    fi
+}
+stop_bitcoind(){
+  BITCOIN_CLI=/usr/bin/bitcoin-cli
+    if test -f "$BITCOIN_CLI"; then
+      /usr/bin/./bitcoin-cli stop &
+    fi
+}
+
+
+
 
 ## Inspired from the script found at
 ##   https://sanjeevan.co.uk/blog/running-services-inside-a-container-using-runit-and-alpine-linux/
@@ -38,7 +51,9 @@ shutdown() {
   done
   exit
 }
+start_bitcoind &
 
+run_grafana &
 . /opt/graphite/bin/activate
 
 PATH="${PATH}:/usr/local/bin"
@@ -55,7 +70,7 @@ done
 # remove stale pids
 find /opt/graphite/storage -maxdepth 1 -name '*.pid' -delete
 
-# chmod logrotate file (#111)
+# chmod logrotate fle (#111)
 chmod 0644 /etc/logrotate.d/*
 
 exec runsvdir -P /etc/service &
