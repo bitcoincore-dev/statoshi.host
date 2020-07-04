@@ -44,7 +44,7 @@ RUN set -ex \
 
 FROM set-initial-env as grafana-config
 
-COPY --from=0 /tmp/grafana "$GF_PATHS_HOME"
+COPY --from=set-initial-env /tmp/grafana "$GF_PATHS_HOME"
 RUN mkdir -p "$GF_PATHS_HOME/.aws" \
     && mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
         "$GF_PATHS_PROVISIONING/dashboards" \
@@ -258,7 +258,7 @@ RUN df -H
 FROM production as clone-repo
 
 # Change to your fork
-RUN git clone https://github.com/bitcoincore-dev/statoshi --depth 1 /statoshi && mkdir -p /statoshi/depends/SDKs
+RUN git clone https://github.com/bitcoincore-dev/statoshi.bitcoincore.dev --depth 1 /statoshi && mkdir -p /statoshi/depends/SDKs
 
 FROM clone-repo as make-depends
 
