@@ -1,1 +1,1 @@
-statoshi.dockerfile
+stats.bitcoincore.dev.dockerfile

@@ -316,3 +316,4 @@ config.docker/grafana.db
 config.docker/sessions
 build-bitcoin-qt-Desktop_Qt_5_15_0_clang_64bit-Debug
 contrib/bitcoin-qt.pro.user
+data

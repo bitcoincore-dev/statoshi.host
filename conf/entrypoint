@@ -1,34 +1,24 @@
-#!/bin/sh
+#!/bin/bash -e
 
-run_grafana(){
-  RUN_GRAFANA=/usr/local/bin/run-grafana.sh
-    if test -f "$RUN_GRAFANA"; then
-      /usr/local/bin/./run-grafana.sh &
-    fi
-}
+export LC_ALL=C
+
 start_bitcoind(){
-  BITCOIND=/usr/local/bin/bitcoind
+  BITCOIND=/usr/bin/bitcoind
     if test -f "$BITCOIND"; then
-      /usr/local/bin/./bitcoind -daemon -prune=550 &
+      /usr/bin/./bitcoind -daemon -prune=550 &
     fi
 }
 stop_bitcoind(){
-  BITCOIN_CLI=/usr/local/bin/bitcoin-cli
+  BITCOIN_CLI=/usr/bin/bitcoin-cli
     if test -f "$BITCOIN_CLI"; then
-      /usr/local/bin/./bitcoin-cli stop &
+      /usr/bin/./bitcoin-cli stop &
     fi
 }
-graphite_activate(){
-  GRAPHITE_ACTIVATE=/opt/graphite/bin/activate
-    if test -f "$GRAPHITE_ACTIVATE"; then
-      . /opt/graphite/bin/activate &
-    fi
-}
-## Inspired from the script found at
-##   https://sanjeevan.co.uk/blog/running-services-inside-a-container-using-runit-and-alpine-linux/
+shutdown(){
 
-shutdown() {
   echo "shutting down container"
+
+  stop_bitcoind
 
   # first shutdown any service started by runit
   for _srv in $(ls -1 /etc/service); do
@@ -51,9 +41,14 @@ shutdown() {
   done
   exit
 }
+
 start_bitcoind &
-run_grafana &
-graphite_activate
+
+su-exec root /usr/local/bin/./run-grafana.sh &
+
+. /opt/graphite/bin/activate
+
+echo
 
 PATH="${PATH}:/usr/local/bin"
 
@@ -69,7 +64,7 @@ done
 # remove stale pids
 find /opt/graphite/storage -maxdepth 1 -name '*.pid' -delete
 
-# chmod logrotate fle (#111)
+# chmod logrotate file (#111)
 chmod 0644 /etc/logrotate.d/*
 
 exec runsvdir -P /etc/service &
