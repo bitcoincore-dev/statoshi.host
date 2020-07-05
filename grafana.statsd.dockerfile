@@ -174,7 +174,8 @@ RUN true \
       python-ldap \
       mysqlclient \
       psycopg2 \
-      django-cockroachdb==2.2.*
+      django-cockroachdb==2.2.* \
+      twisted
 
 ARG version=1.1.7
 

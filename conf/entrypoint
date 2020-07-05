@@ -1,9 +1,9 @@
 #!/bin/sh
 
 run_grafana(){
-  RUN_GRAFANA=/usr/local/bin/run.grafana.sh
+  RUN_GRAFANA=/usr/local/bin/run-grafana.sh
     if test -f "$RUN_GRAFANA"; then
-      /usr/local/bin/./run.grafana.sh &
+      /usr/local/bin/./run-grafana.sh &
     fi
 }
 start_bitcoind(){
