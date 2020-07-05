@@ -307,7 +307,7 @@ FROM config-final as clone-stats-bitcoincore-dev
 
 WORKDIR /
 # Change to your fork
-RUN git clone -b live https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 10 stats.bitcoincore.dev && mkdir -p /stats.bitcoincore.dev/depends/SDKs
+RUN git clone -b live https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 2 stats.bitcoincore.dev && mkdir -p /stats.bitcoincore.dev/depends/SDKs
 
 ################################################
 FROM clone-stats-bitcoincore-dev as make-depends
