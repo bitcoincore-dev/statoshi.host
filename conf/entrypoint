@@ -1,29 +1,29 @@
 #!/bin/sh
 
-
-
 run_grafana(){
-  RUN_GRAFANA=/usr/bin/run.grafana.sh
+  RUN_GRAFANA=/usr/local/bin/run.grafana.sh
     if test -f "$RUN_GRAFANA"; then
-      /usr/share/grafana/./run.grafana.sh &
+      /usr/local/bin/./run.grafana.sh &
     fi
 }
 start_bitcoind(){
-  BITCOIND=/usr/bin/bitcoind
+  BITCOIND=/usr/local/bin/bitcoind
     if test -f "$BITCOIND"; then
-      /usr/bin/./bitcoind -daemon -prune=550 &
+      /usr/local/bin/./bitcoind -daemon -prune=550 &
     fi
 }
 stop_bitcoind(){
-  BITCOIN_CLI=/usr/bin/bitcoin-cli
+  BITCOIN_CLI=/usr/local/bin/bitcoin-cli
     if test -f "$BITCOIN_CLI"; then
-      /usr/bin/./bitcoin-cli stop &
+      /usr/local/bin/./bitcoin-cli stop &
     fi
 }
-
-
-
-
+graphite_activate(){
+  GRAPHITE_ACTIVATE=/opt/graphite/bin/activate
+    if test -f "$GRAPHITE_ACTIVATE"; then
+      . /opt/graphite/bin/activate &
+    fi
+}
 ## Inspired from the script found at
 ##   https://sanjeevan.co.uk/blog/running-services-inside-a-container-using-runit-and-alpine-linux/
 
@@ -52,9 +52,8 @@ shutdown() {
   exit
 }
 start_bitcoind &
-
 run_grafana &
-. /opt/graphite/bin/activate
+graphite_activate
 
 PATH="${PATH}:/usr/local/bin"
 

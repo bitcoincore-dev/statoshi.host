@@ -101,7 +101,9 @@ RUN cp /statoshi/src/bitcoin-tx /usr/local/bin
 
 #RUN cp /statoshi/check_synced.sh /usr/bin
 
-COPY ./conf/run-grafana.sh /usr/local/bin
+#COPY ./conf/run-grafana.sh /usr/local/bin
+
+COPY ./conf/entrypoint /usr/local/bin
 
 FROM strip-copy as cleanup
 
@@ -113,5 +115,7 @@ RUN df -H
 
 FROM cleanup as done
 
-#ENTRYPOINT ["/entrypoint"]
+#TODO create a standalone entrypoint for bitcoind/statoshid only
+#This one is for the full stack
+#ENTRYPOINT ["/usr/local/bin/entrypoint"]
 
