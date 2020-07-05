@@ -5,7 +5,7 @@ export LC_ALL=C
 start_bitcoind(){
   BITCOIND=/usr/bin/bitcoind
     if test -f "$BITCOIND"; then
-      /usr/bin/./bitcoind -daemon -prune=550 &
+      /usr/local/bin/./bitcoind -daemon -prune=550 &
     fi
 }
 stop_bitcoind(){
