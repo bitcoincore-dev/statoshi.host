@@ -91,17 +91,17 @@ RUN strip /statoshi/src/bitcoin-cli
 
 RUN strip /statoshi/src/bitcoin-tx
 
-RUN cp /statoshi/src/bitcoind /usr/bin
+RUN cp /statoshi/src/bitcoind /usr/local/bin
 
-RUN cp /statoshi/src/bitcoin-cli /usr/bin
+RUN cp /statoshi/src/bitcoin-cli /usr/local/bin
 
-RUN cp /statoshi/src/bitcoin-tx /usr/bin
+RUN cp /statoshi/src/bitcoin-tx /usr/local/bin
 
 #RUN cp /statoshi/sys.daemon.py /usr/bin
 
 #RUN cp /statoshi/check_synced.sh /usr/bin
 
-COPY ./conf/run-grafana.sh /usr/bin
+COPY ./conf/run-grafana.sh /usr/local/bin
 
 FROM strip-copy as cleanup
 
