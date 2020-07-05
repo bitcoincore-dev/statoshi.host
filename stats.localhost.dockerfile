@@ -12,7 +12,7 @@ ARG BASE_IMAGE=alpine:3.11.6
 FROM ${BASE_IMAGE}
 LABEL stats.bitcoincore.dev="stats.bitcoincore.dev"
 
-ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     GF_PATHS_CONFIG_DEFAULTS="/usr/share/grafana/conf/defaults.ini" \
     GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
     GF_PATHS_DATA="/var/lib/grafana" \
@@ -39,11 +39,13 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws" \
     && chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" \
     && chmod -R 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
 
+#NOTE:/usr/share/grafana/conf/defaults.ini is read first
+COPY ./conf/defaults.ini "$GF_PATHS_CONFIG_DEFAULTS"
 COPY ./conf/grafana.ini "$GF_PATHS_CONFIG"
-COPY ./conf/run-grafana.sh /run-grafana.sh
-RUN chmod +x  /run-grafana.sh
+COPY ./conf/run-grafana.sh /usr/local/bin/
 COPY ./conf/dashboards/* $GF_PATHS_PROVISIONING/dashboards/
 COPY ./conf/datasources/* $GF_PATHS_PROVISIONING/datasources/
+
 COPY ./conf/dashboards/* $GF_PATHS_HOME/dashboards/
 
 RUN rm -f $GF_PATHS_HOME/public/img/grafana_icon.svg
@@ -55,5 +57,5 @@ COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
 
 EXPOSE 80 3000
 
-CMD ["/run-grafana.sh"]
+CMD ["/usr/local/bin/run-grafana.sh"]
 
