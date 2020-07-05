@@ -109,7 +109,7 @@ FROM strip-copy as cleanup
 
 RUN df -H
 
-RUN rm -rf /statoshi
+#RUN rm -rf /statoshi #NOT YET!
 
 RUN df -H
 
