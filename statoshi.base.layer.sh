@@ -10,5 +10,9 @@ docker cp temp-container-name:/usr/local/bin/bitcoin-cli ./conf/usr/local/bin/st
 docker cp temp-container-name:/usr/local/bin/bitcoin-tx  ./conf/usr/local/bin/statoshi-tx
 docker rm temp-container-name
 
+
+docker build -f graphite.statsd.layer.dockerfile --rm -t graphite.statsd.layer .
+
+docker prune -af
 docker image ls
 
