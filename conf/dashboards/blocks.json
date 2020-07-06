@@ -602,7 +602,7 @@
       }
     }
   ],
-  "refresh": "5s",
+  "refresh": "5m",
   "schemaVersion": 25,
   "style": "dark",
   "tags": [
@@ -613,7 +613,7 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {
@@ -651,3 +651,4 @@
   "uid": "blocks",
   "version": 1
 }
+
