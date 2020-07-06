@@ -11,7 +11,7 @@ start_bitcoind(){
 stop_bitcoind(){
   BITCOIN_CLI=/usr/bin/bitcoin-cli
     if test -f "$BITCOIN_CLI"; then
-      /usr/bin/./bitcoin-cli stop &
+      /usr/local/bin/./bitcoin-cli stop &
     fi
 }
 shutdown(){
