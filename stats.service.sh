@@ -29,7 +29,16 @@ rm -f  stats.bitcoincore.dev.extract.dockerfile
 run(){
 docker run --name stats.bitcoincore.dev -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 stats.bitcoincore.dev .
 }
+message(){
+echo
+echo
+echo "A cron job can be used to automate restarting the service..."
+echo "crontab -e"
+echo "*/5 * * * * docker restart stats.bitcoincore.dev"
+echo
+}
 concat
 build
 extract
+message
 run
