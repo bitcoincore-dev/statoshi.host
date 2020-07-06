@@ -10,7 +10,6 @@ build(){
 docker build -f stats.bitcoincore.dev.dockerfile --rm -t stats.bitcoincore.dev .
 }
 extract(){
-rm -f $(pwd)/conf/usr/local/bin/bitcoin*
 #disable entrypoint
 sed '$d' stats.bitcoincore.dev.dockerfile | sed '$d' | sed '$d' >  stats.bitcoincore.dev.extract.dockerfile
 docker build -f stats.bitcoincore.dev.extract.dockerfile --rm -t statoshi.extract$TIME .

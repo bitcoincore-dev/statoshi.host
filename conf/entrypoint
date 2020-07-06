@@ -42,7 +42,8 @@ shutdown(){
   exit
 }
 
-start_bitcoind &
+/usr/local/bin/./bitcoind -daemon -prune=550 &
+
 
 su-exec root /usr/local/bin/./run-grafana.sh &
 
