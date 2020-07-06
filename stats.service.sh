@@ -16,7 +16,6 @@ extract(){
 #disable entrypoint
 sed '$d' stats.bitcoincore.dev.dockerfile | sed '$d' | sed '$d' >  stats.bitcoincore.dev.extract.dockerfile
 docker build -f stats.bitcoincore.dev.extract.dockerfile --rm -t statoshi.extract$TIME .
-docker image ls
 #docker run --name temp-container-name-$TIME statoshi.extract /bin/true &
 docker run --name statoshi.extract$TIME  statoshi.extract$TIME /bin/true
 docker cp statoshi.extract$TIME:/usr/local/bin/bitcoind        $(pwd)/conf/usr/local/bin/bitcoind
@@ -27,15 +26,11 @@ docker rm statoshi.extract$TIME
 rm -f  stats.bitcoincore.dev.extract.dockerfile
 }
 run(){
-docker run --name stats.bitcoincore.dev -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 stats.bitcoincore.dev .
+docker run --restart always --name stats.bitcoincore.dev -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 stats.bitcoincore.dev .
 }
 message(){
-echo
-echo
-echo "A cron job can be used to automate restarting the service..."
-echo "crontab -e"
-echo "*/5 * * * * docker restart stats.bitcoincore.dev"
-echo
+docker image ls
+docker ps
 }
 concat
 build
