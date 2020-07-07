@@ -37,7 +37,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: shell help build rebuild service login test clean prune concat-all concat-slim slim build-all extract run-all run-slim run-gui build-gui concat-gui test-gui destroy-all
+.PHONY: shell help build rebuild service login test clean prune concat-all concat-slim slim build-all extract run-all run-slim run-gui build-gui concat-gui test-gui destroy-all autogen depends configure
 
 # suppress makes own output
 #.SILENT:
@@ -218,6 +218,31 @@ endif
 #######################
 
 
+autogen:
+	#test
+	# here it is useful to add your own customised tests
+	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
+
+
+#######################
+
+
+depends:
+	#depends
+	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "apk add coreutils && exit"
+	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
+
+
+#######################
+
+configure:
+	#configure
+	# here it is useful to add your own customised tests
+	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet && exit"
+
+
+
+#######################
 test-gui:
 	#test
 	# here it is useful to add your own customised tests
