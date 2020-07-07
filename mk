@@ -37,7 +37,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: shell help build rebuild service login test clean prune concat-all concat-slim slim build-all extract run-all run-slim gui rebuild-gui concat-gui test-gui
+.PHONY: shell help build rebuild service login test clean prune concat-all concat-slim slim build-all extract run-all run-slim run-gui build-gui concat-gui test-gui destroy-all
 
 # suppress makes own output
 #.SILENT:
@@ -98,11 +98,28 @@ prune:
 	#prune
 	docker system prune -af
 
+
+########################
+
+
 concat-all:
 	#concat-all
 	bash -c '$(pwd) cat header.dockerfile >               $(DOCKERFILE)'
 	bash -c '$(pwd) cat statoshi.build.all.dockerfile >>  $(DOCKERFILE)'
 	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE)'
+
+
+#######################
+
+
+build-all:
+	#build-all
+	bash -c '$(pwd) make -f mk concat-all'
+	docker build -f $(DOCKERFILE) --rm -t stats.bitcoincore.dev .
+
+
+#######################
+
 
 concat-slim:
 	#concat-slim
@@ -110,15 +127,18 @@ concat-slim:
 	bash -c '$(pwd) cat statoshi.build.slim.dockerfile >> $(DOCKERFILE_SLIM)'
 	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_SLIM)'
 
+
+#######################
+
+
 slim:
 	#slim
-	bash -c '$(pwd) make -f docker concat-slim'
+	bash -c '$(pwd) make -f mk concat-slim'
 	docker build -f $(DOCKERFILE_SLIM) --rm -t stats.bitcoincore.dev .
 
-build-all:
-	#build-all
-	bash -c '$(pwd) make -f docker concat-all'
-	docker build -f $(DOCKERFILE) --rm -t stats.bitcoincore.dev .
+
+#######################
+
 
 extract:
 	#extract
@@ -129,18 +149,30 @@ extract:
 		docker cp statoshi.extract:/usr/local/bin/bitcoind        $(pwd)/conf/usr/local/bin/bitcoind
 		docker cp statoshi.extract:/usr/local/bin/bitcoin-cli     $(pwd)/conf/usr/local/bin/bitcoin-cli
 		docker cp statoshi.extract:/usr/local/bin/bitcoin-tx      $(pwd)/conf/usr/local/bin/bitcoin-tx
-		docker rm statoshi.extract
-		rm -f  $(DOCKERFILE_EXTRACT)
+		docker rm statoshi.extract'
+		rm -f  $(DOCKERFILE_EXTRACT)'
+
+
+#######################
+
 
 run-all:
 	#run-all
-	bash -c '$(pwd) make -f docker extract'
+	bash -c '$(pwd) make -f mk extract'
 		docker run --restart always --name stats.bitcoincore.dev -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 stats.bitcoincore.dev .
+
+
+#######################
+
 
 run-slim:
 	#run-slim
-	bash -c '$(pwd) make -f docker slim'
-		docker run --restart always --name stats.bitcoincore.dev -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 stats.bitcoincore.dev .
+	bash -c '$(pwd) make -f mk slim'
+		docker run --restart always --name stats.bitcoincore.dev -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 stats.bitcoincore.dev .
+
+
+#######################
+
 
 concat-gui:
 	#concat-gui
@@ -148,30 +180,43 @@ concat-gui:
 	bash -c '$(pwd) cat stats.gui.dockerfile >>           $(DOCKERFILE_GUI)'
 	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_GUI)'
 
-gui:
+
+#######################
+
+
+build-gui:
+#rebuild-gui
+	bash -c '$(pwd) make -f docker concat-gui'
+	# force a rebuild by passing --no-cache
+	docker-compose -f gui.yml build --no-cache $(SERVICE_TARGET)
+
+
+#######################
+
+
+run-gui:
 	#gui
 	bash -c '$(pwd) make -f docker concat-gui'
+	bash -c '$(pwd) make -f docker build-gui'
 	#docker build -f $(DOCKERFILE_GUI) --rm -t stats.gui .
 	#docker run -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 stats.gui
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
 	docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --rm $(SERVICE_TARGET) sh
-	#docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh
-	#docker build -f $(DOCKERFILE_GUI) --rm -t stats.gui .
+	#docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh'
+	#docker build -f $(DOCKERFILE_GUI) --rm -t stats.gui .'
 	#docker run -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 stats.gui
 else
 	# run the command
-	docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000   --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
 	#docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
 	#docker build -f $(DOCKERFILE_GUI) --rm -t stats.gui .
 	#docker run -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 stats.gui
 endif
 
-rebuild-gui:
-#rebuild-gui
-	bash -c '$(pwd) make -f docker concat-gui'
-	# force a rebuild by passing --no-cache
-	docker-compose -f gui.yml build --no-cache $(SERVICE_TARGET)
+
+#######################
+
 
 test-gui:
 	#test
@@ -180,6 +225,10 @@ test-gui:
 		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
 
+
+#######################
+
+
 test:
 	#test
 	# here it is useful to add your own customised tests
@@ -187,6 +236,32 @@ test:
 		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
 
-#docker ps -aq && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q)
 
+#######################
+
+
+destroy-all:
+	docker ps -aq && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q)
+
+
+#######################
+
+
+clean:
+	# remove created images
+	@docker-compose -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
+	&& echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" removed.' \
+	|| echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" already removed.'
+	rm $(DOCKERFILE) $(DOCKERFILE_SLIM) $(DOCKERFILE_EXTRACT)
+
+
+#######################
+
+
+prune:
+	#prune
+	docker system prune -af
+
+
+#######################
 

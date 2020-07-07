@@ -56,9 +56,7 @@ COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_icon.svg
 COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
 COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
 
-EXPOSE 80 3000
-
-#CMD ["/usr/local/bin/run-grafana.sh"]
+EXPOSE 80 3000 8080
 
 #an image 'user' needs to be last
 FROM testing as user
@@ -71,3 +69,5 @@ RUN [ "${HOST_USER}" == "root" ] || \
     && chown -R "${HOST_UID}:${HOST_UID}" /home/${HOST_USER})
 
 USER ${HOST_USER}
+CMD ["/usr/local/bin/./run-grafana.sh"]
+
