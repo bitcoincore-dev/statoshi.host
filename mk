@@ -45,6 +45,7 @@ export HOST_UID
 # Regular Makefile part for buildpypi itself
 help:
 	@echo ''
+	@echo ''
 	@echo '    Usage:	make -fmk [TARGET] [EXTRA_ARGUMENTS]'
 	@echo ''
 	@echo '  Targets:'
@@ -68,10 +69,12 @@ help:
 	@echo ''
 	@echo '     cmd=:	make -fmk shell cmd="whoami"'
 	@echo ''
-	@echo '# user= and uid= allows to override current user. Might require additional privileges.'
-	@echo ''
+	@echo '    user=	overrides current user. Might require additional privileges.'
 	@echo '    user=:	make shell user=root (no need to set uid=0)'
+	@echo '     uid=	overrides current user uid.'
 	@echo '     uid=:	make shell user=$(USER) uid=4000 (defaults to 0 if user= set)'
+	@echo ''
+	@echo ''
 
 shell:
 ifeq ($(CMD_ARGUMENTS),)
@@ -153,13 +156,13 @@ slim:
 
 extract:
 	#extract
-	bash -c '$(pwd) make -f docker build-all'
+	bash -c '$(pwd) make -fmk build-all'
 	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
 		docker build -f $(DOCKERFILE_EXTRACT) --rm -t statoshi.extract .
 		docker run --name statoshi.extract  statoshi.extract /bin/true
-		docker cp statoshi.extract:/usr/local/bin/bitcoind        $(pwd)/conf/usr/local/bin/bitcoind
-		docker cp statoshi.extract:/usr/local/bin/bitcoin-cli     $(pwd)/conf/usr/local/bin/bitcoin-cli
-		docker cp statoshi.extract:/usr/local/bin/bitcoin-tx      $(pwd)/conf/usr/local/bin/bitcoin-tx
+		#docker cp statoshi.extract:/usr/local/bin/bitcoind        $(pwd)/conf/usr/local/bin/bitcoind
+		#docker cp statoshi.extract:/usr/local/bin/bitcoin-cli     $(pwd)/conf/usr/local/bin/bitcoin-cli
+		#docker cp statoshi.extract:/usr/local/bin/bitcoin-tx      $(pwd)/conf/usr/local/bin/bitcoin-tx
 		docker rm statoshi.extract'
 		rm -f  $(DOCKERFILE_EXTRACT)'
 
