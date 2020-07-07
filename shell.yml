@@ -19,7 +19,7 @@ services:
       context: .
       # Build for current user.
       target: user
-      dockerfile: Dockerfile
+      dockerfile: shell.dockerfile
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}
