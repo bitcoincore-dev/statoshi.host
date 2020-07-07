@@ -256,7 +256,8 @@ src/qt/bitcoin-qt.includes
 
 # Compilation and Qt preprocessor part
 *.qm
-Makefile
+!makefile
+!Makefile
 !depends/Makefile
 src/qt/bitcoin-qt
 Bitcoin-Qt.app
