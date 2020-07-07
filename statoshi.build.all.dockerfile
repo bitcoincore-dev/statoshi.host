@@ -1,4 +1,4 @@
-#BEGIN statoshi..build.all.dockerfile
+#BEGIN statoshi.build.all.dockerfile
 RUN df -H
 ###########################################
 # We build Statoshi last
@@ -37,11 +37,7 @@ RUN cd /stats.bitcoincore.dev && make -j $(nproc)
 FROM make as strip-binaries
 ###########################
 
-RUN strip /stats.bitcoincore.dev/src/bitcoind
-#
-RUN strip /stats.bitcoincore.dev/src/bitcoin-cli
-#
-RUN strip /stats.bitcoincore.dev/src/bitcoin-tx
+RUN echo
 
 ###########################
 FROM strip-binaries as copy

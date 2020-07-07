@@ -1,16 +1,19 @@
-FROM alpine:3.11.5
+#Stand alone docker image that pulls data from statoshi.bitcoincore.dev:8080 by default
+#Datasource config also has a http://localhost:8080 config as well - not default
+ARG BASE_IMAGE=alpine:3.11.6
+FROM ${BASE_IMAGE}
 
-EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
-
-ENV GRAFANA_VERSION=7.0.0
+#TODO We will pull from our own compiled package later
+ENV GRAFANA_VERSION=7.0.5
 RUN mkdir /tmp/grafana \
   && wget -P /tmp/ https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
   && tar xfz /tmp/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz --strip-components=1 -C /tmp/grafana
 
-FROM graphite.statsd.layer
+ARG BASE_IMAGE=alpine:3.11.6
+FROM ${BASE_IMAGE} as testing
+LABEL stats.bitcoincore.dev="stats.bitcoincore.dev"
 
-RUN pip3 install twisted
-ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     GF_PATHS_CONFIG_DEFAULTS="/usr/share/grafana/conf/defaults.ini" \
     GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
     GF_PATHS_DATA="/var/lib/grafana" \
@@ -37,11 +40,13 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws" \
     && chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" \
     && chmod -R 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
 
+#NOTE:/usr/share/grafana/conf/defaults.ini is read first
+COPY ./conf/defaults.ini "$GF_PATHS_CONFIG_DEFAULTS"
 COPY ./conf/grafana.ini "$GF_PATHS_CONFIG"
-COPY ./conf/run-grafana.sh /usr/local/bin/run-grafana.sh
-RUN chmod +x  /usr/local/bin/run-grafana.sh
+COPY ./conf/run-grafana.sh /usr/local/bin/
 COPY ./conf/dashboards/* $GF_PATHS_PROVISIONING/dashboards/
 COPY ./conf/datasources/* $GF_PATHS_PROVISIONING/datasources/
+
 COPY ./conf/dashboards/* $GF_PATHS_HOME/dashboards/
 
 RUN rm -f $GF_PATHS_HOME/public/img/grafana_icon.svg
@@ -51,9 +56,18 @@ COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_icon.svg
 COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
 COPY ./conf/img/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
 
-EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
+EXPOSE 80 3000
 
-#CMD ["/usr/local/bin/run-grafana.sh"] #We call this from entrypoint
-RUN df -H
-ENTRYPOINT ["/usr/local/bin/entrypoint"]
+#CMD ["/usr/local/bin/run-grafana.sh"]
 
+#an image 'user' needs to be last
+FROM testing as user
+
+ARG HOST_UID=${HOST_UID:-4000}
+ARG HOST_USER=${HOST_USER:-nodummy}
+
+RUN [ "${HOST_USER}" == "root" ] || \
+    (adduser -h /home/${HOST_USER} -D -u ${HOST_UID} ${HOST_USER} \
+    && chown -R "${HOST_UID}:${HOST_UID}" /home/${HOST_USER})
+
+USER ${HOST_USER}

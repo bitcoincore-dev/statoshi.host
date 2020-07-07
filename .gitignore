@@ -256,8 +256,7 @@ src/qt/bitcoin-qt.includes
 
 # Compilation and Qt preprocessor part
 *.qm
-!makefile
-!Makefile
+Makefile
 !depends/Makefile
 src/qt/bitcoin-qt
 Bitcoin-Qt.app
@@ -319,3 +318,5 @@ build-bitcoin-qt-Desktop_Qt_5_15_0_clang_64bit-Debug
 contrib/bitcoin-qt.pro.user
 data
 stats.bitcoincore.dev.extract.dockerfile
+stats.build.gui.dockerfile
+statoshi.build.slim.dockerfile

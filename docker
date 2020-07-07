@@ -1,5 +1,6 @@
-DOCKERFILE=stats.build.all.dockerfile
+DOCKERFILE=stats.bitcoincore.dev.dockerfile
 DOCKERFILE_SLIM=stats.build.slim.dockerfile
+DOCKERFILE_GUI=stats.build.gui.dockerfile
 DOCKERFILE_EXTRACT=stats.build.all.extract.dockerfile
 
 # If you see pwd_unknown showing up, this is why. Re-calibrate your system.
@@ -36,7 +37,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: shell help build rebuild service login test clean prune concat-all concat-slim slim build-all extract run-all run-slim
+.PHONY: shell help build rebuild service login test clean prune concat-all concat-slim slim build-all extract run-all run-slim gui rebuild-gui concat-gui test-gui
 
 # suppress makes own output
 #.SILENT:
@@ -46,6 +47,7 @@ help:
 	@echo ''
 	@echo 'Usage: make [TARGET] [EXTRA_ARGUMENTS]'
 	@echo 'Targets:'
+	@echo '  shell    	run docker --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo '  build    	build docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo '  rebuild  	rebuild docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo '  test     	test docker --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
@@ -53,7 +55,6 @@ help:
 	@echo '  login   	run as service and login --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo '  clean    	remove docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo '  prune    	shortcut for docker system prune -af. Cleanup inactive containers and cache.'
-	@echo '  shell      run docker --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo ''
 	@echo 'Extra arguments:'
 	@echo 'cmd=:	make cmd="whoami"'
@@ -62,13 +63,12 @@ help:
 	@echo 'uid=:	make shell user=dummy uid=4000 (defaults to 0 if user= set)'
 
 shell:
-	bash -c 'cat makefile > makefile.bak'
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
 	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh
 else
 	# run the command
-	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
 endif
 
 rebuild:
@@ -95,33 +95,34 @@ clean:
 	rm $(DOCKERFILE) $(DOCKERFILE_SLIM) $(DOCKERFILE_EXTRACT)
 
 prune:
+	#prune
 	docker system prune -af
 
 concat-all:
 	#concat-all
-	bash -c "cat header.dockerfile >              $(DOCKERFILE)"
-	bash -c "cat statoshi.build.all.dockerfile >> $(DOCKERFILE)"
-	bash -c "cat footer.dockerfile >>             $(DOCKERFILE)"
+	bash -c '$(pwd) cat header.dockerfile >               $(DOCKERFILE)'
+	bash -c '$(pwd) cat statoshi.build.all.dockerfile >>  $(DOCKERFILE)'
+	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE)'
 
 concat-slim:
 	#concat-slim
-	bash -c "cat header.slim.dockerfile >         $(DOCKERFILE_SLIM)"
-	bash -c "cat statoshi.slim.dockerfile >>      $(DOCKERFILE_SLIM)"
-	bash -c "cat footer.dockerfile >>             $(DOCKERFILE_SLIM)"
+	bash -c '$(pwd) cat header.dockerfile >               $(DOCKERFILE_SLIM)'
+	bash -c '$(pwd) cat statoshi.build.slim.dockerfile >> $(DOCKERFILE_SLIM)'
+	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_SLIM)'
 
 slim:
 	#slim
-	$(call cancat-slim)
+	bash -c '$(pwd) make -f docker concat-slim'
 	docker build -f $(DOCKERFILE_SLIM) --rm -t stats.bitcoincore.dev .
 
 build-all:
 	#build-all
-	$(call cancat-all)
+	bash -c '$(pwd) make -f docker concat-all'
 	docker build -f $(DOCKERFILE) --rm -t stats.bitcoincore.dev .
 
 extract:
 	#extract
-	$(call build-all)
+	bash -c '$(pwd) make -f docker build-all'
 	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
 		docker build -f $(DOCKERFILE_EXTRACT) --rm -t statoshi.extract .
 		docker run --name statoshi.extract  statoshi.extract /bin/true
@@ -133,17 +134,59 @@ extract:
 
 run-all:
 	#run-all
-	$(call extract)
+	bash -c '$(pwd) make -f docker extract'
 		docker run --restart always --name stats.bitcoincore.dev -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 stats.bitcoincore.dev .
 
 run-slim:
 	#run-slim
-	$(call slim)
+	bash -c '$(pwd) make -f docker slim'
 		docker run --restart always --name stats.bitcoincore.dev -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 stats.bitcoincore.dev .
+
+concat-gui:
+	#concat-gui
+	bash -c '$(pwd) cat header.slim.dockerfile >          $(DOCKERFILE_GUI)'
+	bash -c '$(pwd) cat stats.gui.dockerfile >>           $(DOCKERFILE_GUI)'
+	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_GUI)'
+
+gui:
+	#gui
+	bash -c '$(pwd) make -f docker concat-gui'
+	#docker build -f $(DOCKERFILE_GUI) --rm -t stats.gui .
+	#docker run -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 stats.gui
+ifeq ($(CMD_ARGUMENTS),)
+	# no command is given, default to shell
+	docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --rm $(SERVICE_TARGET) sh
+	#docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh
+	#docker build -f $(DOCKERFILE_GUI) --rm -t stats.gui .
+	#docker run -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 stats.gui
+else
+	# run the command
+	docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000   --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
+	#docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
+	#docker build -f $(DOCKERFILE_GUI) --rm -t stats.gui .
+	#docker run -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 stats.gui
+endif
+
+rebuild-gui:
+#rebuild-gui
+	bash -c '$(pwd) make -f docker concat-gui'
+	# force a rebuild by passing --no-cache
+	docker-compose -f gui.yml build --no-cache $(SERVICE_TARGET)
+
+test-gui:
+	#test
+	# here it is useful to add your own customised tests
+	docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c '\
+		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
+	&& echo success
 
 test:
 	#test
 	# here it is useful to add your own customised tests
-	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c '\
+	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c '\
 		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
+
+#docker ps -aq && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q)
+
+
