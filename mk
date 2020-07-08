@@ -5,7 +5,7 @@ endif
 
 DOCKERFILE=stats.bitcoincore.dev.dockerfile
 DOCKERFILE_SLIM=stats.build.slim.dockerfile
-DOCKERFILE_GUI=stats.build.gui.dockerfile
+DOCKERFILE_GUI=stats.build.gui
 DOCKERFILE_EXTRACT=stats.build.all.extract.dockerfile
 
 # If you see pwd_unknown showing up, this is why. Re-calibrate your system.
@@ -203,9 +203,9 @@ run-slim:
 
 concat-gui:
 	#concat-gui
-	bash -c '$(pwd) cat header.slim.dockerfile >          $(DOCKERFILE_GUI)'
-	bash -c '$(pwd) cat stats.gui.dockerfile >>           $(DOCKERFILE_GUI)'
-	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_GUI)'
+	bash -c '$(pwd) cat header.slim.dockerfile >          $(DOCKERFILE_GUI).dockerfile'
+	bash -c '$(pwd) cat stats.gui.dockerfile >>           $(DOCKERFILE_GUI).dockerfile'
+	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_GUI).dockerfile'
 
 
 #######################
@@ -213,32 +213,24 @@ concat-gui:
 
 build-gui:
 #rebuild-gui
-	bash -c '$(pwd) make -f docker concat-gui'
+	bash -c '$(pwd) make -fmk user=root concat-gui'
 	# force a rebuild by passing --no-cache
-	docker-compose -f gui.yml build --no-cache $(SERVICE_TARGET)
+	docker-compose -f docker-compose.yml build --no-cache gui
 
 
 #######################
 
 
 run-gui:
-	#gui
-	bash -c '$(pwd) make -f docker concat-gui'
-	bash -c '$(pwd) make -f docker build-gui'
-	#docker build -f $(DOCKERFILE_GUI) --rm -t stats.gui .
-	#docker run -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 stats.gui
+	# run-gui no command
+	bash -c '$(pwd) make -fmk concat-gui'
+	bash -c '$(pwd) make -fmk build-gui'
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
-	docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --rm $(SERVICE_TARGET) sh
-	#docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh'
-	#docker build -f $(DOCKERFILE_GUI) --rm -t stats.gui .'
-	#docker run -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 stats.gui
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --rm gui sh
 else
-	# run the command
-	docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
-	#docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
-	#docker build -f $(DOCKERFILE_GUI) --rm -t stats.gui .
-	#docker run -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 stats.gui
+	# run-gui with command
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
 endif
 
 
