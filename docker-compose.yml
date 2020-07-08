@@ -16,7 +16,8 @@ services:
     build:
       context: .
       # Build for current user.
-      target: user
+      # This is the name of the last layer in the dockerfile
+      target: <INSERT SOMETHING HERE>
       dockerfile: stats.gui.dockerfile
       # These variables are passed to Dockerfile.
       args:
@@ -28,7 +29,7 @@ services:
     # Expose current project folder to container.
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
-      - ${HOME:-.}:/${PROJECT_NAME}
+      - ${HOME:-.}:/home/${HOST_USER}
     ports:
      - "80:3000"
 
@@ -46,8 +47,9 @@ services:
     build:
       context: .
       # Build for current user.
-      target: user
-      dockerfile: stats.gui.dockerfile
+      # This is the name of the last layer in stats.build.gui.dockerfile
+      target: gui
+      dockerfile: stats.build.gui.dockerfile
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}
@@ -58,6 +60,8 @@ services:
     # Expose current project folder to container.
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
+      - ${HOME:-.}:/home/${HOST_USER}
     ports:
+       #hostPORT:imagePORT
      - "80:3000"
 

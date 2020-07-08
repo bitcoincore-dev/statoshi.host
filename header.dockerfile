@@ -7,7 +7,7 @@ FROM ${BASE_IMAGE} as set-initial-env
 LABEL dev.bitcoincore.stats="dev.bitcoincore.stats"
 LABEL version="v0.20.99.0"
 LABEL description="Statoshi Docker"
-LABEL github="https://github.com/bitcoincore-dev/statoshi"
+LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
 LABEL maintainer="admin@bitcoincore.dev"
 
 RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git

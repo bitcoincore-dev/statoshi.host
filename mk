@@ -3,10 +3,10 @@ Makefile := defined
 endif
 
 
-DOCKERFILE=stats.bitcoincore.dev.dockerfile
-DOCKERFILE_SLIM=stats.build.slim.dockerfile
+DOCKERFILE=stats.bitcoincore.dev
+DOCKERFILE_SLIM=stats.build.slim
 DOCKERFILE_GUI=stats.build.gui
-DOCKERFILE_EXTRACT=stats.build.all.extract.dockerfile
+DOCKERFILE_EXTRACT=stats.build.all.extract
 
 # If you see pwd_unknown showing up, this is why. Re-calibrate your system.
 PWD ?= pwd_unknown
@@ -106,18 +106,6 @@ build:
 	# only build the container. Note, docker does this also if you apply other targets.
 	docker-compose -f shell.yml build $(SERVICE_TARGET)
 
-clean:
-	# remove created images
-	@docker-compose -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
-	&& echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" removed.' \
-	|| echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" already removed.'
-	rm $(DOCKERFILE) $(DOCKERFILE_SLIM) $(DOCKERFILE_EXTRACT)
-
-prune:
-	#prune
-	docker system prune -af
-
-
 ########################
 
 
@@ -175,6 +163,15 @@ slim:
 #######################
 
 
+run-slim:
+	#run-slim
+	bash -c '$(pwd) make -f mk slim'
+		docker run --restart always --name $(DOCKERFILE_SLIM) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE_SLIM) .
+
+
+#######################
+
+
 extract:
 	#extract
 	bash -c '$(pwd) make -fmk build-all'
@@ -186,16 +183,6 @@ extract:
 		#docker cp $(DOCKERFILE_EXTRACT):/usr/local/bin/bitcoin-tx      $(pwd)/conf/usr/local/bin/bitcoin-tx
 		docker rm $(DOCKERFILE_EXTRACT)
 		rm -f  $(DOCKERFILE_EXTRACT)'
-
-
-#######################
-
-
-run-slim:
-	#run-slim
-	bash -c '$(pwd) make -f mk slim'
-		docker run --restart always --name $(DOCKERFILE_SLIM) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE_SLIM) .
-
 
 
 #######################
@@ -223,20 +210,28 @@ build-gui:
 
 run-gui:
 	# run-gui no command
-	bash -c '$(pwd) make -fmk concat-gui'
-	bash -c '$(pwd) make -fmk build-gui'
+	bash -c '$(pwd) make -fmk user=root build-gui'
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --rm gui sh
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --restart always --publish 80:3000 --rm gui sh
 else
 	# run-gui with command
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --restart always --publish 80:3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
 endif
 
 
 #######################
 
 
+test-gui:
+	#test-gui
+	# here it is useful to add your own customised tests
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3333:3000 --rm gui sh -c '\
+		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
+	&& echo success
+
+
+#######################
 autogen:
 	#test
 	# here it is useful to add your own customised tests
@@ -254,20 +249,11 @@ depends:
 
 #######################
 
+
 configure:
 	#configure
 	# here it is useful to add your own customised tests
 	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
-
-
-
-#######################
-test-gui:
-	#test
-	# here it is useful to add your own customised tests
-	docker-compose -f gui.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c '\
-		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
-	&& echo success
 
 
 #######################
@@ -284,27 +270,32 @@ test:
 #######################
 
 
-destroy-all:
-	docker ps -aq && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q)
-
-
-#######################
-
-
 clean:
-	# remove created images
+	# remove created images and dockerfiles
 	@docker-compose -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
 	&& echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" removed.' \
 	|| echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" already removed.'
-	rm $(DOCKERFILE) $(DOCKERFILE_SLIM) $(DOCKERFILE_EXTRACT)
+	bash -c 'touch stats.build.slim.dockerfile stats.build.gui.dockerfile stats.build.all.extract.dockerfile'
+	bash -c '[ -f $(DOCKERFILE_SLIM).dockerfile ]    && rm -f $(DOCKERFILE_SLIM).dockerfile'
+	bash -c '[ -f $(DOCKERFILE_GUI).dockerfile ]     && rm -f $(DOCKERFILE_GUI).dockerfile'
+	bash -c '[ -f $(DOCKERFILE_EXTRACT).dockerfile ] && rm -f $(DOCKERFILE_EXTRACT).dockerfile'
 
 
 #######################
 
 
-prune:
+prune::
 	#prune
 	docker system prune -af
+
+
+#######################
+
+
+destroy-all:
+	bash -c '$(pwd) make -fmk clean'
+	bash -c '$(pwd) make -fmk prune'
+	docker ps -aq && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q)
 
 
 #######################

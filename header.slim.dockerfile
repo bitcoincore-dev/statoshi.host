@@ -7,7 +7,7 @@ FROM ${BASE_IMAGE} as set-initial-env
 LABEL dev.bitcoincore.stats="dev.bitcoincore.stats"
 LABEL version="v0.20.99.0"
 LABEL description="Statoshi Docker"
-LABEL github="https://github.com/bitcoincore-dev/statoshi"
+LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
 LABEL maintainer="admin@bitcoincore.dev"
 
 RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git
@@ -16,7 +16,8 @@ RUN apk add --update -v nodejs nodejs-npm
 
 #NOTE: simply exposing the ports in the dockerfile isnt enough
 #REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
-EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
+# We delay exposing ports until the last stage of the builds for reusablity
+#EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
 RUN git config --global advice.detachedHead false
 
 RUN df -H
