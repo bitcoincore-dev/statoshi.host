@@ -1,3 +1,8 @@
+ifeq ($(Makefile),)
+Makefile := defined
+endif
+
+
 DOCKERFILE=stats.bitcoincore.dev.dockerfile
 DOCKERFILE_SLIM=stats.build.slim.dockerfile
 DOCKERFILE_GUI=stats.build.gui.dockerfile
@@ -129,7 +134,23 @@ concat-all:
 build-all:
 	#build-all
 	bash -c '$(pwd) make -f mk concat-all'
-	docker build -f $(DOCKERFILE) --rm -t stats.bitcoincore.dev .
+	docker build -f $(DOCKERFILE) --rm -t $(DOCKERFILE) .
+
+
+#######################
+
+
+run-all:
+	#run-all
+ifeq ($(Makefile),)
+		Makefile := defined
+		bash -c '$(pwd) make clean'
+endif
+
+	bash -c '$(pwd) make -f mk concat-all'
+	bash -c '$(pwd) make -f mk build-all'
+		#docker run --restart always --name $(DOCKERFILE) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE) .
+		docker run --restart always -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE) .
 
 
 #######################
@@ -148,7 +169,7 @@ concat-slim:
 slim:
 	#slim
 	bash -c '$(pwd) make -f mk concat-slim'
-	docker build -f $(DOCKERFILE_SLIM) --rm -t stats.bitcoincore.dev .
+	docker build -f $(DOCKERFILE_SLIM) --rm -t $(DOCKERFILE_SLIM) .
 
 
 #######################
@@ -158,22 +179,13 @@ extract:
 	#extract
 	bash -c '$(pwd) make -fmk build-all'
 	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
-		docker build -f $(DOCKERFILE_EXTRACT) --rm -t statoshi.extract .
-		docker run --name statoshi.extract  statoshi.extract /bin/true
-		#docker cp statoshi.extract:/usr/local/bin/bitcoind        $(pwd)/conf/usr/local/bin/bitcoind
-		#docker cp statoshi.extract:/usr/local/bin/bitcoin-cli     $(pwd)/conf/usr/local/bin/bitcoin-cli
-		#docker cp statoshi.extract:/usr/local/bin/bitcoin-tx      $(pwd)/conf/usr/local/bin/bitcoin-tx
-		docker rm statoshi.extract'
+		docker build -f $(DOCKERFILE_EXTRACT) --rm -t $(DOCKERFILE_EXTRACT) .
+		docker run --name $(DOCKERFILE_EXTRACT) $(DOCKERFILE_EXTRACT) /bin/true
+		#docker cp $(DOCKERFILE_EXTRACT):/usr/local/bin/bitcoind        $(pwd)/conf/usr/local/bin/bitcoind
+		#docker cp $(DOCKERFILE_EXTRACT):/usr/local/bin/bitcoin-cli     $(pwd)/conf/usr/local/bin/bitcoin-cli
+		#docker cp $(DOCKERFILE_EXTRACT):/usr/local/bin/bitcoin-tx      $(pwd)/conf/usr/local/bin/bitcoin-tx
+		docker rm $(DOCKERFILE_EXTRACT)
 		rm -f  $(DOCKERFILE_EXTRACT)'
-
-
-#######################
-
-
-run-all:
-	#run-all
-	bash -c '$(pwd) make -f mk extract'
-		docker run --restart always --name stats.bitcoincore.dev -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 stats.bitcoincore.dev .
 
 
 #######################
@@ -182,7 +194,8 @@ run-all:
 run-slim:
 	#run-slim
 	bash -c '$(pwd) make -f mk slim'
-		docker run --restart always --name stats.bitcoincore.dev -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 stats.bitcoincore.dev .
+		docker run --restart always --name $(DOCKERFILE_SLIM) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE_SLIM) .
+
 
 
 #######################
@@ -252,7 +265,7 @@ depends:
 configure:
 	#configure
 	# here it is useful to add your own customised tests
-	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet && exit"
+	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
 
 
 

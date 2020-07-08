@@ -319,7 +319,7 @@ RUN make -j $(nproc) download -C /stats.bitcoincore.dev/depends
 FROM make-depends as autogen
 ############################
 
-RUN cd /stats.bitcoincore.dev && ./autogen.sh
+RUN cd /stats.bitcoincore.dev && git pull origin +master:master && ./autogen.sh
 
 #########################
 FROM autogen as configure

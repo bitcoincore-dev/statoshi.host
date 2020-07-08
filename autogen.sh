@@ -5,9 +5,6 @@
 
 export LC_ALL=C
 set -e
-
-cp makefile makefile.bak
-
 srcdir="$(dirname "$0")"
 cd "$srcdir"
 if [ -z "${LIBTOOLIZE}" ] && GLIBTOOLIZE="$(command -v glibtoolize)"; then
