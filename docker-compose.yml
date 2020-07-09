@@ -1,5 +1,3 @@
-# YOU CAN FREELY USE THIS CODE EXAMPLE TO KICKSTART A PROJECT OF YOUR OWN.
-# FEEL FREE TO REPLACE OR REMOVE THIS HEADER.
 version: '3.4'
 services:
   main:
@@ -13,11 +11,11 @@ services:
     # Run with user priviliges by default.
     user: ${HOST_USER:-nodummy}
     image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+    restart: unless-stopped
     build:
       context: .
-      # Build for current user.
-      # This is the name of the last layer in the dockerfile
-      target: <INSERT SOMETHING HERE>
+      # This is the name of the last layer in the dockerfile - avoid dashes and dots in layer name
+      target: <NAME OF LAST LAYER>
       dockerfile: stats.gui.dockerfile
       # These variables are passed to Dockerfile.
       args:
@@ -44,9 +42,9 @@ services:
     # Run with user priviliges by default.
     user: ${HOST_USER:-nodummy}
     image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+    restart: unless-stopped
     build:
       context: .
-      # Build for current user.
       # This is the name of the last layer in stats.build.gui.dockerfile
       target: gui
       dockerfile: stats.build.gui.dockerfile

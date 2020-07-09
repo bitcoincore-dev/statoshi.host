@@ -2,7 +2,6 @@ ifeq ($(Makefile),)
 Makefile := defined
 endif
 
-
 DOCKERFILE=stats.bitcoincore.dev
 DOCKERFILE_SLIM=stats.build.slim
 DOCKERFILE_GUI=stats.build.gui
@@ -12,11 +11,11 @@ DOCKERFILE_EXTRACT=stats.build.all.extract
 PWD ?= pwd_unknown
 
 # PROJECT_NAME defaults to name of the current directory.
-# should not to be changed if you follow GitOps operating procedures.
+# should not need to be changed if you follow GitOps operating procedures.
 PROJECT_NAME = $(notdir $(PWD))
 
 # Note. If you change this, you also need to update docker-compose.yml.
-# only useful in a setting with multiple services/ makefiles.
+# Useful in a setting with multiple services/ makefiles.
 SERVICE_TARGET := main
 
 # if vars not set specifially: try default to environment, else fixed value.
@@ -42,9 +41,9 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: shell help build rebuild service login test clean prune concat-all concat-slim slim build-all extract run-all run-slim run-gui build-gui concat-gui test-gui destroy-all autogen depends configure
+.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends configure
 
-# suppress makes own output
+# suppress make's own output
 #.SILENT:
 
 # Regular Makefile part for buildpypi itself
@@ -90,7 +89,11 @@ else
 	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
 endif
 
-rebuild:
+build-shell:
+	# only build the container. Note, docker does this also if you apply other targets.
+	docker-compose -f shell.yml build $(SERVICE_TARGET)
+
+rebuild-shell:
 	# force a rebuild by passing --no-cache
 	docker-compose -f shell.yml build --no-cache $(SERVICE_TARGET)
 
@@ -102,78 +105,29 @@ login: service
 	# run as a service and attach to it
 	docker exec -it $(PROJECT_NAME)_$(HOST_UID) sh
 
-build:
-	# only build the container. Note, docker does this also if you apply other targets.
-	docker-compose -f shell.yml build $(SERVICE_TARGET)
-
 ########################
-
-
 concat-all:
 	#concat-all
 	bash -c '$(pwd) cat header.dockerfile >               $(DOCKERFILE)'
 	bash -c '$(pwd) cat statoshi.build.all.dockerfile >>  $(DOCKERFILE)'
 	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE)'
-
-
 #######################
-
-
 build-all:
-	#build-all
 	bash -c '$(pwd) make -f mk concat-all'
 	docker build -f $(DOCKERFILE) --rm -t $(DOCKERFILE) .
-
-
 #######################
-
-
 run-all:
-	#run-all
 ifeq ($(Makefile),)
 		Makefile := defined
 		bash -c '$(pwd) make clean'
 endif
-
 	bash -c '$(pwd) make -f mk concat-all'
 	bash -c '$(pwd) make -f mk build-all'
 		#docker run --restart always --name $(DOCKERFILE) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE) .
 		docker run --restart always -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE) .
-
-
 #######################
-
-
-concat-slim:
-	#concat-slim
-	bash -c '$(pwd) cat header.dockerfile >               $(DOCKERFILE_SLIM)'
-	bash -c '$(pwd) cat statoshi.build.slim.dockerfile >> $(DOCKERFILE_SLIM)'
-	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_SLIM)'
-
-
-#######################
-
-
-slim:
-	#slim
-	bash -c '$(pwd) make -f mk concat-slim'
-	docker build -f $(DOCKERFILE_SLIM) --rm -t $(DOCKERFILE_SLIM) .
-
-
-#######################
-
-
-run-slim:
-	#run-slim
-	bash -c '$(pwd) make -f mk slim'
-		docker run --restart always --name $(DOCKERFILE_SLIM) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE_SLIM) .
-
-
-#######################
-
-
 extract:
-	#extract
+	#extract TODO CREATE PACKAGE for distribution
 	bash -c '$(pwd) make -fmk build-all'
 	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
 		docker build -f $(DOCKERFILE_EXTRACT) --rm -t $(DOCKERFILE_EXTRACT) .
@@ -183,95 +137,68 @@ extract:
 		#docker cp $(DOCKERFILE_EXTRACT):/usr/local/bin/bitcoin-tx      $(pwd)/conf/usr/local/bin/bitcoin-tx
 		docker rm $(DOCKERFILE_EXTRACT)
 		rm -f  $(DOCKERFILE_EXTRACT)'
-
-
 #######################
-
-
+concat-slim:
+	bash -c '$(pwd) cat header.dockerfile >               $(DOCKERFILE_SLIM)'
+	bash -c '$(pwd) cat statoshi.build.slim.dockerfile >> $(DOCKERFILE_SLIM)'
+	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_SLIM)'
+#######################
+build-slim:
+	bash -c '$(pwd) make -f mk concat-slim'
+	docker build -f $(DOCKERFILE_SLIM) --rm -t $(DOCKERFILE_SLIM) .
+#######################
+run-slim:
+	bash -c '$(pwd) make -f mk slim'
+		docker run --restart always --name $(DOCKERFILE_SLIM) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE_SLIM) .
+#######################
 concat-gui:
-	#concat-gui
 	bash -c '$(pwd) cat header.slim.dockerfile >          $(DOCKERFILE_GUI).dockerfile'
-	bash -c '$(pwd) cat stats.gui.dockerfile >>           $(DOCKERFILE_GUI).dockerfile'
-	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_GUI).dockerfile'
-
-
+	bash -c '$(pwd) cat stats.gui.dockerfile   >>         $(DOCKERFILE_GUI).dockerfile'
+	bash -c '$(pwd) cat footer.dockerfile      >>         $(DOCKERFILE_GUI).dockerfile'
 #######################
-
-
 build-gui:
-#rebuild-gui
+	bash -c '$(pwd) make -fmk user=root concat-gui'
+	# force a rebuild by passing --no-cache
+	docker-compose -f docker-compose.yml build gui
+#######################
+rebuild-gui:
 	bash -c '$(pwd) make -fmk user=root concat-gui'
 	# force a rebuild by passing --no-cache
 	docker-compose -f docker-compose.yml build --no-cache gui
-
-
 #######################
-
-
 run-gui:
-	# run-gui no command
 	bash -c '$(pwd) make -fmk user=root build-gui'
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --restart always --publish 80:3000 --rm gui sh
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 80:3000 --rm gui sh
 else
 	# run-gui with command
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --restart always --publish 80:3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 80:3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
 endif
-
-
 #######################
-
-
 test-gui:
-	#test-gui
 	# here it is useful to add your own customised tests
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3333:3000 --rm gui sh -c '\
 		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
-
-
 #######################
 autogen:
-	#test
 	# here it is useful to add your own customised tests
 	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
-
-
 #######################
-
-
 depends:
-	#depends
 	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "apk add coreutils && exit"
 	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
-
-
 #######################
-
-
 configure:
-	#configure
-	# here it is useful to add your own customised tests
 	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
-
-
 #######################
-
-
 test:
-	#test
-	# here it is useful to add your own customised tests
 	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c '\
 		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
-
-
 #######################
-
-
 clean:
-	# remove created images and dockerfiles
 	@docker-compose -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
 	&& echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" removed.' \
 	|| echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" already removed.'
@@ -279,24 +206,14 @@ clean:
 	bash -c '[ -f $(DOCKERFILE_SLIM).dockerfile ]    && rm -f $(DOCKERFILE_SLIM).dockerfile'
 	bash -c '[ -f $(DOCKERFILE_GUI).dockerfile ]     && rm -f $(DOCKERFILE_GUI).dockerfile'
 	bash -c '[ -f $(DOCKERFILE_EXTRACT).dockerfile ] && rm -f $(DOCKERFILE_EXTRACT).dockerfile'
-
-
 #######################
-
-
 prune::
 	#prune
 	docker system prune -af
-
-
 #######################
-
-
 destroy-all:
 	bash -c '$(pwd) make -fmk clean'
 	bash -c '$(pwd) make -fmk prune'
 	docker ps -aq && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q)
-
-
 #######################
 
