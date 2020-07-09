@@ -41,7 +41,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends configure doc
+.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends configure doc
 
 # suppress make's own output
 #.SILENT:
@@ -110,7 +110,7 @@ login: service
 concat-all:
 	#concat-all
 	bash -c '$(pwd) cat header.dockerfile >               $(DOCKERFILE)'
-	bash -c '$(pwd) cat statoshi.build.all.dockerfile >>  $(DOCKERFILE)'
+	bash -c '$(pwd) cat statoshi.all.dockerfile >>        $(DOCKERFILE)'
 	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE)'
 #######################
 build-all:
@@ -122,10 +122,18 @@ ifeq ($(Makefile),)
 		Makefile := defined
 		bash -c '$(pwd) make clean'
 endif
-	bash -c '$(pwd) make -f mk concat-all'
-	bash -c '$(pwd) make -f mk build-all'
-		#docker run --restart always --name $(DOCKERFILE) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE) .
-		docker run --restart always -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE) .
+#	bash -c '$(pwd) make -f mk build-all'
+#		#docker run --restart always --name $(DOCKERFILE) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE) .
+#		docker run --restart always -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE) .
+#	bash -c '$(pwd) make -fmk user=root build-gui'
+ifeq ($(CMD_ARGUMENTS),)
+	# no command is given, default to shell
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish  3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
+else
+	# run-all with command
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+endif
+
 #######################
 extract:
 	#extract TODO CREATE PACKAGE for distribution
@@ -159,7 +167,6 @@ concat-gui:
 #######################
 build-gui:
 	bash -c '$(pwd) make -fmk user=root concat-gui'
-	# force a rebuild by passing --no-cache
 	docker-compose -f docker-compose.yml build gui
 #######################
 rebuild-gui:
@@ -213,8 +220,6 @@ prune::
 	docker system prune -af
 #######################
 destroy-all:
-	bash -c '$(pwd) make -fmk clean'
-	bash -c '$(pwd) make -fmk prune'
 	docker ps -aq && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q)
 #######################
 doc:

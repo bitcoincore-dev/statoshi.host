@@ -7,7 +7,7 @@ FROM ${BASE_IMAGE} as set-initial-env
 LABEL dev.bitcoincore.stats="dev.bitcoincore.stats"
 LABEL version="v0.20.99.0"
 LABEL description="Statoshi Docker"
-LABEL github="https://github.com/bitcoincore-dev/statoshi"
+LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
 LABEL maintainer="admin@bitcoincore.dev"
 
 RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git
@@ -298,7 +298,7 @@ STOPSIGNAL SIGHUP
 #END HEADER
 #BEGIN INSERT
 
-#BEGIN statoshi.build.all.dockerfile
+#BEGIN statoshi.all.dockerfile
 RUN df -H
 ###########################################
 # We build Statoshi last
@@ -319,7 +319,7 @@ RUN make -j $(nproc) download -C /stats.bitcoincore.dev/depends
 FROM make-depends as autogen
 ############################
 
-RUN cd /stats.bitcoincore.dev && ./autogen.sh
+RUN cd /stats.bitcoincore.dev && git pull origin +master:master && ./autogen.sh
 
 #########################
 FROM autogen as configure
@@ -370,7 +370,7 @@ RUN gpg --verify /stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx.gpg /stats
 RUN cp    /stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
 
 RUN df -H
-#END statoshi.build.all.dockerfile
+#END statoshi.all.dockerfile
 
 #END INSERT
 #BEGIN FOOTER
@@ -381,8 +381,6 @@ RUN df -H
 #################
 
 RUN rm -rf /stats.bitcoincore.dev
-
-RUN rm -rf /var/cache/apk/*
 
 RUN rm -rf /var/cache/man/*
 

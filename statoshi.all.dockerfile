@@ -1,4 +1,4 @@
-#BEGIN statoshi.build.all.dockerfile
+#BEGIN statoshi.all.dockerfile
 RUN df -H
 ###########################################
 # We build Statoshi last
@@ -40,7 +40,7 @@ FROM make as strip-binaries
 RUN echo
 
 ###########################
-FROM strip-binaries as copy
+FROM strip-binaries as statoshi
 ###########################
 
 RUN cp    /stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind
@@ -70,5 +70,5 @@ RUN gpg --verify /stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx.gpg /stats
 RUN cp    /stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
 
 RUN df -H
-#END statoshi.build.all.dockerfile
+#END statoshi.all.dockerfile
 

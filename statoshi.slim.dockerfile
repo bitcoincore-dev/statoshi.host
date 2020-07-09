@@ -44,7 +44,7 @@ FROM make as strip-binaries
 #RUN strip /stats.bitcoincore.dev/src/bitcoin-tx
 
 ###########################
-FROM strip-binaries as copy
+FROM strip-binaries as statoshi
 ###########################
 
 #RUN cp    /stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind

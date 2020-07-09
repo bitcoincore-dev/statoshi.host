@@ -1,3 +1,4 @@
+!.gitignore
 .git
 db-4.8.30.NC.tar.gz
 depends/*
@@ -6,4 +7,3 @@ build_msvc/*
 build-aux/*
 ci/
 db4/
-nbproject/
