@@ -52,7 +52,7 @@ RUN apk add -v \
 
 RUN df -H
 
-FROM scratch as user
+FROM scratch as shell
 COPY --from=base . .
 
 ARG HOST_UID=${HOST_UID:-4000}

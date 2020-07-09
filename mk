@@ -2,7 +2,7 @@ ifeq ($(Makefile),)
 Makefile := defined
 endif
 
-DOCKERFILE=stats.bitcoincore.dev
+DOCKERFILE=$(notdir $(PWD))
 DOCKERFILE_SLIM=stats.build.slim
 DOCKERFILE_GUI=stats.build.gui
 DOCKERFILE_EXTRACT=stats.build.all.extract
@@ -41,7 +41,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends configure
+.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends configure doc
 
 # suppress make's own output
 #.SILENT:
@@ -50,56 +50,57 @@ export HOST_UID
 help:
 	@echo ''
 	@echo ''
-	@echo '    Usage:	make -fmk [TARGET] [EXTRA_ARGUMENTS]'
+	@echo '  Usage:	make -fmk [TARGET] [EXTRA_ARGUMENTS]'
 	@echo ''
 	@echo '  Targets:'
 	@echo ''
-	@echo '    build	build docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '  rebuild	rebuild docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '     test	test docker --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '  service	run as service --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '    login	run as service and login --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '    clean	remove docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '    prune	shortcut for docker system prune -af. Cleanup inactive containers and cache.'
+	@echo '  	build	    build docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
+	@echo '  	rebuild	    rebuild docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
+	@echo '  	test	    test docker --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
+	@echo '  	service	    run as service --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
+	@echo '  	login	    run as service and login --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
+	@echo '  	clean	    remove docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
+	@echo '  	prune	    shortcut for docker system prune -af. Cleanup inactive containers and cache.'
 	@echo ''
-	@echo '    Shell:'
+	@echo '  Shell:	    make -fmk user=$(HOST_USER) shell'
 	@echo ''
-	@echo '    shell	run docker --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
+	@echo '  	shell	    docker image with ~/${PROJECT_NAME}'
+	@echo '  	shell	    run docker --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo ''
 	@echo ''
 	@echo ''
 	@echo ''
-	@echo '    Extra:'
+	@echo '  Extra:'
 	@echo ''
-	@echo '     cmd=:	make -fmk shell cmd="whoami"'
-	@echo ''
-	@echo '    user=	overrides current user. Might require additional privileges.'
-	@echo '    user=:	make shell user=root (no need to set uid=0)'
-	@echo '     uid=	overrides current user uid.'
-	@echo '     uid=:	make shell user=$(USER) uid=4000 (defaults to 0 if user= set)'
+	@echo '  	cmd=:	    make -fmk shell cmd="whoami"'
+	@echo '  	-----	    ---------------------------'
+	@echo '  	user=	    overrides current user.'
+	@echo '  	user=:	    make shell user=root (no need to set uid=0)'
+	@echo '  	uid=	    overrides current user uid.'
+	@echo '  	uid=:	    make shell user=$(USER) uid=4000 (defaults to 0 if user= set)'
 	@echo ''
 	@echo ''
 
 shell:
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
-	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
 else
 	# run the command
-	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 endif
 
 build-shell:
 	# only build the container. Note, docker does this also if you apply other targets.
-	docker-compose -f shell.yml build $(SERVICE_TARGET)
+	docker-compose -f docker-compose.yml build shell
 
 rebuild-shell:
 	# force a rebuild by passing --no-cache
-	docker-compose -f shell.yml build --no-cache $(SERVICE_TARGET)
+	docker-compose -f docker-compose.yml build --no-cache shell
 
 service:
 	# run as a (background) service
-	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) up -d $(SERVICE_TARGET)
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
 
 login: service
 	# run as a service and attach to it
@@ -187,14 +188,14 @@ autogen:
 	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
 #######################
 depends:
-	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "apk add coreutils && exit"
-	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "apk add coreutils && exit"
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
 #######################
 configure:
-	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
 #######################
 test:
-	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c '\
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c '\
 		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
 #######################
@@ -215,5 +216,13 @@ destroy-all:
 	bash -c '$(pwd) make -fmk clean'
 	bash -c '$(pwd) make -fmk prune'
 	docker ps -aq && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q)
+#######################
+doc:
+
+	export HOST_USER=root
+	export HOST_UID=0
+
+	bash -c '$(pwd) make -fmk user=root'
+	bash -c 'cat README > README.md && cat Docker.md >> README.md'
 #######################
 
