@@ -1,5 +1,5 @@
 ifeq ($(Makefile),)
-Makefile := defined
+		Makefile := defined
 endif
 
 DOCKERFILE=$(notdir $(PWD))
@@ -41,7 +41,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends configure doc
+.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc
 
 # suppress make's own output
 #.SILENT:
@@ -50,7 +50,7 @@ export HOST_UID
 help:
 	@echo ''
 	@echo ''
-	@echo '  Usage:	make -fmk [TARGET] [EXTRA_ARGUMENTS]'
+	@echo '  Usage:	make [TARGET] [EXTRA_ARGUMENTS]'
 	@echo ''
 	@echo '  Targets:'
 	@echo ''
@@ -62,7 +62,7 @@ help:
 	@echo '  	clean	    remove docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo '  	prune	    shortcut for docker system prune -af. Cleanup inactive containers and cache.'
 	@echo ''
-	@echo '  Shell:	    make -fmk user=$(HOST_USER) shell'
+	@echo '  Shell:	    make user=$(HOST_USER) shell'
 	@echo ''
 	@echo '  	shell	    docker image with ~/${PROJECT_NAME}'
 	@echo '  	shell	    run docker --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
@@ -72,7 +72,7 @@ help:
 	@echo ''
 	@echo '  Extra:'
 	@echo ''
-	@echo '  	cmd=:	    make -fmk shell cmd="whoami"'
+	@echo '  	cmd=:	    make shell cmd="whoami"'
 	@echo '  	-----	    ---------------------------'
 	@echo '  	user=	    overrides current user.'
 	@echo '  	user=:	    make shell user=root (no need to set uid=0)'
@@ -112,20 +112,21 @@ concat-all:
 	bash -c '$(pwd) cat header.dockerfile >               $(DOCKERFILE)'
 	bash -c '$(pwd) cat statoshi.all.dockerfile >>        $(DOCKERFILE)'
 	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE)'
+	bash -c 'echo created...                              $(DOCKERFILE)'
+
 #######################
-build-all:
-	bash -c '$(pwd) make -f mk concat-all'
+build-all: concat-all
+	#bash -c '$(pwd) make concat-all'
 	docker build -f $(DOCKERFILE) --rm -t $(DOCKERFILE) .
 #######################
-run-all:
+run-all: build-all
 ifeq ($(Makefile),)
-		Makefile := defined
-		bash -c '$(pwd) make clean'
+		bash -c 'echo run-all'
 endif
-#	bash -c '$(pwd) make -f mk build-all'
+#	bash -c '$(pwd) make build-all'
 #		#docker run --restart always --name $(DOCKERFILE) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 80:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE) .
 #		docker run --restart always -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE) .
-#	bash -c '$(pwd) make -fmk user=root build-gui'
+#	bash -c '$(pwd) make user=root build-gui'
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish  3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
@@ -137,7 +138,7 @@ endif
 #######################
 extract:
 	#extract TODO CREATE PACKAGE for distribution
-	bash -c '$(pwd) make -fmk build-all'
+	bash -c '$(pwd) make build-all'
 	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
 		docker build -f $(DOCKERFILE_EXTRACT) --rm -t $(DOCKERFILE_EXTRACT) .
 		docker run --name $(DOCKERFILE_EXTRACT) $(DOCKERFILE_EXTRACT) /bin/true
@@ -153,11 +154,11 @@ concat-slim:
 	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_SLIM)'
 #######################
 build-slim:
-	bash -c '$(pwd) make -f mk concat-slim'
+	bash -c '$(pwd) make concat-slim'
 	docker build -f $(DOCKERFILE_SLIM) --rm -t $(DOCKERFILE_SLIM) .
 #######################
 run-slim:
-	bash -c '$(pwd) make -f mk slim'
+	bash -c '$(pwd) make slim'
 		docker run --restart always --name $(DOCKERFILE_SLIM) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE_SLIM) .
 #######################
 concat-gui:
@@ -166,16 +167,16 @@ concat-gui:
 	bash -c '$(pwd) cat footer.dockerfile      >>         $(DOCKERFILE_GUI).dockerfile'
 #######################
 build-gui:
-	bash -c '$(pwd) make -fmk user=root concat-gui'
+	bash -c '$(pwd) make user=root concat-gui'
 	docker-compose -f docker-compose.yml build gui
 #######################
 rebuild-gui:
-	bash -c '$(pwd) make -fmk user=root concat-gui'
+	bash -c '$(pwd) make user=root concat-gui'
 	# force a rebuild by passing --no-cache
 	docker-compose -f docker-compose.yml build --no-cache gui
 #######################
 run-gui:
-	bash -c '$(pwd) make -fmk user=root build-gui'
+	bash -c '$(pwd) make user=root build-gui'
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 80:3000 --rm gui sh
@@ -198,7 +199,7 @@ depends:
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "apk add coreutils && exit"
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
 #######################
-configure:
+config:
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
 #######################
 test:
@@ -211,6 +212,7 @@ clean:
 	&& echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" removed.' \
 	|| echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" already removed.'
 	bash -c 'touch stats.build.slim.dockerfile stats.build.gui.dockerfile stats.build.all.extract.dockerfile'
+	bash -c '[ -f $(DOCKERFILE).dockerfile ]         && rm -f $(DOCKERFILE).dockerfile'
 	bash -c '[ -f $(DOCKERFILE_SLIM).dockerfile ]    && rm -f $(DOCKERFILE_SLIM).dockerfile'
 	bash -c '[ -f $(DOCKERFILE_GUI).dockerfile ]     && rm -f $(DOCKERFILE_GUI).dockerfile'
 	bash -c '[ -f $(DOCKERFILE_EXTRACT).dockerfile ] && rm -f $(DOCKERFILE_EXTRACT).dockerfile'
@@ -227,7 +229,8 @@ doc:
 	export HOST_USER=root
 	export HOST_UID=0
 
-	bash -c '$(pwd) make -fmk user=root'
+	bash -c '$(pwd) make user=root'
 	bash -c 'cat README > README.md && cat Docker.md >> README.md'
 #######################
+-include Makefile
 
