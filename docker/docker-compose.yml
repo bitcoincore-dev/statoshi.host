@@ -73,7 +73,7 @@ services:
       context: .
       # This is the name of the last layer in stats.build.gui.dockerfile
       target: statoshi
-      dockerfile: stats.build.all.dockerfile
+      dockerfile: statoshi
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}
@@ -87,7 +87,8 @@ services:
       - ${HOME:-.}:/home/${HOST_USER}
     ports:
        #hostPORT:imagePORT
-     - "80:3000"
+     - "8333:8333"
+     - "18333:18333"
 
   gui:
     # Makefile fills PROJECT_NAME to current directory name.

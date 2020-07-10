@@ -8,35 +8,43 @@ DOCKERFILE_GUI=stats.build.gui
 DOCKERFILE_EXTRACT=stats.build.all.extract
 
 # If you see pwd_unknown showing up, this is why. Re-calibrate your system.
-PWD?=pwd_unknown
+PWD ?= pwd_unknown
 
 # Note the different service configs in  docker-compose.yml.
 # We override this default for different build/run configs
-SERVICE_TARGET:=main
+SERVICE_TARGET := main
+
 ifeq ($(user),)
 # USER retrieved from env, UID from shell.
-HOST_USER?=root #$(strip $(if $(USER),$(USER),nodummy))
-HOST_UID?=0    #$(strip $(if $(shell id -u),$(shell id -u),4000))
+HOST_USER = root
+HOST_UID = 0
+#HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
+#HOST_UID  ?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
 else
 # allow override by adding user= and/ or uid=  (lowercase!).
 # uid= defaults to 0 if user= set (i.e. root).
-HOST_USER = $(user)
-HOST_UID=$(strip $(if $(uid),$(uid),0))
+HOST_USER = root
+HOST_UID = 0
+#HOST_USER = $(user)
+#HOST_UID = $(strip $(if $(uid),$(uid),0))
 endif
 # PROJECT_NAME defaults to name of the current directory.
 # should not need to be changed if you follow GitOps operating procedures.
-PROJECT_NAME=$(notdir $(PWD))
-THIS_FILE:=$(lastword $(MAKEFILE_LIST))
-CMD_ARGUMENTS?=$(cmd)
+PROJECT_NAME = $(notdir $(PWD))
+
+THIS_FILE := $(lastword $(MAKEFILE_LIST))
+CMD_ARGUMENTS ?= $(cmd)
+
 # export such that its passed to shell functions for Docker to pick up.
 export PROJECT_NAME
 export HOST_USER
 export HOST_UID
+
 # all our targets are phony (no files to check).
-.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc
+.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc link statoshi
 
 # suppress make's own output
-#.SILENT:
+.SILENT:
 
 help:
 	@echo ''
@@ -72,29 +80,38 @@ help:
 	@echo ''
 	@echo ''
 
-build-shell:
-	bash -c '$(pwd) ln -fs ./docker/shell .'
-	# only build the container. Note, docker does this also if you apply other targets.
-	docker-compose -f docker/docker-compose.yml build shell
+link:
+	bash -c 'ln -sf ./docker/shell .'
+	bash -c 'ln -sf ./docker/docker-compose.yml .'
+	bash -c 'ln -sf ./docker/statoshi .'
 
-rebuild-shell:
-	# force a rebuild by passing --no-cache
-	docker-compose -f docker/docker-compose.yml build --no-cache shell
+build-shell: link
+		docker-compose build shell
+
+rebuild-shell: link
+	docker-compose build --no-cache shell
 
 shell: build-shell
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
-	#docker-compose -f ./docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
 	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
 else
 	# run the command
-	#docker-compose -f ./docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 endif
-
+build-statoshi: link
+		docker-compose build statoshi
+statoshi: build-statoshi
+ifeq ($(CMD_ARGUMENTS),)
+	# no command is given, default to shell
+	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh
+else
+	# run the command
+	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+endif
 service:
 	# run as a (background) service
-	docker-compose -f ./docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
+	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
 
 login: service
 	# run as a service and attach to it
@@ -207,6 +224,9 @@ clean:
 	&& echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" removed.' \
 	|| echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" already removed.'
 
+	bash -c 'rm -f ./shell'
+	bash -c 'rm -f ./docker-compose.yml'
+	bash -c 'rm -f ./statoshi'
 	#bash -c '[ -f $(DOCKERFILE) ]         && rm -f $(DOCKERFILE)'
 	#bash -c '[ -f $(DOCKERFILE_SLIM) ]    && rm -f $(DOCKERFILE_SLIM)'
 	#bash -c '[ -f $(DOCKERFILE_GUI) ]     && rm -f $(DOCKERFILE_GUI)'
