@@ -40,13 +40,13 @@ services:
       - UID=${HOST_UID:-4000}
     # Run with user priviliges by default.
     user: ${HOST_USER:-nodummy}
-    image: ${PROJECT_NAME}.shell:${HOST_USER:-nodummy}
+    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
     restart: unless-stopped
     build:
       context: .
       # This is the name of the last layer in shell.dockerfile
       target: shell
-      dockerfile: shell.dockerfile
+      dockerfile: /docker/shell
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}
@@ -67,7 +67,7 @@ services:
       - UID=${HOST_UID:-4000}
     # Run with user priviliges by default.
     user: ${HOST_USER:-nodummy}
-    image: ${PROJECT_NAME}.statoshi:${HOST_USER:-nodummy}
+    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
     restart: unless-stopped
     build:
       context: .
@@ -99,7 +99,7 @@ services:
       - UID=${HOST_UID:-4000}
     # Run with user priviliges by default.
     user: ${HOST_USER:-nodummy}
-    image: ${PROJECT_NAME}.gui:${HOST_USER:-nodummy}
+    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
     restart: unless-stopped
     build:
       context: .

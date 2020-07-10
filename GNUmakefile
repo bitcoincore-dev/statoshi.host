@@ -8,32 +8,31 @@ DOCKERFILE_GUI=stats.build.gui
 DOCKERFILE_EXTRACT=stats.build.all.extract
 
 # If you see pwd_unknown showing up, this is why. Re-calibrate your system.
-PWD ?= pwd_unknown
+PWD?=pwd_unknown
 
-# PROJECT_NAME defaults to name of the current directory.
-# should not need to be changed if you follow GitOps operating procedures.
-PROJECT_NAME = $(notdir $(PWD))
-
-# Note. If you change this, you also need to update docker-compose.yml.
-# Useful in a setting with multiple services/ makefiles.
-SERVICE_TARGET := main
-
-# if vars not set specifially: try default to environment, else fixed value.
-# strip to ensure spaces are removed in future editorial mistakes.
-# tested to work consistently on popular Linux flavors and Mac.
+# Note the different service configs in  docker-compose.yml.
+# We override this default for different build/run configs
+SERVICE_TARGET:=main
+#For our purposes we force root user and privledges
 ifeq ($(user),)
 # USER retrieved from env, UID from shell.
-HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
-HOST_UID ?= $(strip $(if $(shell id -u),$(shell id -u),4000))
+HOST_USER?=root #$(strip $(if $(USER),$(USER),nodummy))
+HOST_UID?=0    #$(strip $(if $(shell id -u),$(shell id -u),4000))
 else
 # allow override by adding user= and/ or uid=  (lowercase!).
 # uid= defaults to 0 if user= set (i.e. root).
-HOST_USER = $(user)
-HOST_UID = $(strip $(if $(uid),$(uid),0))
+#HOST_USER = $(user)
+HOST_USER=root
+#HOST_UID=$(strip $(if $(uid),$(uid),0))
+HOST_UID=0
 endif
 
-THIS_FILE := $(lastword $(MAKEFILE_LIST))
-CMD_ARGUMENTS ?= $(cmd)
+# PROJECT_NAME defaults to name of the current directory.
+# should not need to be changed if you follow GitOps operating procedures.
+PROJECT_NAME=$(notdir $(PWD))
+
+THIS_FILE:=$(lastword $(MAKEFILE_LIST))
+CMD_ARGUMENTS?=$(cmd)
 
 # export such that its passed to shell functions for Docker to pick up.
 export PROJECT_NAME
@@ -46,13 +45,22 @@ export HOST_UID
 # suppress make's own output
 #.SILENT:
 
-# Regular Makefile part for buildpypi itself
 help:
 	@echo ''
+	@echo '	Bitcoin:'
 	@echo ''
-	@echo '  Usage:	make [TARGET] [EXTRA_ARGUMENTS]'
+	@echo '  	            ./autogen'
+	@echo '  	            ./configure --disable-wallet #et cetera...'
+	@echo '  	            make -f Makefile'
 	@echo ''
-	@echo '  Targets:'
+	@echo ''
+	@echo '	Docker:	    make [TARGET] [EXTRA_ARGUMENTS]'
+	@echo ''
+	@echo '	Shell:	    make shell'
+	@echo ''
+	@echo '  	shell	    docker image ${PROJECT_NAME}'
+	@echo ''
+	@echo '	Targets:'
 	@echo ''
 	@echo '  	build	    build docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo '  	rebuild	    rebuild docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
@@ -62,22 +70,12 @@ help:
 	@echo '  	clean	    remove docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo '  	prune	    shortcut for docker system prune -af. Cleanup inactive containers and cache.'
 	@echo ''
-	@echo '  Shell:	    make user=$(HOST_USER) shell'
-	@echo ''
-	@echo '  	shell	    docker image with ~/${PROJECT_NAME}'
-	@echo '  	shell	    run docker --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
 	@echo ''
 	@echo ''
 	@echo ''
-	@echo ''
-	@echo '  Extra:'
+	@echo '	Extra:'
 	@echo ''
 	@echo '  	cmd=:	    make shell cmd="whoami"'
-	@echo '  	-----	    ---------------------------'
-	@echo '  	user=	    overrides current user.'
-	@echo '  	user=:	    make shell user=root (no need to set uid=0)'
-	@echo '  	uid=	    overrides current user uid.'
-	@echo '  	uid=:	    make shell user=$(USER) uid=4000 (defaults to 0 if user= set)'
 	@echo ''
 	@echo ''
 
