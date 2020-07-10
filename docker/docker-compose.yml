@@ -46,13 +46,13 @@ services:
       context: .
       # This is the name of the last layer in shell.dockerfile
       target: shell
-      dockerfile: /docker/shell
+      dockerfile: shell
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
     # Run container as a service. Replace with something useful.
-    command: ["tail", "-f", "/dev/null"]
+    #command: ["tail", "-f", "/dev/null"]
     # Copy current (git-) project into container.
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}

@@ -4,22 +4,21 @@
 # FEEL FREE TO REPLACE OR REMOVE THIS HEADER.
 version: '3.4'
 services:
-  main:
-    # Makefile fills PROJECT_NAME to current directory name.
-    # add UID to allow multiple users run this in parallel
+  shell:
     container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
-    hostname: ${PROJECT_NAME}
+    hostname: ${PROJECT_NAME}.${HOST_USER}
     # These variables are passed into the container.
     environment:
       - UID=${HOST_UID:-4000}
     # Run with user priviliges by default.
     user: ${HOST_USER:-nodummy}
-    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+    #image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+    image: test #${PROJECT_NAME}:${HOST_USER:-nodummy}
     build:
       context: .
       # Build for current user.
       target: user
-      dockerfile: shell.dockerfile
+      dockerfile: /docker/shell
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}

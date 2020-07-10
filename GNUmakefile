@@ -13,7 +13,6 @@ PWD?=pwd_unknown
 # Note the different service configs in  docker-compose.yml.
 # We override this default for different build/run configs
 SERVICE_TARGET:=main
-#For our purposes we force root user and privledges
 ifeq ($(user),)
 # USER retrieved from env, UID from shell.
 HOST_USER?=root #$(strip $(if $(USER),$(USER),nodummy))
@@ -21,24 +20,18 @@ HOST_UID?=0    #$(strip $(if $(shell id -u),$(shell id -u),4000))
 else
 # allow override by adding user= and/ or uid=  (lowercase!).
 # uid= defaults to 0 if user= set (i.e. root).
-#HOST_USER = $(user)
-HOST_USER=root
-#HOST_UID=$(strip $(if $(uid),$(uid),0))
-HOST_UID=0
+HOST_USER = $(user)
+HOST_UID=$(strip $(if $(uid),$(uid),0))
 endif
-
 # PROJECT_NAME defaults to name of the current directory.
 # should not need to be changed if you follow GitOps operating procedures.
 PROJECT_NAME=$(notdir $(PWD))
-
 THIS_FILE:=$(lastword $(MAKEFILE_LIST))
 CMD_ARGUMENTS?=$(cmd)
-
 # export such that its passed to shell functions for Docker to pick up.
 export PROJECT_NAME
 export HOST_USER
 export HOST_UID
-
 # all our targets are phony (no files to check).
 .PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc
 
@@ -79,26 +72,29 @@ help:
 	@echo ''
 	@echo ''
 
-shell:
-ifeq ($(CMD_ARGUMENTS),)
-	# no command is given, default to shell
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
-else
-	# run the command
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
-endif
-
 build-shell:
+	bash -c '$(pwd) ln -fs ./docker/shell .'
 	# only build the container. Note, docker does this also if you apply other targets.
-	docker-compose -f docker-compose.yml build shell
+	docker-compose -f docker/docker-compose.yml build shell
 
 rebuild-shell:
 	# force a rebuild by passing --no-cache
-	docker-compose -f docker-compose.yml build --no-cache shell
+	docker-compose -f docker/docker-compose.yml build --no-cache shell
+
+shell: build-shell
+ifeq ($(CMD_ARGUMENTS),)
+	# no command is given, default to shell
+	#docker-compose -f ./docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
+	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
+else
+	# run the command
+	#docker-compose -f ./docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
+endif
 
 service:
 	# run as a (background) service
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
+	docker-compose -f ./docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
 
 login: service
 	# run as a service and attach to it
@@ -107,10 +103,10 @@ login: service
 ########################
 concat-all:
 	#concat-all
-	bash -c '$(pwd) cat header.dockerfile >               $(DOCKERFILE)'
-	bash -c '$(pwd) cat statoshi.all.dockerfile >>        $(DOCKERFILE)'
-	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE)'
-	bash -c 'echo created...                              $(DOCKERFILE)'
+	bash -c '$(pwd) cat ./docker/header.dockerfile >               $(DOCKERFILE)'
+	bash -c '$(pwd) cat ./docker/statoshi.all.dockerfile >>        $(DOCKERFILE)'
+	bash -c '$(pwd) cat ./docker/footer.dockerfile >>              $(DOCKERFILE)'
+	bash -c 'echo created...                                       $(DOCKERFILE)'
 
 #######################
 build-all: concat-all
@@ -127,16 +123,16 @@ endif
 #	bash -c '$(pwd) make user=root build-gui'
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish  3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
+	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish  3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
 else
 	# run-all with command
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 endif
 
 #######################
 extract:
 	#extract TODO CREATE PACKAGE for distribution
-	bash -c '$(pwd) make build-all'
+	#bash -c '$(pwd) make build-all'
 	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
 		docker build -f $(DOCKERFILE_EXTRACT) --rm -t $(DOCKERFILE_EXTRACT) .
 		docker run --name $(DOCKERFILE_EXTRACT) $(DOCKERFILE_EXTRACT) /bin/true
@@ -144,64 +140,65 @@ extract:
 		#docker cp $(DOCKERFILE_EXTRACT):/usr/local/bin/bitcoin-cli     $(pwd)/conf/usr/local/bin/bitcoin-cli
 		#docker cp $(DOCKERFILE_EXTRACT):/usr/local/bin/bitcoin-tx      $(pwd)/conf/usr/local/bin/bitcoin-tx
 		docker rm $(DOCKERFILE_EXTRACT)
-		rm -f  $(DOCKERFILE_EXTRACT)'
+		rm -f  $(DOCKERFILE_EXTRACT)
+
 #######################
 concat-slim:
-	bash -c '$(pwd) cat header.dockerfile >               $(DOCKERFILE_SLIM)'
-	bash -c '$(pwd) cat statoshi.build.slim.dockerfile >> $(DOCKERFILE_SLIM)'
-	bash -c '$(pwd) cat footer.dockerfile >>              $(DOCKERFILE_SLIM)'
+	bash -c '$(pwd) cat ./docker/header.dockerfile >               $(DOCKERFILE_SLIM)'
+	bash -c '$(pwd) cat ./docker/statoshi.build.slim.dockerfile >> $(DOCKERFILE_SLIM)'
+	bash -c '$(pwd) cat ./docker/footer.dockerfile >>              $(DOCKERFILE_SLIM)'
 #######################
-build-slim:
-	bash -c '$(pwd) make concat-slim'
+build-slim: concat-slim
+	#bash -c '$(pwd) make concat-slim'
 	docker build -f $(DOCKERFILE_SLIM) --rm -t $(DOCKERFILE_SLIM) .
 #######################
-run-slim:
-	bash -c '$(pwd) make slim'
+run-slim: build-slim
+	#bash -c '$(pwd) make slim'
 		docker run --restart always --name $(DOCKERFILE_SLIM) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE_SLIM) .
 #######################
 concat-gui:
-	bash -c '$(pwd) cat header.slim.dockerfile >          $(DOCKERFILE_GUI).dockerfile'
-	bash -c '$(pwd) cat stats.gui.dockerfile   >>         $(DOCKERFILE_GUI).dockerfile'
-	bash -c '$(pwd) cat footer.dockerfile      >>         $(DOCKERFILE_GUI).dockerfile'
+	bash -c '$(pwd) cat header.slim.dockerfile >          $(DOCKERFILE_GUI)'
+	bash -c '$(pwd) cat stats.gui.dockerfile   >>         $(DOCKERFILE_GUI)'
+	bash -c '$(pwd) cat footer.dockerfile      >>         $(DOCKERFILE_GUI)'
 #######################
-build-gui:
-	bash -c '$(pwd) make user=root concat-gui'
-	docker-compose -f docker-compose.yml build gui
+build-gui: concat-gui
+	#bash -c '$(pwd) make user=root concat-gui'
+	docker-compose -f /docker/docker-compose.yml build gui
 #######################
 rebuild-gui:
 	bash -c '$(pwd) make user=root concat-gui'
 	# force a rebuild by passing --no-cache
-	docker-compose -f docker-compose.yml build --no-cache gui
+	docker-compose -f /docker/docker-compose.yml build --no-cache gui
 #######################
-run-gui:
-	bash -c '$(pwd) make user=root build-gui'
+run-gui: build-gui
+	#bash -c '$(pwd) make user=root build-gui'
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 80:3000 --rm gui sh
+	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 80:3000 --rm gui sh
 else
 	# run-gui with command
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 80:3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 80:3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
 endif
 #######################
-test-gui:
+test-gui: build-gui
 	# here it is useful to add your own customised tests
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3333:3000 --rm gui sh -c '\
+	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3333:3000 --rm gui sh -c '\
 		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
 #######################
 autogen:
 	# here it is useful to add your own customised tests
-	docker-compose -f shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
+	docker-compose -f /docker/shell.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
 #######################
 depends:
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "apk add coreutils && exit"
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
+	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "apk add coreutils && exit"
+	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
 #######################
 config:
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
+	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
 #######################
 test:
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c '\
+	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c '\
 		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
 #######################
@@ -209,13 +206,13 @@ clean:
 	@docker-compose -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
 	&& echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" removed.' \
 	|| echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" already removed.'
-	bash -c 'touch stats.build.slim.dockerfile stats.build.gui.dockerfile stats.build.all.extract.dockerfile'
-	bash -c '[ -f $(DOCKERFILE).dockerfile ]         && rm -f $(DOCKERFILE).dockerfile'
-	bash -c '[ -f $(DOCKERFILE_SLIM).dockerfile ]    && rm -f $(DOCKERFILE_SLIM).dockerfile'
-	bash -c '[ -f $(DOCKERFILE_GUI).dockerfile ]     && rm -f $(DOCKERFILE_GUI).dockerfile'
-	bash -c '[ -f $(DOCKERFILE_EXTRACT).dockerfile ] && rm -f $(DOCKERFILE_EXTRACT).dockerfile'
+
+	#bash -c '[ -f $(DOCKERFILE) ]         && rm -f $(DOCKERFILE)'
+	#bash -c '[ -f $(DOCKERFILE_SLIM) ]    && rm -f $(DOCKERFILE_SLIM)'
+	#bash -c '[ -f $(DOCKERFILE_GUI) ]     && rm -f $(DOCKERFILE_GUI)'
+	#bash -c '[ -f $(DOCKERFILE_EXTRACT) ] && rm -f $(DOCKERFILE_EXTRACT)'
 #######################
-prune::
+prune:
 	#prune
 	docker system prune -af
 #######################

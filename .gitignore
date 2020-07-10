@@ -320,3 +320,4 @@ data
 stats.bitcoincore.dev.extract.dockerfile
 stats.build.gui.dockerfile
 statoshi.build.slim.dockerfile
+shell
