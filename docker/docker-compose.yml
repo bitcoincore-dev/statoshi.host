@@ -73,7 +73,7 @@ services:
       context: .
       # This is the name of the last layer in stats.build.gui.dockerfile
       target: statoshi
-      dockerfile: statoshi
+      dockerfile: stats.bitcoincore.dev
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}
@@ -106,7 +106,7 @@ services:
       context: .
       # This is the name of the last layer in stats.build.gui.dockerfile
       target: gui
-      dockerfile: stats.build.gui.dockerfile
+      dockerfile: stats.build.gui
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}

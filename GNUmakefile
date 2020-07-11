@@ -47,7 +47,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc link
+.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc copy
 
 # suppress make's own output
 #.SILENT:
@@ -86,22 +86,22 @@ help:
 	@echo ''
 	@echo ''
 #######################
-link:
+copy:
 	@echo ''
-	bash -c 'ln -sf ./docker/shell                   .'
-	bash -c 'ln -sf ./docker/docker-compose.yml      .'
-	bash -c 'ln -sf ./docker/statoshi                .'
-	bash -c 'ln -sf ./docker/gui                     .'
-	bash -c 'ln -sf ./docker/$(DOCKERFILE)   .'
-	bash -c 'ln -sf ./docker/$(DOCKERFILE_SLIM)        .'
-	bash -c 'ln -sf ./docker/$(DOCKERFILE_GUI)         .'
-	bash -c 'ln -sf ./docker/$(DOCKERFILE_EXTRACT) .'
+	bash -c 'install -v ./docker/shell                   .'
+	bash -c 'install -v ./docker/docker-compose.yml      .'
+	bash -c 'install -v ./docker/statoshi                .'
+	bash -c 'install -v ./docker/gui                     .'
+	bash -c 'install -v ./docker/$(DOCKERFILE)   .'
+	bash -c 'install -v ./docker/$(DOCKERFILE_SLIM)        .'
+	bash -c 'install -v ./docker/$(DOCKERFILE_GUI)         .'
+	bash -c 'install -v ./docker/$(DOCKERFILE_EXTRACT) .'
 	@echo ''
 #######################
-build-shell: link
+build-shell: copy
 	docker-compose build shell
 #######################
-rebuild-shell: link
+rebuild-shell: copy
 	docker-compose build --no-cache shell
 #######################
 shell: build-shell
@@ -113,7 +113,7 @@ else
 	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 endif
 #######################
-autogen: link
+autogen: copy
 	# here it is useful to add your own customised tests
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
 #######################
@@ -148,25 +148,30 @@ login: service
 	# run as a service and attach to it
 	docker exec -it $(PROJECT_NAME)_$(HOST_UID) sh
 ########################
-concat-all:
-	#concat-all
+concat-all: copy
 	bash -c '$(pwd) cat ./docker/header >               $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/statoshi.all >>        $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/footer >>              $(DOCKERFILE)'
 	bash -c 'echo created...                            $(DOCKERFILE)'
 #######################
-build-all: concat-all
+build-all: concat-all copy
 	#bash -c '$(pwd) make concat-all'
-	docker build -f $(DOCKERFILE) --rm -t $(DOCKERFILE) .
+	#docker build -f $(DOCKERFILE) --rm -t $(DOCKERFILE) .
+	docker-compose -f docker-compose.yml build statoshi
+#######################
+rebuild-all: concat-all copy
+	#bash -c '$(pwd) make concat-all'
+	#docker build -f $(DOCKERFILE) --rm -t $(DOCKERFILE) .
+	docker-compose -f docker-compose.yml build --no-cache statoshi
 #######################
 run-all: build-all
 ifeq ($(CMD_ARGUMENTS),)
-	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish  3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish  3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
 else
-	docker-compose -f /docker/docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 endif
 #######################
-extract: link
+extract: copy
 	#extract TODO CREATE PACKAGE for distribution
 	#bash -c '$(pwd) make build-all'
 	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
@@ -178,7 +183,7 @@ extract: link
 	docker rm $(DOCKERFILE_EXTRACT)
 	rm -f  $(DOCKERFILE_EXTRACT)
 #######################
-concat-slim: link
+concat-slim: copy
 	bash -c '$(pwd) cat ./docker/header.dockerfile >               $(DOCKERFILE_SLIM)'
 	bash -c '$(pwd) cat ./docker/statoshi.build.slim.dockerfile >> $(DOCKERFILE_SLIM)'
 	bash -c '$(pwd) cat ./docker/footer.dockerfile >>              $(DOCKERFILE_SLIM)'
@@ -198,7 +203,7 @@ concat-gui:
 	bash -c 'cat    ./docker/footer                  >> $(DOCKERFILE_GUI)'
 	@echo ''
 #######################
-build-gui: concat-gui link
+build-gui: concat-gui copy
 	docker-compose -f docker-compose.yml build gui
 	@echo ''
 #######################
@@ -225,13 +230,6 @@ clean:
 	@docker-compose -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
 	&& echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" removed.' \
 	|| echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" already removed.'
-	bash -c 'rm -f ./shell'
-	bash -c 'rm -f ./docker-compose.yml'
-	bash -c 'rm -f ./statoshi'
-	bash -c '[ -f $(DOCKERFILE) ]         && rm -f $(DOCKERFILE)'
-	#bash -c '[ -f $(DOCKERFILE_SLIM) ]    && rm -f $(DOCKERFILE_SLIM)'
-	#bash -c '[ -f $(DOCKERFILE_GUI) ]     && rm -f $(DOCKERFILE_GUI)'
-	#bash -c '[ -f $(DOCKERFILE_EXTRACT) ] && rm -f $(DOCKERFILE_EXTRACT)'
 #######################
 prune:
 	docker system prune -af
