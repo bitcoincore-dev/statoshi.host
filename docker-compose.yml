@@ -1,1 +1,124 @@
-./docker/docker-compose.yml
+version: '3.4'
+services:
+  #  main:
+  #    # Makefile fills PROJECT_NAME to current directory name.
+  #    # add UID to allow multiple users run this in parallel
+  #    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+  #    hostname: ${PROJECT_NAME}
+  #    # These variables are passed into the container.
+  #    environment:
+  #      - UID=${HOST_UID:-4000}
+  #    # Run with user priviliges by default.
+  #    user: ${HOST_USER:-nodummy}
+  #    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+  #    restart: unless-stopped
+  #    build:
+  #      context: .
+  #      # This is the name of the last layer in the dockerfile - avoid dashes and dots in layer name
+  #      target: <NAME OF LAST LAYER>
+  #      dockerfile: stats.gui.dockerfile
+  #      # These variables are passed to Dockerfile.
+  #      args:
+  #        - HOST_UID=${HOST_UID:-4000}
+  #        - HOST_USER=${HOST_USER:-nodummy}
+  #    # Run container as a service. Replace with something useful.
+  #    #command: ["tail", "-f", "/dev/null"]
+  #    command:  ["/usr/local/bin/./run-grafana.sh"]
+  #    # Expose current project folder to container.
+  #    volumes:
+  #      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
+  #      - ${HOME:-.}:/home/${HOST_USER}
+  #    ports:
+  #     - "80:3000"
+  shell:
+    # Makefile fills PROJECT_NAME to current directory name.
+    # add UID to allow multiple users run this in parallel
+    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    hostname: ${PROJECT_NAME}
+    # These variables are passed into the container.
+    environment:
+      - UID=${HOST_UID:-4000}
+    # Run with user priviliges by default.
+    user: ${HOST_USER:-nodummy}
+    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+    restart: unless-stopped
+    build:
+      context: .
+      # This is the name of the last layer in shell.dockerfile
+      target: shell
+      dockerfile: shell
+      # These variables are passed to Dockerfile.
+      args:
+        - HOST_UID=${HOST_UID:-4000}
+        - HOST_USER=${HOST_USER:-nodummy}
+    # Run container as a service. Replace with something useful.
+    #command: ["tail", "-f", "/dev/null"]
+    # Copy current (git-) project into container.
+    volumes:
+      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
+
+  statoshi:
+    # Makefile fills PROJECT_NAME to current directory name.
+    # add UID to allow multiple users run this in parallel
+    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    hostname: ${PROJECT_NAME}
+    # These variables are passed into the container.
+    environment:
+      - UID=${HOST_UID:-4000}
+    # Run with user priviliges by default.
+    user: ${HOST_USER:-nodummy}
+    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+    restart: unless-stopped
+    build:
+      context: .
+      # This is the name of the last layer in stats.build.gui.dockerfile
+      target: statoshi
+      dockerfile: stats.bitcoincore.dev
+      # These variables are passed to Dockerfile.
+      args:
+        - HOST_UID=${HOST_UID:-4000}
+        - HOST_USER=${HOST_USER:-nodummy}
+    # Run container as a service. Replace with something useful.
+    #command: ["tail", "-f", "/dev/null"]
+    command:  ["/bin/bash /usr/local/bin/entrypoint"]
+    # Expose current project folder to container.
+    volumes:
+      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
+      - ${HOME:-.}:/home/${HOST_USER}
+    ports:
+       #hostPORT:imagePORT
+     - "8333:8333"
+     - "18333:18333"
+
+  gui:
+    # Makefile fills PROJECT_NAME to current directory name.
+    # add UID to allow multiple users run this in parallel
+    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    hostname: ${PROJECT_NAME}
+    # These variables are passed into the container.
+    environment:
+      - UID=${HOST_UID:-4000}
+    # Run with user priviliges by default.
+    user: ${HOST_USER:-nodummy}
+    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+    restart: unless-stopped
+    build:
+      context: .
+      # This is the name of the last layer in stats.build.gui.dockerfile
+      target: gui
+      dockerfile: stats.build.gui
+      # These variables are passed to Dockerfile.
+      args:
+        - HOST_UID=${HOST_UID:-4000}
+        - HOST_USER=${HOST_USER:-nodummy}
+    # Run container as a service. Replace with something useful.
+    #command: ["tail", "-f", "/dev/null"]
+    command:  ["/bin/bash /usr/local/bin/run-grafana.sh"]
+    # Expose current project folder to container.
+    volumes:
+      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
+      - ${HOME:-.}:/home/${HOST_USER}
+    ports:
+       #hostPORT:imagePORT
+     - "80:3000"
+
