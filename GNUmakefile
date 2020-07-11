@@ -1,4 +1,4 @@
-ifeq ($(Makefile),)
+ifneq ($(Makefile),)
 	Makefile := defined
 endif
 
@@ -17,14 +17,14 @@ SERVICE_TARGET := main
 ifeq ($(user),)
 # USER retrieved from env, UID from shell.
 HOST_USER = root
-HOST_UID = 0
+HOST_UID  = 0
 #HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
 #HOST_UID  ?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
 else
 # allow override by adding user= and/ or uid=  (lowercase!).
 # uid= defaults to 0 if user= set (i.e. root).
 HOST_USER = root
-HOST_UID = 0
+HOST_UID  = 0
 #HOST_USER = $(user)
 #HOST_UID = $(strip $(if $(uid),$(uid),0))
 endif
@@ -36,6 +36,12 @@ THIS_FILE := $(lastword $(MAKEFILE_LIST))
 CMD_ARGUMENTS ?= $(cmd)
 
 # export such that its passed to shell functions for Docker to pick up.
+# control alpine version from here
+BASE_IMAGE = alpine
+BASE_VERSION = 3.11.6
+
+export BASE_IMAGE
+export BASE_VERSIOn
 export PROJECT_NAME
 export HOST_USER
 export HOST_UID
@@ -57,9 +63,9 @@ help:
 	@echo ''
 	@echo '	Docker:	    make [TARGET] [EXTRA_ARGUMENTS]'
 	@echo ''
-	@echo '	Shell:	    make shell'
+	@echo '	Shell:	    alpine dev environment'
 	@echo ''
-	@echo '  	shell	    docker image ${PROJECT_NAME}'
+	@echo '  	shell	    make user=$(HOST_USER) shell'
 	@echo ''
 	@echo '	Targets:'
 	@echo ''
@@ -81,10 +87,16 @@ help:
 	@echo ''
 #######################
 link:
-	bash -c 'ln -sf ./docker/shell .'
-	bash -c 'ln -sf ./docker/docker-compose.yml .'
-	bash -c 'ln -sf ./docker/statoshi .'
-	bash -c 'ln -sf ./docker/gui .'
+	@echo ''
+	bash -c 'ln -sf ./docker/shell                   .'
+	bash -c 'ln -sf ./docker/docker-compose.yml      .'
+	bash -c 'ln -sf ./docker/statoshi                .'
+	bash -c 'ln -sf ./docker/gui                     .'
+	bash -c 'ln -sf ./docker/$(DOCKERFILE)   .'
+	bash -c 'ln -sf ./docker/$(DOCKERFILE_SLIM)        .'
+	bash -c 'ln -sf ./docker/$(DOCKERFILE_GUI)         .'
+	bash -c 'ln -sf ./docker/$(DOCKERFILE_EXTRACT) .'
+	@echo ''
 #######################
 build-shell: link
 	docker-compose build shell
@@ -180,22 +192,28 @@ run-slim: build-slim
 		docker run --restart always --name $(DOCKERFILE_SLIM) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE_SLIM) .
 #######################
 concat-gui:
-	bash -c '$(pwd) cat header.slim >          $(DOCKERFILE_GUI)'
-	bash -c '$(pwd) cat gui         >>         $(DOCKERFILE_GUI)'
-	bash -c '$(pwd) cat footer      >>         $(DOCKERFILE_GUI)'
+	@echo ''
+	bash -c 'cat    ./docker/header.slim              > $(DOCKERFILE_GUI)'
+	bash -c 'cat    ./docker/gui                     >> $(DOCKERFILE_GUI)'
+	bash -c 'cat    ./docker/footer                  >> $(DOCKERFILE_GUI)'
+	@echo ''
 #######################
 build-gui: concat-gui link
 	docker-compose -f docker-compose.yml build gui
+	@echo ''
 #######################
 rebuild-gui:
 	bash -c '$(pwd) make user=root concat-gui'
 	docker-compose -f docker-compose.yml build --no-cache gui
+	@echo ''
 #######################
 run-gui: build-gui
 ifeq ($(CMD_ARGUMENTS),)
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 80:3000 --rm gui sh
+	@echo ''
 else
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 80:3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
 endif
 #######################
 test-gui: build-gui
