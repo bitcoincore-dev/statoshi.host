@@ -4,9 +4,9 @@
 ## Make Notes
 
 
-### $ <code>make -fmk</code>
+### $ <code>make</code>
 
-  Usage:	make -fmk [TARGET] [EXTRA_ARGUMENTS]
+  Usage:	make [TARGET] [EXTRA_ARGUMENTS]
 
   Targets:
 
@@ -28,12 +28,12 @@
 
   Extra:
 
-  	cmd=:	    make -fmk shell cmd="whoami"
+  	cmd=:	    make user=root shell cmd="whoami"
   	-----	    ---------------------------
-  	user=	    overrides current user.
-  	user=:	    make shell user=root (no need to set uid=0)
+  	user=	    overrides ＄(user)
+  	user=:	    make shell user=root (root default uid=0)
   	uid=	    overrides current user uid.
-  	uid=:	    make shell user=git uid=4000 (defaults to 0 if user= set)
+  	uid=:	    make shell user=git uid=4000 (default 0 if user= set)
 
 
 --

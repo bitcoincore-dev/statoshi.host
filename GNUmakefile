@@ -228,7 +228,7 @@ clean:
 	bash -c 'rm -f ./shell'
 	bash -c 'rm -f ./docker-compose.yml'
 	bash -c 'rm -f ./statoshi'
-	#bash -c '[ -f $(DOCKERFILE) ]         && rm -f $(DOCKERFILE)'
+	bash -c '[ -f $(DOCKERFILE) ]         && rm -f $(DOCKERFILE)'
 	#bash -c '[ -f $(DOCKERFILE_SLIM) ]    && rm -f $(DOCKERFILE_SLIM)'
 	#bash -c '[ -f $(DOCKERFILE_GUI) ]     && rm -f $(DOCKERFILE_GUI)'
 	#bash -c '[ -f $(DOCKERFILE_EXTRACT) ] && rm -f $(DOCKERFILE_EXTRACT)'
@@ -243,7 +243,7 @@ doc:
 	export HOST_USER=root
 	export HOST_UID=0
 	bash -c '$(pwd) make user=root'
-	bash -c 'cat README > README.md && cat Docker.md >> README.md'
+	bash -c 'cat README > README.md && cat ./docker/Docker.md >> README.md'
 #######################
 -include Makefile
 
