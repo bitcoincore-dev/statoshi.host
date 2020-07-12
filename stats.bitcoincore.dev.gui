@@ -16,7 +16,8 @@ RUN apk add --update -v nodejs nodejs-npm
 
 #NOTE: simply exposing the ports in the dockerfile isnt enough
 #REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
-EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
+# We delay exposing ports until the last stage of the builds for reusablity
+#EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
 RUN git config --global advice.detachedHead false
 
 RUN df -H
@@ -94,43 +95,13 @@ WORKDIR /
 
 RUN apk update && apk upgrade
 RUN apk add -v \
-    autoconf \
-    automake \
-    binutils \
-    ca-certificates \
-    cmake \
-    curl \
-    doxygen \
     git \
-    libtool \
     make \
-    patch \
-    pkgconfig \
-    python3 \
-    py3-psutil \
     vim
 
 RUN apk add -v \
-    g++ \
-    build-base \
-    boost-libs \
-    libgcc \
-    libstdc++ \
     musl \
-    boost-system \
-    boost-build \
-    boost-dev \
     openssl-dev \
-    libevent-dev \
-    libzmq \
-    zeromq-dev \
-    protobuf-dev \
-    linux-headers \
-    libbz2 \
-    libcap-dev \
-    librsvg \
-    tiff-tools \
-    zlib-dev \
     py3-setuptools
 
 RUN df -H
@@ -298,82 +269,19 @@ STOPSIGNAL SIGHUP
 #END HEADER
 #BEGIN INSERT
 
-#BEGIN statoshi.all.dockerfile
-RUN df -H
-###########################################
-# We build Statoshi last
-FROM config-final as clone-stats-bitcoincore-dev
-###########################################
+FROM config-final as gui
+#We expose 80 and bind 80:3000
+EXPOSE 80 3000
 
-WORKDIR /home/root
-# Change to your fork
-RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 2
-WORKDIR /home/root/stats.bitcoincore.dev
-RUN mkdir -p /depends
-RUN mkdir -p /depends/SDKs
+ARG HOST_UID=${HOST_UID:-4000}
+ARG HOST_USER=${HOST_USER:-nodummy}
 
-################################################
-FROM clone-stats-bitcoincore-dev as make-depends
-################################################
+RUN [ "${HOST_USER}" == "root" ] || \
+    (adduser -h /home/${HOST_USER} -D -u ${HOST_UID} ${HOST_USER} \
+    && chown -R "${HOST_UID}:${HOST_UID}" /home/${HOST_USER})
 
-#RUN cd /home/root/stats.bitcoincore.dev/depends &&  make -j3 download -C /depends
-
-############################
-FROM make-depends as autogen
-############################
-
-RUN cd /home/root/stats.bitcoincore.dev && git pull -f origin +master:master && ./autogen.sh
-
-#########################
-FROM autogen as configure
-#########################
-
-RUN cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
-
-######################
-FROM configure as make
-######################
-
-RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j3
-
-###########################
-FROM make as strip-binaries
-###########################
-
-RUN echo
-
-###########################
-FROM strip-binaries as statoshi
-###########################
-
-RUN cp    /home/root/stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind
-#
-RUN cp    /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/local/bin/bitcoin-cli
-#
-RUN cp    /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/local/bin/bitcoin-tx
-#
-RUN cp    /home/root/stats.bitcoincore.dev/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
-
-###########################
-# Micro containers may not be able to compile from source - signed binaries verified here
-###########################
-RUN apk add --no-cache gnupg
-RUN gpg --refresh-keys
-RUN gpg --import  /home/root/stats.bitcoincore.dev/conf/usr/local/bin/randymcmillan.asc
-
-RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  /home/root/stats.bitcoincore.dev/conf/usr/local/bin/keys.txt
-
-RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind
-RUN cp    /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind /usr/local/bin/bitcoind
-
-RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli
-RUN cp    /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli /usr/local/bin/bitcoin-cli
-
-RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx
-RUN cp    /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
-
-RUN df -H
-#END statoshi.all.dockerfile
+USER ${HOST_USER}
+CMD ["/bin/bash /usr/local/bin/run-grafana.sh"]
 
 #END INSERT
 #BEGIN FOOTER
@@ -385,7 +293,8 @@ RUN df -H
 
 #RUN rm -rf /home/root/stats.bitcoincore.dev
 
-#RUN rm -rf /var/cache/man/*
+RUN rm -rf /var/cache/man/*
+RUN rm -rf /opt/graphite/examples/*
 
 RUN df -H
 ENTRYPOINT ["/entrypoint"]

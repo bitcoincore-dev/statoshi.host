@@ -2,10 +2,13 @@ ifneq ($(Makefile),)
 	Makefile := defined
 endif
 
-DOCKERFILE=$(notdir $(PWD))
-DOCKERFILE_SLIM=stats.build.slim
-DOCKERFILE_GUI=stats.build.gui
-DOCKERFILE_EXTRACT=stats.build.all.extract
+DOCKERFILE = $(notdir $(PWD))
+SLIM = slim
+DOCKERFILE_SLIM = $(notdir $(PWD)).slim
+GUI = gui
+DOCKERFILE_GUI = $(notdir $(PWD)).gui
+EXTRACT = extract
+DOCKERFILE_EXTRACT = $(notdir $(PWD)).extract
 
 # If you see pwd_unknown showing up, this is why. Re-calibrate your system.
 PWD ?= pwd_unknown
@@ -47,7 +50,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc copy
+.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc concat
 
 # suppress make's own output
 #.SILENT:
@@ -86,22 +89,38 @@ help:
 	@echo ''
 	@echo ''
 #######################
-copy:
+#Docker file creation...
+########################
+concat-all:
 	@echo ''
-	bash -c 'install -v ./docker/shell                   .'
-	bash -c 'install -v ./docker/docker-compose.yml      .'
-	bash -c 'install -v ./docker/statoshi                .'
-	bash -c 'install -v ./docker/gui                     .'
-	bash -c 'install -v ./docker/$(DOCKERFILE)   .'
-	bash -c 'install -v ./docker/$(DOCKERFILE_SLIM)        .'
-	bash -c 'install -v ./docker/$(DOCKERFILE_GUI)         .'
-	bash -c 'install -v ./docker/$(DOCKERFILE_EXTRACT) .'
+	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
+	bash -c '$(pwd) cat ./docker/statoshi.all        >> $(DOCKERFILE)'
+	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE)'
 	@echo ''
 #######################
-build-shell: copy
+concat-slim:
+	@echo ''
+	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE).slim'
+	bash -c '$(pwd) cat ./docker/statoshi.slim       >> $(DOCKERFILE).slim'
+	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE).slim'
+	@echo ''
+#######################
+concat-gui:
+	@echo ''
+	bash -c '$(pwd) cat ./docker/header.slim          > $(DOCKERFILE).gui'
+	bash -c '$(pwd) cat ./docker/gui                 >> $(DOCKERFILE).gui'
+	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE).gui'
+	@echo ''
+#######################
+concat: concat-all concat-slim concat-gui
+	@echo ''
+	bash -c ' install -v ./docker/docker-compose.yml .'
+	@echo ''
+#######################
+build-shell: concat
 	docker-compose build shell
 #######################
-rebuild-shell: copy
+rebuild-shell: concat
 	docker-compose build --no-cache shell
 #######################
 shell: build-shell
@@ -113,7 +132,7 @@ else
 	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 endif
 #######################
-autogen: copy
+autogen: concat
 	# here it is useful to add your own customised tests
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
 #######################
@@ -148,20 +167,10 @@ login: service
 	# run as a service and attach to it
 	docker exec -it $(PROJECT_NAME)_$(HOST_UID) sh
 ########################
-concat-all: copy
-	bash -c '$(pwd) cat ./docker/header >               $(DOCKERFILE)'
-	bash -c '$(pwd) cat ./docker/statoshi.all >>        $(DOCKERFILE)'
-	bash -c '$(pwd) cat ./docker/footer >>              $(DOCKERFILE)'
-	bash -c 'echo created...                            $(DOCKERFILE)'
-#######################
-build-all: concat-all copy
-	#bash -c '$(pwd) make concat-all'
-	#docker build -f $(DOCKERFILE) --rm -t $(DOCKERFILE) .
+build-all: concat
 	docker-compose -f docker-compose.yml build statoshi
 #######################
-rebuild-all: concat-all copy
-	#bash -c '$(pwd) make concat-all'
-	#docker build -f $(DOCKERFILE) --rm -t $(DOCKERFILE) .
+rebuild-all: concat
 	docker-compose -f docker-compose.yml build --no-cache statoshi
 #######################
 run-all: build-all
@@ -171,39 +180,25 @@ else
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 endif
 #######################
-extract: copy
+extract: concat
 	#extract TODO CREATE PACKAGE for distribution
-	#bash -c '$(pwd) make build-all'
 	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
 	docker build -f $(DOCKERFILE_EXTRACT) --rm -t $(DOCKERFILE_EXTRACT) .
 	docker run --name $(DOCKERFILE_EXTRACT) $(DOCKERFILE_EXTRACT) /bin/true
-	#docker cp $(DOCKERFILE_EXTRACT):/usr/local/bin/bitcoind        $(pwd)/conf/usr/local/bin/bitcoind
-	#docker cp $(DOCKERFILE_EXTRACT):/usr/local/bin/bitcoin-cli     $(pwd)/conf/usr/local/bin/bitcoin-cli
-	#docker cp $(DOCKERFILE_EXTRACT):/usr/local/bin/bitcoin-tx      $(pwd)/conf/usr/local/bin/bitcoin-tx
 	docker rm $(DOCKERFILE_EXTRACT)
 	rm -f  $(DOCKERFILE_EXTRACT)
 #######################
-concat-slim: copy
-	bash -c '$(pwd) cat ./docker/header.dockerfile >               $(DOCKERFILE_SLIM)'
-	bash -c '$(pwd) cat ./docker/statoshi.build.slim.dockerfile >> $(DOCKERFILE_SLIM)'
-	bash -c '$(pwd) cat ./docker/footer.dockerfile >>              $(DOCKERFILE_SLIM)'
-#######################
-build-slim: concat-slim
-	#bash -c '$(pwd) make concat-slim'
-	docker build -f $(DOCKERFILE_SLIM) --rm -t $(DOCKERFILE_SLIM) .
+build-slim: concat
+	docker-compose -f docker-compose.yml build statoshi-slim
 #######################
 run-slim: build-slim
-	#bash -c '$(pwd) make slim'
-		docker run --restart always --name $(DOCKERFILE_SLIM) -e GF_AUTH_ANONYMOUS_ENABLED=true -it -p 3000:3000 -p 8080:8080 -p 8125:8125 -p 8126:8126 $(DOCKERFILE_SLIM) .
+ifeq ($(CMD_ARGUMENTS),)
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish  3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh
+else
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
+endif
 #######################
-concat-gui:
-	@echo ''
-	bash -c 'cat    ./docker/header.slim              > $(DOCKERFILE_GUI)'
-	bash -c 'cat    ./docker/gui                     >> $(DOCKERFILE_GUI)'
-	bash -c 'cat    ./docker/footer                  >> $(DOCKERFILE_GUI)'
-	@echo ''
-#######################
-build-gui: concat-gui copy
+build-gui: concat
 	docker-compose -f docker-compose.yml build gui
 	@echo ''
 #######################
@@ -230,6 +225,11 @@ clean:
 	@docker-compose -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
 	&& echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" removed.' \
 	|| echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" already removed.'
+	rm -f $(DOCKERFILE)*
+	rm -f shell
+	rm -f gui
+	rm -f statoshi
+	rm -f stats.build.*
 #######################
 prune:
 	docker system prune -af

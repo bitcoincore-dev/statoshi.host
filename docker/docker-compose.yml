@@ -73,7 +73,7 @@ services:
       context: .
       # This is the name of the last layer in stats.build.gui.dockerfile
       target: statoshi
-      dockerfile: stats.bitcoincore.dev
+      dockerfile: ${PROJECT_NAME}
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}
@@ -90,6 +90,38 @@ services:
      - "8333:8333"
      - "18333:18333"
 
+  statoshi-slim:
+    # Makefile fills PROJECT_NAME to current directory name.
+    # add UID to allow multiple users run this in parallel
+    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    hostname: ${PROJECT_NAME}
+    # These variables are passed into the container.
+    environment:
+      - UID=${HOST_UID:-4000}
+    # Run with user priviliges by default.
+    user: ${HOST_USER:-nodummy}
+    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+    restart: unless-stopped
+    build:
+      context: .
+      # This is the name of the last layer in stats.build.gui.dockerfile
+      target: statoshi
+      dockerfile: ${PROJECT_NAME}.slim
+      # These variables are passed to Dockerfile.
+      args:
+        - HOST_UID=${HOST_UID:-4000}
+        - HOST_USER=${HOST_USER:-nodummy}
+    # Run container as a service. Replace with something useful.
+    #command: ["tail", "-f", "/dev/null"]
+    command:  ["/bin/bash /usr/local/bin/entrypoint"]
+    # Expose current project folder to container.
+    volumes:
+      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
+      - ${HOME:-.}:/home/${HOST_USER}
+    ports:
+       #hostPORT:imagePORT
+     - "8333:8333"
+     - "18333:18333"
   gui:
     # Makefile fills PROJECT_NAME to current directory name.
     # add UID to allow multiple users run this in parallel
@@ -106,7 +138,7 @@ services:
       context: .
       # This is the name of the last layer in stats.build.gui.dockerfile
       target: gui
-      dockerfile: stats.build.gui
+      dockerfile: ${PROJECT_NAME}.gui
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}

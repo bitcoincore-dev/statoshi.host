@@ -385,7 +385,8 @@ RUN df -H
 
 #RUN rm -rf /home/root/stats.bitcoincore.dev
 
-#RUN rm -rf /var/cache/man/*
+RUN rm -rf /var/cache/man/*
+RUN rm -rf /opt/graphite/examples/*
 
 RUN df -H
 ENTRYPOINT ["/entrypoint"]
