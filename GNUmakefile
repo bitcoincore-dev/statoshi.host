@@ -2,49 +2,48 @@ ifneq ($(Makefile),)
 	Makefile := defined
 endif
 
-DOCKERFILE = $(notdir $(PWD))
-SLIM = slim
-DOCKERFILE_SLIM = $(notdir $(PWD)).slim
-GUI = gui
-DOCKERFILE_GUI = $(notdir $(PWD)).gui
-EXTRACT = extract
-DOCKERFILE_EXTRACT = $(notdir $(PWD)).extract
+DOCKERFILE         := $(notdir $(PWD))
+DOCKERFILE_SLIM    := $(notdir $(PWD)).slim
+DOCKERFILE_GUI     := $(notdir $(PWD)).gui
+DOCKERFILE_EXTRACT := $(notdir $(PWD)).extract
 
 # If you see pwd_unknown showing up, this is why. Re-calibrate your system.
 PWD ?= pwd_unknown
 
 # Note the different service configs in  docker-compose.yml.
 # We override this default for different build/run configs
-SERVICE_TARGET := main
+SERVICE_TARGET := shell
 
 ifeq ($(user),)
+# We force root
+HOST_USER := root
+HOST_UID  := 0
 # USER retrieved from env, UID from shell.
-HOST_USER = root
-HOST_UID  = 0
 #HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
 #HOST_UID  ?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
 else
+# We force root
+HOST_USER := root
+HOST_UID  := 0
 # allow override by adding user= and/ or uid=  (lowercase!).
 # uid= defaults to 0 if user= set (i.e. root).
-HOST_USER = root
-HOST_UID  = 0
 #HOST_USER = $(user)
 #HOST_UID = $(strip $(if $(uid),$(uid),0))
 endif
 # PROJECT_NAME defaults to name of the current directory.
 # should not need to be changed if you follow GitOps operating procedures.
-PROJECT_NAME = $(notdir $(PWD))
+PROJECT_NAME := $(notdir $(PWD))
 
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 CMD_ARGUMENTS ?= $(cmd)
 
 # export such that its passed to shell functions for Docker to pick up.
 # control alpine version from here
-BASE_IMAGE = alpine
-BASE_VERSION = 3.11.6
+BASE_IMAGE := alpine
+BASE_VERSION := 3.11.6
 
 export BASE_IMAGE
-export BASE_VERSIOn
+export BASE_VERSION
 export PROJECT_NAME
 export HOST_USER
 export HOST_UID
@@ -57,35 +56,22 @@ export HOST_UID
 
 help:
 	@echo ''
-	@echo '	Bitcoin:'
 	@echo ''
-	@echo '  	            ./autogen'
-	@echo '  	            ./configure --disable-wallet #et cetera...'
-	@echo '  	            make -f Makefile'
-	@echo ''
-	@echo ''
-	@echo '	Docker:	    make [TARGET] [EXTRA_ARGUMENTS]'
-	@echo ''
-	@echo '	Shell:	    alpine dev environment'
-	@echo ''
-	@echo '  	shell	    make user=$(HOST_USER) shell'
+	@echo '	Docker: make [TARGET] [EXTRA_ARGUMENTS]'
+	@echo '	Shell:'
+	@echo '		make shell user=$(HOST_USER)'
 	@echo ''
 	@echo '	Targets:'
 	@echo ''
-	@echo '  	build	    build docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '  	rebuild	    rebuild docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '  	test	    test docker --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '  	service	    run as service --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '  	login	    run as service and login --container-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '  	clean	    remove docker --image-- for current user: $(HOST_USER)(uid=$(HOST_UID))'
-	@echo '  	prune	    shortcut for docker system prune -af. Cleanup inactive containers and cache.'
+	@echo '		build-all	complete build - no deploy'
+	@echo '		run-all  	complete build and deploy'
 	@echo ''
+	@echo '		build-slim	build with precompiled statoshi binaries'
+	@echo '		run-slim	install precompiled statoshi binaries and deploy'
 	@echo ''
+	@echo '	Extra: push a shell command to the container'
 	@echo ''
-	@echo ''
-	@echo '	Extra:'
-	@echo ''
-	@echo '  	cmd=:	    make shell cmd="whoami"'
+	@echo '		cmd=:	    make shell cmd="whoami"'
 	@echo ''
 	@echo ''
 #######################
@@ -115,6 +101,7 @@ concat-gui:
 concat: concat-all concat-slim concat-gui
 	@echo ''
 	bash -c ' install -v ./docker/docker-compose.yml .'
+	bash -c ' install -v ./docker/shell .'
 	@echo ''
 #######################
 build-shell: concat
