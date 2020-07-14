@@ -1,5 +1,6 @@
 {
   "annotations": {
+    "enable": false,
     "list": [
       {
         "builtIn": 1,
@@ -14,45 +15,51 @@
   },
   "editable": false,
   "gnetId": null,
-  "graphTooltip": 0,
-  "id": 300,
+  "graphTooltip": 1,
+  "id": 9,
   "links": [],
   "panels": [
     {
       "aliasColors": {},
+      "annotate": {
+        "enable": false
+      },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "decimals": 0,
       "editable": true,
-      "error": false,
       "fieldConfig": {
         "defaults": {
           "custom": {}
         },
         "overrides": []
       },
-      "fill": 0,
+      "fill": 1,
       "fillGradient": 0,
-      "grid": {},
+      "grid": {
+        "max": null,
+        "min": 0
+      },
       "gridPos": {
         "h": 7,
-        "w": 24,
+        "w": 12,
         "x": 0,
         "y": 0
       },
       "hiddenSeries": false,
-      "id": 1,
+      "id": 5,
+      "interactive": true,
       "legend": {
-        "avg": false,
-        "current": true,
+        "avg": true,
+        "current": false,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
         "values": true
       },
+      "legend_counts": true,
       "lines": true,
       "linewidth": 2,
       "links": [],
@@ -64,60 +71,28 @@
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "stats.gauges.estimates.fee.block1",
-          "yaxis": 1
-        }
-      ],
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
       "spaceLength": 10,
+      "spyable": true,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
           "refId": "A",
-          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block1, 0.001), 4)"
-        },
-        {
-          "refId": "B",
-          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block2, 0.001), 4)"
-        },
-        {
-          "refId": "C",
-          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block3, 0.001), 4)"
-        },
-        {
-          "refId": "D",
-          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block4, 0.001), 4)"
-        },
-        {
-          "refId": "E",
-          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block5, 0.001), 4)"
-        },
-        {
-          "refId": "F",
-          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block10, 0.001), 4)"
-        },
-        {
-          "refId": "G",
-          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block20, 0.001), 4)"
-        },
-        {
-          "refId": "H",
-          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block100, 0.001), 4)"
-        },
-        {
-          "refId": "I",
-          "target": "aliasByNode(scale(stats.gauges.estimates.fee.block1000, 0.001), 4)"
+          "target": "aliasByMetric(stats.gauges.utxoset.tx)"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Recommended Transaction Fee for Target Confirmation in X Blocks",
+      "timezone": "browser",
+      "title": "Total Transactions With Unspent Outputs",
       "tooltip": {
-        "shared": true,
+        "query_as_alias": true,
+        "shared": false,
         "sort": 0,
         "value_type": "individual"
       },
@@ -132,67 +107,71 @@
       "yaxes": [
         {
           "format": "none",
-          "label": "Satoshis / byte",
+          "label": "",
           "logBase": 1,
           "max": null,
-          "min": 0,
+          "min": null,
           "show": true
         },
         {
-          "format": "none",
+          "format": "bytes",
           "logBase": 1,
           "max": null,
-          "min": 0,
+          "min": null,
           "show": true
         }
       ],
       "yaxis": {
         "align": false,
         "alignLevel": null
-      }
+      },
+      "zerofill": true
     },
     {
-      "aliasColors": {
-        "Fee per KB": "#65C5DB",
-        "Fee per byte": "#6ED0E0"
+      "aliasColors": {},
+      "annotate": {
+        "enable": false
       },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "decimals": null,
       "editable": true,
-      "error": false,
       "fieldConfig": {
         "defaults": {
           "custom": {}
         },
         "overrides": []
       },
-      "fill": 0,
+      "fill": 1,
       "fillGradient": 0,
-      "grid": {},
+      "grid": {
+        "max": null,
+        "min": 0
+      },
       "gridPos": {
         "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 7
+        "w": 12,
+        "x": 12,
+        "y": 0
       },
       "hiddenSeries": false,
-      "id": 3,
+      "id": 6,
+      "interactive": true,
       "legend": {
         "avg": true,
-        "current": true,
+        "current": false,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
         "values": true
       },
+      "legend_counts": true,
       "lines": true,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "connected",
       "options": {
         "dataLinks": []
       },
@@ -200,33 +179,28 @@
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "stats.gauges.estimates.fee.block1",
-          "yaxis": 1
-        }
-      ],
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
       "spaceLength": 10,
+      "spyable": true,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
           "refId": "A",
-          "target": "alias(divideSeries(stats.transactions.fees, #B), 'Fee per byte')"
-        },
-        {
-          "hide": true,
-          "refId": "B",
-          "target": "aliasByMetric(scale(stats.transactions.sizeBytes, 0.976563))"
+          "target": "aliasByMetric(stats.gauges.utxoset.txOutputs)"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Average Network Transaction Fees per Byte",
+      "timezone": "browser",
+      "title": "Unspent Transaction Outputs",
       "tooltip": {
-        "shared": true,
+        "query_as_alias": true,
+        "shared": false,
         "sort": 0,
         "value_type": "individual"
       },
@@ -241,14 +215,14 @@
       "yaxes": [
         {
           "format": "none",
-          "label": "Satoshis / byte",
+          "label": "Unspent Transaction Outputs",
           "logBase": 1,
           "max": null,
           "min": null,
           "show": true
         },
         {
-          "format": "none",
+          "format": "bytes",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -258,90 +232,95 @@
       "yaxis": {
         "align": false,
         "alignLevel": null
-      }
+      },
+      "zerofill": true
     },
     {
       "aliasColors": {
-        "Fee per KB": "#65C5DB",
-        "Fee per byte": "#629E51",
-        "Highest 5th percentile fee rate": "#890F02",
-        "Highest percentile fee rate": "#890F02"
+        "dbSizeBytes": "#1F78C1"
+      },
+      "annotate": {
+        "enable": false
       },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "decimals": null,
       "editable": true,
-      "error": false,
       "fieldConfig": {
         "defaults": {
           "custom": {}
         },
         "overrides": []
       },
-      "fill": 0,
+      "fill": 1,
       "fillGradient": 0,
-      "grid": {},
+      "grid": {
+        "max": null,
+        "min": 0
+      },
       "gridPos": {
         "h": 7,
-        "w": 24,
+        "w": 12,
         "x": 0,
-        "y": 14
+        "y": 7
       },
       "hiddenSeries": false,
-      "id": 4,
+      "id": 8,
+      "interactive": true,
       "legend": {
-        "avg": false,
+        "avg": true,
         "current": false,
-        "max": true,
-        "min": true,
+        "max": false,
+        "min": false,
         "show": true,
         "total": false,
         "values": true
       },
-      "lines": false,
+      "legend_counts": true,
+      "lines": true,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "connected",
       "options": {
         "dataLinks": []
       },
       "percentage": false,
-      "pointradius": 2,
-      "points": true,
+      "pointradius": 5,
+      "points": false,
       "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
       "seriesOverrides": [
         {
-          "alias": "stats.gauges.estimates.fee.block1",
+          "alias": "stats.gauges.utxoset.dbSizeBytes",
+          "yaxis": 2
+        },
+        {
+          "alias": "dbSizeBytes",
+          "bars": true,
           "yaxis": 1
         }
       ],
       "spaceLength": 10,
+      "spyable": true,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
           "refId": "A",
-          "target": "alias(removeAbovePercentile(divideSeries(stats.transactions.fees, #B), 1), 'Lowest percentile fee rate')"
-        },
-        {
-          "hide": true,
-          "refId": "B",
-          "target": "aliasByMetric(scale(stats.transactions.sizeBytes, 0.976563))"
-        },
-        {
-          "refId": "C",
-          "target": "alias(removeBelowPercentile(divideSeries(stats.transactions.fees, #B), 99), 'Highest percentile fee rate')"
+          "target": "aliasByMetric(stats.gauges.utxoset.dbSizeBytes)"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Network Transaction Fees per Byte Range",
+      "timezone": "browser",
+      "title": "Size of Serialized UTXO Set",
       "tooltip": {
-        "shared": true,
+        "query_as_alias": true,
+        "shared": false,
         "sort": 0,
         "value_type": "individual"
       },
@@ -355,8 +334,8 @@
       },
       "yaxes": [
         {
-          "format": "none",
-          "label": "Satoshis / byte",
+          "format": "bytes",
+          "label": "",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -373,7 +352,118 @@
       "yaxis": {
         "align": false,
         "alignLevel": null
-      }
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {
+        "totalBTCAmount": "#CCA300"
+      },
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "editable": true,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {
+        "max": null,
+        "min": 0
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 7
+      },
+      "hiddenSeries": false,
+      "id": 7,
+      "interactive": true,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": true,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "legend_counts": true,
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "spyable": true,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "aliasByMetric(stats.gauges.utxoset.totalBTCAmount)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "timezone": "browser",
+      "title": "Total Bitcoins in Existence",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": false,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
     }
   ],
   "refresh": "5s",
@@ -381,13 +471,13 @@
   "style": "dark",
   "tags": [
     "stats",
-    "fees"
+    "utxo"
   ],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -421,7 +511,7 @@
     "type": "timepicker"
   },
   "timezone": "utc",
-  "title": "Fee Estimates",
-  "uid": "fee-estimates",
+  "title": "Unspent Transaction Output Set",
+  "uid": "utxo-set",
   "version": 1
 }
