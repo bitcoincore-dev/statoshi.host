@@ -222,7 +222,9 @@ prune:
 	docker system prune -af
 #######################
 destroy-all:
-	docker ps -aq && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q)
+	#docker ps -lq && docker stop -t 0 $(docker ps -lq) && docker rm $(docker ps -lq) && docker rmi $(docker images --filter "dangling=true" -q)
+	#docker ps -lq && docker rm $(docker ps -lq) && docker rmi $(docker images --filter "dangling=true" -q)
+	#docker ps -lq && docker rmi -f $(docker images --filter "dangling=true" -q)
 #######################
 doc:
 	export HOST_USER=root
