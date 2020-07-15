@@ -44,17 +44,15 @@ CMD_ARGUMENTS ?= $(cmd)
 
 # export such that its passed to shell functions for Docker to pick up.
 # control alpine version from here
-BASE_IMAGE := alpine
-BASE_VERSION := 3.11.6
+VERSION := 3.11.6
 
-export BASE_IMAGE
-export BASE_VERSION
+export VERSION
 export PROJECT_NAME
 export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc concat
+.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc concat package
 
 # suppress make's own output
 #.SILENT:
@@ -251,6 +249,11 @@ doc:
 	bash -c 'cat README > README.md'
 	bash -c 'cat ./docker/Docker.md >> README.md'
 	bash -c '$(pwd) make user=root  >> README.md'
+#######################
+package:
+	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+	bash -c 'docker tag stats.bitcoincore.dev:root docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)):$(VERSION)'
+	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)):$(VERSION)'
 #######################
 -include Makefile
 
