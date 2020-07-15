@@ -29,43 +29,29 @@ A system metrics daemon is available [here](https://github.com/jlopp/bitcoin-uti
 
 Statoshi also supports running multiple nodes that emit metrics to a single graphite instance. 
 In order to facilitate this, you can add a line to bitcoin.conf that will partition each 
-metric by the name of the host: statshostname=yourNodeName
+metric by the name of the host: statshostname=yourNodeName--
+## Docker Notes & [DigitalOcean.com](https://m.do.co/c/ae5c7d05da91)
 
---
 ## Make Notes
 
 
-### $ <code>make</code>
-
-  Usage:	make [TARGET] [EXTRA_ARGUMENTS]
-
-  Targets:
-
-  	build	    build docker --image-- for current user: root(uid=0)
-  	rebuild	    rebuild docker --image-- for current user: root(uid=0)
-  	test	    test docker --container-- for current user: root(uid=0)
-  	service	    run as service --container-- for current user: root(uid=0)
-  	login	    run as service and login --container-- for current user: root(uid=0)
-  	clean	    remove docker --image-- for current user: root(uid=0)
-  	prune	    shortcut for docker system prune -af. Cleanup inactive containers and cache.
-
-  Shell:
-
-  	shell	    run a docker image with stats.bitcoincore.dev as a volume at /home/root/stats.bitcoincore.dev
-  	shell	    run docker --container-- for current user: root(uid=0)
+##### $ <code>make</code>
 
 
+	Docker: make [TARGET] [EXTRA_ARGUMENTS]
+	Shell:
+		make shell user=root
+
+	Targets:
+
+		build-all	complete build - no deploy
+		run-all  	deploy build-all product
+
+		build-slim	build with precompiled statoshi binaries
+		run-slim	deploy build-slim product
+
+	Extra: push a shell command to the container
+
+		cmd=:	    make shell cmd="whoami"
 
 
-  Extra:
-
-  	cmd=:	    make user=root shell cmd="whoami"
-  	-----	    ---------------------------
-  	user=	    overrides ＄(user)
-  	user=:	    make shell user=root (root default uid=0)
-  	uid=	    overrides current user uid.
-  	uid=:	    make shell user=git uid=4000 (default 0 if user= set)
-
-
---
-## Docker Notes & [DigitalOcean.com](https://m.do.co/c/ae5c7d05da91)
