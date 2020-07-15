@@ -1,0 +1,27 @@
+curl -X POST -H "Content-Type: application/json" -d '{“dashboard”:{“annotations”:{“list”:[{“builtIn”:1,”datasource”:”– Grafana –“,”enable”:true,”hide”:true,”iconColor”:”rgba(0, 211, 255, 1)”,”name”:”Annotations Alerts”,”type”:”dashboard”}]},”editable”:true,”gnetId”:null,”graphTooltip”:0,”links”:[],”panels”:[{“alert”:{“conditions”:[{“evaluator”:{“params”:[],”type”:”no_value”},”operator”:{“type”:”and”},”query”:{“params”:[“A”,”1m”,”now”]},”reducer”:{“params”:[],”type”:”last”},”type”:”query”}],”executionErrorState”:”keep_state”,”for”:”5m”,”frequency”:”1m”,”handler”:1,”message”:”user profile stream has died on local”,”name”:”User_details alert”,”noDataState”:”no_data”,”notifications”:[]},”aliasColors”:{},”bars”:false,”dashLength”:10,”dashes”:false,”datasource”:”Graphite”,”fill”:1,”gridPos”:{“h”:9,”w”:12,”x”:0,”y”:0},”id”:2,”legend”:{“avg”:false,”current”:false,”max”:false,”min”:false,”show”:true,”total”:false,”values”:false},”lines”:true,”linewidth”:1,”links”:[],”nullPointMode”:”null”,”percentage”:false,”pointradius”:5,”points”:false,”renderer”:”flot”,”seriesOverrides”:[],”spaceLength”:10,”stack”:false,”steppedLine”:false,”targets”:[{“refId”:”A”,”target”:”alias(sumSeries(user-streamapp.local.kafka.streams.type_stream-metrics.client-id_user-profiles-v1-*.process-rate), ‘user-profiles’)”,”textEditor”:false}],”thresholds”:[],”timeFrom”:null,”timeRegions”:[],”timeShift”:null,”title”:”User_details”,”tooltip”:{“shared”:true,”sort”:0,”value_type”:”individual”},”type”:”graph”,”xaxis”:{“buckets”:null,”mode”:”time”,”name”:null,”show”:true,”values”:[]},”yaxes”:[{“format”:”short”,”label”:null,”logBase”:1,”max”:null,”min”:null,”show”:true},{“format”:”short”,”label”:null,”logBase”:1,”max”:null,”min”:null,”show”:true}],”yaxis”:{“align”:false,”alignLevel”:null}}],”schemaVersion”:16,”style”:”dark”,”tags”:[],”templating”:{“list”:[]},”time”:{“from”:”now-6h”,”to”:”now”},”timepicker”:{“refresh_intervals”:[“5s”,”10s”,”30s”,”1m”,”5m”,”15m”,”30m”,”1h”,”2h”,”1d”],”time_options”:[“5m”,”15m”,”1h”,”6h”,”12h”,”24h”,”2d”,”7d”,”30d”]},”timezone”:””,”title”:”User”,”uid”:null,”id”:null,”version”:1}}' http://admin:admin@localhost/api/dashboards/db
+
+
+
+curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d @/conf/dashboards/blocks.json  http://admin:admin@localhost/api/dashboards/db
+
+curl -X PUT -H "Content-Type: application/json" -d '{"oldPassword": "oldpass","newPassword": "newpass","confirmNew": "newpass"}' http://admin:admin@localhost:3000/api/user/password
+
+curl -X PUT -H "Content-Type: application/json" -d '{"oldPassword": "admin","newPassword": "admin","admin": "newpass"}' http://admin:admin@stats.bitcoincore.dev/api/user/password
+
+curl -X PUT -H "Content-Type: application/json" -d '{"oldPassword": "admin","newPassword": "admin","admin": "newpass"}' http://admin:admin@localhost/api/user/password
+
+curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" --data @data.json  http://admin:admin@localhost/api/dashboards/db
+
+curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" --data @dashlist.json  http://admin:admin@localhost/api/dashboards/db
+
+curl -X PUT -H "Content-Type: application/json" -H "Accept: application/json" --data @orgprefs.json  http://admin:admin@127.0.0.1/api/org/preferences
+
+/opt/graphite/webapp # nc 127.0.0.1 3000 -zv &> /dev/null; echo $?
+
+
+/opt/graphite/webapp # [ -f $(nc 127.0.0.1 -zv)] && echo open
+open
+/opt/graphite/webapp #
+
+
+

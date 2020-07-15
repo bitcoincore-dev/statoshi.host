@@ -89,6 +89,7 @@ services:
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
       - ${HOME:-.}:/home/${HOST_USER}
+      - ${HOME:-.}:/${HOST_USER}
     ports:
        #hostPORT:imagePORT
      - "8333:8333"

@@ -1,0 +1,250 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": false,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Realtime Bitcoin Node Stats",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 700,
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "folderId": null,
+      "gridPos": {
+        "h": 15,
+        "w": 7,
+        "x": 0,
+        "y": 0
+      },
+      "headings": false,
+      "id": 2,
+      "limit": 100,
+      "links": [],
+      "query": "",
+      "recent": true,
+      "search": false,
+      "starred": false,
+      "tags": [
+        "stats"
+      ],
+      "title": "",
+      "type": "dashlist"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "editable": false,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {},
+      "gridPos": {
+        "h": 15,
+        "w": 17,
+        "x": 7,
+        "y": 0
+      },
+      "hiddenSeries": false,
+      "id": 1,
+      "legend": {
+        "avg": true,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "stats.gauges.blocks.currentHeight",
+          "yaxis": 2
+        },
+        {
+          "alias": "Block Height",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "alias(stats.gauges.blocks.currentHeight, 'Block Height')"
+        },
+        {
+          "refId": "B",
+          "target": "alias(movingMedian(stats.transactions.accepted, '5min'), 'Transactions Per Second')"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Block Height",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 4,
+      "panels": [],
+      "repeat": null,
+      "title": "",
+      "type": "row"
+    },
+    {
+      "content": "<img style='height:15.0em;width:18.5em;margin:1.0em;' src=\"/public/img/bitcoin.svg\">\n<div style='margin:50px;overflow:hidden'><h2>Statoshi.info - Realtime Bitcoin Node Stats</h2>To learn about the purpose of statoshi.info, <a href='https://blog.lopp.net/announcing-statoshi-info/'><u>read this</u>.</a><br/>To learn how to use Grafana, <a href='http://docs.grafana.org/guides/getting_started/'><u>RTFM</u></a> and <a href='http://docs.grafana.org/guides/screencasts/'><u>WTFV</u></a><br/>In order to create an account on statoshi.info, <a href='https://blog.lopp.net/statoshi-info-account-creation-guide/'><u>follow this guide</u>.</a><br/>Statoshi is open source; you can <a href='https://github.com/jlopp/statoshi'><u>find us on GitHub</u></a></div>",
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 6,
+      "mode": "html",
+      "targets": [
+        {
+          "refId": "A",
+          "target": ""
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
+    }
+  ],
+  "schemaVersion": 25,
+  "style": "dark",
+  "tags": [
+    "overview",
+    "stats",
+    "welcome"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "collapse": false,
+    "enable": true,
+    "notice": false,
+    "now": true,
+    "refresh_intervals": [
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "status": "Stable",
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ],
+    "type": "timepicker"
+  },
+  "timezone": "utc",
+  "title": "Overview",
+  "uid": "overview",
+  "version": 1
+}

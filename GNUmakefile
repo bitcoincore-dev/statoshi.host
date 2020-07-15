@@ -49,7 +49,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc concat
+.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc concat
 
 # suppress make's own output
 #.SILENT:
@@ -74,10 +74,16 @@ help:
 	@echo '		cmd=:	    make shell cmd="whoami"'
 	@echo ''
 	@echo ''
+
+init:
+	@echo ''
+	bash -c 'mkdir -p $(HOME)/.bitcoin'
+	@echo ''
+
 #######################
 #Docker file creation...
 ########################
-concat-all:
+concat-all: init
 	@echo ''
 	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/statoshi.all        >> $(DOCKERFILE)'
@@ -178,6 +184,9 @@ extract: concat
 build-slim: concat
 	docker-compose -f docker-compose.yml build statoshi-slim
 #######################
+rebuild-slim: concat
+	docker-compose -f docker-compose.yml build --no-cache statoshi-slim
+#######################
 run-slim: build-slim
 ifeq ($(CMD_ARGUMENTS),)
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run  --publish  3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh
@@ -189,8 +198,7 @@ build-gui: concat
 	docker-compose -f docker-compose.yml build gui
 	@echo ''
 #######################
-rebuild-gui:
-	bash -c '$(pwd) make user=root concat-gui'
+rebuild-gui: concat
 	docker-compose -f docker-compose.yml build --no-cache gui
 	@echo ''
 #######################
