@@ -47,7 +47,7 @@ metric by the name of the host: statshostname=yourNodeName--
 		build-all	complete build - no deploy
 		run-all  	deploy build-all product
 
-		build-slim	build with precompiled statoshi binaries
+		build-slim	build with signed precompiled statoshi binaries
 		run-slim	deploy build-slim product
 
 	Extra: push a shell command to the container
