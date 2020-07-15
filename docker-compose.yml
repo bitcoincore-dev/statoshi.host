@@ -27,6 +27,8 @@ services:
     # Copy current (git-) project into container.
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
+      - ${HOME:-.}:/home/${HOST_USER}
+      - ${HOME:-.}:/${HOST_USER}
 
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
@@ -56,6 +58,7 @@ services:
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
       - ${HOME:-.}:/home/${HOST_USER}
+      - ${HOME:-.}:/${HOST_USER}
     ports:
        #hostPORT:imagePORT
      - "8333:8333"
@@ -115,6 +118,7 @@ services:
       args:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
+        - ${HOME:-.}:/${HOST_USER}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
     command:  ["/bin/bash /usr/local/bin/run-grafana.sh"]
@@ -122,6 +126,7 @@ services:
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
       - ${HOME:-.}:/home/${HOST_USER}
+      - ${HOME:-.}:/${HOST_USER}
     ports:
        #hostPORT:imagePORT
      - "80:3000"

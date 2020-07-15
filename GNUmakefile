@@ -77,7 +77,8 @@ help:
 
 init:
 	@echo ''
-	bash -c 'mkdir -p $(HOME)/.bitcoin'
+	bash -c 'mkdir -p $(HOME)/.statoshi'
+	bash -c 'install -v conf/bitcoin.conf $(HOME)/.statoshi'
 	@echo ''
 
 #######################

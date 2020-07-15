@@ -5,7 +5,9 @@ export LC_ALL=C
 start_bitcoind(){
   BITCOIND=/usr/bin/bitcoind
     if test -f "$BITCOIND"; then
-      /usr/local/bin/./bitcoind -daemon -prune=550 &
+      # Avoid exposing/blowing out a full node
+      #REF: conf/docker-compose.yml and make init
+      /usr/local/bin/./bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
     fi
 }
 stop_bitcoind(){
@@ -42,7 +44,8 @@ shutdown(){
   exit
 }
 
-/usr/local/bin/./bitcoind -daemon -prune=550 &
+#TODO: start_bitcoind
+/usr/local/bin/./bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
 
 
 su-exec root /usr/local/bin/./run-grafana.sh &
