@@ -324,3 +324,4 @@ shell
 stats.bitcoincore.dev
 stats.bitcoincore.dev.gui
 stats.bitcoincore.dev.slim
+conf/grafana_api_key
