@@ -26,9 +26,9 @@ services:
     #command: ["tail", "-f", "/dev/null"]
     # Copy current (git-) project into container.
     volumes:
-      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
-      - ${HOME:-.}:/home/${HOST_USER}
-      - ${HOME:-.}:/${HOST_USER}
+      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
+      #- ${HOME:-.}:/home/${HOST_USER}:consistent
+      #- ${HOME:-.}:/${HOST_USER}:consistent
 
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
@@ -56,9 +56,9 @@ services:
     command:  ["/bin/bash /usr/local/bin/entrypoint"]
     # Expose current project folder to container.
     volumes:
-      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
-      - ${HOME:-.}:/home/${HOST_USER}
-      - ${HOME:-.}:/${HOST_USER}
+      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
+      #- ${HOME:-.}:/home/${HOST_USER}:consistent
+      #- ${HOME:-.}:/${HOST_USER}:consistent
     ports:
        #hostPORT:imagePORT
      - "8333:8333"
@@ -90,9 +90,9 @@ services:
     command:  ["/bin/bash /usr/local/bin/entrypoint"]
     # Expose current project folder to container.
     volumes:
-      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
-      - ${HOME:-.}:/home/${HOST_USER}
-      - ${HOME:-.}:/${HOST_USER}
+      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
+      #- ${HOME:-.}:/home/${HOST_USER}:consistent
+      #- ${HOME:-.}:/${HOST_USER}:consistent
     ports:
        #hostPORT:imagePORT
      - "8333:8333"
@@ -118,15 +118,14 @@ services:
       args:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
-        - ${HOME:-.}:/${HOST_USER}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
     command:  ["/bin/bash /usr/local/bin/run-grafana.sh"]
     # Expose current project folder to container.
     volumes:
-      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}
-      - ${HOME:-.}:/home/${HOST_USER}
-      - ${HOME:-.}:/${HOST_USER}
+      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
+      - ${HOME:-.}:/home/${HOST_USER}:consistent
+      - ${HOME:-.}:/${HOST_USER}:consistent
     ports:
        #hostPORT:imagePORT
      - "80:3000"

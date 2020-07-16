@@ -52,7 +52,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc concat package
+.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc concat package-gui package-slim
 
 # suppress make's own output
 #.SILENT:
@@ -176,7 +176,7 @@ rebuild-all: concat
 #######################
 run-all: build-all
 ifeq ($(CMD_ARGUMENTS),)
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish  3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
 else
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 endif
@@ -190,24 +190,24 @@ extract: concat
 	rm -f  $(DOCKERFILE_EXTRACT)
 #######################
 build-slim: concat
-	docker-compose -f docker-compose.yml build statoshi-slim
+	docker-compose -f docker-compose.yml -p stats.bitcoincore.dev build statoshi-slim
 #######################
 rebuild-slim: concat
-	docker-compose -f docker-compose.yml build --no-cache statoshi-slim
+	docker-compose -f docker-compose.yml -p stats.bitcoincore.dev build --no-cache statoshi-slim
 #######################
 run-slim: build-slim
 ifeq ($(CMD_ARGUMENTS),)
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish  3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh
 else
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
 endif
 #######################
 build-gui: concat
-	docker-compose -f docker-compose.yml build gui
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME) build gui
 	@echo ''
 #######################
 rebuild-gui: concat
-	docker-compose -f docker-compose.yml build --no-cache gui
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME) build --no-cache gui
 	@echo ''
 #######################
 run-gui: build-gui
@@ -250,10 +250,20 @@ doc:
 	bash -c 'cat ./docker/Docker.md >> README.md'
 	bash -c '$(pwd) make user=root  >> README.md'
 #######################
-package:
+package-all: clean build-all
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
-	bash -c 'docker tag stats.bitcoincore.dev:root docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)):$(VERSION)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)):$(VERSION)'
 	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)):$(VERSION)'
+#######################
+package-gui: clean build-gui
+	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).gui:$(VERSION)'
+	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).gui:$(VERSION)'
+#######################
+package-slim: clean build-slim
+	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
+	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
 #######################
 -include Makefile
 
