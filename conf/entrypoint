@@ -7,13 +7,13 @@ start_bitcoind(){
     if test -f "$BITCOIND"; then
       # Avoid exposing/blowing out a full node
       #REF: conf/docker-compose.yml and make init
-      /usr/local/bin/./bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
+      su-exec root /usr/local/bin/./bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
     fi
 }
 stop_bitcoind(){
   BITCOIN_CLI=/usr/bin/bitcoin-cli
     if test -f "$BITCOIN_CLI"; then
-      /usr/local/bin/./bitcoin-cli stop &
+      su-exec root /usr/local/bin/./bitcoin-cli stop &
     fi
 }
 shutdown(){
@@ -44,9 +44,9 @@ shutdown(){
   exit
 }
 
-#TODO: start_bitcoind
-/usr/local/bin/./bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
+start_bitcoind &
 
+su-exec root /usr/local/bin/./bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
 
 su-exec root /usr/local/bin/./run-grafana.sh &
 

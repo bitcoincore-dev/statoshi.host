@@ -197,9 +197,13 @@ rebuild-slim: concat
 #######################
 run-slim: build-slim
 ifeq ($(CMD_ARGUMENTS),)
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh
+	#docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh
+	#docker-compose up -d -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim
 else
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
+	#docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
+	#docker-compose up -d -f docker-compose.yml up -d -p $(PROJECT_NAME)_$(HOST_UID) --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim run sh -c "$(CMD_ARGUMENTS)"
 endif
 #######################
 build-gui: concat

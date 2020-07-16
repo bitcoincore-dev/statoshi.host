@@ -27,8 +27,8 @@ services:
     # Copy current (git-) project into container.
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
-      #- ${HOME:-.}:/home/${HOST_USER}:consistent
-      #- ${HOME:-.}:/${HOST_USER}:consistent
+      - ${HOME:-.}:/home/${HOST_USER}:consistent
+      - ${HOME:-.}:/${HOST_USER}:consistent
 
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
@@ -53,12 +53,12 @@ services:
         - HOST_USER=${HOST_USER:-nodummy}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
-    command:  ["/bin/bash /usr/local/bin/entrypoint"]
+    command:  ["/entrypoint"]
     # Expose current project folder to container.
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
-      #- ${HOME:-.}:/home/${HOST_USER}:consistent
-      #- ${HOME:-.}:/${HOST_USER}:consistent
+      - ${HOME:-.}:/home/${HOST_USER}:consistent
+      - ${HOME:-.}:/${HOST_USER}:consistent
     ports:
        #hostPORT:imagePORT
      - "8333:8333"
@@ -87,12 +87,12 @@ services:
         - HOST_USER=${HOST_USER:-nodummy}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
-    command:  ["/bin/bash /usr/local/bin/entrypoint"]
+    command:  ["/entrypoint"]
     # Expose current project folder to container.
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
-      #- ${HOME:-.}:/home/${HOST_USER}:consistent
-      #- ${HOME:-.}:/${HOST_USER}:consistent
+      - ${HOME:-.}:/home/${HOST_USER}:consistent
+      - ${HOME:-.}:/${HOST_USER}:consistent
     ports:
        #hostPORT:imagePORT
      - "8333:8333"

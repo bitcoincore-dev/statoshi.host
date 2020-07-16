@@ -6,6 +6,9 @@
 #################
 #################
 
+
+RUN install /home/root/stats.bitcoincore.dev/conf/entrypoint /
+
 RUN rm -rf /home/root/stats.bitcoincore.dev
 
 RUN rm -rf /var/cache/man/*
@@ -23,5 +26,6 @@ RUN rm -rf /opt/graphite/examples/*
 #RUN rm -rf /opt/graphite/examples/*
 
 RUN df -H
+CMD ["/entrypoint"]
 ENTRYPOINT ["/entrypoint"]
 #END FOOTER
