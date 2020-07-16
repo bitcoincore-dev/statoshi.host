@@ -52,7 +52,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui destroy-all autogen depends config doc concat package-gui package-slim
+.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim
 
 # suppress make's own output
 #.SILENT:
@@ -236,11 +236,6 @@ clean:
 #######################
 prune:
 	docker system prune -af
-#######################
-destroy-all:
-	#docker ps -lq && docker stop -t 0 $(docker ps -lq) && docker rm $(docker ps -lq) && docker rmi $(docker images --filter "dangling=true" -q)
-	#docker ps -lq && docker rm $(docker ps -lq) && docker rmi $(docker images --filter "dangling=true" -q)
-	#docker ps -lq && docker rmi -f $(docker images --filter "dangling=true" -q)
 #######################
 doc:
 	export HOST_USER=root
