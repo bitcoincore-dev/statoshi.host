@@ -7,7 +7,7 @@ start_bitcoind(){
     if test -f "$BITCOIND"; then
       # Avoid exposing/blowing out a full node
       #REF: conf/docker-compose.yml and make init
-      su-exec root /usr/local/bin/./bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
+      su-exec root bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
     fi
 }
 stop_bitcoind(){
@@ -44,17 +44,18 @@ shutdown(){
   exit
 }
 
+echo "################################### entrypoint ##################################"
+
+PATH="${PATH}:/usr/local/bin"
+
 start_bitcoind &
 
-su-exec root /usr/local/bin/./bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
+su-exec root bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
 
 su-exec root /usr/local/bin/./run-grafana.sh &
 
 . /opt/graphite/bin/activate
 
-echo
-
-PATH="${PATH}:/usr/local/bin"
 
 # run all scripts in the run_once folder
 [ -d /etc/run_once ] && /bin/run-parts /etc/run_once
