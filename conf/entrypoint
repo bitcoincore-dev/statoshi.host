@@ -2,25 +2,34 @@
 
 export LC_ALL=C
 
-start_bitcoind(){
-  BITCOIND=/usr/bin/bitcoind
+BITCOIND=/usr/local/bin/bitcoind
+BITCOIN_CLI=/usr/local/bin/bitcoin-cli
+PATH="${PATH}:/usr/local/bin"
+
+start_bitcoin(){
+
     if test -f "$BITCOIND"; then
-      # Avoid exposing/blowing out a full node
-      #REF: conf/docker-compose.yml and make init
-      /usr/local/bin/./bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
+      echo "################################### start_bitcoind ##################################"
+      su-exec root $BITCOIND -daemon -prune=550 -disablewallet -datadir=/root/.bitcoin & wait
+    fi
+    if test -f "$BITCOIN_CLI"; then
+      echo "################################### start_bitcoin-cli gettxoutsetinfo ###############"
+      su-exec root $BITCOIN_CLI gettxoutsetinfo & wait
     fi
 }
-stop_bitcoind(){
-  BITCOIN_CLI=/usr/bin/bitcoin-cli
+stop_bitcoin(){
+
+echo "################################### stop_bitcoind ##################################"
+
     if test -f "$BITCOIN_CLI"; then
-      /usr/local/bin/./bitcoin-cli stop &
+      su-exec root $BITCOIN_CLI stop & wait
     fi
 }
 shutdown(){
 
   echo "shutting down container"
 
-  stop_bitcoind
+  stop_bitcoin; wait &
 
   # first shutdown any service started by runit
   for _srv in $(ls -1 /etc/service); do
@@ -44,17 +53,14 @@ shutdown(){
   exit
 }
 
-#TODO: start_bitcoind
-/usr/local/bin/./bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
+echo "################################### entrypoint ##################################"
 
+start_bitcoin & wait
 
 su-exec root /usr/local/bin/./run-grafana.sh &
-
+su-exec root grafana-cli plugins install ryantxu-ajax-panel &
 . /opt/graphite/bin/activate
 
-echo
-
-PATH="${PATH}:/usr/local/bin"
 
 # run all scripts in the run_once folder
 [ -d /etc/run_once ] && /bin/run-parts /etc/run_once
@@ -71,7 +77,7 @@ find /opt/graphite/storage -maxdepth 1 -name '*.pid' -delete
 # chmod logrotate file (#111)
 chmod 0644 /etc/logrotate.d/*
 
-exec runsvdir -P /etc/service &
+exec runsvdir -P /etc/service & wait
 RUNSVDIR=$!
 echo "Started runsvdir, PID is $RUNSVDIR"
 echo "wait for processes to start...."

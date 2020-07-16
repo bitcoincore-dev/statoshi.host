@@ -24,17 +24,24 @@ ifeq ($(user),)
 HOST_USER := root
 HOST_UID  := 0
 ## USER retrieved from env, UID from shell.
-#HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
-#HOST_UID  ?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
+HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
+HOST_UID  ?= $(strip $(if $(shell id -u),$(shell id -u),4000))
 else
 # We force root
-HOST_USER := root
-HOST_UID  := 0
+#HOST_USER := root
+#HOST_UID  := 0
 ## allow override by adding user= and/ or uid=  (lowercase!).
 ## uid= defaults to 0 if user= set (i.e. root).
-#HOST_USER = $(user)
-#HOST_UID = $(strip $(if $(uid),$(uid),0))
+HOST_USER = $(user)
+HOST_UID = $(strip $(if $(uid),$(uid),0))
 endif
+
+#GITHUB CONFIG
+GITHUB_USER_NAME=$(git config user.name)
+export GITHUB_USER_NAME
+GITHUB_USER_EMAIL=$(git config user.email)
+export GITHUB_USER_EMAIL
+
 # PROJECT_NAME defaults to name of the current directory.
 # should not need to be changed if you follow GitOps operating procedures.
 PROJECT_NAME := $(notdir $(PWD))
@@ -42,17 +49,30 @@ PROJECT_NAME := $(notdir $(PWD))
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 CMD_ARGUMENTS ?= $(cmd)
 
+ifeq ($(did),)
+    D_ID   := $(1)
+    export D_ID
+else
+    D_ID   ?= $(did)
+    export D_ID
+endif
+
+ifeq ($(port),)
+    PUBLIC_PORT   := 3000
+else
+    PUBLIC_PORT   ?= $(port)
+endif
+
 # export such that its passed to shell functions for Docker to pick up.
 # control alpine version from here
 VERSION := 3.11.6
-
 export VERSION
 export PROJECT_NAME
 export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim
+.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim d-ps d-images d-exec torproxy get-branches
 
 # suppress make's own output
 #.SILENT:
@@ -62,9 +82,10 @@ help:
 	@echo ''
 	@echo '	Docker: make [TARGET] [EXTRA_ARGUMENTS]'
 	@echo '	Shell:'
+	@echo '		make shell user=root'
 	@echo '		make shell user=$(HOST_USER)'
 	@echo ''
-	@echo '	Targets:'
+	@echo '	[TARGET]:'
 	@echo ''
 	@echo '		build-all	complete build - no deploy'
 	@echo '		run-all  	deploy build-all product'
@@ -72,10 +93,45 @@ help:
 	@echo '		build-slim	build with signed precompiled statoshi binaries'
 	@echo '		run-slim	deploy build-slim product'
 	@echo ''
-	@echo '	Extra: push a shell command to the container'
+	@echo '	[EXTRA_ARGUMENTS]: push a shell command to the container'
 	@echo ''
-	@echo '		cmd=:	    make shell cmd="whoami"'
+	@echo '		cmd=:	'
+	@echo '		     	    make run-all cmd="bitcoind"'
+	@echo '		d=:  	'
+	@echo '		     	    make shell   d="--prune=550"'
 	@echo ''
+	@echo ''
+
+# Some handy docker commands
+d-ps:
+	@echo ''
+	bash -c 'docker ps'
+	@echo ''
+d-images:
+	@echo ''
+	bash -c 'docker images'
+	@echo ''
+d-exec:
+		bash -c './docker/d-exec.sh'
+cli-exec:
+		bash -c './docker/cli-exec.sh'
+
+#######################
+# Backup $HOME/.bitcoin
+########################
+TIME=$(shell date +%s)
+export TIME
+backup:
+	@echo ''
+	bash -c 'mkdir -p $(HOME)/.bitcoin'
+	bash -c 'conf/get_size.sh'
+	bash -c 'tar czv --exclude=*.log --exclude=banlist.dat \
+			--exclude=fee_exstimates.dat --exclude=mempool.dat \
+			--exclude=peers.dat --exclude=.cookie --exclude=database \
+			--exclude=.lock --exclude=.walletlock --exclude=.DS_Store\
+			-f $(HOME)/.bitcoin-$(TIME).tar.gz $(HOME)/.bitcoin'
+	bash -c 'md5sum $(HOME)/.bitcoin-$(TIME).tar.gz > $(HOME)/bitcoin-$(TIME).tar.gz.md5'
+	bash -c 'md5sum -c $(HOME)/bitcoin-$(TIME).tar.gz.md5'
 	@echo ''
 
 #######################
@@ -84,10 +140,9 @@ help:
 ########################
 init:
 	@echo ''
-	bash -c 'mkdir -p $(HOME)/.statoshi'
-	bash -c 'install -v conf/bitcoin.conf $(HOME)/.statoshi'
+	bash -c 'mkdir -p $(HOME)/.bitcoin'
+	bash -c 'install -v conf/bitcoin.conf $(HOME)/.bitcoin'
 	@echo ''
-
 #######################
 # Docker file creation...
 ########################
@@ -96,6 +151,7 @@ concat-all: init
 	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/statoshi.all        >> $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE)'
+	bash -c '$(pwd) cat ./docker/torproxy            >  torproxy'
 	@echo ''
 #######################
 concat-slim:
@@ -105,13 +161,6 @@ concat-slim:
 	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE).slim'
 	@echo ''
 #######################
-concat-gui:
-	@echo ''
-	bash -c '$(pwd) cat ./docker/header.slim          > $(DOCKERFILE).gui'
-	bash -c '$(pwd) cat ./docker/gui                 >> $(DOCKERFILE).gui'
-	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE).gui'
-	@echo ''
-#######################
 concat: concat-all concat-slim concat-gui
 	@echo ''
 	bash -c ' install -v ./docker/docker-compose.yml .'
@@ -119,66 +168,114 @@ concat: concat-all concat-slim concat-gui
 	@echo ''
 #######################
 build-shell: concat
-	docker-compose build shell
+	@echo ''
+	docker-compose -f stats-compose.yml --verbose build shell
+	@echo ''
 #######################
 rebuild-shell: concat
-	docker-compose build --no-cache shell
+	@echo ''
+	docker-compose -f stats-compose.yml --verbose build --no-cache shell
+	@echo ''
 #######################
 shell: build-shell
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
-	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
+	@echo ''
+	docker-compose -f stats-compose.yml --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
+	@echo ''
 else
 	# run the command
-	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
+	docker-compose -f stats-compose.yml --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
 endif
 #######################
 autogen: concat
 	# here it is useful to add your own customised tests
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
+	@echo ''
 #######################
 config: autogen
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
+	@echo ''
 #######################
 depends: config
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "apk add coreutils && exit"
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "apk add coreutils && exit"
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
+	@echo ''
 #######################
 test:
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm shell sh -c '\
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm shell sh -c '\
 	echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
+	@echo ''
 #######################
 make-statoshi: depends
-	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev && make install && exit"
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev && make install && exit"
+	@echo ''
 #######################
 run-statoshi: make-statoshi
+	@echo ''
 	docker-compose build statoshi
+	@echo ''
 ifeq ($(CMD_ARGUMENTS),)
-	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh
+	@echo ''
 else
-	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
 endif
 #######################
 service:
 	# run as a (background) service
-	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
+	@echo ''
 #######################
 login: service
 	# run as a service and attach to it
+	@echo ''
 	docker exec -it $(PROJECT_NAME)_$(HOST_UID) sh
+	@echo ''
 ########################
 build-all: concat
-	docker-compose -f docker-compose.yml build statoshi
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml build statoshi
+	@echo ''
 #######################
 rebuild-all: concat
-	docker-compose -f docker-compose.yml build --no-cache statoshi
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml build --no-cache statoshi
+	@echo ''
 #######################
 run-all: build-all
 ifeq ($(CMD_ARGUMENTS),)
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
+	@echo ''
 else
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
+endif
+#######################
+rerun-all: rebuild-all
+ifeq ($(CMD_ARGUMENTS),)
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
+	@echo ''
+else
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
 endif
 #######################
 extract: concat
@@ -190,39 +287,38 @@ extract: concat
 	rm -f  $(DOCKERFILE_EXTRACT)
 #######################
 build-slim: concat
-	docker-compose -f docker-compose.yml -p stats.bitcoincore.dev build statoshi-slim
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p stats.bitcoincore.dev build statoshi-slim
+	@echo ''
 #######################
 rebuild-slim: concat
-	docker-compose -f docker-compose.yml -p stats.bitcoincore.dev build --no-cache statoshi-slim
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p stats.bitcoincore.dev build --no-cache statoshi-slim
+	@echo ''
 #######################
 run-slim: build-slim
 ifeq ($(CMD_ARGUMENTS),)
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh
-else
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
-endif
-#######################
-build-gui: concat
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME) build gui
 	@echo ''
-#######################
-rebuild-gui: concat
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME) build --no-cache gui
-	@echo ''
-#######################
-run-gui: build-gui
-ifeq ($(CMD_ARGUMENTS),)
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 80:3000 --rm gui sh
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8080:8080 --publish 8125:8125 --publish 8333:8333 --publish 8126:8126 --rm statoshi-slim sh
 	@echo ''
 else
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 80:3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 #######################
-test-gui: build-gui
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3333:3000 --rm gui sh -c '\
-		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
-	&& echo success
+torproxy: concat-all
+#REF: https://hub.docker.com/r/dperson/torproxy
+
+#	@echo ''
+	bash -c 'docker build https://github.com/dperson/torproxy.git'
+	bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -d dperson/torproxy'
+#	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118  --publish 9050:9050  --publish 9051:9051 --rm dperson/torproxy sh -c "$(CMD_ARGUMENTS)"
+#	@echo ''
+
+#######################
+get-branches:
+	bash -c 'for branch in `git branch -r|grep -v ' -> '|cut -d"/" -f2`; do git checkout $branch; git fetch; done;'
 #######################
 clean:
 	@docker-compose -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
@@ -260,5 +356,9 @@ package-slim: clean build-slim
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
 	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
 #######################
+git-fetch-branches:
+	bash -c "./conf/usr/local/bin/git-fetch-branches.sh"
+#######################
 -include Makefile
+
 

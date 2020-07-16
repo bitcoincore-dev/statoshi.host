@@ -1,0 +1,1 @@
+conf/usr/local/bin/bitcoin-cli-gettxoutsetinfo.sh

@@ -1,28 +1,24 @@
-#BEGIN statoshi.all.dockerfile
+#BEGIN statoshi.slim.dockerfile
 RUN df -H
 ###########################################
 # We build Statoshi last
 FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
 
-WORKDIR /home/root
 # Change to your fork
-RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 2
-WORKDIR /home/root/stats.bitcoincore.dev
-RUN mkdir -p /depends
-RUN mkdir -p /depends/SDKs
+RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 1 /home/root/stats.bitcoincore.dev && mkdir -p /home/root/stats.bitcoincore.dev/depends/SDKs
 
 ################################################
 FROM clone-stats-bitcoincore-dev as make-depends
 ################################################
 
-#RUN cd /home/root/stats.bitcoincore.dev/depends &&  make -j3 download -C /depends
+#RUN make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends
 
 ############################
 FROM make-depends as autogen
 ############################
 
-RUN cd /home/root/stats.bitcoincore.dev && git pull -f origin +master:master && ./autogen.sh
+RUN cd /home/root/stats.bitcoincore.dev && ./autogen.sh
 
 #########################
 FROM autogen as configure
@@ -34,29 +30,46 @@ RUN cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disab
 FROM configure as make
 ######################
 
-RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j3
+RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j $(nproc)
 
 ###########################
 FROM make as strip-binaries
 ###########################
 
-RUN echo
+#RUN strip /stats.bitcoincore.dev/src/bitcoind
+#
+#RUN strip /stats.bitcoincore.dev/src/bitcoin-cli
+#
+#RUN strip /stats.bitcoincore.dev/src/bitcoin-tx
 
 ###########################
 FROM strip-binaries as statoshi
 ###########################
 
-RUN cp    /home/root/stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind
-#
-RUN cp    /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/local/bin/bitcoin-cli
-#
-RUN cp    /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/local/bin/bitcoin-tx
-#
-RUN cp    /home/root/stats.bitcoincore.dev/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
+#TODO mimic the bitcoin package install
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /etc/bitcoin.conf
+RUN ln -s /root/.bitcoin /var/lib/bitcoin
+
+#RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
+#RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
+
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/bin/bitcoind
+
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/local/bin/bitcoin-cli
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/bin/bitcoin-cli
+
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/local/bin/bitcoin-tx
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/bin/bitcoin-tx
+
+RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
+RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind.sh /usr/local/bin/bitcoind.sh
+RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind.sh /usr/local/bin/bitcoin-cli-gettxoutsetinfo.sh
 
 ###########################
 # Micro containers may not be able to compile from source - signed binaries verified here
 ###########################
+
 RUN apk add --no-cache gnupg
 RUN gpg --refresh-keys
 RUN gpg --import  /home/root/stats.bitcoincore.dev/conf/usr/local/bin/randymcmillan.asc
@@ -64,14 +77,11 @@ RUN gpg --import  /home/root/stats.bitcoincore.dev/conf/usr/local/bin/randymcmil
 RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  /home/root/stats.bitcoincore.dev/conf/usr/local/bin/keys.txt
 
 RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind
-RUN cp    /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind /usr/local/bin/bitcoind
 
 RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli
-RUN cp    /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli /usr/local/bin/bitcoin-cli
 
 RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx
-RUN cp    /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
 
 RUN df -H
-#END statoshi.all.dockerfile
+#END statoshi.slim.dockerfile
 

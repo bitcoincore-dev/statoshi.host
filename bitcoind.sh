@@ -1,0 +1,1 @@
+conf/usr/local/bin/bitcoind.sh

@@ -1,5 +1,6 @@
 #BEGIN HEADER
-ARG BASE_IMAGE=alpine:3.11.6
+#ARG BASE_IMAGE=alpine:3.11.6
+ARG BASE_IMAGE=alpine:3.12
 #####################################
 FROM ${BASE_IMAGE} as set-initial-env
 #####################################
@@ -10,13 +11,13 @@ LABEL description="Statoshi Docker"
 LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
 LABEL maintainer="admin@bitcoincore.dev"
 
-RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git
+RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git bitcoin
 RUN apk -U add -v coreutils
 RUN apk add --update -v nodejs nodejs-npm
 
 #NOTE: simply exposing the ports in the dockerfile isnt enough
 #REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
-EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126
+EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8118 8333 18333 8125 8125/udp 8126 9050 9051
 RUN git config --global advice.detachedHead false
 
 RUN df -H
@@ -40,6 +41,7 @@ ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
     GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
     GF_PATHS_DATA="/var/lib/grafana" \
     GF_PATHS_HOME="/usr/share/grafana" \
+    GF_PATHS_HOME_DASHBOARD="/usr/share/grafana/public/dashboards/home.json" \
     GF_PATHS_LOGS="/var/log/grafana" \
     GF_PATHS_PLUGINS="/var/lib/grafana/plugins" \
     GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
@@ -74,6 +76,7 @@ COPY ./conf/defaults.ini "$GF_PATHS_CONFIG_DEFAULTS"
 COPY ./conf/grafana.ini "$GF_PATHS_CONFIG"
 COPY ./conf/run-grafana.sh /usr/local/bin/
 COPY ./conf/dashboards/* $GF_PATHS_PROVISIONING/dashboards/
+COPY ./conf/dashboards/overview.json $GF_PATHS_HOME_DASHBOARD
 COPY ./conf/datasources/* $GF_PATHS_PROVISIONING/datasources/
 
 COPY ./conf/dashboards/* $GF_PATHS_HOME/dashboards/
@@ -181,7 +184,8 @@ RUN apk add -v \
       pkgconfig \
       py3-cairo \
       py3-pip \
-      py3-virtualenv==16.7.8-r0 \
+      #py3-virtualenv==16.7.8-r0 \
+      py3-virtualenv \
       openldap-dev \
       python3-dev \
       rrdtool-dev \

@@ -1,0 +1,1 @@
+conf/usr/local/bin/fastcopy-chaindata.py

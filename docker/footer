@@ -6,22 +6,28 @@
 #################
 #################
 
+
+RUN install /home/root/stats.bitcoincore.dev/conf/entrypoint /
+
 RUN rm -rf /home/root/stats.bitcoincore.dev
 
 RUN rm -rf /var/cache/man/*
 RUN rm -rf /opt/graphite/examples/*
 
-RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/tabs/*.gif
-RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/grid/*.gif
-RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/window/*.gif
-RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/layout/*.gif
-RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/toolbar/*.gif
-RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/button/*.gif
-RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/icons/fam/*.gif
-RUN rm -rf /opt/graphite/webapp/content/img/*.png
-RUN rm -rf /opt/graphite/webapp/content/css/default/*.gif
-RUN rm -rf /opt/graphite/examples/*
+RUN npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y npm
+
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/tabs/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/grid/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/window/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/layout/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/toolbar/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/button/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/icons/fam/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/img/*.png
+#RUN rm -rf /opt/graphite/webapp/content/css/default/*.gif
+#RUN rm -rf /opt/graphite/examples/*
 
 RUN df -H
+CMD ["/entrypoint"]
 ENTRYPOINT ["/entrypoint"]
 #END FOOTER
