@@ -5,8 +5,6 @@ RUN df -H
 FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
 
-RUN apk add --no-cache bitcoin statsd
-
 # Change to your fork
 RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 1 /home/root/stats.bitcoincore.dev && mkdir -p /home/root/stats.bitcoincore.dev/depends/SDKs
 
@@ -14,7 +12,7 @@ RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev
 FROM clone-stats-bitcoincore-dev as make-depends
 ################################################
 
-RUN make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends
+#RUN make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends
 
 ############################
 FROM make-depends as autogen

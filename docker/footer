@@ -14,6 +14,10 @@ RUN rm -rf /home/root/stats.bitcoincore.dev
 RUN rm -rf /var/cache/man/*
 RUN rm -rf /opt/graphite/examples/*
 
+RUN npm cache clean && \
+  cd /usr/lib/node_modules && \
+  npm uninstall -y npm
+
 #RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/tabs/*.gif
 #RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/grid/*.gif
 #RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/window/*.gif
