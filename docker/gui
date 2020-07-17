@@ -2,6 +2,8 @@ FROM config-final as gui
 #We expose 80 and bind 80:3000
 EXPOSE 80 3000
 
+RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 1 /home/root/stats.bitcoincore.dev && mkdir -p /home/root/stats.bitcoincore.dev/depends/SDKs
+
 ARG HOST_UID=${HOST_UID:-4000}
 ARG HOST_USER=${HOST_USER:-nodummy}
 

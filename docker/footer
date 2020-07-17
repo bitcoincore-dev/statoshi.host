@@ -7,7 +7,7 @@
 #################
 
 
-RUN install /home/root/stats.bitcoincore.dev/conf/entrypoint /
+RUN install -v /home/root/stats.bitcoincore.dev/conf/entrypoint /entrypoint
 
 RUN rm -rf /home/root/stats.bitcoincore.dev
 
