@@ -6,6 +6,8 @@ ifneq ($(Makefile),)
 	Makefile := defined
 endif
 
+TIME               :=$(date +%s)
+
 #These are referenced here and docker-compose.yml
 DOCKERFILE         := $(notdir $(PWD))
 DOCKERFILE_SLIM    := $(notdir $(PWD)).slim
@@ -41,12 +43,10 @@ PROJECT_NAME := $(notdir $(PWD))
 
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 CMD_ARGUMENTS ?= $(cmd)
+D_ARGUMENTS   ?= $(d)
 
 # export such that its passed to shell functions for Docker to pick up.
-# control alpine version from here
-VERSION := 3.11.6
-
-export VERSION
+export VERSION := 3.11.6
 export PROJECT_NAME
 export HOST_USER
 export HOST_UID
@@ -74,7 +74,10 @@ help:
 	@echo ''
 	@echo '	Extra: push a shell command to the container'
 	@echo ''
-	@echo '		cmd=:	    make shell cmd="whoami"'
+	@echo '		cmd=:	'
+	@echo '		     	    make shell cmd="whoami"'
+	@echo '		d=:  	'
+	@echo '		     	    make shell   d="--prune=550"'
 	@echo ''
 	@echo ''
 
@@ -91,7 +94,7 @@ init:
 #######################
 # Docker file creation...
 ########################
-concat-all: init
+concat-all:
 	@echo ''
 	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/statoshi.all        >> $(DOCKERFILE)'
@@ -112,26 +115,31 @@ concat-gui:
 	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE).gui'
 	@echo ''
 #######################
-concat: concat-all concat-slim concat-gui
+concat: init concat-all concat-slim concat-gui
 	@echo ''
 	bash -c ' install -v ./docker/docker-compose.yml .'
 	bash -c ' install -v ./docker/shell .'
 	@echo ''
 #######################
-build-shell: concat
+build-shell: init concat
 	docker-compose build shell
 #######################
-rebuild-shell: concat
+rebuild-shell: init concat
 	docker-compose build --no-cache shell
 #######################
 shell: build-shell
+
+ifeq ($(D_ARGUMENTS),)
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
-	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
+			docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
 else
-	# run the command
-	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
+		docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 endif
+else
+		docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "/home/root/stats.bitcoincore.dev/conf/usr/local/bin/./bitcoind $(D_ARGUMENTS)"
+endif
+
 #######################
 autogen: concat
 	# here it is useful to add your own customised tests
