@@ -13,8 +13,8 @@ echo "################################### start_bitcoind #######################
     if test -f "$BITCOIND"; then
       # Avoid exposing/blowing out a full node
       #REF: conf/docker-compose.yml and make init
-      #su-exec root $BITCOIND -daemon -prune=550 -datadir=/root/.statoshi
-      su-exec root $BITCOIND -daemon -prune=550 -datadir=/root/.bitcoin
+      #su-exec root $BITCOIND -daemon -prune=550 -datadir=/root/.bitcoin
+      su-exec root $BITCOIND -prune=550 -datadir=/root/.bitcoin
     fi
 }
 stop_bitcoind(){
@@ -57,7 +57,7 @@ echo "################################### entrypoint ###########################
 
 start_bitcoind &
 
-su-exec root bitcoind -daemon -prune=550 -datadir=/root/.bitcoin &
+#su-exec root bitcoind -daemon -prune=550 -datadir=/root/.bitcoin &
 
 su-exec root /usr/local/bin/./run-grafana.sh &
 
