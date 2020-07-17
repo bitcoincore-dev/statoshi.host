@@ -47,22 +47,22 @@ FROM strip-binaries as statoshi
 ###########################
 
 #TODO mimic the bitcoin package install
-RUN install /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /etc/bitcoin.conf
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /etc/bitcoin.conf
 RUN ln -s /root/.bitcoin /var/lib/bitcoin
 
-RUN install /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
-RUN install /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
+#RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
+#RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
 
-RUN install /home/root/stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind
-RUN install /home/root/stats.bitcoincore.dev/src/bitcoind /usr/bin/bitcoind
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/bin/bitcoind
 
-RUN install /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/local/bin/bitcoin-cli
-RUN install /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/bin/bitcoin-cli
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/local/bin/bitcoin-cli
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/bin/bitcoin-cli
 
-RUN install /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/local/bin/bitcoin-tx
-RUN install /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/bin/bitcoin-tx
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/local/bin/bitcoin-tx
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/bin/bitcoin-tx
 
-RUN install /home/root/stats.bitcoincore.dev/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
+RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
 
 ###########################
 # Micro containers may not be able to compile from source - signed binaries verified here
