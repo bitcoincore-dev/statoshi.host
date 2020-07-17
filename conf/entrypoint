@@ -2,18 +2,27 @@
 
 export LC_ALL=C
 
+BITCOIND=/usr/bin/local/bitcoind
+BITCOIN_CLI=/usr/local/bin/bitcoin-cli
+PATH="${PATH}:/usr/local/bin"
+
 start_bitcoind(){
-  BITCOIND=/usr/bin/bitcoind
+
+echo "################################### start_bitcoind ##################################"
+
     if test -f "$BITCOIND"; then
       # Avoid exposing/blowing out a full node
       #REF: conf/docker-compose.yml and make init
-      su-exec root bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
+      #su-exec root $BITCOIND -daemon -prune=550 -datadir=/root/.statoshi
+      su-exec root $BITCOIND -daemon -prune=550 -datadir=/root/.bitcoin
     fi
 }
 stop_bitcoind(){
-  BITCOIN_CLI=/usr/bin/bitcoin-cli
+
+echo "################################### stop_bitcoind ##################################"
+
     if test -f "$BITCOIN_CLI"; then
-      su-exec root /usr/local/bin/./bitcoin-cli stop &
+      su-exec root $BITCOIN_CLI stop
     fi
 }
 shutdown(){
@@ -46,11 +55,9 @@ shutdown(){
 
 echo "################################### entrypoint ##################################"
 
-PATH="${PATH}:/usr/local/bin"
-
 start_bitcoind &
 
-su-exec root bitcoind -daemon -prune=550 -datadir=/root/.statoshi &
+su-exec root bitcoind -daemon -prune=550 -datadir=/root/.bitcoin &
 
 su-exec root /usr/local/bin/./run-grafana.sh &
 

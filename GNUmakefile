@@ -174,7 +174,7 @@ build-all: concat
 rebuild-all: concat
 	docker-compose -f docker-compose.yml build --no-cache statoshi
 #######################
-run-all: build-all
+run-all: rebuild-all
 ifeq ($(CMD_ARGUMENTS),)
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
 else
