@@ -256,17 +256,17 @@ doc:
 	bash -c 'cat ./docker/Docker.md >> README.md'
 	bash -c '$(pwd) make user=root  >> README.md'
 #######################
-package-all: clean build-all
+package-all: build-all
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)):$(VERSION)'
 	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)):$(VERSION)'
 #######################
-package-gui: clean build-gui
+package-gui: build-gui
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).gui:$(VERSION)'
 	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).gui:$(VERSION)'
 #######################
-package-slim: clean build-slim
+package-slim: build-slim
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
 	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
