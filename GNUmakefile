@@ -6,8 +6,6 @@ ifneq ($(Makefile),)
 	Makefile := defined
 endif
 
-TIME               :=$(date +%s)
-
 #These are referenced here and docker-compose.yml
 DOCKERFILE         := $(notdir $(PWD))
 DOCKERFILE_SLIM    := $(notdir $(PWD)).slim
@@ -52,7 +50,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim
+.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim backup
 
 # suppress make's own output
 #.SILENT:
@@ -82,14 +80,30 @@ help:
 	@echo ''
 
 #######################
-# Shared volume for datadir persistance
-# We avoid a user's bitcoin config when sharing $HOME with container
+# Backup $HOME/.bitcoin
 ########################
+TIME=$(shell date +%s)
+export TIME
+backup:
+	@echo ''
+	bash -c 'mkdir -p $(HOME)/.bitcoin'
+	bash -c 'conf/get_size.sh'
+	bash -c 'tar czv --exclude=*.log --exclude=banlist.dat \
+			--exclude=fee_exstimates.dat --exclude=mempool.dat \
+			--exclude=peers.dat --exclude=.cookie --exclude=database \
+			--exclude=.lock --exclude=.walletlock --exclude=.DS_Store\
+			-f $(HOME)/.bitcoin-$(TIME).tar.gz $(HOME)/.bitcoin'
+	bash -c 'md5sum $(HOME)/.bitcoin-$(TIME).tar.gz > $(HOME)/bitcoin-$(TIME).tar.gz.md5'
+	bash -c 'md5sum -c $(HOME)/bitcoin-$(TIME).tar.gz.md5'
+	@echo ''
 init:
 	@echo ''
 	bash -c 'mkdir -p $(HOME)/.bitcoin'
+	bash -c 'conf/get_size.sh'
+	#install current bitcoin.conf
 	bash -c 'install -v conf/bitcoin.conf $(HOME)/.bitcoin'
 	@echo ''
+
 
 #######################
 # Docker file creation...
