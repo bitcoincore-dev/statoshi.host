@@ -3,6 +3,7 @@
 export LC_ALL=C
 
 BITCOIND=/usr/bin/local/bitcoind
+#BITCOIND=/home/root/stats.bitcoincore.dev/conf/usr/bin/local/bitcoind
 BITCOIN_CLI=/usr/local/bin/bitcoin-cli
 PATH="${PATH}:/usr/local/bin"
 
@@ -11,10 +12,9 @@ start_bitcoind(){
 echo "################################### start_bitcoind ##################################"
 
     if test -f "$BITCOIND"; then
-      # Avoid exposing/blowing out a full node
       #REF: conf/docker-compose.yml and make init
       #su-exec root $BITCOIND -daemon -prune=550 -datadir=/root/.bitcoin
-      su-exec root $BITCOIND -prune=550 -datadir=/root/.bitcoin
+      su-exec root $BITCOIND -daemon -prune=550 -datadir=/root/.bitcoin
     fi
 }
 stop_bitcoind(){
