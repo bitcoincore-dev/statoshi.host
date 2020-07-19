@@ -77,7 +77,7 @@ RUN chmod a+w /usr/local/include
 
 USER ${HOST_USER}
 RUN abuild-keygen -a -n
-RUN cd /home/${HOST_USER}/stats.bitcoincore.dev && git status
+#RUN cd /home/${HOST_USER}/stats.bitcoincore.dev && git status
 
 WORKDIR /home/${HOST_USER}
 

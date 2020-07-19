@@ -308,5 +308,13 @@ package-slim: build-slim
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
 	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
 #######################
+push-all:
+		bash -c 'git push origin   --all'
+		bash -c 'git push statoshi --all'
+
+
+
+
+#######################
 -include Makefile
 
