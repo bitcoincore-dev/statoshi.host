@@ -1,18 +1,41 @@
-# 
 ARG VERSION=3.11.6
 ARG BASE_IMAGE=alpine:${VERSION}
 FROM ${BASE_IMAGE} as base
 
-LABEL description="make shell"
+LABEL description="Alpine Dev Environment"
+LABEL usage="make build-shell && make shell"
 LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
 LABEL maintainer="admin@bitcoincore.dev"
 
-FROM scratch as shell
+#FROM scratch as shell
+FROM ${BASE_IMAGE} as shell
 COPY --from=base . .
 
 RUN apk update \
     && apk add --no-cache \
-        coreutils musl busybox bash-completion vim git make alpine-sdk bitcoin
+        coreutils \
+        musl \
+        busybox \
+        bash-completion \
+        vim \
+        git \
+        make \
+        alpine-sdk \
+				#bitcoin \
+        autoconf \
+        automake \
+        libtool \
+        boost-dev \
+        openssl-dev \
+        db-dev \
+        miniupnpc-dev \
+        qt5-qtbase-dev \
+        qt5-qttools-dev \
+        protobuf-dev \
+        libqrencode-dev \
+        libevent-dev \
+        chrpath \
+        zeromq-dev
 
 RUN git config --global advice.detachedHead false
 
@@ -41,14 +64,20 @@ RUN [ "${HOST_USER}" == "root" ] || \
     (adduser -h /home/${HOST_USER} -D -u ${HOST_UID} ${HOST_USER} \
     && chown -R "${HOST_UID}:${HOST_UID}" /home/${HOST_USER})
 RUN addgroup ${HOST_USER} abuild
-RUN mkdir -p /var/cache/distfiles
 
+RUN mkdir -p /var/cache/distfiles
 RUN chmod a+w /var/cache/distfiles
 # OR
-#RUN chgrp abuild /var/cache/distfiles
-#RUN chmod g+w /var/cache/distfiles
+RUN chgrp abuild /var/cache/distfiles
+RUN chmod g+w /var/cache/distfiles
+# AND
+RUN mkdir -p /usr/local/include
+RUN chmod a+w /usr/local/include
+#RUN chmod a+w /home/${HOST_USER}/stats.bitcoincore.dev/package
 
 USER ${HOST_USER}
 RUN abuild-keygen -a -n
+RUN cd /home/${HOST_USER}/stats.bitcoincore.dev && git status
 
 WORKDIR /home/${HOST_USER}
+
