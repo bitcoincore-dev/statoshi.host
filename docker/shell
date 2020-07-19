@@ -1,8 +1,6 @@
-# USAGE:
-# $ make build-shell
-# $ make shell
-# from command line
-ARG BASE_IMAGE=alpine:3.11.6
+# 
+ARG VERSION=3.11.6
+ARG BASE_IMAGE=alpine:${VERSION}
 FROM ${BASE_IMAGE} as base
 
 LABEL description="make shell"
@@ -15,10 +13,12 @@ COPY --from=base . .
 RUN apk update \
     && apk add --no-cache \
         coreutils musl busybox bash-completion vim git make alpine-sdk bitcoin
+
 RUN git config --global advice.detachedHead false
 
 ENV DSHELL=true
 RUN export DSHELL
+
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:\
 /home/root/stats.bitcoincore.dev:\
 /home/root/stats.bitcoincore.dev/conf:\
@@ -34,9 +34,21 @@ RUN df -H
 ARG HOST_UID=${HOST_UID:-4000}
 ARG HOST_USER=${HOST_USER:-nodummy}
 
+ARG GITHUB_USER_NAME=${GITHUB_USER_NAME}
+ARG GITHUB_USER_EMAIL=${GITHUB_USER_EMAIL}
+
 RUN [ "${HOST_USER}" == "root" ] || \
     (adduser -h /home/${HOST_USER} -D -u ${HOST_UID} ${HOST_USER} \
     && chown -R "${HOST_UID}:${HOST_UID}" /home/${HOST_USER})
+RUN addgroup ${HOST_USER} abuild
+RUN mkdir -p /var/cache/distfiles
+
+RUN chmod a+w /var/cache/distfiles
+# OR
+#RUN chgrp abuild /var/cache/distfiles
+#RUN chmod g+w /var/cache/distfiles
 
 USER ${HOST_USER}
+RUN abuild-keygen -a -n
+
 WORKDIR /home/${HOST_USER}

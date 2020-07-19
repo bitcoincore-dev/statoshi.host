@@ -21,20 +21,27 @@ SERVICE_TARGET := shell
 
 ifeq ($(user),)
 # We force root
-HOST_USER := root
-HOST_UID  := 0
-## USER retrieved from env, UID from shell.
-#HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
-#HOST_UID  ?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
+#HOST_USER := root
+#HOST_UID  := 0
+# USER retrieved from env, UID from shell.
+HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
+HOST_UID  ?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
 else
 # We force root
-HOST_USER := root
-HOST_UID  := 0
-## allow override by adding user= and/ or uid=  (lowercase!).
-## uid= defaults to 0 if user= set (i.e. root).
-#HOST_USER = $(user)
-#HOST_UID = $(strip $(if $(uid),$(uid),0))
+#HOST_USER := root
+#HOST_UID  := 0
+# allow override by adding user= and/ or uid=  (lowercase!).
+# uid= defaults to 0 if user= set (i.e. root).
+HOST_USER = $(user)
+HOST_UID = $(strip $(if $(uid),$(uid),0))
 endif
+
+#FOR ABUILD CONFIG
+GITHUB_USER_NAME=$(git config user.name)
+export GITHUB_USER_NAME
+GITHUB_USER_EMAIL=$(git config user.email)
+export GITHUB_USER_EMAIL
+
 # PROJECT_NAME defaults to name of the current directory.
 # should not need to be changed if you follow GitOps operating procedures.
 PROJECT_NAME := $(notdir $(PWD))
@@ -45,7 +52,8 @@ D_ARGUMENTS   ?= $(d)
 CLI_ARGUMENTS   ?= $(cli)
 
 # export such that its passed to shell functions for Docker to pick up.
-export VERSION := 3.11.6
+VERSION=3.11.6
+export VERSION
 export PROJECT_NAME
 export HOST_USER
 export HOST_UID
@@ -159,7 +167,6 @@ ifeq ($(CMD_ARGUMENTS),)
 else
 		docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS) && /home/root/stats.bitcoincore.dev/conf/usr/local/bin/./bitcoind $(D_ARGUMENTS)"
 endif
-
 endif
 
 #######################
