@@ -42,6 +42,7 @@ PROJECT_NAME := $(notdir $(PWD))
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 CMD_ARGUMENTS ?= $(cmd)
 D_ARGUMENTS   ?= $(d)
+CLI_ARGUMENTS   ?= $(cli)
 
 # export such that its passed to shell functions for Docker to pick up.
 export VERSION := 3.11.6
@@ -100,7 +101,7 @@ init:
 	@echo ''
 	bash -c 'mkdir -p $(HOME)/.bitcoin'
 	bash -c 'conf/get_size.sh'
-	#install current bitcoin.conf
+	@echo 'Installing $(HOME)/stats.bitcoincore.dev/conf/bitcoin.conf'
 	bash -c 'install -v conf/bitcoin.conf $(HOME)/.bitcoin'
 	@echo ''
 
@@ -141,7 +142,7 @@ build-shell: init concat
 rebuild-shell: init concat
 	docker-compose build --no-cache shell
 #######################
-shell: build-shell
+shell:
 
 ifeq ($(D_ARGUMENTS),)
 ifeq ($(CMD_ARGUMENTS),)
@@ -151,7 +152,14 @@ else
 		docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 endif
 else
+
+ifeq ($(CMD_ARGUMENTS),)
+	# no command is given, default to shell
 		docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "/home/root/stats.bitcoincore.dev/conf/usr/local/bin/./bitcoind $(D_ARGUMENTS)"
+else
+		docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS) && /home/root/stats.bitcoincore.dev/conf/usr/local/bin/./bitcoind $(D_ARGUMENTS)"
+endif
+
 endif
 
 #######################

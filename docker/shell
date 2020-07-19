@@ -1,59 +1,35 @@
 # USAGE:
+# $ make build-shell
 # $ make shell
 # from command line
-FROM alpine:3.11.6 as base
+ARG BASE_IMAGE=alpine:3.11.6
+FROM ${BASE_IMAGE} as base
 
-RUN apk update \
-    && apk add --no-cache \
-        coreutils musl busybox bash-completion vim git bitcoin
-RUN git config --global advice.detachedHead false
-WORKDIR /
-
-#RUN apk update && apk upgrade
-#RUN apk add -v \
-#    autoconf \
-#    automake \
-#    binutils \
-#    ca-certificates \
-#    cmake \
-#    curl \
-#    doxygen \
-#    git \
-#    libtool \
-#    make \
-#    patch \
-#    pkgconfig \
-#    python3 \
-#    py3-psutil \
-#    vim
-#
-#RUN apk add -v \
-#    g++ \
-#    build-base \
-#    boost-libs \
-#    libgcc \
-#    libstdc++ \
-#    musl \
-#    boost-system \
-#    boost-build \
-#    boost-dev \
-#    openssl-dev \
-#    libevent-dev \
-#    libzmq \
-#    zeromq-dev \
-#    protobuf-dev \
-#    linux-headers \
-#    libbz2 \
-#    libcap-dev \
-#    librsvg \
-#    tiff-tools \
-#    zlib-dev \
-#    py3-setuptools
-
-RUN df -H
+LABEL description="make shell"
+LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
+LABEL maintainer="admin@bitcoincore.dev"
 
 FROM scratch as shell
 COPY --from=base . .
+
+RUN apk update \
+    && apk add --no-cache \
+        coreutils musl busybox bash-completion vim git make alpine-sdk bitcoin
+RUN git config --global advice.detachedHead false
+
+ENV DSHELL=true
+RUN export DSHELL
+ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:\
+/home/root/stats.bitcoincore.dev:\
+/home/root/stats.bitcoincore.dev/conf:\
+/home/root/stats.bitcoincore.dev/conf/usr/bin:\
+/home/root/stats.bitcoincore.dev/conf/usr/local/bin:${PATH}"
+
+RUN export PATH
+
+WORKDIR /
+
+RUN df -H
 
 ARG HOST_UID=${HOST_UID:-4000}
 ARG HOST_USER=${HOST_USER:-nodummy}
