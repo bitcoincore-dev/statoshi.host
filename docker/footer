@@ -28,6 +28,6 @@ RUN rm -rf /var/cache/man/*
 #RUN rm -rf /opt/graphite/examples/*
 
 RUN df -H
-CMD ["/home/root/stats.bitoincore.dev/conf/usr/local/bin/bitcoind"]
-ENTRYPOINT ["/entrypoint"]
+#CMD ["/home/root/stats.bitoincore.dev/conf/usr/local/bin/bitcoind"]
+#ENTRYPOINT ["/entrypoint"]
 #END FOOTER

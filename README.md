@@ -144,8 +144,12 @@ Use as base image in DockerFile:
 	HOST_USER            = root
 	HOST_UID             = 0
 
-	CMD_ARGUMENTS        = ls -a
-	D_ARGUMENTS          = --disable-wallet
+	CMD_ARGUMENTS        = apk add bitcoin && ls -a .
+	                       make shell cmd="apk add bitcoin && ls -a ."
+
+	D_ARGUMENTS          = -daemon
+	                       make shell user=root d="-daemon" cmd="apk add bitcoin && ls -a ."
+
 	CLI_ARGUMENTS        = stop
 
 
