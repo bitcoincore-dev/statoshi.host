@@ -95,21 +95,60 @@ Use as base image in DockerFile:
 
 ##### $ <code>make</code>
 
+	Docker:
+		make [TARGET] [ARGS]
 
-	Docker: make [TARGET] [EXTRA_ARGUMENTS]
 	Shell:
 		make shell user=root
 
 	Targets:
 
-		build-all	complete build - no deploy
+		build-all complete build - no deploy
 		run-all  	deploy build-all product
 
 		build-slim	build with signed precompiled statoshi binaries
 		run-slim	deploy build-slim product
 
-	Extra: push a shell command to the container
+	ARGS:
 
-		cmd=:	    make shell cmd="whoami"
+	CMD:
+		push a shell command to the container
+
+		cmd=:	
+		     	   make shell cmd="whoami"
+	D:         push a bitcoind command to the container
+		d=:  	
+		     	   make shell   d="--prune=550"
+
+	USER:       
+	           make            
+	           make user=<user>
+	                            result: stats.bitcoincore.dev_0
+
+
+	PROJECT_NAME         = stats.bitcoincore.dev
+
+
+	PWD                  = /Users/git/stats.bitcoincore.dev
+	THIS_FILE            = /Users/git/stats.bitcoincore.dev/GNUmakefile
+
+	DOCKERFILE           = /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev
+	DOCKERFILE_SLIM      = /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev.slim
+	DOCKERFILE_GUI       = /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev.gui
+	DOCKERFILE_SHELL     = /Users/git/stats.bitcoincore.dev/shell
+
+	DOCKER_COMPOSE       = /Users/git/stats.bitcoincore.dev/docker-compose.yml
+
+	SERVICE_TARGET       = shell (default)
+
+	HOST_USER            = root
+	HOST_UID             = 0
+
+	CMD_ARGUMENTS        = ls -a
+	D_ARGUMENTS          = --disable-wallet
+	CLI_ARGUMENTS        = stop
+
+
+
 
 
