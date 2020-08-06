@@ -95,6 +95,35 @@ Use as base image in DockerFile:
 
 ##### $ <code>make</code>
 
+mkdir -p /Users/git/.bitcoin
+bash -c 'mkdir -p /Users/git/.bitcoin'
+bash -c 'conf/get_size.sh'
+Installing /Users/git/stats.bitcoincore.dev/conf/bitcoin.conf /Users/git/.bitcoin
+bash -c 'install -v conf/bitcoin.conf /Users/git/.bitcoin'
+install: conf/bitcoin.conf -> /Users/git/.bitcoin/bitcoin.conf
+
+
+bash -c ' cat ./docker/header               > /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev'
+bash -c ' cat ./docker/statoshi.all        >> /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev'
+bash -c ' cat ./docker/footer              >> /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev'
+
+
+bash -c ' cat ./docker/header               > /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev.slim'
+bash -c ' cat ./docker/statoshi.slim       >> /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev.slim'
+bash -c ' cat ./docker/footer              >> /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev.slim'
+
+
+bash -c ' cat ./docker/header.slim          > /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev.gui'
+bash -c ' cat ./docker/gui                 >> /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev.gui'
+bash -c ' cat ./docker/footer              >> /Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev.gui'
+
+
+bash -c ' install -v ./docker/docker-compose.yml .'
+install: ./docker/docker-compose.yml -> ./docker-compose.yml
+bash -c ' install -v ./docker/shell .'
+install: ./docker/shell -> ./shell
+
+
 	Docker:
 		make [TARGET] [ARGS]
 
@@ -144,15 +173,19 @@ Use as base image in DockerFile:
 	HOST_USER            = root
 	HOST_UID             = 0
 
-	CMD_ARGUMENTS        = apk add bitcoin && ls -a .
-	                       make shell cmd="apk add bitcoin && ls -a ."
+	CMD_ARGUMENTS        = 
+	                       make shell cmd=""
 
-	D_ARGUMENTS          = -daemon
-	                       make shell user=root d="-daemon" cmd="apk add bitcoin && ls -a ."
+	D_ARGUMENTS          = 
+	                       make shell d=""
 
-	CLI_ARGUMENTS        = stop
+	CLI_ARGUMENTS        = 
 
+### EXAMPLES:	
+``````
+make shell user=root d="" cmd=""   
+make build-all user=root d="" cmd=""   
+make run-all user=root d="" cmd=""   
 
-
-
+``````
 

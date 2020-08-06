@@ -29,5 +29,5 @@ RUN rm -rf /var/cache/man/*
 
 RUN df -H
 #CMD ["/home/root/stats.bitoincore.dev/conf/usr/local/bin/bitcoind"]
-#ENTRYPOINT ["/entrypoint"]
+ENTRYPOINT ["/entrypoint"]
 #END FOOTER
