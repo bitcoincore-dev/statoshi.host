@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 14,
+  "id": 7,
   "links": [],
   "panels": [
     {
@@ -42,7 +42,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 20,
+        "h": 17,
         "w": 24,
         "x": 0,
         "y": 0
@@ -51,8 +51,8 @@
       "options": {
         "colorMode": "value",
         "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
+        "justifyMode": "auto",
+        "orientation": "vertical",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -71,6 +71,61 @@
       "timeFrom": null,
       "timeShift": null,
       "title": "Block Clock",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 4,
+      "links": [],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "values": false
+        }
+      },
+      "pluginVersion": "7.0.0",
+      "targets": [
+        {
+          "refId": "A",
+          "target": "aliasByMetric(stats.gauges.utxoset.totalBTCAmount)"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Total Bitcoins in Existence",
       "transparent": true,
       "type": "stat"
     }
@@ -105,5 +160,5 @@
   "timezone": "",
   "title": "Block Clock",
   "uid": "blockclock",
-  "version": 6
+  "version": 3
 }
