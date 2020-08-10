@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 6,
   "links": [],
   "panels": [
     {
@@ -34,7 +34,7 @@
         "x": 0,
         "y": 0
       },
-      "headings": true,
+      "headings": false,
       "id": 2,
       "limit": 100,
       "links": [
@@ -47,7 +47,7 @@
       "query": "",
       "recent": true,
       "search": true,
-      "starred": true,
+      "starred": false,
       "tags": [
         "stats"
       ],
@@ -60,6 +60,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
+      "description": "localhost",
       "editable": false,
       "error": false,
       "fieldConfig": {
@@ -72,7 +73,7 @@
       "fillGradient": 0,
       "grid": {},
       "gridPos": {
-        "h": 8,
+        "h": 7,
         "w": 17,
         "x": 7,
         "y": 0
@@ -123,12 +124,119 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Block Height",
+      "title": "localhost",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "cumulative"
       },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        },
+        {
+          "format": "none",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "stats.bitcoincore.dev",
+      "description": "stats.bitcoincore.dev",
+      "editable": false,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {},
+      "gridPos": {
+        "h": 8,
+        "w": 17,
+        "x": 7,
+        "y": 7
+      },
+      "hiddenSeries": false,
+      "id": 13,
+      "legend": {
+        "avg": true,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "stats.gauges.blocks.currentHeight",
+          "yaxis": 2
+        },
+        {
+          "alias": "Block Height",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refCount": 0,
+          "refId": "A",
+          "target": "alias(stats.gauges.blocks.currentHeight, 'Block Height')"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "stats.bitcoincore.dev",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -185,19 +293,19 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 17,
-        "x": 7,
-        "y": 8
+        "w": 7,
+        "x": 0,
+        "y": 15
       },
       "hiddenSeries": false,
       "id": 12,
       "interactive": true,
       "legend": {
         "alignAsTable": true,
-        "avg": true,
+        "avg": false,
         "current": true,
         "max": false,
-        "min": true,
+        "min": false,
         "rightSide": false,
         "show": true,
         "total": false,
@@ -298,9 +406,9 @@
         "min": null
       },
       "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
+        "h": 7,
+        "w": 17,
+        "x": 7,
         "y": 15
       },
       "hiddenSeries": false,
@@ -392,6 +500,7 @@
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -425,120 +534,6 @@
       "zerofill": true
     },
     {
-      "aliasColors": {
-        "cmpctblock": "#BF1B00",
-        "currentHeight": "#508642"
-      },
-      "bars": true,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "editable": false,
-      "error": false,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "grid": {},
-      "gridPos": {
-        "h": 11,
-        "w": 24,
-        "x": 0,
-        "y": 21
-      },
-      "hiddenSeries": false,
-      "id": 4,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": false,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "stats.gauges.blocks.currentHeight",
-          "yaxis": 2
-        },
-        {
-          "alias": "currentHeight",
-          "yaxis": 2
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "refId": "A",
-          "target": "aliasByMetric(stats.gauges.blocks.currentHeight)"
-        },
-        {
-          "refId": "B",
-          "target": "aliasByMetric(stats.message.received.block)"
-        },
-        {
-          "refId": "C",
-          "target": "aliasByMetric(stats.message.received.cmpctblock)"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Blocks Received vs Block Height",
-      "tooltip": {
-        "shared": false,
-        "sort": 0,
-        "value_type": "cumulative"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "none",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -556,7 +551,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 22
       },
       "hiddenSeries": false,
       "id": 6,
@@ -614,6 +609,7 @@
         "sort": 2,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -663,7 +659,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 22
       },
       "hiddenSeries": false,
       "id": 8,
@@ -721,6 +717,7 @@
         "sort": 2,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -801,5 +798,5 @@
   "timezone": "utc",
   "title": "Overview",
   "uid": "overview",
-  "version": 4
+  "version": 7
 }
