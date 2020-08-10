@@ -29,7 +29,7 @@
       },
       "folderId": null,
       "gridPos": {
-        "h": 15,
+        "h": 12,
         "w": 7,
         "x": 0,
         "y": 0
@@ -59,8 +59,8 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
-      "description": "localhost",
+      "datasource": "stats.bitcoincore.dev",
+      "description": "stats.bitcoincore.dev:8080",
       "editable": false,
       "error": false,
       "fieldConfig": {
@@ -73,7 +73,7 @@
       "fillGradient": 0,
       "grid": {},
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 17,
         "x": 7,
         "y": 0
@@ -81,7 +81,7 @@
       "hiddenSeries": false,
       "id": 1,
       "legend": {
-        "avg": true,
+        "avg": false,
         "current": true,
         "max": false,
         "min": false,
@@ -124,13 +124,12 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "localhost",
+      "title": "stats.bitcoincore.dev:8080",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "cumulative"
       },
-      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -165,8 +164,8 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "stats.bitcoincore.dev",
-      "description": "stats.bitcoincore.dev",
+      "datasource": null,
+      "description": "localhost:8080",
       "editable": false,
       "error": false,
       "fieldConfig": {
@@ -182,12 +181,12 @@
         "h": 8,
         "w": 17,
         "x": 7,
-        "y": 7
+        "y": 8
       },
       "hiddenSeries": false,
       "id": 13,
       "legend": {
-        "avg": true,
+        "avg": false,
         "current": true,
         "max": false,
         "min": false,
@@ -230,13 +229,12 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "stats.bitcoincore.dev",
+      "title": "localhost:8080",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "cumulative"
       },
-      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -292,10 +290,10 @@
         "min": 0
       },
       "gridPos": {
-        "h": 7,
+        "h": 12,
         "w": 7,
         "x": 0,
-        "y": 15
+        "y": 12
       },
       "hiddenSeries": false,
       "id": 12,
@@ -406,10 +404,10 @@
         "min": null
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 17,
         "x": 7,
-        "y": 15
+        "y": 16
       },
       "hiddenSeries": false,
       "id": 10,
@@ -500,7 +498,6 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -551,7 +548,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 22
+        "y": 24
       },
       "hiddenSeries": false,
       "id": 6,
@@ -609,7 +606,6 @@
         "sort": 2,
         "value_type": "individual"
       },
-      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -659,7 +655,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 22
+        "y": 24
       },
       "hiddenSeries": false,
       "id": 8,
@@ -717,7 +713,6 @@
         "sort": 2,
         "value_type": "individual"
       },
-      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -762,7 +757,7 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -798,5 +793,5 @@
   "timezone": "utc",
   "title": "Overview",
   "uid": "overview",
-  "version": 7
+  "version": 22
 }
