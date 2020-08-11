@@ -60,7 +60,7 @@ start_bitcoind &
 su-exec root bitcoind -daemon -prune=550 -datadir=/root/.bitcoin &
 
 su-exec root /usr/local/bin/./run-grafana.sh &
-
+su-exec root grafana-cli plugins install ryantxu-ajax-panel &
 . /opt/graphite/bin/activate
 
 
@@ -79,7 +79,7 @@ find /opt/graphite/storage -maxdepth 1 -name '*.pid' -delete
 # chmod logrotate file (#111)
 chmod 0644 /etc/logrotate.d/*
 
-exec runsvdir -P /etc/service &
+exec runsvdir -P /etc/service & wait
 RUNSVDIR=$!
 echo "Started runsvdir, PID is $RUNSVDIR"
 echo "wait for processes to start...."
