@@ -42,6 +42,12 @@ PROJECT_NAME := $(notdir $(PWD))
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 CMD_ARGUMENTS ?= $(cmd)
 
+ifeq ($(port),)
+    PUBLIC_PORT   := 80
+else
+    PUBLIC_PORT   ?= $(port)
+endif
+
 # export such that its passed to shell functions for Docker to pick up.
 # control alpine version from here
 VERSION := 3.11.6
@@ -87,7 +93,6 @@ init:
 	bash -c 'mkdir -p $(HOME)/.statoshi'
 	bash -c 'install -v conf/bitcoin.conf $(HOME)/.statoshi'
 	@echo ''
-
 #######################
 # Docker file creation...
 ########################
@@ -119,77 +124,114 @@ concat: concat-all concat-slim concat-gui
 	@echo ''
 #######################
 build-shell: concat
+	@echo ''
 	docker-compose build shell
+	@echo ''
 #######################
 rebuild-shell: concat
+	@echo ''
 	docker-compose build --no-cache shell
+	@echo ''
 #######################
 shell: build-shell
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
+	@echo ''
 	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
+	@echo ''
 else
 	# run the command
+	@echo ''
 	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
 endif
 #######################
 autogen: concat
 	# here it is useful to add your own customised tests
+	@echo ''
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
+	@echo ''
 #######################
 config: autogen
+	@echo ''
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
+	@echo ''
 #######################
 depends: config
+	@echo ''
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "apk add coreutils && exit"
+	@echo ''
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
+	@echo ''
 #######################
 test:
+	@echo ''
 	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm shell sh -c '\
 	echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
+	@echo ''
 #######################
 make-statoshi: depends
+	@echo ''
 	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev && make install && exit"
+	@echo ''
 #######################
 run-statoshi: make-statoshi
+	@echo ''
 	docker-compose build statoshi
+	@echo ''
 ifeq ($(CMD_ARGUMENTS),)
+	@echo ''
 	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh
+	@echo ''
 else
+	@echo ''
 	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
 endif
 #######################
 service:
 	# run as a (background) service
+	@echo ''
 	docker-compose -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
+	@echo ''
 #######################
 login: service
 	# run as a service and attach to it
+	@echo ''
 	docker exec -it $(PROJECT_NAME)_$(HOST_UID) sh
+	@echo ''
 ########################
 build-all: concat
+	@echo ''
 	docker-compose -f docker-compose.yml build statoshi
+	@echo ''
 #######################
 rebuild-all: concat
+	@echo ''
 	docker-compose -f docker-compose.yml build --no-cache statoshi
+	@echo ''
 #######################
 run-all: build-all
 ifeq ($(CMD_ARGUMENTS),)
-#	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
+	@echo ''
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
+	@echo ''
 else
-#	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
 endif
 #######################
 rerun-all: rebuild-all
 ifeq ($(CMD_ARGUMENTS),)
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
-#	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh
+	@echo ''
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
+	@echo ''
 else
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
-#	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 80:3000 --publish 8125:8125 --publish 8126:8126 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
 endif
 #######################
 extract: concat
@@ -201,20 +243,24 @@ extract: concat
 	rm -f  $(DOCKERFILE_EXTRACT)
 #######################
 build-slim: concat
+	@echo ''
 	docker-compose -f docker-compose.yml -p stats.bitcoincore.dev build statoshi-slim
+	@echo ''
 #######################
 rebuild-slim: concat
+	@echo ''
 	docker-compose -f docker-compose.yml -p stats.bitcoincore.dev build --no-cache statoshi-slim
+	@echo ''
 #######################
 run-slim: build-slim
 ifeq ($(CMD_ARGUMENTS),)
-	#docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh
-	#docker-compose up -d -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim
+	@echo ''
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8080:8080 --publish 8125:8125 --publish 8333:8333 --publish 8126:8126 --rm statoshi-slim sh
+	@echo ''
 else
-	#docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
-	#docker-compose up -d -f docker-compose.yml up -d -p $(PROJECT_NAME)_$(HOST_UID) --publish 3000:3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --rm statoshi-slim run sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
+	@echo ''
 endif
 #######################
 build-gui: concat
@@ -227,15 +273,15 @@ rebuild-gui: concat
 #######################
 run-gui: build-gui
 ifeq ($(CMD_ARGUMENTS),)
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 80:3000 --rm gui sh
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --rm gui sh
 	@echo ''
 else
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 80:3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --rm gui sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 #######################
 test-gui: build-gui
-	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish 3333:3000 --rm gui sh -c '\
+	docker-compose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --rm gui sh -c '\
 		echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
 #######################
