@@ -57,7 +57,7 @@ echo "################################### entrypoint ###########################
 
 start_bitcoind &
 
-su-exec root bitcoind -daemon -prune=550 -datadir=/root/.bitcoin &
+su-exec root bitcoind -daemon -prune=1 -datadir=/root/.bitcoin &
 
 su-exec root /usr/local/bin/./run-grafana.sh &
 su-exec root grafana-cli plugins install ryantxu-ajax-panel &
