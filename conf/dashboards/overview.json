@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 10,
   "links": [],
   "panels": [
     {
@@ -29,7 +29,7 @@
       },
       "folderId": null,
       "gridPos": {
-        "h": 12,
+        "h": 4,
         "w": 7,
         "x": 0,
         "y": 0
@@ -59,111 +59,6 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "stats.bitcoincore.dev",
-      "description": "stats.bitcoincore.dev:8080",
-      "editable": false,
-      "error": false,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "grid": {},
-      "gridPos": {
-        "h": 8,
-        "w": 17,
-        "x": 7,
-        "y": 0
-      },
-      "hiddenSeries": false,
-      "id": 1,
-      "legend": {
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "connected",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "stats.gauges.blocks.currentHeight",
-          "yaxis": 2
-        },
-        {
-          "alias": "Block Height",
-          "yaxis": 2
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "refCount": 0,
-          "refId": "A",
-          "target": "alias(stats.gauges.blocks.currentHeight, 'Block Height')"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "stats.bitcoincore.dev:8080",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "cumulative"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        },
-        {
-          "format": "none",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": null,
       "description": "localhost:8080",
       "editable": false,
@@ -181,7 +76,7 @@
         "h": 8,
         "w": 17,
         "x": 7,
-        "y": 8
+        "y": 0
       },
       "hiddenSeries": false,
       "id": 13,
@@ -222,7 +117,8 @@
         {
           "refCount": 0,
           "refId": "A",
-          "target": "alias(stats.gauges.blocks.currentHeight, 'Block Height')"
+          "target": "alias(stats.gauges.blocks.currentHeight, 'Block Height')",
+          "textEditor": true
         }
       ],
       "thresholds": [],
@@ -265,118 +161,112 @@
       }
     },
     {
-      "aliasColors": {
-        "totalBTCAmount": "#CCA300"
-      },
-      "annotate": {
-        "enable": false
-      },
-      "bars": true,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "decimals": 2,
-      "editable": true,
+      "datasource": "http://localhost:8080",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
-      "grid": {
-        "max": null,
-        "min": 0
-      },
       "gridPos": {
-        "h": 12,
+        "h": 4,
         "w": 7,
         "x": 0,
-        "y": 12
+        "y": 4
       },
-      "hiddenSeries": false,
-      "id": 12,
-      "interactive": true,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "legend_counts": true,
-      "lines": false,
-      "linewidth": 0,
-      "links": [],
-      "nullPointMode": "connected",
+      "id": 17,
       "options": {
-        "dataLinks": []
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "values": false
+        }
       },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "resolution": 100,
-      "scale": 1,
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "spyable": true,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "7.0.0",
       "targets": [
         {
           "refId": "A",
-          "target": "aliasByMetric(stats.gauges.utxoset.totalBTCAmount)"
+          "target": "alias(stats.gauges.blocks.currentHeight, 'Block Height')",
+          "textEditor": true
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
-      "timezone": "browser",
-      "title": "Total Bitcoins in Existence",
-      "tooltip": {
-        "query_as_alias": true,
-        "shared": false,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 1,
-          "format": "none",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+      "title": "Block Height",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 0,
+        "y": 8
+      },
+      "id": 18,
+      "links": [],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "values": false
+        }
+      },
+      "pluginVersion": "7.0.0",
+      "targets": [
         {
-          "format": "none",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "refId": "A",
+          "target": "alias(stats.gauges.utxoset.totalBTCAmount, 'Total BTC')"
         }
       ],
-      "yaxis": {
-        "align": true,
-        "alignLevel": null
-      },
-      "zerofill": true
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Total Bitcoins in Existence",
+      "type": "stat"
     },
     {
       "aliasColors": {
@@ -404,10 +294,10 @@
         "min": null
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 17,
         "x": 7,
-        "y": 16
+        "y": 8
       },
       "hiddenSeries": false,
       "id": 10,
@@ -548,7 +438,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 17
       },
       "hiddenSeries": false,
       "id": 6,
@@ -655,7 +545,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 17
       },
       "hiddenSeries": false,
       "id": 8,
@@ -743,6 +633,34 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "content": "",
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 19,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 15,
+      "mode": "markdown",
+      "targets": [
+        {
+          "refId": "A",
+          "target": ""
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
     }
   ],
   "refresh": "5s",
@@ -793,5 +711,5 @@
   "timezone": "utc",
   "title": "Overview",
   "uid": "overview",
-  "version": 3
+  "version": 1
 }
