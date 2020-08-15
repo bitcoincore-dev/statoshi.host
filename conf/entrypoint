@@ -6,30 +6,30 @@ BITCOIND=/usr/bin/local/bitcoind
 BITCOIN_CLI=/usr/local/bin/bitcoin-cli
 PATH="${PATH}:/usr/local/bin"
 
-start_bitcoind(){
-
-echo "################################### start_bitcoind ##################################"
+start_bitcoin(){
 
     if test -f "$BITCOIND"; then
-      # Avoid exposing/blowing out a full node
-      #REF: conf/docker-compose.yml and make init
-      #su-exec root $BITCOIND -daemon -prune=550 -datadir=/root/.statoshi
-      su-exec root $BITCOIND -daemon -prune=550 -datadir=/root/.bitcoin
+echo "################################### start_bitcoind ##################################"
+      su-exec root $BITCOIND -daemon -prune=1 -datadir=/root/.bitcoin & wait
+    fi
+    if test -f "$BITCOIN_CLI"; then
+echo "################################### start_bitcoin-cli gettxoutsetinfo ################"
+      su-exec root $BITCOIN_CLI gettxoutsetinfo & wait
     fi
 }
-stop_bitcoind(){
+stop_bitcoin(){
 
 echo "################################### stop_bitcoind ##################################"
 
     if test -f "$BITCOIN_CLI"; then
-      su-exec root $BITCOIN_CLI stop
+      su-exec root $BITCOIN_CLI stop & wait
     fi
 }
 shutdown(){
 
   echo "shutting down container"
 
-  stop_bitcoind
+  stop_bitcoin & wait
 
   # first shutdown any service started by runit
   for _srv in $(ls -1 /etc/service); do
@@ -55,9 +55,7 @@ shutdown(){
 
 echo "################################### entrypoint ##################################"
 
-start_bitcoind &
-
-su-exec root bitcoind -daemon -prune=1 -datadir=/root/.bitcoin &
+start_bitcoin & wait
 
 su-exec root /usr/local/bin/./run-grafana.sh &
 su-exec root grafana-cli plugins install ryantxu-ajax-panel &
