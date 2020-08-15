@@ -90,8 +90,8 @@ help:
 ########################
 init:
 	@echo ''
-	bash -c 'mkdir -p $(HOME)/.statoshi'
-	bash -c 'install -v conf/bitcoin.conf $(HOME)/.statoshi'
+	bash -c 'mkdir -p $(HOME)/.bitcoin'
+	bash -c 'install -v conf/bitcoin.conf $(HOME)/.bitcoin'
 	@echo ''
 #######################
 # Docker file creation...
