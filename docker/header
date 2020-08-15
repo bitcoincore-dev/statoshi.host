@@ -40,6 +40,7 @@ ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
     GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
     GF_PATHS_DATA="/var/lib/grafana" \
     GF_PATHS_HOME="/usr/share/grafana" \
+    GF_PATHS_HOME_DASHBOARD="/usr/share/grafana/public/dashboards/home.json" \
     GF_PATHS_LOGS="/var/log/grafana" \
     GF_PATHS_PLUGINS="/var/lib/grafana/plugins" \
     GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
@@ -74,6 +75,7 @@ COPY ./conf/defaults.ini "$GF_PATHS_CONFIG_DEFAULTS"
 COPY ./conf/grafana.ini "$GF_PATHS_CONFIG"
 COPY ./conf/run-grafana.sh /usr/local/bin/
 COPY ./conf/dashboards/* $GF_PATHS_PROVISIONING/dashboards/
+COPY ./conf/dashboards/overview.json $GF_PATHS_HOME_DASHBOARD
 COPY ./conf/datasources/* $GF_PATHS_PROVISIONING/datasources/
 
 COPY ./conf/dashboards/* $GF_PATHS_HOME/dashboards/
