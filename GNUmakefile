@@ -309,7 +309,7 @@ endif
 #######################
 torproxy: concat-all
 #REF: https://hub.docker.com/r/dperson/torproxy
-	bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -p 9051:9051 -d dperson/torproxy'
+	bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -d dperson/torproxy'
 #	@echo ''
 #	docker-compose --verbose  -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118  --publish 9050:9050  --publish 9051:9051 --rm torproxy sh -c "$(CMD_ARGUMENTS)"
 #	@echo ''
