@@ -95,38 +95,41 @@ services:
       - ${HOME:-.}:/${HOST_USER}:consistent
     ports:
        #hostPORT:imagePORT
+       #we expose tor proxy ports for 'make torproxy'
      - "8333:8333"
      - "18333:18333"
-  gui:
+  torproxy:
     # Makefile fills PROJECT_NAME to current directory name.
     # add UID to allow multiple users run this in parallel
-    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
-    hostname: ${PROJECT_NAME}
+    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}_torproxy
+    hostname: ${PROJECT_NAME}_torproxy
     # These variables are passed into the container.
     environment:
       - UID=${HOST_UID:-4000}
     # Run with user priviliges by default.
     user: ${HOST_USER:-nodummy}
-    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+    image: ${PROJECT_NAME}_torproxy:${HOST_USER:-nodummy}
     restart: unless-stopped
     build:
       context: .
-      # This is the name of the last layer in stats.bitcoincore.dev.gui
-      target: gui
-      dockerfile: ${PROJECT_NAME}.gui
+      # This is the name of the last layer in stats.bitcoincore.dev.slim
+      target: torproxy
+      dockerfile: torproxy
       # These variables are passed to Dockerfile.
       args:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
-    command:  ["/bin/bash /usr/local/bin/run-grafana.sh"]
+    command:  ["/sbin/tini", "--", "/usr/bin/torproxy.sh"]
     # Expose current project folder to container.
     volumes:
-      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
-      - ${HOME:-.}:/home/${HOST_USER}:consistent
-      - ${HOME:-.}:/${HOST_USER}:consistent
+      - /etc/tor
+      - /var/lib/tor
     ports:
        #hostPORT:imagePORT
-     - "80:3000"
+       #we expose tor proxy ports for 'make torproxy'
+     - "8118:8118"
+     - "9050:9050"
+     - "9051:9051"
 
