@@ -98,11 +98,12 @@ services:
        #we expose tor proxy ports for 'make torproxy'
      - "8333:8333"
      - "18333:18333"
+
   torproxy:
     # Makefile fills PROJECT_NAME to current directory name.
     # add UID to allow multiple users run this in parallel
-    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}_torproxy
-    hostname: ${PROJECT_NAME}_torproxy
+    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    hostname: ${PROJECT_NAME}
     # These variables are passed into the container.
     environment:
       - UID=${HOST_UID:-4000}
