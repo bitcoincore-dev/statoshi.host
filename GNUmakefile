@@ -151,7 +151,7 @@ concat-all: init
 	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/statoshi.all        >> $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE)'
-	bash -c '$(pwd) cat ./docker/torproxy              >> torproxy'
+	bash -c '$(pwd) cat ./docker/torproxy            >  torproxy'
 	@echo ''
 #######################
 concat-slim:
