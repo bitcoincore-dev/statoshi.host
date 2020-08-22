@@ -259,22 +259,22 @@ rebuild-all: concat
 run-all: build-all
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
+	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
 	@echo ''
 else
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 #######################
 rerun-all: rebuild-all
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
+	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
 	@echo ''
 else
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 #######################

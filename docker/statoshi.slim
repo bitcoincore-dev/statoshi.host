@@ -12,25 +12,26 @@ RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev
 FROM clone-stats-bitcoincore-dev as make-depends
 ################################################
 
-RUN make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends
+#RUN make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends
 
 ############################
 FROM make-depends as autogen
 ############################
 
-RUN cd /home/root/stats.bitcoincore.dev && ./autogen.sh
+#RUN cd /home/root/stats.bitcoincore.dev && ./autogen.sh
 
 #########################
 FROM autogen as configure
 #########################
 
-RUN cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+#RUN cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+#RUN cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --disable-bench
 
 ######################
 FROM configure as make
 ######################
 
-RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j $(nproc)
+#RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j 2
 
 ###########################
 FROM make as strip-binaries

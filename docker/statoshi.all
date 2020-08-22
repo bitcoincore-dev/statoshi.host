@@ -63,6 +63,8 @@ RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/local/bin/bi
 RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/bin/bitcoin-tx
 
 RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
+RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind.sh /usr/local/bin/bitcoind.sh
+RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind.sh /usr/local/bin/bitcoin-cli-gettxoutsetinfo.sh
 
 ###########################
 # Micro containers may not be able to compile from source - signed binaries verified here
