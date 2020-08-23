@@ -72,7 +72,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim d-ps d-images d-exec torproxy
+.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim d-ps d-images d-exec torproxy git-fetch-branches
 
 # suppress make's own output
 #.SILENT:
@@ -309,9 +309,11 @@ endif
 #######################
 torproxy: concat-all
 #REF: https://hub.docker.com/r/dperson/torproxy
-	bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -d dperson/torproxy'
+
 #	@echo ''
-#	docker-compose --verbose  -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118  --publish 9050:9050  --publish 9051:9051 --rm torproxy sh -c "$(CMD_ARGUMENTS)"
+	bash -c 'docker build https://github.com/dperson/torproxy.git'
+	bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -d dperson/torproxy'
+#	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118  --publish 9050:9050  --publish 9051:9051 --rm dperson/torproxy sh -c "$(CMD_ARGUMENTS)"
 #	@echo ''
 
 #######################
@@ -351,5 +353,9 @@ package-slim: clean build-slim
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
 	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
 #######################
+git-fetch-branches:
+	bash -c "./conf/usr/local/bin/git-fetch-branches.sh"
+#######################
 -include Makefile
+
 
