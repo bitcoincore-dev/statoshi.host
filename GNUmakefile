@@ -72,7 +72,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim d-ps d-images d-exec torproxy
+.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim d-ps d-images d-exec torproxy get-branches
 
 # suppress make's own output
 #.SILENT:
@@ -314,6 +314,9 @@ torproxy: concat-all
 #	docker-compose --verbose  -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118  --publish 9050:9050  --publish 9051:9051 --rm torproxy sh -c "$(CMD_ARGUMENTS)"
 #	@echo ''
 
+#######################
+get-branches:
+	bash -c 'for branch in `git branch -r|grep -v ' -> '|cut -d"/" -f2`; do git checkout $branch; git fetch; done;'
 #######################
 clean:
 	@docker-compose -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
