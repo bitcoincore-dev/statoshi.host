@@ -316,7 +316,7 @@ torproxy: concat-all
 
 #######################
 get-branches:
-	bash -c 'for branch in `git branch -r|grep -v ' -> '|cut -d"/" -f2`; do git checkout $branch; git fetch; done;'
+		bash -c ./conf/usr/local/bin/get-branches.sh
 #######################
 clean:
 	@docker-compose -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
