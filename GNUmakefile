@@ -151,7 +151,7 @@ concat-all: init
 	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/statoshi.all        >> $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE)'
-	bash -c '$(pwd) cat ./docker/torproxy              >> torproxy'
+	bash -c '$(pwd) cat ./docker/torproxy            >  torproxy'
 	@echo ''
 #######################
 concat-slim:
@@ -309,9 +309,11 @@ endif
 #######################
 torproxy: concat-all
 #REF: https://hub.docker.com/r/dperson/torproxy
-	bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -d dperson/torproxy'
+
 #	@echo ''
-#	docker-compose --verbose  -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118  --publish 9050:9050  --publish 9051:9051 --rm torproxy sh -c "$(CMD_ARGUMENTS)"
+	bash -c 'docker build https://github.com/dperson/torproxy.git'
+	bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -d dperson/torproxy'
+#	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118  --publish 9050:9050  --publish 9051:9051 --rm dperson/torproxy sh -c "$(CMD_ARGUMENTS)"
 #	@echo ''
 
 #######################
@@ -354,5 +356,9 @@ package-slim: clean build-slim
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
 	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(notdir $(PWD)).slim:$(VERSION)'
 #######################
+git-fetch-branches:
+	bash -c "./conf/usr/local/bin/git-fetch-branches.sh"
+#######################
 -include Makefile
+
 

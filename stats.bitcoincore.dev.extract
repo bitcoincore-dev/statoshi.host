@@ -1,6 +1,5 @@
 #BEGIN HEADER
-#ARG BASE_IMAGE=alpine:3.11.6
-ARG BASE_IMAGE=alpine:3.12
+ARG BASE_IMAGE=alpine:3.11.6
 #####################################
 FROM ${BASE_IMAGE} as set-initial-env
 #####################################
@@ -301,3 +300,123 @@ STOPSIGNAL SIGHUP
 #END HEADER
 #BEGIN INSERT
 
+#BEGIN statoshi.slim.dockerfile
+RUN df -H
+###########################################
+# We build Statoshi last
+FROM config-final as clone-stats-bitcoincore-dev
+###########################################
+
+# Change to your fork
+RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 1 /home/root/stats.bitcoincore.dev && mkdir -p /home/root/stats.bitcoincore.dev/depends/SDKs
+
+################################################
+FROM clone-stats-bitcoincore-dev as make-depends
+################################################
+
+#RUN make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends
+
+############################
+FROM make-depends as autogen
+############################
+
+RUN cd /home/root/stats.bitcoincore.dev && ./autogen.sh
+
+#########################
+FROM autogen as configure
+#########################
+
+RUN cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+
+######################
+FROM configure as make
+######################
+
+RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j $(nproc)
+
+###########################
+FROM make as strip-binaries
+###########################
+
+#RUN strip /stats.bitcoincore.dev/src/bitcoind
+#
+#RUN strip /stats.bitcoincore.dev/src/bitcoin-cli
+#
+#RUN strip /stats.bitcoincore.dev/src/bitcoin-tx
+
+###########################
+FROM strip-binaries as statoshi
+###########################
+
+#TODO mimic the bitcoin package install
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /etc/bitcoin.conf
+RUN ln -s /root/.bitcoin /var/lib/bitcoin
+
+#RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
+#RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
+
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/bin/bitcoind
+
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/local/bin/bitcoin-cli
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/bin/bitcoin-cli
+
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/local/bin/bitcoin-tx
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/bin/bitcoin-tx
+
+RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
+RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind.sh /usr/local/bin/bitcoind.sh
+RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind.sh /usr/local/bin/bitcoin-cli-gettxoutsetinfo.sh
+
+###########################
+# Micro containers may not be able to compile from source - signed binaries verified here
+###########################
+
+RUN apk add --no-cache gnupg
+RUN gpg --refresh-keys
+RUN gpg --import  /home/root/stats.bitcoincore.dev/conf/usr/local/bin/randymcmillan.asc
+
+RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  /home/root/stats.bitcoincore.dev/conf/usr/local/bin/keys.txt
+
+RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind
+
+RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli
+
+RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx
+
+RUN df -H
+#END statoshi.slim.dockerfile
+
+#END INSERT
+#BEGIN FOOTER
+#################
+#################
+#################
+#################
+#################
+
+
+RUN install /home/root/stats.bitcoincore.dev/conf/entrypoint /
+
+RUN rm -rf /home/root/stats.bitcoincore.dev
+
+RUN rm -rf /var/cache/man/*
+RUN rm -rf /opt/graphite/examples/*
+
+RUN npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y npm
+
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/tabs/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/grid/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/window/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/layout/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/toolbar/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/button/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/icons/fam/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/img/*.png
+#RUN rm -rf /opt/graphite/webapp/content/css/default/*.gif
+#RUN rm -rf /opt/graphite/examples/*
+
+RUN df -H
+CMD ["/entrypoint"]
+ENTRYPOINT ["/entrypoint"]
+#END FOOTER

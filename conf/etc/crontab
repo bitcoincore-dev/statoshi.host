@@ -1,2 +1,2 @@
-*   *  *   *   *  root  echo 'foo'
+*/5   *  *   *   *  root  bitcoin-cli gettxoutsetinfo
 
