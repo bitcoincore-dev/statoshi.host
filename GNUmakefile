@@ -72,7 +72,7 @@ export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help init shell build-shell rebuild-shell service login concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim d-ps d-images d-exec torproxy get-branches
+.PHONY: help init shell build-shell rebuild-shell service logini concat concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim d-ps d-images d-exec torproxy get-branches
 
 # suppress make's own output
 #.SILENT:
@@ -151,7 +151,7 @@ concat-all: init
 	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/statoshi.all        >> $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE)'
-	bash -c '$(pwd) cat ./docker/torproxy              >> torproxy'
+	bash -c '$(pwd) cat ./docker/torproxy             > torproxy'
 	@echo ''
 #######################
 concat-slim:
@@ -167,12 +167,12 @@ concat: concat-all concat-slim concat-gui
 	bash -c ' install -v ./docker/shell .'
 	@echo ''
 #######################
-build-shell: concat
+build-shell: concat-all
 	@echo ''
 	docker-compose --verbose build shell
 	@echo ''
 #######################
-rebuild-shell: concat
+rebuild-shell: concat-all
 	@echo ''
 	docker-compose --verbose build --no-cache shell
 	@echo ''
@@ -190,7 +190,7 @@ else
 	@echo ''
 endif
 #######################
-autogen: concat
+autogen: concat-all
 	# here it is useful to add your own customised tests
 	@echo ''
 	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
@@ -246,7 +246,7 @@ login: service
 	docker exec -it $(PROJECT_NAME)_$(HOST_UID) sh
 	@echo ''
 ########################
-build-all: concat
+build-all: concat-all
 	@echo ''
 	docker-compose --verbose -f docker-compose.yml build statoshi
 	@echo ''
