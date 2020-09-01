@@ -25,7 +25,7 @@ RUN npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y np
 #RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/icons/fam/*.gif
 #RUN rm -rf /opt/graphite/webapp/content/img/*.png
 #RUN rm -rf /opt/graphite/webapp/content/css/default/*.gif
-#RUN rm -rf /opt/graphite/examples/*
+RUN rm -rf /opt/graphite/examples/*
 
 RUN df -H
 CMD ["/entrypoint"]
