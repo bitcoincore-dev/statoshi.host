@@ -25,7 +25,7 @@ HOST_USER := root
 HOST_UID  := 0
 ## USER retrieved from env, UID from shell.
 HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
-HOST_UID  ?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
+HOST_UID  ?= $(strip $(if $(shell id -u),$(shell id -u),4000))
 else
 # We force root
 #HOST_USER := root
@@ -169,55 +169,55 @@ concat: concat-all concat-slim concat-gui
 #######################
 build-shell: concat
 	@echo ''
-	docker-compose --verbose build shell
+	docker-compose -f stats-compose.yml --verbose build shell
 	@echo ''
 #######################
 rebuild-shell: concat
 	@echo ''
-	docker-compose --verbose build --no-cache shell
+	docker-compose -f stats-compose.yml --verbose build --no-cache shell
 	@echo ''
 #######################
 shell: build-shell
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
 	@echo ''
-	docker-compose --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
+	docker-compose -f stats-compose.yml --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
 	@echo ''
 else
 	# run the command
 	@echo ''
-	docker-compose --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
+	docker-compose -f stats-compose.yml --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 #######################
 autogen: concat
 	# here it is useful to add your own customised tests
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
 	@echo ''
 #######################
 config: autogen
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
 	@echo ''
 #######################
 depends: config
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "apk add coreutils && exit"
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "apk add coreutils && exit"
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
 	@echo ''
 #######################
 test:
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm shell sh -c '\
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm shell sh -c '\
 	echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
 	&& echo success
 	@echo ''
 #######################
 make-statoshi: depends
 	@echo ''
-	docker-compose --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev && make install && exit"
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev && make install && exit"
 	@echo ''
 #######################
 run-statoshi: make-statoshi
@@ -226,18 +226,18 @@ run-statoshi: make-statoshi
 	@echo ''
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
-	docker-compose --verbose -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh
 	@echo ''
 else
 	@echo ''
-	docker-compose --verbose -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 #######################
 service:
 	# run as a (background) service
 	@echo ''
-	docker-compose --verbose -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
 	@echo ''
 #######################
 login: service
@@ -248,33 +248,33 @@ login: service
 ########################
 build-all: concat
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml build statoshi
+	docker-compose --verbose -f stats-compose.yml build statoshi
 	@echo ''
 #######################
 rebuild-all: concat
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml build --no-cache statoshi
+	docker-compose --verbose -f stats-compose.yml build --no-cache statoshi
 	@echo ''
 #######################
 run-all: build-all
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
 	@echo ''
 else
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 #######################
 rerun-all: rebuild-all
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
 	@echo ''
 else
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 #######################
@@ -288,22 +288,22 @@ extract: concat
 #######################
 build-slim: concat
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p stats.bitcoincore.dev build statoshi-slim
+	docker-compose --verbose -f stats-compose.yml -p stats.bitcoincore.dev build statoshi-slim
 	@echo ''
 #######################
 rebuild-slim: concat
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p stats.bitcoincore.dev build --no-cache statoshi-slim
+	docker-compose --verbose -f stats-compose.yml -p stats.bitcoincore.dev build --no-cache statoshi-slim
 	@echo ''
 #######################
 run-slim: build-slim
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8080:8080 --publish 8125:8125 --publish 8333:8333 --publish 8126:8126 --rm statoshi-slim sh
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8080:8080 --publish 8125:8125 --publish 8333:8333 --publish 8126:8126 --rm statoshi-slim sh
 	@echo ''
 else
 	@echo ''
-	docker-compose --verbos e-f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
+	docker-compose --verbose -f stats-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 #######################

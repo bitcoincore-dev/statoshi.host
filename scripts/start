@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Start Umbrel
+
+if [[ $UID != 0 ]]; then
+    echo "Umbrel must be started as root"
+    echo "Please re-run this script as"
+    echo "  sudo ./scripts/start"
+    exit 1
+fi
+
+check_dependencies () {
+  for cmd in "$@"; do
+    if ! command -v $cmd >/dev/null 2>&1; then
+      echo "This script requires \"${cmd}\" to be installed"
+      exit 1
+    fi
+  done
+}
+
+# Check system's dependencies
+check_dependencies readlink dirname docker docker-compose
+
+# Check karen's dependencies
+check_dependencies fswatch
+
+# Check OTA update scripts' dependencies
+check_dependencies rsync jq curl
+
+UMBREL_ROOT="$(dirname $(readlink -f "${BASH_SOURCE[0]}"))/.."
+
+if [[ ! -d "$UMBREL_ROOT" ]]; then
+  echo "Root dir does not exist '$UMBREL_ROOT'"
+  exit 1
+fi
+
+# Configure Umbrel if it isn't already configured
+if [[ ! -f "${UMBREL_ROOT}/statuses/configured" ]]; then
+  NETWORK="${NETWORK:-mainnet}" "${UMBREL_ROOT}/scripts/configure"
+fi
+
+echo
+echo "======================================"
+echo "============= STARTING ==============="
+echo "============== UMBREL ================"
+echo "======================================"
+echo
+
+echo "Setting environment variables..."
+echo
+DEVICE_IP="$(hostname -I | cut -d ' ' -f 1)"
+DEVICE_HOSTNAME="$(hostname)"
+export DEVICE_HOST="http://"${DEVICE_IP:-"$DEVICE_HOSTNAME".local}""
+# Increase default Docker and Compose timeouts to 240s
+# as bitcoin can take a long while to respond
+export DOCKER_CLIENT_TIMEOUT=240
+export COMPOSE_HTTP_TIMEOUT=240
+
+cd "$UMBREL_ROOT"
+
+echo "Starting karen..."
+echo
+./karen &
+
+echo "Starting backup monitor..."
+echo
+./scripts/backup/monitor &
+
+echo "Starting decoy backup trigger..."
+echo
+./scripts/backup/decoy-trigger &
+
+echo
+echo "Starting Docker services..."
+echo
+docker-compose up --detach --build --remove-orphans
+echo
+
+echo "Umbrel is now accessible at"
+echo "  $DEVICE_HOST"

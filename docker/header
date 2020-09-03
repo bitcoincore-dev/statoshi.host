@@ -184,7 +184,8 @@ RUN apk add -v \
       pkgconfig \
       py3-cairo \
       py3-pip \
-      py3-virtualenv==16.7.8-r0 \
+      #py3-virtualenv==16.7.8-r0 \
+      py3-virtualenv \
       openldap-dev \
       python3-dev \
       rrdtool-dev \

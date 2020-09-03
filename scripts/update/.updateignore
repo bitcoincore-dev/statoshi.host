@@ -1,0 +1,7 @@
+.*
+bitcoin/*
+db
+lnd/*
+statuses
+tor/*
+events/signals
