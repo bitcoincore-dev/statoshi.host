@@ -42,6 +42,13 @@ export GITHUB_USER_NAME
 GITHUB_USER_EMAIL=$(git config user.email)
 export GITHUB_USER_EMAIL
 
+
+BITCOIN_DATA  := $(HOME)/.bitcoin
+export BITCOIN_DATA
+STATOSHI_DATA := $(HOME)/.statoshi
+export STATOSHI_DATA
+
+
 # PROJECT_NAME defaults to name of the current directory.
 # should not need to be changed if you follow GitOps operating procedures.
 PROJECT_NAME := $(notdir $(PWD))
@@ -140,8 +147,10 @@ backup:
 ########################
 init:
 	@echo ''
-	bash -c 'mkdir -p $(HOME)/.bitcoin'
-	bash -c 'install -v conf/bitcoin.conf $(HOME)/.bitcoin'
+	bash -c 'mkdir -p $(BITCOIN_DATA)'
+	bash -c 'test -d $(STATOSHI_DATA) && echo Exists || ./conf/usr/local/bin/fastcopy-chaindata.py $(BITCOIN_DATA)  $(STATOSHI_DATA)'
+	bash -c 'test -f $(STATOSHI_DATA)/bitcoin.conf && rm -f $(HOME)/.statoshi/bitcoin.conf'
+	bash -c 'install -v conf/bitcoin.conf $(HOME)/.statoshi'
 	@echo ''
 #######################
 # Docker file creation...
