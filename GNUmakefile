@@ -45,7 +45,7 @@ export GITHUB_USER_EMAIL
 
 BITCOIN_DATA  := $(HOME)/.bitcoin
 export BITCOIN_DATA
-STATOSHI_DATA := $(HOME)/.statoshi
+BLOCK_DATA_BAK := $(HOME)/.bitcoin.bak
 export STATOSHI_DATA
 
 
@@ -143,14 +143,12 @@ backup:
 
 #######################
 # Shared volume for datadir persistance
-# We avoid a user's bitcoin config when sharing $HOME with container
+# We fastcopy user's bitcoin datadir when sharing $HOME with container
 ########################
 init:
 	@echo ''
 	bash -c 'mkdir -p $(BITCOIN_DATA)'
-	bash -c 'test -d $(STATOSHI_DATA) && echo Exists || ./conf/usr/local/bin/fastcopy-chaindata.py $(BITCOIN_DATA)  $(STATOSHI_DATA)'
-	bash -c 'test -f $(STATOSHI_DATA)/bitcoin.conf && rm -f $(HOME)/.statoshi/bitcoin.conf'
-	bash -c 'install -v conf/bitcoin.conf $(HOME)/.statoshi'
+	bash -c 'test -d $(BLOCK_DATA_BAK) && echo Exists || ./conf/usr/local/bin/fastcopy-chaindata.py $(BITCOIN_DATA)  $(BLOCK_DATA_BAK)'
 	@echo ''
 #######################
 # Docker file creation...
