@@ -109,6 +109,12 @@ help:
 	@echo ''
 	@echo ''
 
+# git fetch branches
+git-fetch-branches:
+	@echo ''
+	bash -c 'git remote set-branches origin "*" &  git fetch -v '
+	@echo ''
+
 # Some handy docker commands
 d-ps:
 	@echo ''
