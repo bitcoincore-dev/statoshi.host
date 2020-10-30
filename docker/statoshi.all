@@ -1,4 +1,4 @@
-#BEGIN statoshi.slim.dockerfile
+#BEGIN statoshi.all
 RUN df -H
 ###########################################
 # We build Statoshi last
@@ -34,7 +34,7 @@ RUN cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disab
 FROM configure as make
 ######################
 
-RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j $(nproc)
+RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j 2
 
 ###########################
 FROM make as strip-binaries
@@ -54,12 +54,19 @@ WORKDIR /home/root/stats.bitcoincore.dev
 #RUN install -v conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
 #RUN test -d /home/root/.bitcoin && echo Exists || conf/usr/local/bin/fastcopy-chaindata.py /home/root/.bitcoin /home/root/.statoshi
 
+# These should be the mounted volume
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin
+
+RUN bash /home/root/stats.bitcoincore.dev/conf/config.bitcoin.conf.sh
+
 #TODO mimic the bitcoin package install?
-RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /etc/bitcoin.conf
+RUN install -v /home/root/./bitcoin/bitcoin.conf /etc
+# This should be the mounted volume
 RUN ln -s /root/.bitcoin /var/lib/bitcoin
 
-RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin
-RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin
+
 
 RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind
 RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/bin/bitcoind
@@ -91,5 +98,5 @@ RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli
 RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx
 
 RUN df -H
-#END statoshi.slim.dockerfile
+#END statoshi.all
 
