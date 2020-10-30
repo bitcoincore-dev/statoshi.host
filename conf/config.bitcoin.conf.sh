@@ -4,7 +4,7 @@ NORMAL="\033[1;0m"
 STRONG="\033[1;1m"
 GREEN="\033[1;32m"
 
-config=$(find ~/.bitcoin -maxdepth 1 -type f -name bitcoin.conf*)
+config=$(find ./conf -maxdepth 1 -type f -name bitcoin.conf*)
 
 randgen() {
 	output=$(cat /dev/urandom | tr -dc '0-9a-zA-Z!@#$%^&*_+-' | head -c${1:-$1}) 2>/dev/null
