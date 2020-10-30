@@ -26,11 +26,12 @@ services:
     #command: ["tail", "-f", "/dev/null"]
     # Copy current (git-) project into container.
     volumes:
-      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
+        #- ${PWD:-.}:/root/${PROJECT_NAME}:consistent
+        #- ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
       - ${HOME:-.}:/home/${HOST_USER}:consistent
-      - ${HOME:-.}:/${HOST_USER}:consistent
+      - ${HOME:-.}:/root:consistent
       - /mnt/bitcoin:/home/${HOST_USER}/.bitcoin:consistent
-      - /mnt/bitcoin:/${HOST_USER}/.bitcoin:consistent
+      - /mnt/bitcoin:/root/.bitcoin:consistent
 
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
@@ -58,48 +59,14 @@ services:
     command:  ["/entrypoint"]
     # Expose current project folder to container.
     volumes:
-      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
+        #- ${PWD:-.}:/root/${PROJECT_NAME}:consistent
+        #- ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
       - ${HOME:-.}:/home/${HOST_USER}:consistent
-      - ${HOME:-.}:/${HOST_USER}:consistent
+      - ${HOME:-.}:/root:consistent
       - /mnt/bitcoin:/home/${HOST_USER}/.bitcoin:consistent
-      - /mnt/bitcoin:/${HOST_USER}/.bitcoin:consistent
+      - /mnt/bitcoin:/root/.bitcoin:consistent
     ports:
        #hostPORT:imagePORT
-     - "8333:8333"
-     - "18333:18333"
-
-  statoshi-slim:
-    # Makefile fills PROJECT_NAME to current directory name.
-    # add UID to allow multiple users run this in parallel
-    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
-    hostname: ${PROJECT_NAME}
-    # These variables are passed into the container.
-    environment:
-      - UID=${HOST_UID:-4000}
-    # Run with user priviliges by default.
-    user: ${HOST_USER:-nodummy}
-    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
-    restart: unless-stopped
-    build:
-      context: .
-      # This is the name of the last layer in stats.bitcoincore.dev.slim
-      target: statoshi
-      dockerfile: ${PROJECT_NAME}.slim
-      # These variables are passed to Dockerfile.
-      args:
-        - HOST_UID=${HOST_UID:-4000}
-        - HOST_USER=${HOST_USER:-nodummy}
-    # Run container as a service. Replace with something useful.
-    #command: ["tail", "-f", "/dev/null"]
-    command:  ["/entrypoint"]
-    # Expose current project folder to container.
-    volumes:
-      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
-      - ${HOME:-.}:/home/${HOST_USER}:consistent
-      - ${HOME:-.}:/${HOST_USER}:consistent
-    ports:
-       #hostPORT:imagePORT
-       #we expose tor proxy ports for 'make torproxy'
      - "8333:8333"
      - "18333:18333"
 
