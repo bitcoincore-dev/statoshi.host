@@ -42,6 +42,13 @@ export GITHUB_USER_NAME
 GITHUB_USER_EMAIL=$(git config user.email)
 export GITHUB_USER_EMAIL
 
+
+BITCOIN_DATA  := $(HOME)/.bitcoin
+export BITCOIN_DATA
+BLOCK_DATA_BAK := $(HOME)/.bitcoin.bak
+export STATOSHI_DATA
+
+
 # PROJECT_NAME defaults to name of the current directory.
 # should not need to be changed if you follow GitOps operating procedures.
 PROJECT_NAME := $(notdir $(PWD))
@@ -102,6 +109,12 @@ help:
 	@echo ''
 	@echo ''
 
+# git fetch branches
+git-fetch-branches:
+	@echo ''
+	bash -c 'git remote set-branches origin "*" &  git fetch -v '
+	@echo ''
+
 # Some handy docker commands
 d-ps:
 	@echo ''
@@ -124,24 +137,24 @@ export TIME
 backup:
 	@echo ''
 	bash -c 'mkdir -p $(HOME)/.bitcoin'
-	bash -c 'conf/get_size.sh'
+#	bash -c 'conf/get_size.sh'
 	bash -c 'tar czv --exclude=*.log --exclude=banlist.dat \
 			--exclude=fee_exstimates.dat --exclude=mempool.dat \
 			--exclude=peers.dat --exclude=.cookie --exclude=database \
 			--exclude=.lock --exclude=.walletlock --exclude=.DS_Store\
 			-f $(HOME)/.bitcoin-$(TIME).tar.gz $(HOME)/.bitcoin'
-	bash -c 'md5sum $(HOME)/.bitcoin-$(TIME).tar.gz > $(HOME)/bitcoin-$(TIME).tar.gz.md5'
-	bash -c 'md5sum -c $(HOME)/bitcoin-$(TIME).tar.gz.md5'
+	bash -c 'openssl md5 $(HOME)/.bitcoin-$(TIME).tar.gz > $(HOME)/bitcoin-$(TIME).tar.gz.md5'
+	bash -c 'openssl md5 -c $(HOME)/bitcoin-$(TIME).tar.gz.md5'
 	@echo ''
 
 #######################
 # Shared volume for datadir persistance
-# We avoid a user's bitcoin config when sharing $HOME with container
+# We fastcopy user's bitcoin datadir when sharing $HOME with container
 ########################
 init:
 	@echo ''
-	bash -c 'mkdir -p $(HOME)/.bitcoin'
-	bash -c 'install -v conf/bitcoin.conf $(HOME)/.bitcoin'
+	bash -c 'mkdir -p $(BITCOIN_DATA)'
+	bash -c 'test -d $(BLOCK_DATA_BAK) && echo Exists || ./conf/usr/local/bin/fastcopy-chaindata.py $(BITCOIN_DATA)  $(BLOCK_DATA_BAK)'
 	@echo ''
 #######################
 # Docker file creation...
@@ -266,6 +279,8 @@ else
 	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
+	@echo 'Give grafana a few minutes to set up...'
+	@echo 'http://localhost:$(PUBLIC_PORT)'
 #######################
 rerun-all: rebuild-all
 ifeq ($(CMD_ARGUMENTS),)
