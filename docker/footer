@@ -8,6 +8,8 @@
 
 
 RUN install /home/root/stats.bitcoincore.dev/conf/entrypoint /
+RUN install /home/root/stats.bitcoincore.dev/conf/usr/local/bin/systemMetrics.Daemon.py /
+RUN install /home/root/stats.bitcoincore.dev/conf/usr/local/bin/requirements.txt /
 
 RUN rm -rf /home/root/stats.bitcoincore.dev
 
