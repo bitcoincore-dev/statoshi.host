@@ -30,8 +30,8 @@ services:
         #- ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
       - ${HOME:-.}:/home/${HOST_USER}:consistent
       - ${HOME:-.}:/root:consistent
-      - /mnt/bitcoin:/home/${HOST_USER}/.bitcoin:consistent
-      - /mnt/bitcoin:/root/.bitcoin:consistent
+        #      - /mnt/bitcoin:/home/${HOST_USER}/.bitcoin:consistent
+        #      - /mnt/bitcoin:/root/.bitcoin:consistent
 
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
@@ -63,8 +63,8 @@ services:
         #- ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
       - ${HOME:-.}:/home/${HOST_USER}:consistent
       - ${HOME:-.}:/root:consistent
-      - /mnt/bitcoin:/home/${HOST_USER}/.bitcoin:consistent
-      - /mnt/bitcoin:/root/.bitcoin:consistent
+        #      - /mnt/bitcoin:/home/${HOST_USER}/.bitcoin:consistent
+        #      - /mnt/bitcoin:/root/.bitcoin:consistent
     ports:
        #hostPORT:imagePORT
      - "8333:8333"

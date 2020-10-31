@@ -42,11 +42,12 @@ export GITHUB_USER_NAME
 GITHUB_USER_EMAIL=$(git config user.email)
 export GITHUB_USER_EMAIL
 
-
+DATA_DIR      := /mnt/bitcoin
+export DATA_DIR
 BITCOIN_DATA  := $(HOME)/.bitcoin
 export BITCOIN_DATA
-BLOCK_DATA_BAK := $(HOME)/.bitcoin.bak
-export STATOSHI_DATA
+#BLOCK_DATA_BAK := $(HOME)/.bitcoin.bak
+#export STATOSHI_DATA
 
 
 # PROJECT_NAME defaults to name of the current directory.
@@ -153,8 +154,10 @@ backup:
 ########################
 init:
 	@echo ''
-	bash -c 'mkdir -p $(BITCOIN_DATA)'
-	bash -c 'test -d $(BLOCK_DATA_BAK) && echo Exists || ./conf/usr/local/bin/fastcopy-chaindata.py $(BITCOIN_DATA)  $(BLOCK_DATA_BAK)'
+#	bash -c 'echo $(DATA_DIR)'
+#	bash -c 'mkdir -p $(DATA_DIR)'
+#	bash -c 'test -d $(DATA_DIR) && mount -o discard,defaults,noatime /dev/disk/by-id/scsi-0DO_Volume_bitcoin $(DATA_DIR) || echo no volume to mount at $(DATA_DIR)'
+#	bash -c 'test -d $(BLOCK_DATA_BAK) && echo Exists || ./conf/usr/local/bin/fastcopy-chaindata.py $(BITCOIN_DATA)  $(BLOCK_DATA_BAK)'
 	@echo ''
 #######################
 # Docker file creation...
