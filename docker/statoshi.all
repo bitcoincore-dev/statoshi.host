@@ -6,7 +6,7 @@ FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
 
 # Change to your fork
-RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 1 /home/root/stats.bitcoincore.dev
+RUN git clone -b $BRANCH https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 1 /home/root/stats.bitcoincore.dev
 WORKDIR /home/root/stats.bitcoincore.dev
 #RUN cd /home/root/stats.bitcoincore.dev
 #RUN ./conf/usr/local/bin/get-branches.sh

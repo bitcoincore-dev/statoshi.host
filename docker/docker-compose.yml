@@ -22,6 +22,7 @@ services:
       args:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
+        - BRANCH=${BRANCH}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
     # Copy current (git-) project into container.
@@ -54,6 +55,7 @@ services:
       args:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
+        - BRANCH=${BRANCH}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
     command:  ["/entrypoint"]
@@ -91,6 +93,7 @@ services:
       args:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
+        - BRANCH=${BRANCH}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
     command:  ["/sbin/tini", "--", "/usr/bin/torproxy.sh"]

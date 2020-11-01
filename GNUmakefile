@@ -19,6 +19,15 @@ PWD ?= pwd_unknown
 # We override this default for different build/run configs
 SERVICE_TARGET := shell
 
+
+ifeq ($(branch),)
+# Default master branch
+BRANCH ?= master
+else
+BRANCH ?= $(branch)
+endif
+export BRANCH
+
 ifeq ($(user),)
 # We force root
 HOST_USER := root
@@ -42,8 +51,8 @@ export GITHUB_USER_NAME
 GITHUB_USER_EMAIL=$(git config user.email)
 export GITHUB_USER_EMAIL
 
-DATA_DIR      := /mnt/bitcoin
-export DATA_DIR
+#DATA_DIR      := /mnt/bitcoin
+#export DATA_DIR
 BITCOIN_DATA  := $(HOME)/.bitcoin
 export BITCOIN_DATA
 #BLOCK_DATA_BAK := $(HOME)/.bitcoin.bak
