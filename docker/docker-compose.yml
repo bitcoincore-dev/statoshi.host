@@ -4,7 +4,7 @@ services:
   shell:
     # Makefile fills PROJECT_NAME to current directory name.
     # add UID to allow multiple users run this in parallel
-    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    container_name: ${PROJECT_NAME}_shell_${HOST_UID:-4000}
     hostname: ${PROJECT_NAME}
     # These variables are passed into the container.
     environment:
@@ -37,7 +37,7 @@ services:
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
     # add UID to allow multiple users run this in parallel
-    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    container_name: ${PROJECT_NAME}_shell_${HOST_UID:-4000}
     hostname: ${PROJECT_NAME}
     # These variables are passed into the container.
     environment:
@@ -75,7 +75,7 @@ services:
   torproxy:
     # Makefile fills PROJECT_NAME to current directory name.
     # add UID to allow multiple users run this in parallel
-    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    container_name: ${PROJECT_NAME}_torproxy_${HOST_UID:-4000}
     hostname: ${PROJECT_NAME}
     # These variables are passed into the container.
     environment:
