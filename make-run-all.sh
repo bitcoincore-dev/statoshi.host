@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export LC_ALL=C
 #Ubuntu usage
 #
 # chmod +x make-run-all.sh
