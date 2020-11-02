@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 export LC_ALL=C
 # Execute on the most recent composed image
 D_ID1=$(echo $(docker ps | awk '{print $1}' | awk 'NR==2'))

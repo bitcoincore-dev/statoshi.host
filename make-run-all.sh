@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #Ubuntu usage
 #
 # chmod +x make-run-all.sh
