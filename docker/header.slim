@@ -14,7 +14,7 @@ RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git
 RUN apk -U add -v coreutils
 RUN apk add --update -v nodejs nodejs-npm
 
-#NOTE: simply exposing the ports in the dockerfile isnt enough
+#NOTE: simply exposing the ports in the dockerfile isn't enough
 #REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
 # We delay exposing ports until the last stage of the builds for reusablity
 #EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8333 18333 8125 8125/udp 8126

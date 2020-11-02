@@ -158,7 +158,7 @@ backup:
 	@echo ''
 
 #######################
-# Shared volume for datadir persistance
+# Shared volume for datadir persistence
 # We fastcopy user's bitcoin datadir when sharing $HOME with container
 ########################
 init:

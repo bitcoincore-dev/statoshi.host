@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export LC_ALL=C
     timed_wait=600
     vars_to_load(){
         ## Set vars to function such that they are set upon every call

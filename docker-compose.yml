@@ -9,7 +9,7 @@ services:
     # These variables are passed into the container.
     environment:
       - UID=${HOST_UID:-4000}
-    # Run with user priviliges by default.
+    # Run with user privileges by default.
     user: ${HOST_USER:-nodummy}
     image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
     restart: unless-stopped
@@ -42,7 +42,7 @@ services:
     # These variables are passed into the container.
     environment:
       - UID=${HOST_UID:-4000}
-    # Run with user priviliges by default.
+    # Run with user privileges by default.
     user: ${HOST_USER:-nodummy}
     image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
     restart: unless-stopped
@@ -80,7 +80,7 @@ services:
     # These variables are passed into the container.
     environment:
       - UID=${HOST_UID:-4000}
-    # Run with user priviliges by default.
+    # Run with user privileges by default.
     user: ${HOST_USER:-nodummy}
     image: ${PROJECT_NAME}_torproxy:${HOST_USER:-nodummy}
     restart: unless-stopped

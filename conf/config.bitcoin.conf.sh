@@ -1,4 +1,5 @@
 #!/bin/sh
+export LC_ALL=C
 
 NORMAL="\033[1;0m"
 STRONG="\033[1;1m"

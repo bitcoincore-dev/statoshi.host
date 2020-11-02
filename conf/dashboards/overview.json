@@ -597,7 +597,7 @@
         }
       ],
       "timeShift": null,
-      "title": "bytes Recieved",
+      "title": "bytes Received",
       "tooltip": {
         "shared": false,
         "sort": 2,
