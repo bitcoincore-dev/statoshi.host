@@ -1,4 +1,4 @@
-## Graphite local_settings.py
+# Graphite local_settings.py
 # Edit this file to customize the default Graphite webapp settings
 #
 # Additional customizations to Django settings can be added to this file as well
@@ -114,11 +114,11 @@ URL_PREFIX = str(os.environ.get('GRAPHITE_URL_ROOT', ''))
 # To further or fully customize the paths, modify the following. Note that the
 # default settings for each of these are relative to CONF_DIR and STORAGE_DIR
 #
-## Webapp config files
+# Webapp config files
 #DASHBOARD_CONF = '/opt/graphite/conf/dashboard.conf'
 #GRAPHTEMPLATES_CONF = '/opt/graphite/conf/graphTemplates.conf'
 
-## Data directories
+# Data directories
 #
 # NOTE: If any directory is unreadable in STANDARD_DIRS it will break metric browsing
 #
@@ -129,7 +129,7 @@ URL_PREFIX = str(os.environ.get('GRAPHITE_URL_ROOT', ''))
 # Data directories using the "Standard" metrics finder (i.e. not Ceres)
 #STANDARD_DIRS = [WHISPER_DIR, RRD_DIR] # Default: set from the above variables
 
-## Data finders
+# Data finders
 # It is possible to use an alternate storage layer than the default, Whisper,
 # in order to accommodate specific needs.
 # See: http://graphite.readthedocs.io/en/latest/storage-backends.html
@@ -161,13 +161,13 @@ URL_PREFIX = str(os.environ.get('GRAPHITE_URL_ROOT', ''))
 # Authentication Configuration #
 #####################################
 #
-## LDAP / ActiveDirectory authentication setup
+# LDAP / ActiveDirectory authentication setup
 #USE_LDAP_AUTH = True
 #LDAP_SERVER = "ldap.mycompany.com"
 #LDAP_PORT = 389
 #LDAP_USE_TLS = False
 
-## Manual URI / query setup
+# Manual URI / query setup
 #LDAP_URI = "ldaps://ldap.mycompany.com:636"
 #LDAP_SEARCH_BASE = "OU=users,DC=mycompany,DC=com"
 #LDAP_BASE_USER = "CN=some_readonly_account,DC=mycompany,DC=com"
@@ -192,7 +192,7 @@ URL_PREFIX = str(os.environ.get('GRAPHITE_URL_ROOT', ''))
 #ldap.set_option(ldap.OPT_DEBUG_LEVEL, 65535) # To enable verbose debugging
 # See http://www.python-ldap.org/ for further details on these options.
 
-## REMOTE_USER authentication. See: https://docs.djangoproject.com/en/dev/howto/auth-remote-user/
+# REMOTE_USER authentication. See: https://docs.djangoproject.com/en/dev/howto/auth-remote-user/
 #USE_REMOTE_USER_AUTHENTICATION = True
 
 # Override the URL for the login link (e.g. for django_openid_auth)
@@ -332,14 +332,14 @@ REMOTE_BUFFER_SIZE = int(os.environ.get('GRAPHITE_REMOTE_BUFFER_SIZE', '1048576'
 # when making a request to a remote webapp server in CLUSTER_SERVERS
 #REMOTE_STORE_FORWARD_HEADERS = [] # An iterable of HTTP header names
 
-## Prefetch cache
+# Prefetch cache
 # set to True to fetch all metrics using a single http request per remote server
 # instead of one http request per target, per remote server.
 # Especially useful when generating graphs with more than 4-5 targets or if
 # there's significant latency between this server and the backends.
 REMOTE_PREFETCH_DATA = os.environ.get("GRAPHITE_REMOTE_PREFETCH_DATA", "false").lower() in ['1', 'true', 'yes']
 
-## Remote rendering settings
+# Remote rendering settings
 # Set to True to enable rendering of Graphs on a remote webapp
 #REMOTE_RENDERING = True
 # List of IP (and optionally port) of the webapp on each remote server that
