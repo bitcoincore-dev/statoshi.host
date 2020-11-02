@@ -34,7 +34,7 @@ RUN cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disab
 FROM configure as make
 ######################
 
-RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j 2
+RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j $(nproc)
 
 ###########################
 FROM make as strip-binaries
