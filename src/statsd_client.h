@@ -1,6 +1,6 @@
 
-#ifndef STATSD_CLIENT_H
-#define STATSD_CLIENT_H
+#ifndef BITCOIN_STATSD_CLIENT_H
+#define BITCOIN_STATSD_CLIENT_H
 
 #include <sys/types.h>
 #include <arpa/inet.h>
