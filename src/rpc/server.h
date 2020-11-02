@@ -9,7 +9,7 @@
 #include <amount.h>
 #include <rpc/request.h>
 
-#include "statsd_client.h"
+#include <statsd_client.h>
 
 #include <functional>
 #include <map>
