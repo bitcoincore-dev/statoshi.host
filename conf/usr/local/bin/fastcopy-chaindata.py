@@ -15,7 +15,10 @@ are read-only once they are written.
 Warning: Hardlinking only works within a filesystem, and may not work for all
 filesystems.
 '''
-import os,re,shutil,sys
+import os
+import re
+import shutil
+import sys
 from os import path
 
 def dat_name(type_, num) -> str:
