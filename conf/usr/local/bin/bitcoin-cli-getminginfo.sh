@@ -21,5 +21,14 @@ export LC_ALL=C
 # 0 4 * * 2-4 - Run the command every Tuesday, Wednesday, and Thursday at 4:00 AM.
 # 20,40 */8 * 7-12 * - Run the command on the 20th and 40th minute of every 8th hour every day of the last 6 months of the year.
 
-# 12 * * * * /root/stats.bitcoincore.dev/bitcoin-cli-gettxoutsetinfo.sh
-docker exec -it $(echo $(docker ps | awk '{print $1}' | awk 'NR==2')) sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
+
+if hash docker 2>/dev/null; then
+
+    # 12 * * * * /root/stats.bitcoincore.dev/bitcoin-cli-gettxoutsetinfo.sh
+    docker exec -it $(echo $(docker ps | awk '{print $1}' | awk 'NR==2')) sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
+
+else
+
+		bitcoin-cli getmininginfo
+
+fi

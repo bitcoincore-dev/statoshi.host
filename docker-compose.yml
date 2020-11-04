@@ -4,7 +4,7 @@ services:
   shell:
     # Makefile fills PROJECT_NAME to current directory name.
     # add UID to allow multiple users run this in parallel
-    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    container_name: ${PROJECT_NAME}_shell_${HOST_UID:-4000}
     hostname: ${PROJECT_NAME}
     # These variables are passed into the container.
     environment:
@@ -22,7 +22,7 @@ services:
       args:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
-        - BRANCH=${BRANCH}
+        - BRANCH=${BRANCH:-master}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
     # Copy current (git-) project into container.
@@ -37,7 +37,7 @@ services:
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
     # add UID to allow multiple users run this in parallel
-    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    container_name: ${PROJECT_NAME}_shell_${HOST_UID:-4000}
     hostname: ${PROJECT_NAME}
     # These variables are passed into the container.
     environment:
@@ -55,7 +55,7 @@ services:
       args:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
-        - BRANCH=${BRANCH}
+        - BRANCH=${BRANCH:-master}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
     command:  ["/entrypoint"]
@@ -75,7 +75,7 @@ services:
   torproxy:
     # Makefile fills PROJECT_NAME to current directory name.
     # add UID to allow multiple users run this in parallel
-    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+    container_name: ${PROJECT_NAME}_torproxy_${HOST_UID:-4000}
     hostname: ${PROJECT_NAME}
     # These variables are passed into the container.
     environment:
@@ -93,7 +93,7 @@ services:
       args:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
-        - BRANCH=${BRANCH}
+        - BRANCH=${BRANCH:-master}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
     command:  ["/sbin/tini", "--", "/usr/bin/torproxy.sh"]
