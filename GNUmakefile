@@ -134,18 +134,18 @@ cli-exec:
 ########################
 TIME=$(shell date +%s)
 export TIME
-backup:
-	@echo ''
-	bash -c 'mkdir -p $(HOME)/.bitcoin'
-#	bash -c 'conf/get_size.sh'
-	bash -c 'tar czv --exclude=*.log --exclude=banlist.dat \
-			--exclude=fee_exstimates.dat --exclude=mempool.dat \
-			--exclude=peers.dat --exclude=.cookie --exclude=database \
-			--exclude=.lock --exclude=.walletlock --exclude=.DS_Store\
-			-f $(HOME)/.bitcoin-$(TIME).tar.gz $(HOME)/.bitcoin'
-	bash -c 'openssl md5 $(HOME)/.bitcoin-$(TIME).tar.gz > $(HOME)/bitcoin-$(TIME).tar.gz.md5'
-	bash -c 'openssl md5 -c $(HOME)/bitcoin-$(TIME).tar.gz.md5'
-	@echo ''
+#backup:
+#	@echo ''
+#	bash -c 'mkdir -p $(HOME)/.bitcoin'
+##	bash -c 'conf/get_size.sh'
+#	bash -c 'tar czv --exclude=*.log --exclude=banlist.dat \
+#			--exclude=fee_exstimates.dat --exclude=mempool.dat \
+#			--exclude=peers.dat --exclude=.cookie --exclude=database \
+#			--exclude=.lock --exclude=.walletlock --exclude=.DS_Store\
+#			-f $(HOME)/.bitcoin-$(TIME).tar.gz $(HOME)/.bitcoin'
+#	bash -c 'openssl md5 $(HOME)/.bitcoin-$(TIME).tar.gz > $(HOME)/bitcoin-$(TIME).tar.gz.md5'
+#	bash -c 'openssl md5 -c $(HOME)/bitcoin-$(TIME).tar.gz.md5'
+#	@echo ''
 
 #######################
 # Shared volume for datadir persistance
@@ -154,7 +154,7 @@ backup:
 init:
 	@echo ''
 	bash -c 'mkdir -p $(BITCOIN_DATA)'
-	bash -c 'test -d $(BLOCK_DATA_BAK) && echo Exists || ./conf/usr/local/bin/fastcopy-chaindata.py $(BITCOIN_DATA)  $(BLOCK_DATA_BAK)'
+#	bash -c 'test -d $(BLOCK_DATA_BAK) && echo Exists || ./conf/usr/local/bin/fastcopy-chaindata.py $(BITCOIN_DATA)  $(BLOCK_DATA_BAK)'
 	@echo ''
 #######################
 # Docker file creation...

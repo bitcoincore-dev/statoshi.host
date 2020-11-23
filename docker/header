@@ -10,7 +10,7 @@ LABEL description="Statoshi Docker"
 LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
 LABEL maintainer="admin@bitcoincore.dev"
 
-RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git bitcoin
+RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git
 RUN apk -U add -v coreutils
 RUN apk add --update -v nodejs nodejs-npm
 
