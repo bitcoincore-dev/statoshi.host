@@ -6,7 +6,7 @@ FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
 
 # Change to your fork
-RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 5 /home/root/stats.bitcoincore.dev
+RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 2 /home/root/stats.bitcoincore.dev
 WORKDIR /home/root/stats.bitcoincore.dev
 #RUN cd /home/root/stats.bitcoincore.dev
 #RUN ./conf/usr/local/bin/get-branches.sh
@@ -34,7 +34,7 @@ RUN cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disab
 FROM configure as make
 ######################
 
-RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j 2
+RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j $(nproc)
 
 ###########################
 FROM make as strip-binaries
