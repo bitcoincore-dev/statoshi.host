@@ -8,7 +8,7 @@ GREEN="\033[1;32m"
 config=$(find ~/stats.bitcoincore.dev/conf -maxdepth 2 -type f -name bitcoin.conf)
 
 randgen() {
-	output=$(cat /dev/urandom | tr -dc '0-9a-zA-Z!@#$%^&*_+-' | head -c${1:-$1}) 2>/dev/null
+	output=$(cat /dev/urandom | tr -dc '0-9a-zA-Z!@$%^&*_+-' | head -c${1:-$1}) 2>/dev/null
 	echo $output
 }
 
