@@ -70,6 +70,9 @@ RUN ln -s /root/.bitcoin /var/lib/bitcoin
 RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /etc/bitcoin/bitcoin.conf
 RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
 RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /etc/bitcoin/additional.conf
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin/additional.conf
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin/additional.conf
 
 RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind
 RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/bin/bitcoind
