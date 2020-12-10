@@ -6,6 +6,7 @@ BITCOIND=/usr/local/bin/bitcoind
 BITCOIN_CLI=/usr/local/bin/bitcoin-cli
 PATH="${PATH}:/usr/local/bin"
 ZMQ_SUB=/home/root/stats.bitcoincore.dev/contrib/zmq/zmq_python.py
+
 start_bitcoin(){
 
     if test -f "$BITCOIND"; then
@@ -16,7 +17,7 @@ start_bitcoin(){
       echo "################################### start_bitcoin-cli gettxoutsetinfo ###############"
       su-exec root $BITCOIN_CLI gettxoutsetinfo & wait
     fi
-    python3 $ZMQ_SUB
+    su-exec root python3 $ZMQ_SUB &
 }
 stop_bitcoin(){
 
