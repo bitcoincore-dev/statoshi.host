@@ -157,6 +157,10 @@ init:
 #	bash -c 'test -d $(BLOCK_DATA_BAK) && echo Exists || ./conf/usr/local/bin/fastcopy-chaindata.py $(BITCOIN_DATA)  $(BLOCK_DATA_BAK)'
 	@echo ''
 	install -v ./conf/usr/local/bin/* /usr/local/bin
+	@echo ''
+	make -p $(BITCOIN_DATA)
+	install -v ./conf/bitcoin.conf $(BITCOIN_DATA)/bitcoin.conf
+	@echo ''
 #######################
 # Docker file creation...
 ########################
