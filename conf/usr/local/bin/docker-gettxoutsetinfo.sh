@@ -13,7 +13,7 @@ else
 fi
 if hash docker 2>/dev/null; then
     mkdir -p /usr/local/bin
-    install -v /root/stats.bitcoincore.dev/conf/local/bin/docker-gettxoutsetinfo.sh /usr/local/bin/
+    #install -v /root/stats.bitcoincore.dev/conf/local/bin/docker-gettxoutsetinfo.sh /usr/local/bin/
     docker exec -it $(echo $(docker ps | awk '{print $1}' | awk 'NR==2')) sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
 else
     if hash bitcoin-cli 2>/dev/null; then
