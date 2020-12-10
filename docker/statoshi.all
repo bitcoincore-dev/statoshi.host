@@ -63,6 +63,8 @@ RUN /home/root/stats.bitcoincore.dev/conf/config.bitcoin.conf.sh
 # These should be the mounted volume
 #TODO mimic the bitcoin package install?
 RUN mkdir -p /var/lib/bitcoin
+RUN mkdir -p /root/.bitcoin
+RUN mkdir -p /home/root/.bitcoin
 RUN ln -s /root/.bitcoin /var/lib/bitcoin
 RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /etc/bitcoin/bitcoin.conf
 RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
