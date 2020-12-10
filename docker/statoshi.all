@@ -57,9 +57,9 @@ WORKDIR /home/root/stats.bitcoincore.dev
 RUN bash /home/root/stats.bitcoincore.dev/conf/config.bitcoin.conf.sh
 
 # These should be the mounted volume
-RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin
-RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin
-RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin/
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin/
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin/
 
 #TODO mimic the bitcoin package install?
 RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /etc/bitcoin
