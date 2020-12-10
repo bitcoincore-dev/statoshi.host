@@ -26,12 +26,10 @@ services:
     #command: ["tail", "-f", "/dev/null"]
     # Copy current (git-) project into container.
     volumes:
-        #- ${PWD:-.}:/root/${PROJECT_NAME}:consistent
-        #- ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
+      - ${PWD:-.}:/root/${PROJECT_NAME}:consistent
+      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
       - ${HOME:-.}:/home/${HOST_USER}:consistent
       - ${HOME:-.}:/root:consistent
-      - /mnt/bitcoin:/home/${HOST_USER}/.bitcoin:consistent
-      - /mnt/bitcoin:/root/.bitcoin:consistent
 
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
@@ -59,12 +57,10 @@ services:
     command:  ["/entrypoint"]
     # Expose current project folder to container.
     volumes:
-        #- ${PWD:-.}:/root/${PROJECT_NAME}:consistent
-        #- ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
+      - ${PWD:-.}:/root/${PROJECT_NAME}:consistent
+      - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
       - ${HOME:-.}:/home/${HOST_USER}:consistent
       - ${HOME:-.}:/root:consistent
-      - /mnt/bitcoin:/home/${HOST_USER}/.bitcoin:consistent
-      - /mnt/bitcoin:/root/.bitcoin:consistent
     ports:
        #hostPORT:imagePORT
      - "8333:8333"
