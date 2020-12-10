@@ -20,7 +20,7 @@ FROM clone-stats-bitcoincore-dev as make-depends
 #RUN make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends
 RUN apk add libzmq
 RUN pip3 install pyzmq
-RUN python3 /root/stats.bitcoincore.dev/contrib/zmq_sub.py
+RUN python3 /root/stats.bitcoincore.dev/contrib/zmq/zmq_sub.py
 
 ############################
 FROM make-depends as autogen
