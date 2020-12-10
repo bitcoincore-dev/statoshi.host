@@ -8,7 +8,7 @@ else
         apt install cron
         systemctl enable cron
         # crontab -e #no need
-    echo '0,7,14,21,28,35,42,49,56 * * * * /root/stats.bitcoincore.dev/conf/usr/local/bin/docker-gettxoutsetinfo.sh' >> /etc/cron.hourly/gettxoutsetinfo
+    echo '*/7 * * * * /root/stats.bitcoincore.dev/conf/usr/local/bin/docker-gettxoutsetinfo.sh' >> /etc/cron.hourly/gettxoutsetinfo
     fi
 fi
 if hash docker 2>/dev/null; then
