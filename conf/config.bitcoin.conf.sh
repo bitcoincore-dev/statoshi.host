@@ -13,9 +13,8 @@ randgen() {
 }
 
 findRandomTcpPort(){
-	#port=$(( 1024 + $(( $RANDOM % $(( 65534 - 1024 )) )) ))
     port=$(( 3000 ))
-	while netstat -atn | grep -q :$port; do port=$(expr $port + 1); done; echo $port
+	while netstat -atn | grep -q :$port; do port=$(expr $port); done; echo $port
 }
 
 GenPasswd(){
