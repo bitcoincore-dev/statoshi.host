@@ -13,7 +13,7 @@ randgen() {
 }
 
 findRandomTcpPort(){
-    port=$(( 3000 ))
+    port=8332
 	while netstat -atn | grep -q :$port; do port=$(expr $port); done; echo $port
 }
 

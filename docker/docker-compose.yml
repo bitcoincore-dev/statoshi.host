@@ -63,6 +63,7 @@ services:
       - ${HOME:-.}:/root:consistent
     ports:
        #hostPORT:imagePORT
+     - "8332:8332"
      - "8333:8333"
      - "18333:18333"
 
