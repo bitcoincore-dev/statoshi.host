@@ -16,8 +16,8 @@ if hash docker 2>/dev/null; then
     mkdir -p /usr/local/bin
     docker exec -it $(echo $(docker ps | awk '{print $1}' | awk 'NR==2')) sh -c  "/usr/local/bin/bitcoind"
 else
-    if hash bitcoin-cli 2>/dev/null; then
-        /usr/local/bin/./bitcoin-cli gettxoutsetinfo
+    if hash bitcoind 2>/dev/null; then
+        /usr/local/bin/./bitcoind
     else
         echo  /usr/local/bin/docker-bitcoind.sh ?
     fi
