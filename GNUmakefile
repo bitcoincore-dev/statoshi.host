@@ -160,6 +160,7 @@ init:
 	@echo ''
 	make -p $(BITCOIN_DATA)
 	install -v ./conf/bitcoin.conf $(BITCOIN_DATA)/bitcoin.conf
+	install -v ./conf/additional.conf $(BITCOIN_DATA)/additional.conf
 	@echo ''
 #######################
 # Docker file creation...
