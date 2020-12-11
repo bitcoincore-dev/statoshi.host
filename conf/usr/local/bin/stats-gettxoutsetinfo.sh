@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
 if hash crontab 2>/dev/null; then
     echo '0,7,14,21,28,35,42,49,56 * * * * /root/stats.bitcoincore.dev/conf/usr/local/bin/docker-gettxoutsetinfo.sh' >> /etc/cron.hourly/gettxoutsetinfo
 else
@@ -10,6 +11,7 @@ else
         # crontab -e #no need
     echo '*/7 * * * * /root/stats.bitcoincore.dev/conf/usr/local/bin/docker-gettxoutsetinfo.sh' >> /etc/cron.hourly/gettxoutsetinfo
     fi
+fi
 fi
 if hash docker 2>/dev/null; then
     mkdir -p /usr/local/bin
