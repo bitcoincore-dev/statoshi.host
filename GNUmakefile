@@ -151,6 +151,7 @@ export TIME
 ########################
 init:
 	@echo 'init'
+	git config --global core.editor vim
 	bash -c 'mkdir -p $(BITCOIN_DATA)'
 	@echo ''
 	install -v ./conf/usr/local/bin/* /usr/local/bin
