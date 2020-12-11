@@ -12,15 +12,9 @@ randgen() {
 	echo $output
 }
 
-findRandomTcpPort(){
-    port=8332
-	while netstat -atn | grep -q :$port; do port=$(expr $port); done; echo $port
-}
-
 GenPasswd(){
 	sed -i "/rpcuser=/ c \rpcuser=USER-"$(randgen 32)"" $1
 	sed -i "/rpcpassword=/ c \rpcpassword=PW-"$(randgen 64)"" $1
-	sed -i "/rpcport=/ c \rpcport="$(findRandomTcpPort)"" $1
 	print_green "Generated random user / password / port in:" " $1\n"
 }
 
@@ -35,6 +29,6 @@ for file in $config; do
 	fi
 done
 
-install -v $config ~/.bitcoin/
+install -v $config /home/root/.bitcoin/bitcoin.conf
 
 exit 0
