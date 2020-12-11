@@ -166,7 +166,8 @@ RUN apk add -v \
       postgresql-client \
       iptables \
  && rm -rf \
-      /etc/nginx/conf.d/default.conf \
+#TODO: SSL
+      /etc/nginx/conf.d/default.conf \ 
  && mkdir -p \
       /var/log/carbon \
       /var/log/graphite
@@ -255,11 +256,11 @@ RUN df -H
 #######################
 FROM config2 as config3
 #######################
-
+#TODO Why?
 COPY conf/opt/graphite/conf/                             /opt/defaultconf/graphite/
 COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/local_settings.py
 #COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/settings.py
-
+#TODO Why?
 # config graphite
 COPY conf/opt/graphite/conf/*.conf /opt/graphite/conf/
 COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
@@ -277,6 +278,7 @@ FROM config3 as config4
 #######################
 
 ENV STATSD_INTERFACE udp
+#TODO Why?
 #ENV STATSD_INTERFACE tcp/udp
 
 COPY conf /
@@ -284,7 +286,7 @@ COPY conf /
 # copy /opt from build image
 COPY --from=config3 /opt /opt
 
-VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd/config", "/etc/logrotate.d", "/var/log", "/var/lib/redis"]
+VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd/config", "/etc/logrotate.d", "/var/log", "/var/lib/redis", "/home/root/.bitcoin"]
 
 RUN df -H
 #######################

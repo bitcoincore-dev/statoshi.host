@@ -23,15 +23,13 @@ services:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
     # Run container as a service. Replace with something useful.
-    #command: ["tail", "-f", "/dev/null"]
+    command: ["tail", "-f", "/home/root/.bitcoin/debug.log"]
     # Copy current (git-) project into container.
     volumes:
         #- ${PWD:-.}:/root/${PROJECT_NAME}:consistent
         #- ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
       - ${HOME:-.}:/home/${HOST_USER}:consistent
       - ${HOME:-.}:/root:consistent
-      - /mnt/bitcoin:/home/${HOST_USER}/.bitcoin:consistent
-      - /mnt/bitcoin:/root/.bitcoin:consistent
 
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
@@ -63,8 +61,6 @@ services:
         #- ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}:consistent
       - ${HOME:-.}:/home/${HOST_USER}:consistent
       - ${HOME:-.}:/root:consistent
-      - /mnt/bitcoin:/home/${HOST_USER}/.bitcoin:consistent
-      - /mnt/bitcoin:/root/.bitcoin:consistent
     ports:
        #hostPORT:imagePORT
      - "8333:8333"
@@ -94,7 +90,6 @@ services:
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
     command:  ["/sbin/tini", "--", "/usr/bin/torproxy.sh"]
-    # Expose current project folder to container.
     volumes:
       - /etc/tor
       - /var/lib/tor
