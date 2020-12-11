@@ -271,7 +271,7 @@ build-all: concat-all
 	docker-compose --verbose -f docker-compose.yml build statoshi
 	@echo ''
 #######################
-rebuild-all: concat
+rebuild-all: concat-all
 	@echo ''
 	docker-compose --verbose -f docker-compose.yml build --no-cache statoshi
 	@echo ''
