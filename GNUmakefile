@@ -148,7 +148,7 @@ export TIME
 #######################
 # Shared volume for datadir persistance
 ########################
-init:
+init:concat-all
 	@echo 'init'
 	git config --global core.editor vim
 	@echo ''
