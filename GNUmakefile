@@ -43,8 +43,7 @@ GITHUB_USER_EMAIL=$(git config user.email)
 export GITHUB_USER_EMAIL
 
 
-#BITCOIN_DATA  := $(HOME)/.bitcoin
-BITCOIN_DATA  := /home/root/.bitcoin
+BITCOIN_DATA  := $(HOME)/.bitcoin
 export BITCOIN_DATA
 
 
@@ -151,11 +150,12 @@ export TIME
 ########################
 init:
 	@echo 'init'
-	bash -c 'mkdir -p $(BITCOIN_DATA)'
+	git config --global core.editor vim
 	@echo ''
 	install -v ./conf/usr/local/bin/* /usr/local/bin
 	@echo ''
 	mkdir -p $(BITCOIN_DATA)
+	./conf/config.bitcoin.conf.sh
 	install -v ./conf/bitcoin.conf $(BITCOIN_DATA)/bitcoin.conf
 	install -v ./conf/additional.conf $(BITCOIN_DATA)/additional.conf
 	@echo ''
