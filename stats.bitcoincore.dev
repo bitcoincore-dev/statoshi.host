@@ -309,3 +309,144 @@ STOPSIGNAL SIGHUP
 #END HEADER
 #BEGIN INSERT
 
+#BEGIN statoshi.all
+RUN df -H
+###########################################
+# We build Statoshi last
+FROM config-final as clone-stats-bitcoincore-dev
+###########################################
+
+# Change to your fork
+RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 2 /home/root/stats.bitcoincore.dev
+WORKDIR /home/root/stats.bitcoincore.dev
+#RUN cd /home/root/stats.bitcoincore.dev
+#RUN ./conf/usr/local/bin/get-branches.sh
+RUN mkdir -p /home/root/stats.bitcoincore.dev/depends/SDKs
+
+################################################
+FROM clone-stats-bitcoincore-dev as make-depends
+################################################
+
+# Install before autogen.sh and configure
+#RUN make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends
+RUN apk add libzmq
+RUN pip3 install pyzmq
+RUN python3 /home/root/stats.bitcoincore.dev/contrib/zmq/zmq_sub.py &
+
+############################
+FROM make-depends as autogen
+############################
+
+RUN cd /home/root/stats.bitcoincore.dev && ./autogen.sh
+
+#########################
+FROM autogen as configure
+#########################
+
+RUN cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+
+######################
+FROM configure as make
+######################
+
+RUN cd /home/root/stats.bitcoincore.dev && make -f Makefile -j $(nproc)
+
+###########################
+FROM make as strip-binaries
+###########################
+
+#RUN strip /stats.bitcoincore.dev/src/bitcoind
+#
+#RUN strip /stats.bitcoincore.dev/src/bitcoin-cli
+#
+#RUN strip /stats.bitcoincore.dev/src/bitcoin-tx
+
+###########################
+FROM strip-binaries as statoshi
+###########################
+
+WORKDIR /home/root/stats.bitcoincore.dev
+#RUN install -v conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
+#RUN test -d /home/root/.bitcoin && echo Exists || conf/usr/local/bin/fastcopy-chaindata.py /home/root/.bitcoin /home/root/.statoshi
+
+RUN /home/root/stats.bitcoincore.dev/conf/config.bitcoin.conf.sh
+
+# These should be the mounted volume
+#TODO mimic the bitcoin package install?
+RUN mkdir -p /etc/bitcoin
+RUN mkdir -p /var/lib/bitcoin
+RUN mkdir -p /root/.bitcoin
+RUN mkdir -p /home/root/.bitcoin
+RUN ln -s /root/.bitcoin /var/lib/bitcoin
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /etc/bitcoin/bitcoin.conf
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
+RUN install -v /home/root/stats.bitcoincore.dev/conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
+RUN install -v /home/root/stats.bitcoincore.dev/conf/additional.conf /etc/bitcoin/additional.conf
+RUN install -v /home/root/stats.bitcoincore.dev/conf/additional.conf /root/.bitcoin/additional.conf
+RUN install -v /home/root/stats.bitcoincore.dev/conf/additional.conf /home/root/.bitcoin/additional.conf
+
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/local/bin/bitcoind
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoind /usr/bin/bitcoind
+
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/local/bin/bitcoin-cli
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-cli /usr/bin/bitcoin-cli
+
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/local/bin/bitcoin-tx
+RUN install -v /home/root/stats.bitcoincore.dev/src/bitcoin-tx /usr/bin/bitcoin-tx
+
+#RUN install -v /home/root/stats.bitcoincore.dev/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
+
+###########################
+# Micro containers may not be able to compile from source - signed binaries verified here
+###########################
+
+RUN apk add --no-cache gnupg
+RUN gpg --refresh-keys
+RUN gpg --import  /home/root/stats.bitcoincore.dev/conf/usr/local/bin/randymcmillan.asc
+
+RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  /home/root/stats.bitcoincore.dev/conf/usr/local/bin/keys.txt
+
+RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoind
+
+RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-cli
+
+RUN gpg --verify /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx.gpg /home/root/stats.bitcoincore.dev/conf/usr/local/bin/bitcoin-tx
+
+RUN df -H
+#END statoshi.all
+
+#END INSERT
+#BEGIN FOOTER
+#################
+#################
+#################
+#################
+#################
+
+
+RUN install /home/root/stats.bitcoincore.dev/conf/entrypoint /
+RUN install /home/root/stats.bitcoincore.dev/conf/usr/local/bin/systemMetrics.Daemon.py /
+RUN install /home/root/stats.bitcoincore.dev/conf/usr/local/bin/requirements.txt /
+
+RUN rm -rf /home/root/stats.bitcoincore.dev
+
+RUN rm -rf /var/cache/man/*
+RUN rm -rf /opt/graphite/examples/*
+
+RUN npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y npm
+
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/tabs/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/grid/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/window/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/layout/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/toolbar/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/button/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/icons/fam/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/img/*.png
+#RUN rm -rf /opt/graphite/webapp/content/css/default/*.gif
+RUN rm -rf /opt/graphite/examples/*
+
+RUN df -H
+CMD ["bitcoind &"]
+ENTRYPOINT ["/entrypoint"]
+#END FOOTER
