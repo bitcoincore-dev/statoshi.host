@@ -1,23 +1,35 @@
 #BEGIN HEADER
-ARG FORK=bitcoincore-dev
-ARG REPO_NAME=stats.bitcoincore.dev
-##ARG BRANCH=$(git rev-parse --abbrev-ref HEAD)
-ARG BRANCH=master
-ARG GITHUB_ROOT=https://github.com/bitcoincore-dev/${FORK}/${REPO_NAME}/${BRANCH}
-ARG BASE_IMAGE=alpine:3.11.6
 #####################################
+ARG BASE_IMAGE=alpine:3.11.6
 FROM ${BASE_IMAGE} as set-initial-env
 #####################################
+ARG GITHUB_ROOT=https://github.com
+ARG FORK=bitcoincore-dev
+ARG REPO_NAME=stats.bitcoincore.dev
+ARG BRANCH=master
+ARG REPO=${GITHUB_ROOT}/${FORK}/${REPO_NAME}
+ARG DEPTH=1
+
+ENV GITHUB_ROOT=${GITHUB_ROOT}
+ENV FORK=${FORK}
+ENV REPO_NAME=${REPO_NAME}
+ENV BRANCH=${BRANCH}
+ENV REPO=${REPO}
+ENV DEPTH=${DEPTH}
 
 LABEL stats.bitcoincore.dev=${REPO_NAME}
 LABEL version="v0.20.99.0"
 LABEL description="Statoshi Docker"
-LABEL github=${GITHUB_ROOT}
+LABEL github=${REPO}
 LABEL maintainer="admin@bitcoincore.dev"
 
-RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git
-RUN apk -U add -v coreutils
-RUN apk add --update -v nodejs nodejs-npm
+RUN apk update && apk upgrade && apk add -v git
+
+RUN git clone -b $BRANCH $REPO --depth $DEPTH /$REPO_NAME
+
+RUN apk update && apk upgrade && apk add --no-cache -v musl busybox bash-completion git
+RUN apk -U add --no-cache -v coreutils
+RUN apk add --update --no-cache -v nodejs nodejs-npm
 
 #NOTE: simply exposing the ports in the dockerfile isnt enough
 #REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
@@ -60,8 +72,8 @@ WORKDIR $GF_PATHS_HOME
 RUN set -ex \
     && addgroup -S grafana \
     && adduser -S -G grafana grafana \
-    #&& apk add --no-cache libc6-compat ca-certificates su-exec bash
-    && apk add -v libc6-compat su-exec
+    && apk add -v --no-cache libc6-compat ca-certificates su-exec bash \
+    && apk add -v --no-cache libc6-compat su-exec
 
 #NOTE Once /tmp/grafana is copied to GF_PATHS_HOME we are free to modify the default configuration
 COPY --from=grafana-config /tmp/grafana "$GF_PATHS_HOME"
@@ -76,21 +88,20 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws" \
     && chmod -R 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
 
 #NOTE:/usr/share/grafana/conf/defaults.ini is read first
-COPY ${GITHUB_ROOT}/conf/defaults.ini "$GF_PATHS_CONFIG_DEFAULTS"
-COPY ${GITHUB_ROOT}/conf/grafana.ini "$GF_PATHS_CONFIG"
-COPY ${GITHUB_ROOT}/conf/run-grafana.sh /usr/local/bin/
-COPY ${GITHUB_ROOT}/conf/dashboards/* $GF_PATHS_PROVISIONING/dashboards/
-COPY ${GITHUB_ROOT}/conf/dashboards/overview.json $GF_PATHS_HOME_DASHBOARD
-COPY ${GITHUB_ROOT}/conf/datasources/* $GF_PATHS_PROVISIONING/datasources/
+RUN install -v /$REPO_NAME/conf/defaults.ini "$GF_PATHS_CONFIG_DEFAULTS"
+RUN install -v /$REPO_NAME/conf/grafana.ini "$GF_PATHS_CONFIG"
+RUN install -v /$REPO_NAME/conf/run-grafana.sh /usr/local/bin/run-grafana.sh
+RUN install -v /$REPO_NAME/conf/dashboards/overview.json $GF_PATHS_PROVISIONING/dashboards/overview.json
+RUN install -v /$REPO_NAME/conf/dashboards/overview.json $GF_PATHS_HOME_DASHBOARD
+RUN install -v /$REPO_NAME/conf/datasources/datasources.yml $GF_PATHS_PROVISIONING/datasources/datasources.yml
 
-COPY ${GITHUB_ROOT}/conf/dashboards/* $GF_PATHS_HOME/dashboards/
+RUN wait
+##RUN r -f $GF_PATHS_HOME/public/img/grafana_icon.svg
+##RUN r -f $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
 
-RUN r -f $GF_PATHS_HOME/public/img/grafana_icon.svg
-RUN r -f $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
-
-COPY ${GITHUB_ROOT}/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_icon.svg
-COPY ${GITHUB_ROOT}/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
-COPY ${GITHUB_ROOT}/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
+RUN install -v /$REPO_NAME/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_icon.svg
+RUN install -v /$REPO_NAME/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
+RUN install -v /$REPO_NAME/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
 
 RUN df -H
 #########################################
@@ -100,7 +111,7 @@ FROM set-grafana-env as apk-add-packages1
 WORKDIR /
 
 RUN apk update && apk upgrade
-RUN apk add -v \
+RUN apk add --no-cache -v \
     autoconf \
     automake \
     binutils \
@@ -117,7 +128,7 @@ RUN apk add -v \
     py3-psutil \
     vim
 
-RUN apk add -v \
+RUN apk add --no-cache -v \
     g++ \
     build-base \
     boost-libs \
@@ -145,7 +156,7 @@ RUN df -H
 FROM apk-add-packages1 as apk-add-packages2
 ###########################################
 
-RUN apk add -v \
+RUN apk add --no-cache -v \
       cairo \
       collectd \
       collectd-disk \
@@ -182,7 +193,7 @@ RUN df -H
 FROM apk-add-packages2 as apk-add-packages3
 ###########################################
 
-RUN apk add -v \
+RUN apk add --no-cache -v \
       alpine-sdk \
       git \
       libffi-dev \
@@ -262,25 +273,39 @@ RUN df -H
 FROM config2 as config3
 #######################
 # config graphite
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/aggregation-rules.conf       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/aggregation-rules.conf       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
+RUN install -v /$REPO_NAME/conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/
+
+
+
+RUN mkdir -p /opt/graphite/webapp/graphite
+
+RUN install -v /$REPO_NAME/conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+RUN wait
 WORKDIR /opt/graphite/webapp
 RUN mkdir -p /var/log/graphite/ \
   && PYTHONPATH=/opt/graphite/webapp /opt/graphite/bin/django-admin.py collectstatic --noinput --settings=graphite.settings
 
 # config statsd
-COPY ${GITHUB_ROOT}/conf/opt/statsd/config/* /opt/defaultconf/statsd/config/
+WORKDIR /
+RUN mkdir -p /opt/defaultconf/statsd
+RUN mkdir -p /opt/defaultconf/statsd/config
+RUN install -v /$REPO_NAME/conf/opt/statsd/config/tcp.js /opt/defaultconf/statsd/config/tcp.js
+RUN install -v /$REPO_NAME/conf/opt/statsd/config/udp.js /opt/defaultconf/statsd/config/udp.js
 
+RUN rm -rf /var/lib/apk/lists
+RUN rm -rf /var/cache/apk/*
+RUN rm -rf /etc/apk/cache/*
 RUN df -H
 #######################
 FROM config3 as config4
