@@ -5,7 +5,7 @@ NORMAL="\033[1;0m"
 STRONG="\033[1;1m"
 GREEN="\033[1;32m"
 
-config=$(find /home/root/stats.bitcoincore.dev/conf -maxdepth 2 -type f -name bitcoin.conf)
+config=$(find $HOME/stats.bitcoincore.dev/conf -maxdepth 2 -type f -name bitcoin.conf)
 
 randgen() {
 	output=$(cat /dev/urandom | tr -dc '0-9a-zA-Z!@$%^&*_+-' | head -c${1:-$1}) 2>/dev/null
@@ -15,7 +15,7 @@ randgen() {
 GenPasswd(){
 	sed -i "/rpcuser=/ c \rpcuser=USER-"$(randgen 32)"" $1
 	sed -i "/rpcpassword=/ c \rpcpassword=PW-"$(randgen 64)"" $1
-	print_green "Generated random user / password / port in:" " $1\n"
+	print_green "Generated random user / password in:" " $1\n"
 }
 
 print_green() {
@@ -29,6 +29,6 @@ for file in $config; do
 	fi
 done
 
-install -v $config /home/root/.bitcoin/bitcoin.conf
+install -v $config $HOME/.bitcoin/bitcoin.conf
 
 exit 0
