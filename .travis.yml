@@ -21,8 +21,7 @@
                   - bash-completion
                   - make
                   - docker-ce
-                  - docker-ce-cli
-                  - containerd.io
+                  - docker-compose
           ssh_known_hosts: stats.bitcoincore.dev
       install:
             - install -v .conf/usr/local/bin/* /usr/local/bin
