@@ -9,29 +9,31 @@ ZMQ_SUB=/home/root/stats.bitcoincore.dev/contrib/zmq/zmq_python.py
 
 start_bitcoin(){
 
-    if test -f "$BITCOIND"; then
+    if hash $BITCOIND; then
       echo "################################### start_bitcoind ##################################"
-      su-exec root $BITCOIND -daemon -prune=1 -disablewallet -datadir=/root/.statoshi & wait
+      su-exec root $BITCOIND -daemon -prune=1 -disablewallet -datadir=/home/root/.bitcoin & wait &
     fi
-    if test -f "$BITCOIN_CLI"; then
+    if hash $BITCOIN_CLI; then
       echo "################################### start_bitcoin-cli gettxoutsetinfo ###############"
-      su-exec root $BITCOIN_CLI gettxoutsetinfo & wait
+      su-exec root $BITCOIN_CLI gettxoutsetinfo & wait &
     fi
-    su-exec root python3 $ZMQ_SUB &
+    if hash $ZMQ_SUB; then
+        install -v $ZMQ_SUB $PATH/zmq_python.py
+    su-exec root python3 $PATH/zmq_python.py & wait &
 }
 stop_bitcoin(){
 
       echo "################################### stop_bitcoind ##################################"
 
-    if test -f "$BITCOIN_CLI"; then
-      su-exec root $BITCOIN_CLI stop & wait
+    if hash $BITCOIN_CLI; then
+      su-exec root $BITCOIN_CLI stop & wait &
     fi
 }
 shutdown(){
 
   echo "shutting down container"
 
-  stop_bitcoin; wait &
+  stop_bitcoin & wait &
 
   # first shutdown any service started by runit
   for _srv in $(ls -1 /etc/service); do
@@ -57,12 +59,11 @@ shutdown(){
 
 echo "################################### entrypoint ##################################"
 
-start_bitcoin & wait
+start_bitcoin & wait &
 
 su-exec root /usr/local/bin/./run-grafana.sh &
 su-exec root grafana-cli plugins install ryantxu-ajax-panel &
 . /opt/graphite/bin/activate
-
 
 # run all scripts in the run_once folder
 [ -d /etc/run_once ] && /bin/run-parts /etc/run_once
