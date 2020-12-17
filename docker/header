@@ -1,24 +1,98 @@
 #BEGIN HEADER
-ARG FORK=bitcoincore-dev
-ARG REPO_NAME=stats.bitcoincore.dev
-##ARG BRANCH=$(git rev-parse --abbrev-ref HEAD)
-ARG BRANCH=master
-ARG GITHUB_ROOT=https://github.com/bitcoincore-dev/${FORK}/${REPO_NAME}/${BRANCH}
 ARG BASE_IMAGE=alpine:3.11.6
-#####################################
 FROM ${BASE_IMAGE} as set-initial-env
 #####################################
-
-LABEL stats.bitcoincore.dev=${REPO_NAME}
-LABEL version="v0.20.99.0"
-LABEL description="Statoshi Docker"
-LABEL github=${GITHUB_ROOT}
-LABEL maintainer="admin@bitcoincore.dev"
+ENV FORK=bitcoincore-dev
+ENV REPO_NAME=stats.bitcoincore.dev
+ENV BRANCH=master
+ENV GITHUB_ROOT=https://github.com/bitcoincore-dev/${FORK}/${REPO_NAME}/${BRANCH}
 
 #NOTE: simply exposing the ports in the dockerfile isnt enough
 #REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
 EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8118 8333 8332 18333 8125 8125/udp 8126 9050 9051
 
+#########################################
+
+RUN apk update && apk upgrade
+RUN apk add -v \
+    alpine-sdk \
+    autoconf \
+    automake \
+    binutils \
+    bash-completion \
+    boost-build \
+    boost-dev \
+    boost-libs \
+    boost-system \
+    build-base \
+    busybox \
+    ca-certificates \
+    cairo \
+    cmake \
+    collectd \
+    collectd-disk \
+    collectd-nginx \
+    coreutils \
+    curl \
+    dcron \
+    doxygen \
+    expect \
+    findutils \
+    g++ \
+    git \
+    iptables \
+    libbz2 \
+    libcap-dev \
+    libevent-dev \
+    libffi-dev \
+    libgcc \
+    librrd \
+    librsvg \
+    libstdc++ \
+    libtool \
+    libzmq \
+    linux-headers \
+    logrotate \
+    make \
+    memcached \
+    musl \
+    mysql-dev \
+    mysql-client \
+    nginx \
+    nodejs \
+    nodejs-npm \
+    npm \
+    openldap-dev \
+    openssl-dev \
+    patch \
+    pkgconfig \
+    postgresql-dev \
+    postgresql-client \
+    protobuf-dev \
+    python3 \
+    python3-dev \
+    py3-cairo \
+    py3-mysqlclient \
+    py3-pip \
+    py3-psutil \
+    py3-pyldap \
+    py3-setuptools \
+    py3-virtualenv==16.7.8-r0 \
+    redis \
+    rrdtool-dev \
+    runit \
+    sqlite \
+    tiff-tools \
+    vim \
+    wget \
+    zeromq-dev \
+    zlib-dev
+#################################
+RUN rm -rf /etc/nginx/conf.d/default.conf \
+    && mkdir -p \
+    /var/log/carbon \
+    /var/log/graphite
+#TODO: SSL
 #########################################
 FROM set-initial-env as grafana-download
 #########################################
@@ -67,28 +141,27 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws" \
     && chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" \
     && chmod -R 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
 
-#NOTE:/usr/share/grafana/conf/defaults.ini is read first
-COPY ${GITHUB_ROOT}/conf/defaults.ini "$GF_PATHS_CONFIG_DEFAULTS"
-COPY ${GITHUB_ROOT}/conf/grafana.ini "$GF_PATHS_CONFIG"
-COPY ${GITHUB_ROOT}/conf/run-grafana.sh /usr/local/bin/
-COPY ${GITHUB_ROOT}/conf/dashboards/* $GF_PATHS_PROVISIONING/dashboards/
-COPY ${GITHUB_ROOT}/conf/dashboards/overview.json $GF_PATHS_HOME_DASHBOARD
-COPY ${GITHUB_ROOT}/conf/datasources/* $GF_PATHS_PROVISIONING/datasources/
+RUN apk add -v git
+RUN git clone ${GITHUB_ROOT} --depth 2 ${REPO_NAME}
 
-COPY ${GITHUB_ROOT}/conf/dashboards/* $GF_PATHS_HOME/dashboards/
+COPY ${REPO_NAME}/conf/defaults.ini "$GF_PATHS_CONFIG_DEFAULTS"
+COPY ${REPO_NAME}/conf/grafana.ini "$GF_PATHS_CONFIG"
+COPY ${REPO_NAME}/conf/run-grafana.sh /usr/local/bin/
+COPY ${REPO_NAME}/conf/dashboards/overview.json $GF_PATHS_HOME_DASHBOARD
+COPY ${REPO_NAME}/conf/datasources/datasources.conf $GF_PATHS_PROVISIONING/datasources/datasources.conf
+
+COPY ${REPO_NAME}/conf/dashboards/overview.conf $GF_PATHS_HOME/dashboards/overview.conf
 
 RUN rm -f $GF_PATHS_HOME/public/img/grafana_icon.svg
 RUN rm -f $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
 
-COPY ${GITHUB_ROOT}/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_icon.svg
-COPY ${GITHUB_ROOT}/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
-COPY ${GITHUB_ROOT}/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
+COPY ${REPO_NAME}/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_icon.svg
+COPY ${REPO_NAME}/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
+COPY ${REPO_NAME}/src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
 
 #########################################
 FROM set-grafana-env as apk-add-packages
 #########################################
-
-WORKDIR /
 
 RUN apk update && apk upgrade
 RUN apk add -v \
@@ -234,25 +307,15 @@ RUN git clone "${statsd_repo}" \
 FROM config2 as config3
 #######################
 # config graphite
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/aggregation-rules.conf       /opt/graphite/conf/aggregation-rules.conf
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/conf/*.conf                       /opt/graphite/conf/
-COPY ${GITHUB_ROOT}/conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+COPY ${REPO_NAME}/conf/opt/graphite/conf/aggregation-rules.conf       /opt/graphite/conf/aggregation-rules.conf
+COPY ${REPO_NAME}/conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 
 WORKDIR /opt/graphite/webapp
 RUN mkdir -p /var/log/graphite/ \
   && PYTHONPATH=/opt/graphite/webapp /opt/graphite/bin/django-admin.py collectstatic --noinput --settings=graphite.settings
 
 # config statsd
-COPY ${GITHUB_ROOT}/conf/opt/statsd/config/* /opt/defaultconf/statsd/config/
+COPY ${REPO_NAME}/conf/opt/statsd/config/* /opt/defaultconf/statsd/config/
 
 #######################
 FROM config3 as config4
