@@ -8,9 +8,9 @@ endif
 
 #These are referenced here and docker-compose.yml
 DOCKERFILE         := $(notdir $(PWD))
-DOCKERFILE_SLIM    := $(notdir $(PWD)).slim
-DOCKERFILE_GUI     := $(notdir $(PWD)).gui
-DOCKERFILE_EXTRACT := $(notdir $(PWD)).extract
+#DOCKERFILE_SLIM    := $(notdir $(PWD)).slim
+#DOCKERFILE_GUI     := $(notdir $(PWD)).gui
+#DOCKERFILE_EXTRACT := $(notdir $(PWD)).extract
 
 # If you see pwd_unknown showing up, this is why. Re-calibrate your system.
 PWD ?= pwd_unknown
@@ -158,11 +158,12 @@ init:
 	./conf/config.bitcoin.conf.sh
 	install -v ./conf/bitcoin.conf $(BITCOIN_DATA)/bitcoin.conf
 	install -v ./conf/additional.conf $(BITCOIN_DATA)/additional.conf
+	bash -c ' install -v ./docker/docker-compose.yml .'
 	@echo ''
 #######################
 # Docker file creation...
 ########################
-concat-all: init
+all: init run
 	@echo 'concat-all'
 	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/statoshi.all        >> $(DOCKERFILE)'
@@ -171,25 +172,21 @@ concat-all: init
 	bash -c '$(pwd) cat ./docker/shell                > shell'
 	@echo ''
 #######################
-concat-slim:
+slim: init run
 	@echo 'concat-slim'
-	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE).slim'
-	bash -c '$(pwd) cat ./docker/statoshi.slim       >> $(DOCKERFILE).slim'
-	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE).slim'
+	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
+	bash -c '$(pwd) cat ./docker/statoshi.slim       >> $(DOCKERFILE)'
+	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE)'
+	bash -c '$(pwd) cat ./docker/torproxy             > torproxy'
+	bash -c '$(pwd) cat ./docker/shell                > shell'
 	@echo ''
 #######################
-concat: concat-all concat-slim
-	@echo 'concat'
-	bash -c ' install -v ./docker/docker-compose.yml .'
-	bash -c ' install -v ./docker/shell .'
-	@echo ''
-#######################
-build-shell: concat-all
+build-shell: all
 	@echo 'build-shell'
 	docker-compose --verbose build shell
 	@echo ''
 #######################
-rebuild-shell: concat-all
+rebuild-shell: all
 	@echo 'rebuild-shell'
 	docker-compose --verbose build --no-cache shell
 	@echo ''
@@ -208,7 +205,7 @@ else
 	@echo ''
 endif
 #######################
-autogen: concat-all
+autogen: all
 	@echo 'autogen'
 	# here it is useful to add your own customised tests
 	@echo ''
@@ -234,48 +231,12 @@ test:
 	&& echo success
 	@echo ''
 #######################
-make-statoshi: depends
-	@echo 'make-statoshi'
-	docker-compose --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev && make install && exit"
-	@echo ''
-#######################
-run-statoshi: make-statoshi
-	@echo 'run-statoshi'
-	docker-compose build statoshi
-	@echo ''
-ifeq ($(CMD_ARGUMENTS),)
-	@echo ''
-	docker-compose --verbose -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh
-	@echo ''
-else
-	@echo ''
-	docker-compose --verbose -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm statoshi sh -c "$(CMD_ARGUMENTS)"
-	@echo ''
-endif
-#######################
-service:
-	# run as a (background) service
-	@echo 'service'
-	docker-compose --verbose -p $(PROJECT_NAME)_$(HOST_UID) up -d shell
-	@echo ''
-#######################
-login: service
-	# run as a service and attach to it
-	@echo 'login'
-	docker exec -it $(PROJECT_NAME)_$(HOST_UID) sh
-	@echo ''
-########################
-build-all: concat-all
+build:
 	@echo 'build-all'
 	docker-compose --verbose -f docker-compose.yml build statoshi
 	@echo ''
 #######################
-rebuild-all: concat-all
-	@echo 'rebuild-all'
-	docker-compose --verbose -f docker-compose.yml build --no-cache statoshi
-	@echo ''
-#######################
-run-all: build-all
+run: build
 	@echo 'run-all'
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
@@ -289,18 +250,6 @@ endif
 	@echo 'Give grafana a few minutes to set up...'
 	@echo 'http://localhost:$(PUBLIC_PORT)'
 #######################
-rerun-all: rebuild-all
-	@echo 'rerun-all'
-ifeq ($(CMD_ARGUMENTS),)
-	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
-	@echo ''
-else
-	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
-	@echo ''
-endif
-#######################
 extract: concat
 	@echo 'extract'
 	#extract TODO CREATE PACKAGE for distribution
@@ -309,28 +258,6 @@ extract: concat
 	docker run --name $(DOCKERFILE_EXTRACT) $(DOCKERFILE_EXTRACT) /bin/true
 	docker rm $(DOCKERFILE_EXTRACT)
 	rm -f  $(DOCKERFILE_EXTRACT)
-#######################
-build-slim: concat
-	@echo 'build-slim'
-	docker-compose --verbose -f docker-compose.yml -p stats.bitcoincore.dev build statoshi-slim
-	@echo ''
-#######################
-rebuild-slim: concat
-	@echo 'rebuild-slim'
-	docker-compose --verbose -f docker-compose.yml -p stats.bitcoincore.dev build --no-cache statoshi-slim
-	@echo ''
-#######################
-run-slim: build-slim
-	@echo 'run-slim'
-ifeq ($(CMD_ARGUMENTS),)
-	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8080:8080 --publish 8125:8125 --publish 8333:8333 --publish 8126:8126 --rm statoshi-slim sh
-	@echo ''
-else
-	@echo ''
-	docker-compose --verbos e-f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish $(PUBLIC_PORT):3000 --publish 8080:8080 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi-slim sh -c "$(CMD_ARGUMENTS)"
-	@echo ''
-endif
 #######################
 torproxy: concat-all
 	@echo 'concat-all'

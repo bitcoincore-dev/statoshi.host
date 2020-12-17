@@ -1,15 +1,19 @@
-#BEGIN statoshi.all
-ENV REPO=stats.bitcoincore.dev
+#BEGIN statoshi.slim
+RUN echo statoshi.slim
+RUN echo statoshi.slim
+RUN echo statoshi.slim
+RUN echo statoshi.slim
 RUN df -H
 ###########################################
 # We build Statoshi last
 FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
-
+ENV REPO=stats.bitcoincore.dev
 # Change to your fork
 RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 2 ${REPO}
-WORKDIR ${REPO}
-#RUN ./conf/usr/local/bin/get-branches.sh
+WORKDIR ${REPO} 
+#RUN cd ${REPO} 
+#RUN ${REPO}/conf/usr/local/bin/get-branches.sh
 RUN mkdir -p ${REPO}/depends/SDKs
 
 ################################################
@@ -17,7 +21,7 @@ FROM clone-stats-bitcoincore-dev as make-depends
 ################################################
 
 # Install before autogen.sh and configure
-#RUN make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends
+#RUN make -j $(nproc) download -C ${REPO}/depends
 RUN apk add libzmq
 RUN pip3 install pyzmq
 RUN python3 ${REPO}/contrib/zmq/zmq_sub.py &
@@ -26,19 +30,19 @@ RUN python3 ${REPO}/contrib/zmq/zmq_sub.py &
 FROM make-depends as autogen
 ############################
 
-RUN cd ${REPO} && ./autogen.sh
+#RUN cd ${REPO} && ./autogen.sh
 
 #########################
 FROM autogen as configure
 #########################
 
-RUN cd ${REPO}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+#RUN cd ${REPO}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
 
 ######################
 FROM configure as make
 ######################
 
-RUN cd ${REPO} && make -f Makefile -j $(nproc)
+#RUN cd ${REPO} && make -f Makefile -j $(nproc)
 
 ###########################
 FROM make as strip-binaries
@@ -49,7 +53,7 @@ FROM make as strip-binaries
 #RUN strip ${REPO}/src/bitcoin-cli
 #
 #RUN strip ${REPO}/src/bitcoin-tx
-
+RUN echo statoshi.slim
 ###########################
 FROM strip-binaries as statoshi
 ###########################
@@ -95,7 +99,7 @@ RUN gpg --import  ${REPO}/conf/usr/local/bin/randymcmillan.asc
 
 RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  ${REPO}/conf/usr/local/bin/keys.txt
 
-RUN gpg --verify ${REPO}/conf/usr/local/bin/bitcoind.gpg    ${REPO}/conf/usr/local/bin/bitcoind
+RUN gpg --verify ${REPO}/conf/usr/local/bin/bitcoind.gpg ${REPO}/conf/usr/local/bin/bitcoind
 
 RUN gpg --verify ${REPO}/conf/usr/local/bin/bitcoin-cli.gpg ${REPO}/conf/usr/local/bin/bitcoin-cli
 
