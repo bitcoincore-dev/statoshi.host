@@ -20,6 +20,7 @@ start_bitcoin(){
     if hash $ZMQ_SUB; then
         install -v $ZMQ_SUB $PATH/zmq_python.py
     su-exec root python3 $PATH/zmq_python.py & wait &
+    fi
 }
 stop_bitcoin(){
 

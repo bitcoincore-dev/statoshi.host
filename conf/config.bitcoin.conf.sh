@@ -5,7 +5,7 @@ NORMAL="\033[1;0m"
 STRONG="\033[1;1m"
 GREEN="\033[1;32m"
 
-config=$(find $HOME/stats.bitcoincore.dev/conf -maxdepth 2 -type f -name bitcoin.conf)
+config=$(find / -maxdepth 4 -type f -name bitcoin.conf)
 
 randgen() {
 	output=$(cat /dev/urandom | tr -dc '0-9a-zA-Z!@$%^&*_+-' | head -c${1:-$1}) 2>/dev/null
@@ -29,6 +29,7 @@ for file in $config; do
 	fi
 done
 
-install -v $config $HOME/.bitcoin/bitcoin.conf
+install -v $config /root/.bitcoin/bitcoin.conf
+install -v $config /home/root/.bitcoin/bitcoin.conf
 
 exit 0
