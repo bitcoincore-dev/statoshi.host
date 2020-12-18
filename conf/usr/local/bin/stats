@@ -1,5 +1,13 @@
 #!/bin/bash
 
+STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
+#echo STATS_ID: $STATS_ID
+STATS_TAG=$(echo $(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1'))
+#echo STATS_TAG: $STATS_TAG
+
+#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli $1"
+
+
 for ((i=1;i<=$#;i++));
 do
 
@@ -31,14 +39,13 @@ do
     then ((i++))
         var6=${!i};
     else
-        echo - $1 else working
+        echo stats-cli $1 
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli $1"
     fi
 
 done;
 
-# Execute on the most recent composed image
-D_ID1=$(echo $(docker ps | awk '{print $1}' | awk 'NR==2'))
-echo $D_ID1
-echo "./docker/cli-exec.sh"
-#docker exec -it $D_ID1 sh -c  "ls" \
-docker exec -it $D_ID1 sh -c  "/usr/local/bin/bitcoin-cli help"
+docker exec -it $STATS_ID sh -c  "find /usr/local/bin -type f -name 'stats'" 
+docker exec -it $STATS_ID sh -c  "find /usr/local/bin -type f -name 'stats*'" 
+echo stats-cli $1 
+
