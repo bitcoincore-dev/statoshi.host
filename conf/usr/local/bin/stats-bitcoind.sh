@@ -1,15 +1,19 @@
 #!/bin/bash
 #
+#REPO=$(find / -maxdepth 5 -type d -name stats.bitcoincore.dev 2>&1) | grep -v find
+#export REPO
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
 if hash crontab 2>/dev/null; then
-    echo '*/7 * * * * /root/stats.bitcoincore.dev/conf/usr/local/bin/stats-bitcoind.sh' >> /etc/cron.hourly/bitcoind
+    mkdir -p /etc/cron.hourly
+    echo '*/7 * * * * $REPO/conf/usr/local/bin/stats-bitcoind.sh' >> /etc/cron.hourly/bitcoind
 else
     if [[ "$OSTYPE" == "linux-gnu" ]]; then
         apt update
         apt install cron
         systemctl enable cron
         # crontab -e #no need
-    echo '*/7 * * * * /root/stats.bitcoincore.dev/conf/usr/local/bin/stats-bitcoind.sh' >> /etc/cron.hourly/bitcoind
+    mkdir -p /etc/cron.hourly
+    echo '*/7 * * * * $REPO/conf/usr/local/bin/stats-bitcoind.sh' >> /etc/cron.hourly/bitcoind
     fi
 fi
 fi
