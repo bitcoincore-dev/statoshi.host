@@ -309,11 +309,11 @@ STOPSIGNAL SIGHUP
 #END HEADER
 #BEGIN INSERT
 
-#BEGIN statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
+#BEGIN statoshi.slim
+RUN echo statoshi.slim
+RUN echo statoshi.slim
+RUN echo statoshi.slim
+RUN echo statoshi.slim
 RUN df -H
 ###########################################
 # We build Statoshi last
@@ -331,7 +331,7 @@ FROM clone-stats-bitcoincore-dev as make-depends
 ################################################
 
 # Install before autogen.sh and configure
-RUN make -j $(nproc) download -C ${REPO}/depends
+#RUN make -j $(nproc) download -C ${REPO}/depends
 RUN apk add libzmq
 RUN pip3 install pyzmq
 RUN python3 ${REPO}/contrib/zmq/zmq_sub.py &
@@ -340,19 +340,19 @@ RUN python3 ${REPO}/contrib/zmq/zmq_sub.py &
 FROM make-depends as autogen
 ############################
 
-RUN cd ${REPO} && ./autogen.sh
+#RUN cd ${REPO} && ./autogen.sh
 
 #########################
 FROM autogen as configure
 #########################
 
-RUN cd ${REPO}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+#RUN cd ${REPO}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
 
 ######################
 FROM configure as make
 ######################
 
-RUN cd ${REPO} && make -f Makefile -j $(nproc)
+#RUN cd ${REPO} && make -f Makefile -j $(nproc)
 
 ###########################
 FROM make as strip-binaries
@@ -363,13 +363,13 @@ FROM make as strip-binaries
 #RUN strip ${REPO}/src/bitcoin-cli
 #
 #RUN strip ${REPO}/src/bitcoin-tx
-RUN echo statoshi.all
+RUN echo statoshi.slim
 ###########################
 FROM strip-binaries as statoshi
 ###########################
 
 RUN install -v ${REPO}/conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
-#RUN test -d /home/root/.bitcoin && echo Exists || conf/usr/local/bin/fastcopy-chaindata.py /home/root/.bitcoin /home/root/.statoshi
+RUN test -d /home/root/.bitcoin && echo Exists || conf/usr/local/bin/fastcopy-chaindata.py /home/root/.bitcoin /home/root/.statoshi
 
 RUN ${REPO}/conf/config.bitcoin.conf.sh
 
