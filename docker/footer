@@ -5,13 +5,13 @@
 #################
 #################
 #################
+ENV REPO=stats.bitcoincore.dev
 
+RUN install ${REPO}/conf/entrypoint /
+RUN install ${REPO}/conf/usr/local/bin/systemMetrics.Daemon.py /
+RUN install ${REPO}/conf/usr/local/bin/requirements.txt /
 
-RUN install /home/root/stats.bitcoincore.dev/conf/entrypoint /
-RUN install /home/root/stats.bitcoincore.dev/conf/usr/local/bin/systemMetrics.Daemon.py /
-RUN install /home/root/stats.bitcoincore.dev/conf/usr/local/bin/requirements.txt /
-
-RUN rm -rf /home/root/stats.bitcoincore.dev
+RUN rm -rf  ${REPO}/
 
 RUN rm -rf /var/cache/man/*
 RUN rm -rf /opt/graphite/examples/*

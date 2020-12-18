@@ -6,12 +6,6 @@ ifneq ($(Makefile),)
 	Makefile := defined
 endif
 
-#These are referenced here and docker-compose.yml
-DOCKERFILE         := $(notdir $(PWD))
-#DOCKERFILE_SLIM    := $(notdir $(PWD)).slim
-#DOCKERFILE_GUI     := $(notdir $(PWD)).gui
-#DOCKERFILE_EXTRACT := $(notdir $(PWD)).extract
-
 # If you see pwd_unknown showing up, this is why. Re-calibrate your system.
 PWD ?= pwd_unknown
 
@@ -50,6 +44,11 @@ export BITCOIN_DATA
 # PROJECT_NAME defaults to name of the current directory.
 # should not need to be changed if you follow GitOps operating procedures.
 PROJECT_NAME := $(notdir $(PWD))
+export PROJECT_NAME
+
+#These are referenced here and docker-compose.yml
+DOCKERFILE         := $(notdir $(PWD))
+export DOCKERFILE
 
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 CMD_ARGUMENTS ?= $(cmd)
@@ -72,12 +71,11 @@ endif
 # control alpine version from here
 VERSION := 3.11.6
 export VERSION
-export PROJECT_NAME
 export HOST_USER
 export HOST_UID
 
 # all our targets are phony (no files to check).
-.PHONY: help init shell build-shell rebuild-shell service logini concat concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim d-ps d-images d-exec torproxy get-branches
+.PHONY: help slim all init shell build-shell rebuild-shell service logini concat concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim d-ps d-images d-exec torproxy get-branches
 
 # suppress make's own output
 #.SILENT:
@@ -92,10 +90,6 @@ help:
 	@echo ''
 	@echo '	[TARGET]:'
 	@echo ''
-	@echo '		build-all	complete build - no deploy'
-	@echo '		run-all  	deploy build-all product'
-	@echo ''
-	@echo '		build-slim	build with signed precompiled statoshi binaries'
 	@echo '		run-slim	deploy build-slim product'
 	@echo ''
 	@echo '	[EXTRA_ARGUMENTS]: push a shell command to the container'
@@ -163,22 +157,26 @@ init:
 #######################
 # Docker file creation...
 ########################
-all: init run
+.PHONY: all
+all: init
 	@echo 'concat-all'
 	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/statoshi.all        >> $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/torproxy             > torproxy'
 	bash -c '$(pwd) cat ./docker/shell                > shell'
+	make run
 	@echo ''
 #######################
-slim: init run
+.PHONY: slim
+slim: init
 	@echo 'concat-slim'
 	bash -c '$(pwd) cat ./docker/header               > $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/statoshi.slim       >> $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/footer              >> $(DOCKERFILE)'
 	bash -c '$(pwd) cat ./docker/torproxy             > torproxy'
 	bash -c '$(pwd) cat ./docker/shell                > shell'
+	make run
 	@echo ''
 #######################
 build-shell: all
@@ -209,19 +207,19 @@ autogen: all
 	@echo 'autogen'
 	# here it is useful to add your own customised tests
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./autogen.sh && exit"
+	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd $(REPO)  && ./autogen.sh && exit"
 	@echo ''
 #######################
 config: autogen
 	@echo 'config'
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd /home/root/stats.bitcoincore.dev  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
+	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd $(REPO)  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench && exit"
 	@echo ''
 #######################
 depends: config
 	@echo 'depends'
 	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "apk add coreutils && exit"
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends && exit"
+	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --rm statoshi sh -c "cd $(REPO) && make -j $(nproc) download -C $(REPO)/depends && exit"
 	@echo ''
 #######################
 test:
@@ -232,12 +230,12 @@ test:
 	@echo ''
 #######################
 build:
-	@echo 'build-all'
+	@echo 'build'
 	docker-compose --verbose -f docker-compose.yml build statoshi
 	@echo ''
 #######################
 run: build
-	@echo 'run-all'
+	@echo 'run'
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
 	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
