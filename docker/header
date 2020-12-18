@@ -11,13 +11,15 @@ LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
 LABEL maintainer="admin@bitcoincore.dev"
 
 ENV REPO=stats.bitcoincore.dev
+#ENV VERBOSE=-v
+ENV VERBOSE=    
 
-RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git
+RUN apk update && apk upgrade && apk add ${VERBOSE} musl busybox bash-completion git
 RUN git clone https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 3 ${REPO}
 RUN ${REPO}/conf/install_packages.sh
 
-RUN apk -U add -v coreutils
-RUN apk add --update -v nodejs nodejs-npm
+RUN apk -U add ${VERBOSE} coreutils
+RUN apk add --update ${VERBOSE} nodejs nodejs-npm
 
 #NOTE: simply exposing the ports in the dockerfile isnt enough
 #REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
@@ -61,7 +63,7 @@ RUN set -ex \
     && addgroup -S grafana \
     && adduser -S -G grafana grafana \
     #&& apk add --no-cache libc6-compat ca-certificates su-exec bash
-    && apk add -v libc6-compat su-exec
+    && apk add ${VERBOSE} libc6-compat su-exec
 
 #NOTE Once /tmp/grafana is copied to GF_PATHS_HOME we are free to modify the default configuration
 COPY --from=grafana-config /tmp/grafana "$GF_PATHS_HOME"
@@ -100,7 +102,7 @@ FROM set-grafana-env as apk-add-packages1
 WORKDIR /
 
 RUN apk update && apk upgrade
-RUN apk add -v \
+RUN apk add ${VERBOSE} \
     autoconf \
     automake \
     binutils \
@@ -117,7 +119,7 @@ RUN apk add -v \
     py3-psutil \
     vim
 
-RUN apk add -v \
+RUN apk add ${VERBOSE} \
     g++ \
     build-base \
     boost-libs \
@@ -145,7 +147,7 @@ RUN df -H
 FROM apk-add-packages1 as apk-add-packages2
 ###########################################
 
-RUN apk add -v \
+RUN apk add ${VERBOSE} \
       cairo \
       collectd \
       collectd-disk \
@@ -182,7 +184,7 @@ RUN df -H
 FROM apk-add-packages2 as apk-add-packages3
 ###########################################
 
-RUN apk add -v \
+RUN apk add ${VERBOSE} \
       alpine-sdk \
       git \
       libffi-dev \

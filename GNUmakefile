@@ -74,6 +74,10 @@ export VERSION
 export HOST_USER
 export HOST_UID
 
+#VERBOSE=--verbose
+VERBOSE=	
+export VERBOSE
+
 # all our targets are phony (no files to check).
 .PHONY: help slim all init shell build-shell rebuild-shell service logini concat concat-all build-all run-all rerun-all make-statoshi run-statoshi extract concat-slim build-slim rebuild-slim run-slim concat-gui build-gui rebuild-gui run-gui test-gui autogen depends config doc concat package-all package-gui package-slim d-ps d-images d-exec torproxy get-branches
 
@@ -231,14 +235,14 @@ test:
 #######################
 build:
 	@echo 'build'
-	docker-compose --verbose -f docker-compose.yml build statoshi
+	docker-compose $(VERBOSE) -f docker-compose.yml build statoshi
 	@echo ''
 #######################
 run: build
 	@echo 'run'
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
+	docker-compose $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
 	@echo ''
 else
 	@echo ''

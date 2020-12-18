@@ -1,11 +1,11 @@
 #!/bin/sh
 export LC_CTYPE=C
-apk update && apk upgrade && apk add -v musl busybox bash-completion git
-apk -U add -v coreutils
-apk add --update -v nodejs nodejs-npm
+apk update && apk upgrade && apk add $VERBOSE musl busybox bash-completion git
+apk -U add $VERBOSE coreutils
+apk add --update $VERBOSE nodejs nodejs-npm
 
 apk update && apk upgrade
-apk add -v \
+apk add $VERBOSE \
 autoconf \
 automake \
 binutils \
@@ -98,23 +98,23 @@ mkdir -p /var/lib/bitcoin
 mkdir -p /root/.bitcoin
 mkdir -p /home/root/.bitcoin
 
-install -v $REPO/conf/bitcoin.conf /etc/bitcoin/bitcoin.conf
-install -v $REPO/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
-install -v $REPO/conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
-install -v $REPO/conf/additional.conf /etc/bitcoin/additional.conf
-install -v $REPO/conf/additional.conf /root/.bitcoin/additional.conf
-install -v $REPO/conf/additional.conf /home/root/.bitcoin/additional.conf
+install $VERBOSE $REPO/conf/bitcoin.conf /etc/bitcoin/bitcoin.conf
+install $VERBOSE $REPO/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
+install $VERBOSE $REPO/conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
+install $VERBOSE $REPO/conf/additional.conf /etc/bitcoin/additional.conf
+install $VERBOSE $REPO/conf/additional.conf /root/.bitcoin/additional.conf
+install $VERBOSE $REPO/conf/additional.conf /home/root/.bitcoin/additional.conf
 
-install -v $REPO/conf/usr/local/bin/bitcoind /usr/local/bin/bitcoind
-install -v $REPO/conf/usr/local/bin/bitcoind /usr/bin/bitcoind
+install $VERBOSE $REPO/conf/usr/local/bin/bitcoind /usr/local/bin/bitcoind
+install $VERBOSE $REPO/conf/usr/local/bin/bitcoind /usr/bin/bitcoind
 
-install -v $REPO/conf/usr/local/bin/bitcoin-cli /usr/local/bin/bitcoin-cli
-install -v $REPO/conf/usr/local/bin/bitcoin-cli /usr/bin/bitcoin-cli
+install $VERBOSE $REPO/conf/usr/local/bin/bitcoin-cli /usr/local/bin/bitcoin-cli
+install $VERBOSE $REPO/conf/usr/local/bin/bitcoin-cli /usr/bin/bitcoin-cli
 
-install -v $REPO/conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
-install -v $REPO/conf/usr/local/bin/bitcoin-tx /usr/bin/bitcoin-tx
+install $VERBOSE $REPO/conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
+install $VERBOSE $REPO/conf/usr/local/bin/bitcoin-tx /usr/bin/bitcoin-tx
 
-install -v $REPO/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
+install $VERBOSE $REPO/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
 
 ###########################
 # Micro containers may not be able to compile from source - signed binaries verified here
