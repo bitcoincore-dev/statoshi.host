@@ -1,3 +1,94 @@
+# [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev)
+
+![stats.bitcoincore.dev](./docker/stats.bitcoincore.dev.png)
+
+### Install make
+```
+Linux:
+sudo apt-get install build-essential
+MacOS:
+brew install make
+```
+### Install Docker
+```
+Linux:
+sudo apt-get docker-ce docker-ce-cli containerd.io
+MacOS:
+brew install --cask docker
+```
+
+### Run:
+
+```
+git clone https://github.com/bitcoincore-dev/stats.bitcoincore.dev
+cd stats.bitcoincore.dev
+
+```
+##### $ <code>make</code>
+
+```
+make slim # Run stats.bitcoincore.dev container with pre built signed binaries
+make all  # Run stats.bitcoincore.dev container with compiled binaries
+make init # Installs prefixed stats-<command>
+
+```
+
+### OpenGPG: [signature](./conf/usr/local/bin/randymcmillan.asc)
+
+##### $ <code>stats-\<command></code> <code>commands assume image is most recent container</code>
+
+```
+stats-console         # container command line
+stats-bitcoind        # start container bitcoind -daemon
+stats-debug           # container debug.log output
+stats-getmininginfo   # report mining info
+stats-gettxoutsetinfo # report txo info
+```
+
+#### WARNING: (effects host datadir)
+
+```
+stats-prune           # default in bitcoin.conf is prune=1 - start pruning node
+
+```
+
+--
+
+## Other Notes
+
+A system metrics daemon is available [here](https://github.com/jlopp/bitcoin-utils/blob/master/systemMetricsDaemon.py)
+
+Statoshi also supports running multiple nodes that emit metrics to a single graphite instance. 
+In order to facilitate this, you can add a line to bitcoin.conf that will partition each 
+metric by the name of the host: statshostname=yourNodeName--
+
+## Docker Notes
+
+## [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/packages/314536)
+
+#### Full Build
+
+This runs the statoshi configuration and [displays statsd data from the pruned node](http://stats.bitcoincore.dev).
+
+```
+docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev
+0.20.99             a27f8eb4ad39        4 minutes ago       2.98GB
+```
+
+Pull image from the command line:
+
+	docker pull docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev:0.20.99
+
+Use as base image in DockerFile:
+
+	FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev:0.20.99
+
+## [Digital Ocean](https://m.do.co/c/ae5c7d05da91) Notes
+
+NOTES
+
+--
+
 ## Statoshi: Bitcoin Core + statistics logging
 
 ## What is Statoshi?
@@ -29,87 +120,4 @@ A system metrics daemon is available [here](https://github.com/jlopp/bitcoin-uti
 
 Statoshi also supports running multiple nodes that emit metrics to a single graphite instance. 
 In order to facilitate this, you can add a line to bitcoin.conf that will partition each 
-metric by the name of the host: statshostname=yourNodeName--
-## Docker Notes & [DigitalOcean.com](https://m.do.co/c/ae5c7d05da91)
-
-## [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/packages/314536)
-
-#### Full Build
-
-This runs the statoshi configuration and [displays statsd data from the pruned node](http://stats.bitcoincore.dev:3000).
-
-```
-docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev
-0.20.99             a27f8eb4ad39        4 minutes ago       2.98GB
-```
-
-Pull image from the command line:
-
-	docker pull docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev:0.20.99
-
-Use as base image in DockerFile:
-
-	FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev:0.20.99
-
-
-## [stats.bitcoincore.dev.slim](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/packages/315130)
-
-#### Slim Build
-
-This runs the slim (precompiled signed binaries) configuration and [displays statsd data from the pruned node](http://stats.bitcoincore.dev:3000).
-
-```
-docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.slim
-0.20.99             390876b14625        24 minutes ago      1.63GB
-```
-Pull image from the command line:
-
-	docker pull docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.slim:0.20.99
-
-Use as base image in DockerFile:
-
-	FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.slim:0.20.99
-
-## [stats.bitcoincore.dev.gui](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/packages/315116)
-
-#### Gui Build
-
-This runs the gui [(graphite/grafana) configuration](http://stats.bitcoincore.dev:3000) and pulls data from
-[http://stats.bitcoincore.dev:8080](http://stats.bitcoincore.dev:8080). Useful as a demo or if you don't want to run your own statoshi instance.
-
-```
-docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.gui
-0.20.99             737a8acf33c5        About an hour ago   1.23GB
-```
-
-Pull image from the command line:
-
-	docker pull docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.gui:0.20.99
-	
-Use as base image in DockerFile:
-
-	FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.gui:0.20.99
-
-## make help
-
-
-##### $ <code>make</code>
-
-
-	Docker: make [TARGET] [EXTRA_ARGUMENTS]
-	Shell:
-		make shell user=root
-
-	Targets:
-
-		build-all	complete build - no deploy
-		run-all  	deploy build-all product
-
-		build-slim	build with signed precompiled statoshi binaries
-		run-slim	deploy build-slim product
-
-	Extra: push a shell command to the container
-
-		cmd=:	    make shell cmd="whoami"
-
-
+metric by the name of the host: statshostname=yourNodeName
