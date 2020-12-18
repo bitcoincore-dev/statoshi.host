@@ -1,15 +1,18 @@
 #BEGIN statoshi.all
-ENV REPO=stats.bitcoincore.dev
+RUN echo statoshi.all
+RUN echo statoshi.all
+RUN echo statoshi.all
+RUN echo statoshi.all
 RUN df -H
 ###########################################
 # We build Statoshi last
 FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
-
+ENV REPO=stats.bitcoincore.dev
 # Change to your fork
 RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 2 ${REPO}
-WORKDIR ${REPO}
-#RUN ./conf/usr/local/bin/get-branches.sh
+#RUN cd ${REPO} 
+#RUN ${REPO}/conf/usr/local/bin/get-branches.sh
 RUN mkdir -p ${REPO}/depends/SDKs
 
 ################################################
@@ -17,7 +20,7 @@ FROM clone-stats-bitcoincore-dev as make-depends
 ################################################
 
 # Install before autogen.sh and configure
-#RUN make -j $(nproc) download -C /home/root/stats.bitcoincore.dev/depends
+RUN make -j $(nproc) download -C ${REPO}/depends
 RUN apk add libzmq
 RUN pip3 install pyzmq
 RUN python3 ${REPO}/contrib/zmq/zmq_sub.py &
@@ -49,13 +52,12 @@ FROM make as strip-binaries
 #RUN strip ${REPO}/src/bitcoin-cli
 #
 #RUN strip ${REPO}/src/bitcoin-tx
-
+RUN echo statoshi.all
 ###########################
 FROM strip-binaries as statoshi
 ###########################
 
-WORKDIR ${REPO}
-#RUN install -v conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
+RUN install -v ${REPO}/conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
 #RUN test -d /home/root/.bitcoin && echo Exists || conf/usr/local/bin/fastcopy-chaindata.py /home/root/.bitcoin /home/root/.statoshi
 
 RUN ${REPO}/conf/config.bitcoin.conf.sh
@@ -74,14 +76,14 @@ RUN install -v ${REPO}/conf/additional.conf /etc/bitcoin/additional.conf
 RUN install -v ${REPO}/conf/additional.conf /root/.bitcoin/additional.conf
 RUN install -v ${REPO}/conf/additional.conf /home/root/.bitcoin/additional.conf
 
-RUN install -v ${REPO}/src/bitcoind /usr/local/bin/bitcoind
-RUN install -v ${REPO}/src/bitcoind /usr/bin/bitcoind
+RUN install -v ${REPO}/conf/usr/local/bin/bitcoind /usr/local/bin/bitcoind
+RUN install -v ${REPO}/conf/usr/local/bin/bitcoind /usr/bin/bitcoind
 
-RUN install -v ${REPO}/src/bitcoin-cli /usr/local/bin/bitcoin-cli
-RUN install -v ${REPO}/src/bitcoin-cli /usr/bin/bitcoin-cli
+RUN install -v ${REPO}/conf/usr/local/bin/bitcoin-cli /usr/local/bin/bitcoin-cli
+RUN install -v ${REPO}/conf/usr/local/bin/bitcoin-cli /usr/bin/bitcoin-cli
 
-RUN install -v ${REPO}/src/bitcoin-tx /usr/local/bin/bitcoin-tx
-RUN install -v ${REPO}/src/bitcoin-tx /usr/bin/bitcoin-tx
+RUN install -v ${REPO}/conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
+RUN install -v ${REPO}/conf/usr/local/bin/bitcoin-tx /usr/bin/bitcoin-tx
 
 RUN install -v ${REPO}/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
 
@@ -90,12 +92,12 @@ RUN install -v ${REPO}/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked
 ###########################
 
 RUN apk add --no-cache gnupg
-RUN gpg --refresh-keys
 RUN gpg --import  ${REPO}/conf/usr/local/bin/randymcmillan.asc
+#RUN gpg --refresh-keys
 
 RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  ${REPO}/conf/usr/local/bin/keys.txt
 
-RUN gpg --verify ${REPO}/conf/usr/local/bin/bitcoind.gpg    ${REPO}/conf/usr/local/bin/bitcoind
+RUN gpg --verify ${REPO}/conf/usr/local/bin/bitcoind.gpg ${REPO}/conf/usr/local/bin/bitcoind
 
 RUN gpg --verify ${REPO}/conf/usr/local/bin/bitcoin-cli.gpg ${REPO}/conf/usr/local/bin/bitcoin-cli
 
