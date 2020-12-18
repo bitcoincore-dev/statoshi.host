@@ -5,7 +5,9 @@ NORMAL="\033[1;0m"
 STRONG="\033[1;1m"
 GREEN="\033[1;32m"
 
-config=$(find $REPO/conf -maxdepth 2 -type f -name bitcoin.conf)
+DATADIR=$(find / -maxdepth 3 -type d -name .bitcoin 2>&1) | grep -v find
+REPO=$(find / -maxdepth 5 -type d -name stats.bitcoincore.dev 2>&1) | grep -v find
+config=$(find $REPO -maxdepth 2 -type f -name bitcoin.conf)
 
 randgen() {
 	output=$(cat /dev/urandom | tr -dc '0-9a-zA-Z!@$%^&*_+-' | head -c${1:-$1}) 2>/dev/null
@@ -29,7 +31,6 @@ for file in $config; do
 	fi
 done
 
-mkdir -p $HOME/.bitcoin
-install -v $config $HOME/.bitcoin/bitcoin.conf
-
+install -v $config $DATADIR/bitcoin.conf
+echo end
 exit 0

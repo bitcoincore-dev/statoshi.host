@@ -45,6 +45,8 @@ export BITCOIN_DATA
 # should not need to be changed if you follow GitOps operating procedures.
 PROJECT_NAME := $(notdir $(PWD))
 export PROJECT_NAME
+REPO := $(notdir $(PWD))
+export REPO
 
 #These are referenced here and docker-compose.yml
 DOCKERFILE         := $(notdir $(PWD))
