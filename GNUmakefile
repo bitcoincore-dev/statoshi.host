@@ -245,11 +245,11 @@ run: build
 	@echo 'run'
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
-	docker-compose $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh
+	docker-compose $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --publish 8332:8332 --rm statoshi sh
 	@echo ''
 else
 	@echo ''
-	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
+	docker-compose --verbose -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --publish 8332:8332 --rm statoshi sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 	@echo 'Give grafana a few minutes to set up...'
@@ -267,7 +267,7 @@ extract: concat
 torproxy: concat-all
 	@echo 'concat-all'
 #REF: https://hub.docker.com/r/dperson/torproxy
-	bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -d dperson/torproxy'
+	bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -p 9051:9051 -d dperson/torproxy'
 #	@echo ''
 #	docker-compose --verbose  -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118  --publish 9050:9050  --publish 9051:9051 --rm torproxy sh -c "$(CMD_ARGUMENTS)"
 #	@echo ''
