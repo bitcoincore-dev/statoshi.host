@@ -152,7 +152,8 @@ init:
 	@echo 'init'
 	git config --global core.editor vim
 	@echo ''
-	install -v ./conf/usr/local/bin/* /usr/local/bin
+	install -v ./conf/usr/local/bin/stats /usr/local/bin
+	install -v ./conf/usr/local/bin/stats-* /usr/local/bin
 	@echo ''
 	mkdir -p $(BITCOIN_DATA)
 	./conf/config.bitcoin.conf.sh
