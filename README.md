@@ -38,11 +38,14 @@ make init # Installs prefixed stats-<command>
 ##### $ <code>stats-\<command></code> <code>commands assume image is most recent container</code>
 
 ```
-stats-console         # container command line
-stats-bitcoind        # start container bitcoind -daemon
-stats-debug           # container debug.log output
-stats-getmininginfo   # report mining info
-stats-gettxoutsetinfo # report txo info
+stats-console              # container command line
+stats-bitcoind             # start container bitcoind -daemon
+stats-debug                # container debug.log output
+stats-whatami              # container OS profile
+```
+```
+stats-cli -getmininginfo   # report mining info
+stats-cli -gettxoutsetinfo # report txo info
 ```
 
 #### WARNING: (effects host datadir)

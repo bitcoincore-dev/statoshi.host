@@ -45,7 +45,7 @@ do
 
 done;
 
-docker exec -it $STATS_ID sh -c  "find /usr/local/bin -type f -name 'stats'" 
-docker exec -it $STATS_ID sh -c  "find /usr/local/bin -type f -name 'stats*'" 
+docker exec -it $STATS_ID sh -c "find /usr/local -maxdepth 2 -type f -name 'stats'"
+docker exec -it $STATS_ID sh -c "find /usr/local -maxdepth 2 -type f -name 'stats*'"
 echo stats-cli $1 
 
