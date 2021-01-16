@@ -11,9 +11,15 @@ if [ -n "$V" ]; then
     export VERBOSE="$V"
 fi
 
-# Check that environment variables assumed to be set by the environment are set
-echo "Building for platform triple ${HOST:?not set} with reference timestamp ${SOURCE_DATE_EPOCH:?not set}..."
-echo "At most ${MAX_JOBS:?not set} jobs will run at once..."
+# Check that required environment variables are set
+cat << EOF
+Required environment variables as seen inside the container:
+    HOST: ${HOST:?not set}
+    SOURCE_DATE_EPOCH: ${SOURCE_DATE_EPOCH:?not set}
+    MAX_JOBS: ${MAX_JOBS:?not set}
+    DISTSRC: ${DISTSRC:?not set}
+    OUTDIR: ${OUTDIR:?not set}
+EOF
 
 #####################
 # Environment Setup #
@@ -22,19 +28,6 @@ echo "At most ${MAX_JOBS:?not set} jobs will run at once..."
 # The depends folder also serves as a base-prefix for depends packages for
 # $HOSTs after successfully building.
 BASEPREFIX="${PWD}/depends"
-
-# Setup an output directory for our build
-OUTDIR="${OUTDIR:-${PWD}/output}"
-[ -e "$OUTDIR" ] || mkdir -p "$OUTDIR"
-
-# Setup the directory where our Bitcoin Core build for HOST will occur
-DISTSRC="${DISTSRC:-${PWD}/distsrc-${HOST}}"
-if [ -e "$DISTSRC" ]; then
-    echo "DISTSRC directory '${DISTSRC}' exists, probably because of previous builds... Aborting..."
-    exit 1
-else
-    mkdir -p "$DISTSRC"
-fi
 
 # Given a package name and an output name, return the path of that output in our
 # current guix environment
@@ -158,7 +151,7 @@ GIT_ARCHIVE="${OUTDIR}/src/${DISTNAME}.tar.gz"
 # Create the source tarball if not already there
 if [ ! -e "$GIT_ARCHIVE" ]; then
     mkdir -p "$(dirname "$GIT_ARCHIVE")"
-    git archive --output="$GIT_ARCHIVE" HEAD
+    git archive --prefix="${DISTNAME}/" --output="$GIT_ARCHIVE" HEAD
 fi
 
 ###########################
@@ -189,11 +182,12 @@ esac
 
 # Make $HOST-specific native binaries from depends available in $PATH
 export PATH="${BASEPREFIX}/${HOST}/native/bin:${PATH}"
+mkdir -p "$DISTSRC"
 (
     cd "$DISTSRC"
 
     # Extract the source tarball
-    tar -xf "${GIT_ARCHIVE}"
+    tar --strip-components=1 -xf "${GIT_ARCHIVE}"
 
     ./autogen.sh
 

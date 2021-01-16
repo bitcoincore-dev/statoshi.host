@@ -28,6 +28,7 @@ A guide for Statoshi developers is available [here](https://medium.com/@lopp/sta
 
 Other Notes
 -------
+
 A system metrics daemon is available [here](https://github.com/jlopp/bitcoin-utils/blob/master/systemMetricsDaemon.py)
 
 Statoshi also supports running multiple nodes that emit metrics to a single graphite instance. 
