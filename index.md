@@ -114,8 +114,8 @@ blocknotify=/path/to/bitcoin-cli getmininginfo && sleep 10 && /path/to/bitcoin-c
 9) Set the various necessary services to automatically start on machine boot, via /etc/crontab entries:
 ```
 @reboot /usr/bin/python /opt/graphite/bin/carbon-cache.py start
-@reboot /usr/local/bin/forever start /home//statsd/stats.js /home//statsd/config.js
-@reboot /usr/bin/python /home//logSystemMetrics.py &
+@reboot /usr/local/bin/forever start /home/{yourusername}/statsd/stats.js /home/{yourusername}/statsd/config.js
+@reboot /usr/bin/python /home/{yourusername}/logSystemMetrics.py &
 @reboot /usr/bin/bitcoind -daemon
 ```
 
