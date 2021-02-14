@@ -108,17 +108,25 @@ Note that the Statoshi project assumes that you are running StatsD on the same m
 ```
 rpcuser=unguessableUser3256
 rpcpassword=someRandomPasswordWithEntropyHere
-blocknotify=/path/to/bitcoin-cli getmininginfo && sleep 30 && /path/to/bitcoin-cli gettxoutsetinfo
+blocknotify=/path/to/bitcoin-cli getmininginfo && sleep 10 && /path/to/bitcoin-cli getchaintxstats && sleep 10 && /path/to/bitcoin-cli gettxoutsetinfo
 ```
 
-9) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:
+9) Set the various necessary services to automatically start on machine boot, via /etc/crontab entries:
+```
+@reboot /usr/bin/python /opt/graphite/bin/carbon-cache.py start
+@reboot /usr/local/bin/forever start /home//statsd/stats.js /home//statsd/config.js
+@reboot /usr/bin/python /home//logSystemMetrics.py &
+@reboot /usr/bin/bitcoind -daemon
+```
+
+10) Start your Statoshi node (either the GUI or the command line daemon) - the Linux commands for them are:
 ```
     GUI: /path/to/statoshi/src/qt/bitcoin-qt &
     Daemon: /path/to/statoshi/src/bitcoind -daemon
 ```
 Now you can check out the stats as they roll in to Graphite; you should see graphs begin to be populated within 30 seconds!
 
-10) If you wish to duplicate the UI on [statoshi.info](http://statoshi.info), you'll also need to install Grafana. You can find [installation instructions here](http://docs.grafana.org/installation/).
+11) If you wish to duplicate the UI on [statoshi.info](http://statoshi.info), you'll also need to install Grafana. You can find [installation instructions here](http://docs.grafana.org/installation/).
 
 Since Graphite runs on port 3000, you can have Apache proxy requests to it by:
 
