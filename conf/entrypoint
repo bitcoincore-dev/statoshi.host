@@ -1,0 +1,101 @@
+#!/bin/bash -e
+
+export LC_ALL=C
+
+BITCOIND=/usr/local/bin/./bitcoind
+BITCOIN_CLI=/usr/local/bin/./bitcoin-cli
+PATH="${PATH}:/usr/local/bin"
+ZMQ_SUB=/home/root/stats.bitcoincore.dev/contrib/zmq/zmq_python.py
+
+start_bitcoin(){
+
+    if test -f "$BITCOIND"; then
+
+      echo "################################### start_bitcoind ##################################"
+      $BITCOIND -daemon -datadir=${HOME}/.statoshi & wait
+
+    fi
+    if test -f "$BITCOIN_CLI"; then
+
+      echo "################################### start_bitcoin-cli gettxoutsetinfo ###############"
+      $BITCOIN_CLI gettxoutsetinfo & wait
+      $BITCOIN_CLI getmininginfo   & wait
+
+    fi
+    su-exec ${HOT_USER} python3 $ZMQ_SUB &
+
+}
+stop_bitcoin(){
+
+      echo "################################### stop_bitcoind ##################################"
+
+    if test -f "$BITCOIN_CLI"; then
+      $BITCOIN_CLI stop &
+    fi
+}
+shutdown(){
+
+  echo "shutting down container"
+
+  stop_bitcoin &
+
+  # first shutdown any service started by runit
+  for _srv in $(ls -1 /etc/service); do
+    sv force-stop $_srv
+  done
+
+  echo "shutting down runsvdir"
+
+  # shutdown runsvdir command
+  kill -HUP $RUNSVDIR
+  wait $RUNSVDIR
+
+  # give processes time to stop
+  sleep 0.5
+
+  echo "killing rest processes"
+  # kill any other processes still running in the container
+  for _pid  in $(ps -eo pid | grep -v PID  | tr -d ' ' | grep -v '^1$' | head -n -6); do
+    timeout -t 5 /bin/sh -c "kill $_pid && wait $_pid || kill -9 $_pid"
+  done
+  exit
+}
+
+echo "################################### entrypoint ##################################"
+
+start_bitcoin
+
+su-exec ${HOST_USER} /usr/local/bin/./run-grafana.sh &
+su-exec ${HOST_USER} grafana-cli plugins install ryantxu-ajax-panel &
+. /opt/graphite/bin/activate
+
+# run all scripts in the run_once folder
+[ -d /etc/run_once ] && /bin/run-parts /etc/run_once
+
+## check services to disable
+for _srv in $(ls -1 /etc/service); do
+    eval X=$`echo -n $_srv | tr [:lower:]- [:upper:]_`_DISABLED
+    [ -n "$X" ] && touch /etc/service/$_srv/down
+done
+
+# remove stale pids
+find /opt/graphite/storage -maxdepth 1 -name '*.pid' -delete
+
+# chmod logrotate file (#111)
+su-exec ${HOST_USER} chmod 0644 /etc/logrotate.d/*
+
+exec runsvdir -P /etc/service & wait
+RUNSVDIR=$!
+echo "Started runsvdir, PID is $RUNSVDIR"
+echo "wait for processes to start...."
+
+sleep 5
+for _srv in $(ls -1 /etc/service); do
+    sv status $_srv
+done
+
+# catch shutdown signals
+trap shutdown SIGTERM SIGHUP SIGQUIT SIGINT
+wait $RUNSVDIR
+
+shutdown

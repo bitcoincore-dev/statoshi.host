@@ -1,0 +1,37 @@
+#END INSERT
+#BEGIN FOOTER
+#################
+#################
+#################
+#################
+#################
+
+#TODO better consue
+ARG PWD UMBREL THIS_FILE PROJECT_NAME GIT_SERVER DOCKERFILE BITCOIN_DATA CMD_ARGUMENTS PWD Makefile GIT_REPO_ORIGIN TIME SERVICE_TARGET GIT_USER_NAME GIT_USER_EMAIL GIT_PROFILE GIT_REPO_PATH DOCKERFILE_PATH BITCOIN_CONF
+
+RUN install ./conf/entrypoint /
+RUN install ./conf/usr/local/bin/systemMetrics.Daemon.py /
+RUN install ./conf/usr/local/bin/requirements.txt /
+
+#RUN rm -rf  *
+
+RUN rm -rf /var/cache/man/*
+RUN rm -rf /opt/graphite/examples/*
+
+RUN npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y npm
+
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/tabs/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/grid/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/window/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/layout/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/toolbar/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/button/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/icons/fam/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/img/*.png
+#RUN rm -rf /opt/graphite/webapp/content/css/default/*.gif
+RUN rm -rf /opt/graphite/examples/*
+
+RUN df -H
+#CMD ["bitcoind &"]
+ENTRYPOINT ["/entrypoint"]
+#END FOOTER

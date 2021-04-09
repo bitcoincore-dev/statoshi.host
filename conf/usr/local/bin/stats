@@ -1,0 +1,85 @@
+#!/bin/bash
+
+source 'error.trap'
+touch error.trap.log
+
+TIME=$(date +%s)
+
+export LC_ALL=C
+
+if ! hash awk 2>/dev/null; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        if hash brew 2>/dev/null; then
+            brew install awk
+        fi
+    fi
+    if [[ "$OSTYPE" == "linux"* ]]; then
+        #CHECK APT
+        if [[ "$OSTYPE" == "linux-gnu" ]]; then
+            if hash apt 2>/dev/null; then
+                apt install awk
+            fi
+        fi
+        if [[ "$OSTYPE" == "linux-musl" ]]; then
+            if hash apk 2>/dev/null; then
+                apk add awk
+            fi
+        fi
+        if [[ "$OSTYPE" == "linux-arm"* ]]; then
+            if hash apt 2>/dev/null; then
+                apt install awk
+            fi
+        fi
+    fi
+fi
+stats-help (){
+    echo '' 
+    echo '     [USAGE]:'
+    echo '' 
+    echo '         stats [COMMANDS] [ARG]'
+    echo '' 
+    echo '     [COMMANDS]:'
+    echo '' 
+    echo '         start        - executes /entrypoint'
+    echo '         -id          - returns stats docker id'
+    echo '         -tag         - returns stats docker tag'
+    echo '         -d   [ARG]   - send ARG to bitcoind'
+    echo '         -cli [ARG]   - send ARG to bitcoin-cli'
+    echo '' 
+    echo '' 
+}
+#find our docker service
+if hash docker 2>/dev/null; then
+    STATS_ID=$(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1')
+    export STATS_ID
+    STATS_TAG=$(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1')
+    export STATS_TAG
+
+for ((i=1;i<=$#;i++));
+    do
+    #TODO more here
+        if [ ${!i} = "start" ]; then
+            ((i++))
+            docker exec -it $STATS_ID sh -c  "/entrypoint"
+        elif [ ${!i} = "-log" ]; then
+            ((i++))
+            logFile=${!i};
+        elif [ ${!i} = "-d" ]; then
+            ((i++))
+            docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
+        elif [ ${!i} = "-id" ]; then
+            ((i++))
+            echo $STATS_ID
+        elif [ ${!i} = "-tag" ]; then
+            ((i++))
+            echo $STATS_TAG
+        elif [ ${!i} = "-cli" ]; then
+            ((i++))
+            docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
+        else
+            stats-help
+        fi
+    done;
+else
+    stats $1 
+fi

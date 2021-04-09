@@ -1,0 +1,22 @@
+#!/usr/bin/env expect
+
+set timeout -1
+spawn /opt/graphite/bin/django-admin.py createsuperuser
+
+expect "Username (leave blank to use 'root'):" {
+  send "root\r"
+}
+
+expect "Email address:" {
+  send "admin@bitcoincore.dev\r"
+}
+
+expect "Password:" {
+  send "root\r"
+}
+
+expect "Password *:" {
+  send "root\r"
+}
+
+expect "Superuser created successfully"
