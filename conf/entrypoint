@@ -11,7 +11,7 @@ start_bitcoin(){
 
     if test -f "$BITCOIND"; then
       echo "################################### start_bitcoind ##################################"
-      $BITCOIND -daemon -prune=1 -disablewallet -datadir=/root/.statoshi & wait
+      $BITCOIND -daemon -prune=550 -disablewallet -datadir=/root/.statoshi & wait
     fi
     if test -f "$BITCOIN_CLI"; then
       echo "################################### start_bitcoin-cli gettxoutsetinfo ###############"
