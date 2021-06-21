@@ -30,10 +30,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make
         run: |
-         make init
-         make header user=root
-         ./conf/usr/local/bin/stats-d -daemon & wait
-         ./conf/usr/local/bin/stats-cli gettxoutsetinfo
+         make init header
 
   ubuntu-latest-docker:
     runs-on: ubuntu-latest
@@ -41,8 +38,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make
         run: |
-         make init
-         make run user=root
+         make init header run
 
   ubuntu20-docker:
     runs-on: ubuntu20
