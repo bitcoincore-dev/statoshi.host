@@ -50,9 +50,11 @@ jobs:
       - name: Make
         run: |
          make init
-         sudo apt install build-essential libtool libevent-dev autotools-dev automake pkg-config bsdmainutils python3
+         ./contrib/install_db4.sh `pwd`
+         sudo apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
+         sudo apt install libevent-dev libboost-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev
          sudo apt install g++-arm-linux-gnueabihf curl
-         make -C depends
+         make install -C depends
          ./autogen.sh
          ./configure --disable-wallet --disable-tests --disable-bench --disable-docs
          make
