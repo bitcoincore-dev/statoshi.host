@@ -168,6 +168,13 @@ PUBLIC_PORT								:= $(port)
 endif
 export PUBLIC_PORT
 
+ifeq ($(nodeport),)
+NODE_PORT								:= 8333
+else
+NODE_PORT								:= $(nodeport)
+endif
+export NODE_PORT
+
 ifneq ($(passwd),)
 PASSWORD								:= $(passwd)
 else 
@@ -276,6 +283,8 @@ report:
 	@echo '        - TIME=${TIME}'
 	@echo '        - HOST_USER=${HOST_USER}'
 	@echo '        - HOST_UID=${HOST_UID}'
+	@echo '        - PUBLIC_PORT=${PUBLIC_PORT}'
+	@echo '        - NODE_PORT=${NODE_PORT}'
 	@echo '        - SERVICE_TARGET=${SERVICE_TARGET}'
 	@echo '        - ALPINE_VERSION=${ALPINE_VERSION}'
 	@echo '        - WHISPER_VERSION=${WHISPER_VERSION}'
