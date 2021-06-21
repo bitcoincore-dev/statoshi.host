@@ -25,6 +25,17 @@ jobs:
          make init
          make run user=root
 
+  ubuntu-build-on-host:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init
+         ./autogen.sh
+         ./configure --disable-wallet --disable-tests --disable-bench --disable-docs
+         
+
   ubuntu20:
     runs-on: ubuntu20
     steps:
