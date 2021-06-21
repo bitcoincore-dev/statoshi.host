@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  ubuntu-latest:
+  ubuntu-latest-docker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -25,18 +25,7 @@ jobs:
          make init
          make run user=root
 
-  ubuntu-build-on-host:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Make
-        run: |
-         make init
-         ./autogen.sh
-         ./configure --disable-wallet --disable-tests --disable-bench --disable-docs
-         
-
-  ubuntu20:
+  ubuntu20-docker:
     runs-on: ubuntu20
     steps:
       - uses: actions/checkout@v2
@@ -45,7 +34,7 @@ jobs:
          make init
          make run user=root
 
-  ubuntu18:
+  ubuntu18-docker:
     runs-on: ubuntu18
     steps:
       - uses: actions/checkout@v2
@@ -54,3 +43,39 @@ jobs:
          make init
          make run user=root
 
+  ubuntu-latest-build-on-host:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init
+         sudo apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
+         make -C depends
+         ./autogen.sh
+         ./configure --disable-wallet --disable-tests --disable-bench --disable-docs
+         
+  ubuntu20-build-on-host:
+    runs-on: ubuntu20
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init
+         sudo apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
+         make -C depends
+         ./autogen.sh
+         ./configure --disable-wallet --disable-tests --disable-bench --disable-docs
+         
+  ubuntu18-build-on-host:
+    runs-on: ubuntu18
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init
+         sudo apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
+         make -C depends
+         ./autogen.sh
+         ./configure --disable-wallet --disable-tests --disable-bench --disable-docs
+         
