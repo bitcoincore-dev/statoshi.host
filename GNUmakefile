@@ -365,7 +365,7 @@ endif
 .PHONY: build-shell
 build-shell:
 	@echo ''
-	bash -c '$(pwd) cat ./docker/shell                > shell'
+	bash -c 'cat ./docker/shell                > shell'
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NO_CACHE) shell
 	@echo ''
 #######################
