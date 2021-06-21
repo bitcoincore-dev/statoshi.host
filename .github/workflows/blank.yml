@@ -55,6 +55,8 @@ jobs:
          make -C depends
          ./autogen.sh
          ./configure --disable-wallet --disable-tests --disable-bench --disable-docs
+         make
+         make install
          
   ubuntu20-build-on-host:
     runs-on: ubuntu20
@@ -68,6 +70,8 @@ jobs:
          make -C depends
          ./autogen.sh
          ./configure --disable-wallet --disable-tests --disable-bench --disable-docs
+         make
+         make install
          
   ubuntu18-build-on-host:
     runs-on: ubuntu18
@@ -81,6 +85,8 @@ jobs:
          make -C depends
          ./autogen.sh
          ./configure --disable-wallet --disable-tests --disable-bench --disable-docs
+         make
+         make install
          
   ubuntu-latest-build-on-host-cross-compile:
     runs-on: ubuntu-latest
@@ -94,3 +100,5 @@ jobs:
          make -C depends HOST=arm-linux-gnueabihf NO_QT=1
          ./autogen.sh
          ./configure --disable-wallet --disable-tests --disable-bench --disable-docs --prefix=$PWD/depends/arm-linux-gnueabihf --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++
+         make
+         make install
