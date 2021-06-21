@@ -50,7 +50,7 @@ jobs:
       - name: Make
         run: |
          make init
-         sudo apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
+         sudo apt install build-essential libtool libevent-dev autotools-dev automake pkg-config bsdmainutils python3
          sudo apt install g++-arm-linux-gnueabihf curl
          make -C depends
          ./autogen.sh
