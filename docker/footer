@@ -5,13 +5,33 @@
 #################
 #################
 #################
-ENV REPO=stats.bitcoincore.dev
 
-RUN install ${REPO}/conf/entrypoint /
-RUN install ${REPO}/conf/usr/local/bin/systemMetrics.Daemon.py /
-RUN install ${REPO}/conf/usr/local/bin/requirements.txt /
+#TODO better consue
+#ARG PWD
+#ARG UMBREL
+#ARG THIS_FILE
+#ARG PROJECT_NAME
+#ARG GIT_SERVER
+#ARG DOCKERFILE
+#ARG BITCOIN_DATA_DIR
+#ARG STATOSHI_DATA_DIR
+#ARG CMD_ARGUMENTS
+#ARG Makefile
+#ARG GIT_REPO_ORIGIN
+#ARG TIME
+#ARG SERVICE_TARGET
+#ARG GIT_USER_NAME
+#ARG GIT_USER_EMAIL
+#ARG GIT_PROFILE
+#ARG GIT_REPO_PATH
+#ARG DOCKERFILE_PATH
+#ARG BITCOIN_CONF
 
-RUN rm -rf  ${REPO}/
+RUN install /home/root/stats.bitcoincore-dev/conf/entrypoint /
+RUN install /home/root/stats.bitcoincore-dev/conf/usr/local/bin/systemMetrics.Daemon.py /
+RUN install /home/root/stats.bitcoincore-dev/conf/usr/local/bin/requirements.txt /
+
+#RUN rm -rf  *
 
 RUN rm -rf /var/cache/man/*
 RUN rm -rf /opt/graphite/examples/*
@@ -30,6 +50,6 @@ RUN npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y np
 RUN rm -rf /opt/graphite/examples/*
 
 RUN df -H
-CMD ["bitcoind &"]
+#CMD ["bitcoind &"]
 ENTRYPOINT ["/entrypoint"]
 #END FOOTER

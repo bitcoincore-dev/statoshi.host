@@ -10,14 +10,19 @@ ZMQ_SUB=/home/root/stats.bitcoincore.dev/contrib/zmq/zmq_python.py
 start_bitcoin(){
 
     if test -f "$BITCOIND"; then
+
       echo "################################### start_bitcoind ##################################"
-      $BITCOIND -daemon -prune=1 -disablewallet -datadir=/root/.statoshi & wait
+      $BITCOIND -daemon -datadir=${HOME}/.statoshi & wait
+
     fi
     if test -f "$BITCOIN_CLI"; then
+
       echo "################################### start_bitcoin-cli gettxoutsetinfo ###############"
       $BITCOIN_CLI gettxoutsetinfo & wait
+      $BITCOIN_CLI getmininginfo   & wait
+
     fi
-    su-exec root python3 $ZMQ_SUB &
+    su-exec ${HOT_USER} python3 $ZMQ_SUB &
 
 }
 stop_bitcoin(){
@@ -25,14 +30,14 @@ stop_bitcoin(){
       echo "################################### stop_bitcoind ##################################"
 
     if test -f "$BITCOIN_CLI"; then
-      $BITCOIN_CLI stop & wait
+      $BITCOIN_CLI stop &
     fi
 }
 shutdown(){
 
   echo "shutting down container"
 
-  stop_bitcoin; wait &
+  stop_bitcoin &
 
   # first shutdown any service started by runit
   for _srv in $(ls -1 /etc/service); do
@@ -58,12 +63,11 @@ shutdown(){
 
 echo "################################### entrypoint ##################################"
 
-start_bitcoin & wait
+start_bitcoin
 
-su-exec root /usr/local/bin/./run-grafana.sh &
-su-exec root grafana-cli plugins install ryantxu-ajax-panel &
+su-exec ${HOST_USER} /usr/local/bin/./run-grafana.sh &
+su-exec ${HOST_USER} grafana-cli plugins install ryantxu-ajax-panel &
 . /opt/graphite/bin/activate
-
 
 # run all scripts in the run_once folder
 [ -d /etc/run_once ] && /bin/run-parts /etc/run_once
@@ -78,7 +82,7 @@ done
 find /opt/graphite/storage -maxdepth 1 -name '*.pid' -delete
 
 # chmod logrotate file (#111)
-chmod 0644 /etc/logrotate.d/*
+su-exec ${HOST_USER} chmod 0644 /etc/logrotate.d/*
 
 exec runsvdir -P /etc/service & wait
 RUNSVDIR=$!

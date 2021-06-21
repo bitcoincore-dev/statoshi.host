@@ -1,41 +1,24 @@
 #!/bin/bash
-#
-checkbrew() {
-
-    if hash brew 2>/dev/null; then
-        brew update
-        brew upgrade
-    else
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-        checkbrew
-    fi
-}
+echo uname -a
 if [[ "$OSTYPE" == "linux"* ]]; then
     echo $OSTYPE
-    echo this was trigger from blocknotify in bitcoin.conf
-    if [[ "$OSTYPE" == "linux"* ]]; then
-    echo $OSTYPE
-    echo this was trigger from blocknotify in bitcoin.conf
-    fi
+    echo this was triggered from blocknotify in $BITCOIN_CONF
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     echo $OSTYPE
-    echo this was trigger from blocknotify in bitcoin.conf
-    checkbrew
+    echo this was triggered from blocknotify in $BITCOIN_CONF
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     echo TODO add support for $OSTYPE
-    echo this was trigger from blocknotify in bitcoin.conf
+    echo this was triggered from blocknotify in $BITCOIN_CONF
 elif [[ "$OSTYPE" == "msys" ]]; then
     echo TODO add support for $OSTYPE
-    echo this was trigger from blocknotify in bitcoin.conf
+    echo this was triggered from blocknotify in $BITCOIN_CONF
 elif [[ "$OSTYPE" == "win32" ]]; then
     echo TODO add support for $OSTYPE
-    echo this was trigger from blocknotify in bitcoin.conf
+    echo this was triggered from blocknotify in $BITCOIN_CONF
 elif [[ "$OSTYPE" == "freebsd"* ]]; then
     echo TODO add support for $OSTYPE
-    echo this was trigger from blocknotify in bitcoin.conf
+    echo this was triggered from blocknotify in $BITCOIN_CONF
 else
     echo TODO add support for $OSTYPE
-    echo this was trigger from blocknotify in bitcoin.conf
+    echo this was triggered from blocknotify in $BITCOIN_CONF
 fi
-
-#

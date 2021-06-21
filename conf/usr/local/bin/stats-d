@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
 #echo STATS_ID: $STATS_ID

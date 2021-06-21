@@ -1,5 +1,7 @@
-FROM alpine
-MAINTAINER David Personette <dperson@gmail.com>
+ARG ALPINE_VERSION=${ALPINE_VERSION}
+ARG BASEIMAGE=alpine:${ALPINE_VERSION}
+FROM ${BASEIMAGE} as alpine
+MAINTAINER admin@bitcoincore.dev <admin@bitcoincore.dev>
 
 # Install tor and privoxy
 RUN apk --no-cache --no-progress upgrade && \
