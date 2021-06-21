@@ -16,14 +16,13 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  ubuntu-latest-docker:
+  ubuntu-latest-docker-shell:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Make
         run: |
-         make init
-         make run user=root
+         make shell
 
   ubuntu-latest-docker-header:
     runs-on: ubuntu-latest
@@ -36,6 +35,14 @@ jobs:
          ./conf/usr/local/bin/stats-d -daemon & wait
          ./conf/usr/local/bin/stats-cli gettxoutsetinfo
 
+  ubuntu-latest-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init
+         make run user=root
 
   ubuntu20-docker:
     runs-on: ubuntu20
