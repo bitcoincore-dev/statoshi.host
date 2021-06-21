@@ -8,8 +8,7 @@ RUN echo statoshi.all
 FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
 # Change to your fork
-#CMD "[ ! -d '/${GIT_REPO_NAME}' ] && \
-RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev.git --depth 10 /${GIT_REPO_NAME}
+CMD "[ ! -d '/${GIT_REPO_NAME}' ] && git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev.git --depth 10 /${GIT_REPO_NAME}
 COPY . /${GIT_REPO_NAME}
 RUN cd /${GIT_REPO_NAME}
 #RUN ./conf/usr/local/bin/get-branches.sh
