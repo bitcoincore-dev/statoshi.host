@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make
         run: |
-         make init header run
+         make init header run user=root
 
   ubuntu18-docker:
     runs-on: ubuntu18
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make
         run: |
-         make init header run
+         make init header run user=root
 
   ubuntu-latest-build-on-host:
     runs-on: ubuntu-latest
