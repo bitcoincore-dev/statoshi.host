@@ -25,6 +25,18 @@ jobs:
          make init
          make run user=root
 
+  ubuntu-latest-docker-header:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init
+         make header user=root
+         ./conf/usr/local/bin/stats-d -daemon & wait
+         ./conf/usr/local/bin/stats-cli gettxoutsetinfo
+
+
   ubuntu20-docker:
     runs-on: ubuntu20
     steps:
