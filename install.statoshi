@@ -1,0 +1,276 @@
+#!/bin/bash
+echo BEGIN install.statoshi
+#ENV VARS
+OS=$(uname)
+OS_VERSION=$(uname -r)
+UNAME_M=$(uname -m)
+ARCH=$(uname -m)
+export OS
+export OS_VERSION
+export UNAME_M
+export ARCH
+report() {
+echo OS:
+echo "$OS" | awk '{print tolower($0)}'
+echo OS_VERSION:
+echo "$OS_VERSION" | awk '{print tolower($0)}'
+echo UNAME_M:
+echo "$UNAME_M" | awk '{print tolower($0)}'
+echo ARCH:
+echo "$ARCH" | awk '{print tolower($0)}'
+echo OSTYPE:
+echo "$OSTYPE" | awk '{print tolower($0)}'
+df -H
+}
+report
+checkbrew() {
+    if hash brew 2>/dev/null; then
+        if !hash $AWK 2>/dev/null; then
+            brew install $AWK
+        fi
+        if !hash git 2>/dev/null; then
+            brew install git
+        fi
+    else
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        checkbrew
+    fi
+}
+checkraspi(){
+    echo 'Checking Raspi'
+    if [ -e /etc/rpi-issue ]; then
+    echo "- Original Installation"
+    cat /etc/rpi-issue
+    fi
+    if [ -e /usr/bin/lsb_release ]; then
+    echo "- Current OS"
+    lsb_release -irdc
+    fi
+    echo "- Kernel"
+    uname -r
+    echo "- Model"
+    cat /proc/device-tree/model && echo
+    echo "- hostname"
+    hostname
+    echo "- Firmware"
+    /opt/vc/bin/vcgencmd version
+}
+
+libs=()
+install_libs(){
+
+$PACKAGE_MANAGER update && $PACKAGE_MANAGER upgrade && $PACKAGE_MANAGER $INSTALL $VERBOSE $NO_CACHE musl busybox bash-completion git
+$PACKAGE_MANAGER  -U $INSTALL $VERBOSE coreutils
+$PACKAGE_MANAGER $INSTALL --update $VERBOSE $NO_CACHE nodejs nodejs-npm
+$PACKAGE_MANAGER $INSTALL $VERBOSE $NO_CACHE binutils-avr gcc-avr
+$PACKAGE_MANAGER update && $PACKAGE_MANAGER upgrade
+$PACKAGE_MANAGER $INSTALL $VERBOSE \
+autoconf \
+automake \
+binutils \
+ca-certificates \
+cmake \
+curl \
+doxygen \
+git \
+libtool \
+make \
+patch \
+pkgconfig \
+python3 \
+py3-psutil \
+vim \
+g++ \
+build-base \
+boost-libs \
+libgcc \
+libstdc++ \
+musl \
+boost-system \
+boost-build \
+boost-dev \
+openssl-dev \
+libevent \
+libevent-dev \
+libzmq \
+zeromq-dev \
+protobuf-dev \
+linux-headers \
+libbz2 \
+libcap-dev \
+librsvg \
+tiff-tools \
+zlib-dev \
+py3-setuptools \
+cairo \
+collectd \
+collectd-disk \
+collectd-nginx \
+findutils \
+librrd \
+logrotate \
+memcached \
+nginx \
+nodejs \
+npm \
+nodejs-npm \
+py3-pyldap \
+redis \
+runit \
+shadow \
+sqlite \
+expect \
+dcron \
+py3-mysqlclient \
+mysql-dev \
+mysql-client \
+postgresql-dev \
+postgresql-client \
+iptables \
+alpine-sdk \
+git \
+libffi-dev \
+pkgconfig \
+py3-cairo \
+py3-pip \
+py3-virtualenv==16.7.8-r0 \
+openldap-dev \
+python3-dev \
+rrdtool-dev \
+wget \
+gnupg
+
+$PACKAGE_MANAGER $INSTALL libzmq
+pip3 install pyzmq
+
+}
+
+if [[ "$OSTYPE" == "linux"* ]]; then
+    #CHECK APT
+    if [[ "$OSTYPE" == "linux-gnu" ]]; then
+        PACKAGE_MANAGER=apt
+        export PACKAGE_MANAGER
+        INSTALL=install
+        export INSTALL
+        AWK=gawk
+        export AWK
+        if hash apt 2>/dev/null; then
+            $PACKAGE_MANAGER $INSTALL $AWK
+            report
+            install_libs
+        fi
+    fi
+    if [[ "$OSTYPE" == "linux-musl" ]]; then
+        PACKAGE_MANAGER=apk
+        export PACKAGE_MANAGER
+        INSTALL=install
+        export INSTALL
+        AWK=gawk
+        export AWK
+        if hash apk 2>/dev/null; then
+            $PACKAGE_MANAGER $INSTALL $AWK
+            report
+            install_libs
+        fi
+    fi
+    if [[ "$OSTYPE" == "linux-arm"* ]]; then
+        PACKAGE_MANAGER=apt
+        export PACKAGE_MANAGER
+        INSTALL=install
+        export INSTALL
+        AWK=gawk
+        echo $AWK
+        export AWK
+        checkraspi
+        if hash apt 2>/dev/null; then
+            $PACKAGE_MANAGER $INSTALL $AWK
+            report
+            install_libs
+        fi
+    fi
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        report
+        PACKAGE_MANAGER=brew
+        export PACKAGE_MANAGER
+        INSTALL=install
+        export INSTALL
+        AWK=awk
+        export AWK
+        checkbrew
+        install_libs
+    fi
+fi
+
+more_config(){
+if [ "$EUID" -ne 0 ]; then
+SUDO=sudo
+export SUDO
+$SUDO more_config
+else
+$SUDO rm -rf \
+     /etc/nginx/conf.d/default.conf \
+&& $SUDO mkdir -p \
+     /var/log/carbon \
+     /var/log/graphite
+
+$SUDO mkdir -p /etc/bitcoin
+$SUDO mkdir -p /root/.bitcoin
+$SUDO mkdir -p /home/root/.bitcoin
+$SUDO mkdir -p /usr/bin
+$SUDO mkdir -p /usr/local/bin
+
+$SUDO install $VERBOSE ./conf/bitcoin.conf /etc/bitcoin/bitcoin.conf
+$SUDO install $VERBOSE ./conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
+$SUDO install $VERBOSE ./conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
+$SUDO install $VERBOSE ./conf/additional.conf /etc/bitcoin/additional.conf
+$SUDO install $VERBOSE ./conf/additional.conf /root/.bitcoin/additional.conf
+$SUDO install $VERBOSE ./conf/additional.conf /home/root/.bitcoin/additional.conf
+$SUDO 
+$SUDO install $VERBOSE ./conf/usr/local/bin/bitcoind /usr/local/bin/bitcoind
+$SUDO install $VERBOSE ./conf/usr/local/bin/bitcoind /usr/bin/bitcoind
+$SUDO 
+$SUDO install $VERBOSE ./conf/usr/local/bin/bitcoin-cli /usr/local/bin/bitcoin-cli
+$SUDO install $VERBOSE ./conf/usr/local/bin/bitcoin-cli /usr/bin/bitcoin-cli
+$SUDO 
+$SUDO install $VERBOSE ./conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
+$SUDO install $VERBOSE ./conf/usr/local/bin/bitcoin-tx /usr/bin/bitcoin-tx
+$SUDO 
+$SUDO install $VERBOSE ./conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
+
+fi
+}
+
+###########################
+# Micro containers may not be able to compile from source - signed binaries verified here
+###########################
+
+if !hash gpg 2>/dev/null; then
+$PACKAGE_MANAGER $INSTALL gnupg
+fi
+gpg --refresh-keys
+gpg --import  ./conf/usr/local/bin/randymcmillan.asc
+gpg --import  ./conf/usr/local/bin/randymcmillan2.asc
+
+while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ./conf/usr/local/bin/keys.txt
+
+gpg --verify ./conf/usr/local/bin/bitcoind.gpg    ./conf/usr/local/bin/bitcoind
+gpg --verify ./conf/usr/local/bin/bitcoind.sig    ./conf/usr/local/bin/bitcoind
+
+gpg --verify ./conf/usr/local/bin/bitcoin-cli.gpg ./conf/usr/local/bin/bitcoin-cli
+gpg --verify ./conf/usr/local/bin/bitcoin-cli.sig ./conf/usr/local/bin/bitcoin-cli
+
+gpg --verify ./conf/usr/local/bin/bitcoin-tx.gpg  ./conf/usr/local/bin/bitcoin-tx
+gpg --verify ./conf/usr/local/bin/bitcoin-tx.sig  ./conf/usr/local/bin/bitcoin-tx
+
+$SUDO install ./conf/entrypoint /usr/local/bin/entrypoint
+$SUDO install ./conf/usr/local/bin/systemMetrics.Daemon.py /usr/local/bin/systemMetric.Daemon.py
+$SUDO install ./conf/usr/local/bin/requirements.txt /usr/local/bin/requirements.txt
+$SUDO python3 -m pip install -r /usr/local/bin/requirements.txt
+
+$SUDO rm -rf /var/cache/man/*
+$SUDO rm -rf /opt/graphite/examples/*
+$SUDO npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y npm
+
+$SUDO rm -rf /opt/graphite/examples/*
+$SUDO df -H
+echo END install.statoshi
