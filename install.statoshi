@@ -20,7 +20,7 @@ echo ARCH:
 echo "$ARCH" | awk '{print tolower($0)}'
 echo OSTYPE:
 echo "$OSTYPE" | awk '{print tolower($0)}'
-df -H
+df
 }
 report
 checkbrew() {
@@ -163,7 +163,7 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     if [[ "$OSTYPE" == "linux-musl" ]]; then
         PACKAGE_MANAGER=apk
         export PACKAGE_MANAGER
-        INSTALL=install
+        INSTALL=add
         export INSTALL
         AWK=gawk
         export AWK
