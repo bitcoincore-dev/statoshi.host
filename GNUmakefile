@@ -311,9 +311,9 @@ super:
 ifneq ($(shell id -u),0)
 	@echo switch to superuser
 	@echo cd $(TARGET_DIR)
-	sudo ln -s $(PWD) $(TARGET_DIR)
-.ONESHELL:
-	sudo -i &
+	#sudo ln -s $(PWD) $(TARGET_DIR)
+#.ONESHELL:
+	sudo -s
 endif
 #######################
 #######################
