@@ -91,6 +91,13 @@ GRAFANA_VERSION							:= $(grafana)
 endif
 export GRAFANA_VERSION
 
+ifeq ($(django),)
+DJANGO_VERSION							:= 2.2.24
+else
+DJANGO_VERSION							:= $(django)
+endif
+export DJANGO_VERSION
+
 # PROJECT_NAME defaults to name of the current directory.
 ifeq ($(project),)
 PROJECT_NAME							:= $(notdir $(PWD))
@@ -285,6 +292,7 @@ report:
 	@echo '        - GRAPHITE_VERSION=${GRAPHITE_VERSION}'
 	@echo '        - STATSD_VERSION=${STATSD_VERSION}'
 	@echo '        - GRAFANA_VERSION=${GRAFANA_VERSION}'
+	@echo '        - DJANGO_VERSION=${DJANGO_VERSION}'
 	@echo '        - PROJECT_NAME=${PROJECT_NAME}'
 	@echo '        - DOCKER_BUILD_TYPE=${DOCKER_BUILD_TYPE}'
 	@echo '        - SLIM=${SLIM}'
