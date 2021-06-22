@@ -340,14 +340,16 @@ endif
 	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
-#	bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
+	bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
 	@echo ''
 	bash -c 'mkdir -p $(BITCOIN_DATA_DIR)'
 	bash -c 'mkdir -p $(STATOSHI_DATA_DIR)'
 	bash -c 'mkdir -p /usr/local/bin'
 	bash -c 'mkdir -p /usr/local/include'
 ifneq ($(shell id -u),0)
-	sudo bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin/'
+	sudo bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
+else
+	bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
 endif
 	@echo ''
 	#bash -c '$(GIT_REPO_PATH)/conf/config.bitcoin.conf.sh'
