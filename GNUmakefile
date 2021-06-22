@@ -488,15 +488,10 @@ docs:
 	bash -c 'make help >> README.md'
 	bash -c 'make report >> README.md'
 #######################
-package-all:
+package:
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
-	bash -c 'docker tag $(PROJECT_NAME):root docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(GIT_HASH).all:root'
-	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(GIT_HASH).all:root'
-########################
-#package-slim:
-#	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
-#	bash -c 'docker tag $(PROJECT_NAME):root docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(GIT_HASH).slim:root'
-#	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(GIT_HASH).slim:root'
+	bash -c 'docker tag $(PROJECT_NAME):root docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
+	bash -c 'docker push docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
 ########################
 -include funcs.mk
 -include Makefile
