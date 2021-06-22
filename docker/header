@@ -205,7 +205,7 @@ FROM apk-add-packages3 as config1
 RUN virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip3 install \
-      django==2.2.12 \
+      django==2.2.24 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.0.4 \
