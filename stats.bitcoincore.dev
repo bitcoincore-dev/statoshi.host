@@ -449,6 +449,7 @@ RUN npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y np
 RUN rm -rf /opt/graphite/examples/*
 
 RUN df -H
-CMD ["bitcoind &"]
+CMD ["bitcoind", "-daemon", "&&", "wait", "&"]
+
 ENTRYPOINT ["/entrypoint"]
 #END FOOTER
