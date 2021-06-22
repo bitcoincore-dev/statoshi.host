@@ -254,9 +254,9 @@ RUN . /opt/graphite/bin/activate \
 ARG statsd_version=0.8.6
 ARG statsd_repo=https://github.com/statsd/statsd.git
 WORKDIR /opt
-RUN git clone "${statsd_repo}" \
+RUN git clone ${statsd_repo} \
  && cd /opt/statsd \
- && git checkout tags/v"${statsd_version}" \
+ && git checkout tags/v${statsd_version} \
  && npm install
 
 RUN df -H
