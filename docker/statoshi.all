@@ -92,7 +92,7 @@ RUN install -v ${REPO}/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked
 ###########################
 
 RUN apk add --no-cache gnupg
-RUN gpg --import  ${REPO}/conf/usr/local/bin/randymcmillan.asc
+RUN gpg --import  ${REPO}/conf/usr/local/bin/randymcmillan2.asc
 #RUN gpg --refresh-keys
 
 RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  ${REPO}/conf/usr/local/bin/keys.txt
