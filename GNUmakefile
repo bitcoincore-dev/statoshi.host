@@ -210,13 +210,13 @@ endif
 #######################
 #
 #######################
-.PHONY: superuser
-superuser:
-ifneq ($(shell id -u),0)
-	@echo switch to superuser
-	@echo cd $(PWD)
-	sudo -i
-endif
+#.PHONY: superuser
+#superuser:
+#ifneq ($(shell id -u),0)
+#	@echo switch to superuser
+#	@echo cd $(PWD)
+#	sudo -i
+#endif
 #######################
 
 .PHONY: help
