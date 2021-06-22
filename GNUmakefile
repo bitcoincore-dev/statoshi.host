@@ -208,16 +208,6 @@ pwd ?= pwd_unknown
 UMBREL=false
 endif
 #######################
-#
-#######################
-#.PHONY: superuser
-#superuser:
-#ifneq ($(shell id -u),0)
-#	@echo switch to superuser
-#	@echo cd $(PWD)
-#	sudo -i
-#endif
-#######################
 
 .PHONY: help
 help: report
@@ -310,6 +300,22 @@ report:
 	@echo '        - GIT_REPO_NAME=${GIT_REPO_NAME}'
 	@echo '        - GIT_REPO_PATH=${GIT_REPO_PATH}'
 
+#######################
+ORIGIN_DIR:=$(PWD)
+MACOS_TARGET_DIR:=/var/root/$(PROJECT_NAME)
+LINUX_TARGET_DIR:=/root/$(PROJECT_NAME)
+export ORIGIN_DIR
+export TARGET_DIR
+.PHONY: super
+super:
+ifneq ($(shell id -u),0)
+	@echo switch to superuser
+	@echo cd $(TARGET_DIR)
+	sudo ln -s $(PWD) $(TARGET_DIR)
+.ONESHELL:
+	sudo -i &
+endif
+#######################
 #######################
 # Backup $HOME/.bitcoin
 ########################
