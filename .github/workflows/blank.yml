@@ -41,7 +41,7 @@ jobs:
          make init header run user=root
 
   ubuntu20-docker:
-    runs-on: ubuntu20
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - name: Make
@@ -49,7 +49,7 @@ jobs:
          make init header run user=root
 
   ubuntu18-docker:
-    runs-on: ubuntu18
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - name: Make
