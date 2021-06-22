@@ -309,11 +309,13 @@ report:
 	@echo '        - GIT_REPO_PATH=${GIT_REPO_PATH}'
 
 #######################
+
 ORIGIN_DIR:=$(PWD)
 MACOS_TARGET_DIR:=/var/root/$(PROJECT_NAME)
 LINUX_TARGET_DIR:=/root/$(PROJECT_NAME)
 export ORIGIN_DIR
 export TARGET_DIR
+
 .PHONY: super
 super:
 ifneq ($(shell id -u),0)
@@ -340,10 +342,16 @@ endif
 #	bash -c 'openssl md5 -c $(HOME)/bitcoin-$(TIME).tar.gz.md5'
 #	@echo ''
 #######################
-
-#######################
 # Some initial setup
 ########################
+#######################
+
+.PHONY: host
+host:
+	@echo 'host'
+	bash -c './host'
+
+#######################
 .PHONY: init
 init: report
 ifneq ($(shell id -u),0)
