@@ -1,4 +1,4 @@
-# [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev)
+## [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev) [![CI](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/actions/workflows/blank.yml/badge.svg)](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/actions/workflows/blank.yml)
 
 ![stats.bitcoincore.dev](./docker/stats.bitcoincore.dev.png)
 
