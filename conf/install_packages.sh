@@ -134,10 +134,10 @@ gpg --verify $REPO/conf/usr/local/bin/bitcoin-tx.gpg $REPO/conf/usr/local/bin/bi
 
 df -H
 
-install $REPO/conf/entrypoint /
-install $REPO/conf/usr/local/bin/systemMetrics.Daemon.py /
-install $REPO/conf/usr/local/bin/requirements.txt /
-python3 -m pip install -r requirements.txt
+install $REPO/conf/usr/local/bin/entrypoint              /usr/local/bin/entrypoint
+install $REPO/conf/usr/local/bin/systemMetrics.Daemon.py /usr/local/bin/systemMetrics.Daemon.py
+install $REPO/conf/usr/local/bin/requirements.txt        /usr/local/bin/requirements.txt
+python3 -m pip install -r                                /usr/local/bin/requirements.txt
 
 rm -rf $REPO
 rm -rf /var/cache/man/*
