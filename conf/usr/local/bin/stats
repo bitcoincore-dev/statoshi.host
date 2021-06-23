@@ -1,33 +1,42 @@
 #!/bin/bash
 
 STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
-#echo STATS_ID: $STATS_ID
+export STATS_ID
+#echo $STATS_ID
+
 STATS_TAG=$(echo $(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1'))
+export STATS_TAG
 #echo STATS_TAG: $STATS_TAG
 
-#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli $1"
-
+#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon"
+#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
+#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
 
 for ((i=1;i<=$#;i++));
 do
 
     if [ ${!i} = "-s" ]
     then ((i++))
+	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon"
+	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
+	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
         var1=${!i};
 
     elif [ ${!i} = "-id" ];
     then ((i++))
-	STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
+	#STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
 	echo STATS_ID: $STATS_ID
-	STATS_TAG=$(echo $(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1'))
-	echo STATS_TAG: $STATS_TAG
+	#STATS_TAG=$(echo $(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1'))
+	#echo STATS_TAG: $STATS_TAG
 
-    elif [ ${!i} = "-log" ];
+    elif [ ${!i} = "-prune" ];
     then ((i++))
-        logFile=${!i};
+	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
 
-    elif [ ${!i} = "-x" ];
+    elif [ ${!i} = "-cli" ];
     then ((i++))
+        echo ${!i};
+	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
         var2=${!i};
 
     elif [ ${!i} = "-p" ];
