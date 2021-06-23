@@ -307,6 +307,17 @@ report:
 	@echo '        - GIT_REPO_ORIGIN=${GIT_REPO_ORIGIN}'
 	@echo '        - GIT_REPO_NAME=${GIT_REPO_NAME}'
 	@echo '        - GIT_REPO_PATH=${GIT_REPO_PATH}'
+	@echo '        - DOCKERFILE=${DOCKERFILE}'
+	@echo '        - DOCKERFILE_PATH=${DOCKERFILE_PATH}'
+	@echo '        - BITCOIN_CONF=${BITCOIN_CONF}'
+	@echo '        - BITCOIN_DATA_DIR=${BITCOIN_DATA_DIR}'
+	@echo '        - STATOSHI_DATA_DIR=${STATOSHI_DATA_DIR}'
+	@echo '        - NO_CACHE=${NO_CACHE}'
+	@echo '        - VERBOSE=${VERBOSE}'
+	@echo '        - PUBLIC_PORT=${PUBLIC_PORT}'
+	@echo '        - NODE_PORT=${NODE_PORT}'
+	@echo '        - PASSWORD=${PASSWORD}'
+	@echo '        - CMD_ARGUMENTS=${CMD_ARGUMENTS}'
 
 #######################
 
