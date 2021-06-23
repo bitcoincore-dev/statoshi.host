@@ -5,7 +5,7 @@ FROM alpine:3.11.6 as base
 
 RUN apk update \
     && apk add --no-cache \
-        coreutils musl busybox bash-completion vim git make
+        coreutils musl busybox bash-completion vim git make su-exec
 RUN git config --global advice.detachedHead false
 WORKDIR /
 
