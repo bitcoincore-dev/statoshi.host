@@ -17,9 +17,9 @@ ENV VERBOSE=
 RUN apk update && apk upgrade && apk add ${VERBOSE} musl busybox bash-completion git
 RUN git clone https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 3 ${REPO}
 RUN ${REPO}/conf/install_packages.sh
-WORKDIR /
+WORKDIR ${REPO}
 RUN mkdir -p /usr/local/bin/
-#RUN install -v ${REPO}/contrib/zmq/zmq_sub.py /usr/local/bin/zmq_sub.py
+#COPY ./contrib/zmq/zmq_sub.py /usr/local/bin/zmq_sub.py
 
 RUN apk -U add ${VERBOSE} coreutils
 RUN apk add --update ${VERBOSE} nodejs nodejs-npm
