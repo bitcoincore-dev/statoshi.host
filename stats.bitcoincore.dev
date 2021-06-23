@@ -426,7 +426,8 @@ RUN df -H
 #################
 ENV REPO=stats.bitcoincore.dev
 
-RUN install ${REPO}/conf/entrypoint /
+RUN install ${REPO}/conf/usr/local/bin/entrypoint /entrypoint
+RUN install ${REPO}/conf/usr/local/bin/entrypoint /usr/local/bin/entrypoint
 RUN install ${REPO}/conf/usr/local/bin/systemMetrics.Daemon.py /
 RUN install ${REPO}/conf/usr/local/bin/requirements.txt /
 
