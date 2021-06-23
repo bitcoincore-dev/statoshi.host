@@ -11,7 +11,7 @@ FROM config-final as clone-stats-bitcoincore-dev
 ARG PROJECT_NAME=${PROJECT_NAME}
 ENV REPO=/${PROJECT_NAME}
 # Change to your fork
-RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 2 ${REPO}
+RUN git clone -b master https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 1 ${REPO}
 #RUN cd ${REPO} 
 #RUN ${REPO}/conf/usr/local/bin/get-branches.sh
 RUN mkdir -p ${REPO}/depends/SDKs
