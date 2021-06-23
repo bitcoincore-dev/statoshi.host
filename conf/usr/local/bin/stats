@@ -39,9 +39,9 @@ do
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
         var2=${!i};
 
-    elif [ ${!i} = "-p" ];
+    elif [ ${!i} = "-ep" ];
     then ((i++))
-        var3=${!i};
+	docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
 
     elif [ ${!i} = "-b" ];
     then ((i++))
