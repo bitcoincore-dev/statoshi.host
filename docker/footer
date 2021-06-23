@@ -7,12 +7,12 @@
 #################
 ENV REPO=stats.bitcoincore.dev
 
-RUN install ${REPO}/conf/usr/local/bin/entrypoint /entrypoint
-RUN install ${REPO}/conf/usr/local/bin/entrypoint /usr/local/bin/entrypoint
-RUN install ${REPO}/conf/usr/local/bin/systemMetrics.Daemon.py /usr/local/bin/systemMetrics.Daemon.py
-RUN install ${REPO}/conf/usr/local/bin/systemMetrics.Daemon.py /systemMetrics.Daemon.py
-RUN install ${REPO}/conf/usr/local/bin/requirements.txt /requirements.txt
-RUN install ${REPO}/conf/usr/local/bin/requirements.txt /usr/local/bin/requirements.txt
+RUN install -v ${REPO}/conf/usr/local/bin/entrypoint /entrypoint
+RUN install -v ${REPO}/conf/usr/local/bin/entrypoint /usr/local/bin/entrypoint
+RUN install -v ${REPO}/conf/usr/local/bin/systemMetrics.Daemon.py /usr/local/bin/systemMetrics.Daemon.py
+RUN install -v ${REPO}/conf/usr/local/bin/systemMetrics.Daemon.py /systemMetrics.Daemon.py
+RUN install -v ${REPO}/conf/usr/local/bin/requirements.txt /requirements.txt
+RUN install -v ${REPO}/conf/usr/local/bin/requirements.txt /usr/local/bin/requirements.txt
 
 RUN rm -rf  ${REPO}/
 
