@@ -11,11 +11,12 @@ LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
 LABEL maintainer="admin@bitcoincore.dev"
 ARG PROJECT_NAME=${PROJECT_NAME}
 ENV REPO=/${PROJECT_NAME}
+RUN echo ${REPO}
 #ENV VERBOSE=-v
 ENV VERBOSE=    
 
 RUN apk update && apk upgrade && apk add ${VERBOSE} musl busybox bash-completion git
-RUN git clone https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 3 ${REPO}
+RUN git clone https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 1 ${REPO}
 RUN ${REPO}/conf/install_packages.sh
 WORKDIR ${REPO}
 RUN mkdir -p /usr/local/bin/

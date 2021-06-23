@@ -11,7 +11,7 @@ start_bitcoin(){
 
     if hash bitcoind 2>/dev/null; then
       echo "################################### start_bitcoind ##################################"
-      bitcoind -daemon -prune=1 -disablewallet -datadir=/root/.statoshi & wait
+      bitcoind -daemon -disablewallet -datadir=/home/root/.bitcoin & wait
     fi
     if hash bitcoin-cli 2>/dev/null; then
       echo "################################### start_bitcoin-cli gettxoutsetinfo ###############"
