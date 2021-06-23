@@ -86,18 +86,18 @@ jobs:
 #         make ./host
 
 ## Cross Compile 
-  ubuntu-latest-build-on-host-cross-compile:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Make
-        run: |
-         make init
-         sudo apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
-         sudo apt install g++-arm-linux-gnueabihf curl
-         make -C depends HOST=arm-linux-gnueabihf NO_QT=1
-         ./autogen.sh
-         ./configure --disable-wallet --disable-tests --disable-bench --disable-docs --prefix=$PWD/depends/arm-linux-gnueabihf --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++
-         make
-         make install
+#  ubuntu-latest-build-on-host-cross-compile:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Make
+#        run: |
+#         make init
+#         sudo apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
+#         sudo apt install g++-arm-linux-gnueabihf curl
+#         make -C depends HOST=arm-linux-gnueabihf NO_QT=1
+#         ./autogen.sh
+#         ./configure --disable-wallet --disable-tests --disable-bench --disable-docs --prefix=$PWD/depends/arm-linux-gnueabihf --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++
+#         make
+#         make install
 
