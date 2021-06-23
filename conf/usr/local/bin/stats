@@ -61,8 +61,8 @@ do
     then ((i++))
         var6=${!i};
 
-    elif [ ${!i} = "-h" ];
-    then ((i++))
+    elif [ ${!i} = "-h" ]; then
+        ((i++))
         echo
         echo "stats -d <command>"
         echo "stats -cli <command>"
@@ -76,6 +76,9 @@ do
         echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli gettxoutsetinfo'"
         echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli getmininginfo'"
         echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli $1'"
+    elif [ -n ${!i} ];
+    then ((i++))
+        echo "else $1"
     fi
 
 done;
