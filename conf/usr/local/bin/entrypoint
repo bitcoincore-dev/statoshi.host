@@ -2,30 +2,33 @@
 
 export LC_ALL=C
 
-BITCOIND=/usr/local/bin/./bitcoind
-BITCOIN_CLI=/usr/local/bin/./bitcoin-cli
+BITCOIND=/usr/local/bin/bitcoind
+BITCOIN_CLI=/usr/local/bin/bitcoin-cli
 PATH="${PATH}:/usr/local/bin"
 ZMQ_SUB=/home/root/stats.bitcoincore.dev/contrib/zmq/zmq_python.py
 
 start_bitcoin(){
 
-    if test -f "$BITCOIND"; then
+    if hash bitcoind 2>/dev/null; then
       echo "################################### start_bitcoind ##################################"
-      $BITCOIND -daemon -prune=1 -disablewallet -datadir=/root/.statoshi & wait
+      bitcoind -daemon -prune=1 -disablewallet -datadir=/root/.statoshi & wait
     fi
-    if test -f "$BITCOIN_CLI"; then
+    if hash bitcoin-cli 2>/dev/null; then
       echo "################################### start_bitcoin-cli gettxoutsetinfo ###############"
-      $BITCOIN_CLI gettxoutsetinfo & wait
+      bitcoin-cli gettxoutsetinfo & wait
     fi
-    su-exec root python3 $ZMQ_SUB &
+    if hash zmq_python.py 2>/dev/null; then
+      echo "################################### zmq_python.py ###################################"
+    su-exec root python3 zmq_python.py &
+    fi
 
 }
 stop_bitcoin(){
 
       echo "################################### stop_bitcoind ##################################"
 
-    if test -f "$BITCOIN_CLI"; then
-      $BITCOIN_CLI stop & wait
+    if hash bitcoin-cli 2>/dev/null; then
+      bitcoin-cli stop & wait
     fi
 }
 shutdown(){
