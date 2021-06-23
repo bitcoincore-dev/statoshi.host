@@ -2,7 +2,7 @@
 
 STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
 export STATS_ID
-#echo $STATS_ID
+#echo STATS_ID: $STATS_ID
 
 STATS_TAG=$(echo $(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1'))
 export STATS_TAG
@@ -20,7 +20,7 @@ do
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon"
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
-        var1=${!i};
+        #var1=${!i};
 
     elif [ ${!i} = "-id" ];
     then ((i++))
@@ -37,7 +37,13 @@ do
     then ((i++))
         echo ${!i};
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
-        var2=${!i};
+        #var2=${!i};
+
+    elif [ ${!i} = "-d" ];
+    then ((i++))
+        echo ${!i};
+	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
+        #var2=${!i};
 
     elif [ ${!i} = "-ep" ];
     then ((i++))
@@ -54,14 +60,22 @@ do
     elif [ ${!i} = "-a" ];
     then ((i++))
         var6=${!i};
-    else
-        echo stats-d -daemon
-        echo stats-cli gettxoutsetinfo 
-        echo stats-cli getmininginfo
-        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
-        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
-        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
-        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli $1"
+
+    elif [ ${!i} = "-h" ];
+    then ((i++))
+        echo
+        echo "stats -d <command>"
+        echo "stats -cli <command>"
+        echo
+        echo "Examples:"
+        echo
+        echo "stats -cli gettxoutsetinfo"
+        echo "stats -cli getmininginfo"
+        echo
+        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoind -daemon -prune=550'"
+        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli gettxoutsetinfo'"
+        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli getmininginfo'"
+        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli $1'"
     fi
 
 done;
