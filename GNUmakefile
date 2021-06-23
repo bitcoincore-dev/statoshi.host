@@ -209,11 +209,11 @@ ifeq ($(umbrel),true)
 PWD=/home/umbrel/umbrel/apps/$(PROJECT_NAME)
 UMBREL=true
 export PWD
-export UMBREL
 else
 pwd ?= pwd_unknown
-UMBREL=false
+export pwd
 endif
+export UMBREL
 #######################
 
 .PHONY: help
