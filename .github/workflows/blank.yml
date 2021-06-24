@@ -63,8 +63,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make
         run: |
-            make init
-            make package user=umbrel umbrel=true verbose=true nocache=true
+            make init build run user=umbrel port=8666 umbrel=true verbose=true nocache=true
 
 ### Make Host
 #  ubuntu-latest-host:
