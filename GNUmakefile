@@ -514,8 +514,8 @@ prune-network:
 docs:
 #$ make report no-cache=true verbose=true cmd='make doc' user=root doc
 	@echo 'docs'
-	export HOST_USER=root
-	export HOST_UID=0
+	export HOST_USER=$(HOST_USER)
+	export HOST_UID=$(HOST_UID)
 	bash -c 'cat ./docker/README.md > README.md'
 	bash -c 'cat ./docker/DOCKER.md >> README.md'
 	bash -c 'make help >> README.md'
@@ -524,7 +524,7 @@ docs:
 package: init build
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 #TODO: use $(PROJECT_NAME)?
-	bash -c 'docker tag $(PROJECT_NAME):root docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
 	bash -c 'docker push docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
 ########################
 -include funcs.mk
