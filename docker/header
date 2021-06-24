@@ -10,6 +10,9 @@ LABEL description="Statoshi Docker"
 LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
 LABEL maintainer="admin@bitcoincore.dev"
 ARG PROJECT_NAME=${PROJECT_NAME}
+RUN echo  "umbrel statoshi port 8666?"
+ARG PUBLIC_PORT=${PUBLIC_PORT}
+ENV PUBLIC_PORT=${PUBLIC_PORT}
 ENV REPO=/${PROJECT_NAME}
 #ENV VERBOSE=-v
 ENV VERBOSE=    
