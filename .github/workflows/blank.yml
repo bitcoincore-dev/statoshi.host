@@ -57,13 +57,13 @@ jobs:
         run: |
             make init header run user=root
 
-  ubuntu18-docker-umbrel:
-    runs-on: ubuntu-18.04
+  ubuntu-latest-debian-latest-docker:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Make
         run: |
-            make init build run user=umbrel port=8666 umbrel=true verbose=true nocache=true
+            make statoshi-debian user=umbrel port=8666 umbrel=true verbose=true nocache=true
 
 ### Make Host
 #  ubuntu-latest-host:

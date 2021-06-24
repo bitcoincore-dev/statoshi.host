@@ -447,6 +447,11 @@ build: report
 	@echo 'build'
 	$(DOCKER_COMPOSE) $(VERBOSE) $(NO_CACHE)  build $(NO_CACHE) statoshi
 	@echo ''
+.PHONY: statoshi-debian
+statoshi-debian: report
+	@echo 'build'
+	$(DOCKER_COMPOSE) $(VERBOSE) $(NO_CACHE)  build $(NO_CACHE) statoshi-debian
+	@echo ''
 #######################
 .PHONY: run
 run: build
@@ -512,10 +517,10 @@ prune-network:
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME)_$(HOST_UID) down
 	docker network prune -f
 #######################
-.PHONY: docs
-docs:
+.PHONY: readme
+readme:
 #$ make report no-cache=true verbose=true cmd='make doc' user=root doc
-	@echo 'docs'
+	@echo 'readme'
 	export HOST_USER=$(HOST_USER)
 	export HOST_UID=$(HOST_UID)
 	bash -c 'cat ./docker/README.md > README.md'
