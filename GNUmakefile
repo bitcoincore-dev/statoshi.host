@@ -171,6 +171,8 @@ VERBOSE									:=
 endif
 export VERBOSE
 
+
+#TODO more umbrel config testing
 ifeq ($(port),)
 PUBLIC_PORT								:= 80
 else
