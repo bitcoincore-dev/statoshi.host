@@ -57,6 +57,14 @@ jobs:
         run: |
          make init header run user=root
 
+  ubuntu18-docker-umbrel:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init package verbose=true no-cache=true user=umbrel
+
 ### Make Host
 #  ubuntu-latest-host:
 #    runs-on: ubuntu-latest
