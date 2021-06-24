@@ -208,9 +208,9 @@ export CMD_ARGUMENTS
 #todo: ref: https://github.com/getumbrel/umbrel/blob/master/security.md
 ifeq ($(umbrel),true)
 #comply with umbrel conventions
-PWD=/home/umbrel/umbrel/apps/$(PROJECT_NAME)
+#PWD=/home/umbrel/umbrel/apps/$(PROJECT_NAME)
 UMBREL=true
-export PWD
+#export PWD
 export UMBREL
 else
 pwd ?= pwd_unknown
