@@ -448,6 +448,7 @@ build: report
 	$(DOCKER_COMPOSE) $(VERBOSE) $(NO_CACHE)  build $(NO_CACHE) statoshi
 	@echo ''
 .PHONY: statoshi-debian
+#######################
 statoshi-debian: report
 	@echo 'build'
 	$(DOCKER_COMPOSE) $(VERBOSE) $(NO_CACHE)  build $(NO_CACHE) statoshi-debian
@@ -529,6 +530,12 @@ readme:
 	bash -c 'make report >> README.md'
 #######################
 package: init build
+	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+#TODO: use $(PROJECT_NAME)?
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
+	bash -c 'docker push docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
+#######################
+package-debian: init build-debian
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 #TODO: use $(PROJECT_NAME)?
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
