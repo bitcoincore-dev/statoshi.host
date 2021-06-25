@@ -2,40 +2,40 @@
 
 export LC_ALL=C
 
-BITCOIND=/usr/local/bin/bitcoind
-BITCOIN_CLI=/usr/local/bin/bitcoin-cli
-PATH="${PATH}:/usr/local/bin"
-ZMQ_SUB=/home/root/stats.bitcoincore.dev/contrib/zmq/zmq_python.py
-
-start_bitcoin(){
-
-    if hash bitcoind 2>/dev/null; then
-      echo "################################### start_bitcoind ##################################"
-      bitcoind -daemon -prune=1 -disablewallet -datadir=/root/.statoshi & wait
-    fi
-    if hash bitcoin-cli 2>/dev/null; then
-      echo "################################### start_bitcoin-cli gettxoutsetinfo ###############"
-      bitcoin-cli gettxoutsetinfo & wait
-    fi
-    if hash zmq_python.py 2>/dev/null; then
-      echo "################################### zmq_python.py ###################################"
-    su-exec root python3 zmq_python.py &
-    fi
-
-}
-stop_bitcoin(){
-
-      echo "################################### stop_bitcoind ##################################"
-
-    if hash bitcoin-cli 2>/dev/null; then
-      bitcoin-cli stop & wait
-    fi
-}
+#BITCOIND=/usr/local/bin/bitcoind
+#BITCOIN_CLI=/usr/local/bin/bitcoin-cli
+#PATH="${PATH}:/usr/local/bin"
+#ZMQ_SUB=/home/root/stats.bitcoincore.dev/contrib/zmq/zmq_python.py
+#
+#start_bitcoin(){
+#
+#    if hash bitcoind 2>/dev/null; then
+#      echo "################################### start_bitcoind ##################################"
+#      bitcoind -daemon -prune=1 -disablewallet -datadir=/root/.statoshi & wait
+#    fi
+#    if hash bitcoin-cli 2>/dev/null; then
+#      echo "################################### start_bitcoin-cli gettxoutsetinfo ###############"
+#      bitcoin-cli gettxoutsetinfo & wait
+#    fi
+#    if hash zmq_python.py 2>/dev/null; then
+#      echo "################################### zmq_python.py ###################################"
+#    su-exec root python3 zmq_python.py &
+#    fi
+#
+#}
+#stop_bitcoin(){
+#
+#      echo "################################### stop_bitcoind ##################################"
+#
+#    if hash bitcoin-cli 2>/dev/null; then
+#      bitcoin-cli stop & wait
+#    fi
+#}
 shutdown(){
 
   echo "shutting down container"
 
-  stop_bitcoin; wait &
+#  stop_bitcoin; wait &
 
   # first shutdown any service started by runit
   for _srv in $(ls -1 /etc/service); do
@@ -61,9 +61,11 @@ shutdown(){
 
 echo "################################### entrypoint ##################################"
 
-start_bitcoin & wait
-
-su-exec root /usr/local/bin/./run-grafana.sh &
+#start_bitcoin & wait
+su-exec root bitcoind -daemon & wait
+su-exec root bitcoin-cli gettxoutsetinfo & wait
+su-exec root bitcoin-cli getmininginfo & wait
+su-exec root run-grafana.sh &
 su-exec root grafana-cli plugins install ryantxu-ajax-panel &
 . /opt/graphite/bin/activate
 

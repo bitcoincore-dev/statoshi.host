@@ -34,6 +34,6 @@ RUN rm -rf /opt/graphite/examples/*
 
 RUN df -H
 
-ENTRYPOINT ["entrypoint"]
-CMD ["bitcoind", "-daemon", "&", "wait", "&"]
+ENTRYPOINT ["/usr/local/bin/./entrypoint"]
+#CMD ["bitcoind", "-daemon", "&", "wait", "&"]
 #END FOOTER
