@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make
         run: |
-            make statoshi-debian user=umbrel port=8666 umbrel=true verbose=true nocache=true
+            make init statoshi-debian user=umbrel port=8666 umbrel=true
 
 ### Make Host
 #  ubuntu-latest-host:

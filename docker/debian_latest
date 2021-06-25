@@ -42,7 +42,7 @@ ARG PROJECT_NAME=${PROJECT_NAME}
 
 RUN cd /tmp && git clone https://github.com/bitcoincore-dev/${PROJECT_NAME} --depth 1
 RUN cd /tmp/${PROJECT_NAME} && ./autogen.sh
-RUN cd /tmp/${PROJECT_NAME} && ./configure --disable-wallet --with-cli --without-gui --enable-hardening --without-miniupnpc --disable-tests --disable-docs --disable-bench
+RUN cd /tmp/${PROJECT_NAME} && ./configure --disable-wallet --with-cli --without-gui --enable-hardening --without-miniupnpc --disable-tests --disable-docs --disable-bench --disable-man
 RUN cd /tmp/${PROJECT_NAME} && make
 RUN cd /tmp/${PROJECT_NAME} && make install
 
