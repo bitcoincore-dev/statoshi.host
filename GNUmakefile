@@ -515,6 +515,7 @@ docs:
 	@echo 'docs'
 	export HOST_USER=$(HOST_USER)
 	export HOST_UID=$(HOST_UID)
+	bash -c 'curl https://raw.githubusercontent.com/jlopp/statoshi/master/README.md -o ./docker/README.md'
 	bash -c 'cat ./docker/README.md > README.md'
 	bash -c 'cat ./docker/DOCKER.md >> README.md'
 	bash -c 'make help >> README.md'
