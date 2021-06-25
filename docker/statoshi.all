@@ -42,6 +42,7 @@ FROM configure as make
 ######################
 
 RUN cd ${REPO} && make -f Makefile -j $(nproc)
+RUN cd ${REPO} && make install
 
 ###########################
 FROM make as strip-binaries
