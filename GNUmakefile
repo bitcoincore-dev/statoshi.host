@@ -157,12 +157,12 @@ export STATOSHI_DATA_DIR
 #REF: https://github.com/getumbrel/umbrel/blob/master/apps/README.md
 #- ${APP_DATA_DIR}/data:/data
 
-ifeq ($(no-cache),true)
-NO_CACHE								:= --no-cache
+ifeq ($(nocache),true)
+NOCACHE								:= --no-cache
 else
-NO_CACHE								:=	
+NOCACHE								:=	
 endif
-export NO_CACHE
+export NOCACHE
 
 ifeq ($(verbose),true)
 VERBOSE									:= --verbose
@@ -240,7 +240,7 @@ help: report
 	@echo '	[EXTRA_ARGUMENTS]:	set build variables	'
 	@echo ''
 	@echo '		no-cache=true'
-	@echo '		            	add --no-cache to docker command and apk add $(NO_CACHE)'
+	@echo '		            	add --no-cache to docker command and apk add $(NOCACHE)'
 	@echo '		port=integer'
 	@echo '		            	set PUBLIC_PORT default 80'
 	@echo ''
@@ -314,7 +314,7 @@ report:
 	@echo '        - BITCOIN_CONF=${BITCOIN_CONF}'
 	@echo '        - BITCOIN_DATA_DIR=${BITCOIN_DATA_DIR}'
 	@echo '        - STATOSHI_DATA_DIR=${STATOSHI_DATA_DIR}'
-	@echo '        - NO_CACHE=${NO_CACHE}'
+	@echo '        - NOCACHE=${NOCACHE}'
 	@echo '        - VERBOSE=${VERBOSE}'
 	@echo '        - PUBLIC_PORT=${PUBLIC_PORT}'
 	@echo '        - NODE_PORT=${NODE_PORT}'
@@ -403,7 +403,7 @@ endif
 build-shell:
 	@echo ''
 	bash -c 'cat ./docker/shell                > shell'
-	$(DOCKER_COMPOSE) $(VERBOSE) build $(NO_CACHE) shell
+	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) shell
 	@echo ''
 #######################
 .PHONY: shell
@@ -424,7 +424,7 @@ endif
 .PHONY: build-header
 build-header:
 	@echo ''
-	$(DOCKER_COMPOSE) $(VERBOSE) build $(NO_CACHE) header
+	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) header
 	@echo ''
 #######################
 .PHONY: header
@@ -445,7 +445,7 @@ test:
 .PHONY: build
 build: report
 	@echo 'build'
-	$(DOCKER_COMPOSE) $(VERBOSE) $(NO_CACHE)  build $(NO_CACHE) statoshi
+	$(DOCKER_COMPOSE) $(VERBOSE) $(NOCACHE)  build $(NOCACHE) statoshi
 	@echo ''
 #######################
 .PHONY: run

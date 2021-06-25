@@ -4,10 +4,17 @@ ARG BASE_IMAGE=alpine:3.11.6
 FROM ${BASE_IMAGE} as set-initial-env
 #####################################
 
+ARG GIT_SERVER=${GIT_SERVER}
+ENV GIT_SERVER=${GIT_SERVER}
+ARG GIT_PROFILE=${GIT_PROFILE}
+ENV GIT_PROFILE=${GIT_PROFILE}
+ARG PROJECT_NAME=${PROJECT_NAME}
+ENV PROJECT_NAME=${PROJECT_NAME}
+
 LABEL dev.bitcoincore.stats="dev.bitcoincore.stats"
 LABEL version="v0.20.99.0"
 LABEL description="Statoshi Docker"
-LABEL github="https://github.com/bitcoincore-dev/stats.bitcoincore.dev"
+LABEL github="${GIT_SERVER}/${GIT_PROFILE}/${PROJECT_NAME}"
 LABEL maintainer="admin@bitcoincore.dev"
 ARG PROJECT_NAME=${PROJECT_NAME}
 RUN echo  "umbrel statoshi port 8666?"
@@ -17,14 +24,14 @@ ENV REPO=/${PROJECT_NAME}
 #ENV VERBOSE=-v
 ENV VERBOSE=    
 
-RUN apk update && apk upgrade && apk add ${VERBOSE} musl busybox bash-completion git
-RUN git clone https://github.com/bitcoincore-dev/stats.bitcoincore.dev --depth 3 ${REPO}
+RUN apk update && apk upgrade && apk add ${VERBOSE} ${NOCACHE} musl busybox bash-completion git
+RUN git clone ${GIT_SERVER}/${GIT_PROFILE}/${PROJECT_NAME} --depth 1 ${REPO}
 RUN ${REPO}/conf/install_packages.sh
 RUN mkdir -p /usr/local/bin/
 #RUN install -v ${REPO}/contrib/zmq/zmq_sub.py /usr/local/bin/zmq_sub.py
 
-RUN apk -U add ${VERBOSE} coreutils
-RUN apk add --update ${VERBOSE} nodejs nodejs-npm
+RUN apk -U add ${VERBOSE} ${NOCACHE} coreutils
+RUN apk add --update ${VERBOSE} ${NOCACHE} nodejs nodejs-npm
 
 #NOTE: simply exposing the ports in the dockerfile isnt enough
 #REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
@@ -68,7 +75,7 @@ RUN set -ex \
     && addgroup -S grafana \
     && adduser -S -G grafana grafana \
     #&& apk add --no-cache libc6-compat ca-certificates su-exec bash
-    && apk add ${VERBOSE} libc6-compat su-exec
+    && apk add ${VERBOSE} ${NOCACHE} libc6-compat su-exec
 
 #NOTE Once /tmp/grafana is copied to GF_PATHS_HOME we are free to modify the default configuration
 COPY --from=grafana-config /tmp/grafana "$GF_PATHS_HOME"
@@ -107,7 +114,7 @@ FROM set-grafana-env as apk-add-packages1
 WORKDIR /
 
 RUN apk update && apk upgrade
-RUN apk add ${VERBOSE} \
+RUN apk add ${VERBOSE} ${NOCACHE} \
     autoconf \
     automake \
     binutils \
@@ -124,7 +131,7 @@ RUN apk add ${VERBOSE} \
     py3-psutil \
     vim
 
-RUN apk add ${VERBOSE} \
+RUN apk add ${VERBOSE} ${NOCACHE} \
     g++ \
     build-base \
     boost-libs \
@@ -152,7 +159,7 @@ RUN df -H
 FROM apk-add-packages1 as apk-add-packages2
 ###########################################
 
-RUN apk add ${VERBOSE} \
+RUN apk add ${VERBOSE} ${NOCACHE} \
       cairo \
       collectd \
       collectd-disk \
@@ -189,7 +196,7 @@ RUN df -H
 FROM apk-add-packages2 as apk-add-packages3
 ###########################################
 
-RUN apk add ${VERBOSE} \
+RUN apk add ${VERBOSE} ${NOCACHE} \
       alpine-sdk \
       git \
       libffi-dev \
