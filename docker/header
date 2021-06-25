@@ -374,7 +374,7 @@ COPY conf /
 # copy /opt from build image
 COPY --from=config3 /opt /opt
 
-VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd/config", "/etc/logrotate.d", "/var/log", "/var/lib/redis", "/home/root/.bitcoin"]
+VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd/config", "/etc/logrotate.d", "/var/log", "/var/lib/redis", "${BITCOIN_DATA_DIR}", "${STATOSHI_DATA_DIR}"]
 
 RUN df -H
 #######################
