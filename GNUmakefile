@@ -518,7 +518,6 @@ docs:
 	bash -c 'cat ./docker/README.md > README.md'
 	bash -c 'cat ./docker/DOCKER.md >> README.md'
 	bash -c 'make help >> README.md'
-	bash -c 'make report >> README.md'
 #######################
 package: init build
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
