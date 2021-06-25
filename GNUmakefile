@@ -445,7 +445,7 @@ test:
 .PHONY: build
 build: report
 	@echo 'build'
-	$(DOCKER_COMPOSE) $(VERBOSE) $(NOCACHE)  build $(NOCACHE) statoshi
+	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) statoshi
 	@echo ''
 #######################
 .PHONY: run
