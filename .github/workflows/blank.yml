@@ -62,7 +62,7 @@ jobs:
          make init header run user=root
          stats
 
-  ubuntu18-amend-commit:
+  ubuntu18-make-docs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@master
@@ -73,7 +73,7 @@ jobs:
       - name: Get last commit message
         id: last-commit-message
         run: |
-          make docs
+          make docs user=runner uid=$(HOST_UID)
           echo "::set-output name=msg::$(git log -1 --pretty=%s)"
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
