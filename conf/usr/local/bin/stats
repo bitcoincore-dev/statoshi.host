@@ -1,5 +1,8 @@
 #!/bin/bash
 
+if hash docker 2>/dev/null; then
+
+
 STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
 export STATS_ID
 #echo STATS_ID: $STATS_ID
@@ -92,4 +95,4 @@ done;
 #docker exec -it $STATS_ID sh -c "find /usr/local -maxdepth 2 -type f -name 'stats'"
 #docker exec -it $STATS_ID sh -c "find /usr/local -maxdepth 2 -type f -name 'stats*'"
 #echo stats-cli $1 
-
+fi #end if docker hash
