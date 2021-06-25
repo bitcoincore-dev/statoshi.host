@@ -62,6 +62,26 @@ jobs:
          make init header run user=root
          stats
 
+  ubuntu18-amend-commit:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+        with:
+# Fetch the last 2 commits instead of just 1. (Fetching just 1 commit would overwrite the whole history)
+          fetch-depth: 2
+# Other steps in your workflow to trigger a changed file
+      - name: Get last commit message
+        id: last-commit-message
+        run: |
+          echo "::set-output name=msg::$(git log -1 --pretty=%s)"
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: ${{ steps.last-commit-message.outputs.msg }}
+          commit_options: '--amend --no-edit'
+          push_options: '--force'
+          skip_fetch: true
+
+
 ### Make Host
 #  ubuntu-latest-host:
 #    runs-on: ubuntu-latest
