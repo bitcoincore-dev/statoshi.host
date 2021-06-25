@@ -10,7 +10,7 @@ FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
 ENV REPO=stats.bitcoincore.dev
 # Change to your fork
-RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${REPO}
+RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${iGIT_REPO_NAME}
 #RUN cd ${REPO} 
 #RUN ${REPO}/conf/usr/local/bin/get-branches.sh
 RUN mkdir -p ${REPO}/depends/SDKs
@@ -29,13 +29,13 @@ RUN pip3 install pyzmq
 FROM make-depends as autogen
 ############################
 
-RUN cd ${REPO} && ./autogen.sh
+RUN cd ${GIT_REPO_NAME} && ./autogen.sh
 
 #########################
 FROM autogen as configure
 #########################
 
-RUN cd ${REPO}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+RUN cd ${GIT_REPO_NAME}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
 
 ######################
 FROM configure as make
@@ -61,7 +61,7 @@ FROM strip-binaries as statoshi
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
 #RUN test -d /home/root/.bitcoin && echo Exists || conf/usr/local/bin/fastcopy-chaindata.py /home/root/.bitcoin /home/root/.statoshi
 
-RUN ${REPO}/conf/config.bitcoin.conf.sh
+RUN ${GIT_REPO_NAME}/conf/config.bitcoin.conf.sh
 
 # These should be the mounted volume
 #TODO mimic the bitcoin package install?
