@@ -17,61 +17,8 @@ on:
 jobs:
 
 ## Docker Configs
-  ubuntu-latest-docker-shell:
+  ubuntu-latest-make-docs:
     runs-on: ubuntu-latest
-    steps:
-## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
-      - uses: styfle/cancel-workflow-action@0.8.0
-        with:
-          access_token: ${{ github.token }}
-      - uses: actions/checkout@v2
-      - name: Make
-        run: |
-         make init shell
-         stats
-
-  ubuntu-latest-docker-header:
-    needs: ubuntu-latest-docker-shell
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Make
-        run: |
-         make init header user=root
-         stats
-
-  ubuntu-latest-docker:
-    needs: ubuntu-latest-docker-header
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Make
-        run: |
-         make init header run user=root
-         stats
-
-  ubuntu20-docker:
-    needs: ubuntu-latest-docker-header
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: Make
-        run: |
-         make init header run user=root
-         stats
-
-  ubuntu18-docker:
-    needs: ubuntu-latest-docker-header
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: Make
-        run: |
-         make init header run user=root
-         stats
-
-  ubuntu18-make-docs:
-    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@master
         with:
@@ -79,7 +26,7 @@ jobs:
         # (Fetching just 1 commit would overwrite the whole history)
           fetch-depth: 2
         # Other steps in your workflow to trigger a changed file
-      - name: make --silent docs 
+      - name: make --silent init help docs 
         id: last-commit-message
         run: |
           make init docs nocache=true verbose=true
@@ -91,6 +38,79 @@ jobs:
           push_options: '--force'
           skip_fetch: true
 
+  ubuntu-latest-docker-shell:
+    runs-on: ubuntu-latest
+    steps:
+## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init help shell
+         stats
+
+  ubuntu-latest-docker-header:
+    needs: ubuntu-latest-docker-shell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init help header user=root
+         stats
+
+  ubuntu-latest-docker:
+    needs: ubuntu-latest-docker-header
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init help header run user=root
+         stats
+
+  ubuntu20-docker:
+    needs: ubuntu-latest-docker-header
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init help header run user=root
+         stats
+
+  ubuntu18-docker:
+    needs: ubuntu-latest-docker-header
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init help header run user=root
+         stats
+
+#  ubuntu18-make-docs:
+#    runs-on: ubuntu-18.04
+#    steps:
+#      - uses: actions/checkout@master
+#        with:
+#        # Fetch the last 2 commits instead of just 1.
+#        # (Fetching just 1 commit would overwrite the whole history)
+#          fetch-depth: 2
+#        # Other steps in your workflow to trigger a changed file
+#      - name: make --silent init help docs 
+#        id: last-commit-message
+#        run: |
+#          make init docs nocache=true verbose=true
+#          echo "::set-output name=msg::$(git log -1 --pretty=%s)"
+#      - uses: stefanzweifel/git-auto-commit-action@v4
+#        with:
+#          commit_message: ${{ steps.last-commit-message.outputs.msg }}
+#          commit_options: '--amend --no-edit'
+#          push_options: '--force'
+#          skip_fetch: true
 
 ### Make Host
 #  ubuntu-latest-host:
