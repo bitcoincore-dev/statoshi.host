@@ -34,71 +34,14 @@ A system metrics daemon is available [here](https://github.com/jlopp/bitcoin-uti
 Statoshi also supports running multiple nodes that emit metrics to a single graphite instance.
 In order to facilitate this, you can add a line to bitcoin.conf that will partition each
 metric by the name of the host: statshostname=yourNodeName
---
-## Docker Notes & [DigitalOcean.com](https://m.do.co/c/ae5c7d05da91)
+<html>
 
-## [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/packages/314536)
+test
 
-#### Full Build
-
-This runs the statoshi configuration and [displays statsd data from the pruned node](http://stats.bitcoincore.dev:3000).
-
-```
-docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev
-0.20.99             a27f8eb4ad39        4 minutes ago       2.98GB
-```
-
-Pull image from the command line:
-
-	docker pull docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev:0.20.99
-
-Use as base image in DockerFile:
-
-	FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev:0.20.99
-
-
-## [stats.bitcoincore.dev.slim](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/packages/315130)
-
-#### Slim Build
-
-This runs the slim (precompiled signed binaries) configuration and [displays statsd data from the pruned node](http://stats.bitcoincore.dev:3000).
-
-```
-docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.slim
-0.20.99             390876b14625        24 minutes ago      1.63GB
-```
-Pull image from the command line:
-
-	docker pull docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.slim:0.20.99
-
-Use as base image in DockerFile:
-
-	FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.slim:0.20.99
-
-## [stats.bitcoincore.dev.gui](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/packages/315116)
-
-#### Gui Build
-
-This runs the gui [(graphite/grafana) configuration](http://stats.bitcoincore.dev:3000) and pulls data from
-[http://stats.bitcoincore.dev:8080](http://stats.bitcoincore.dev:8080). Useful as a demo or if you don't want to run your own statoshi instance.
-
-```
-docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.gui
-0.20.99             737a8acf33c5        About an hour ago   1.23GB
-```
-
-Pull image from the command line:
-
-	docker pull docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.gui:0.20.99
-	
-Use as base image in DockerFile:
-
-	FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/stats.bitcoincore.dev.gui:0.20.99
-
-## make help
-
-
-##### $ <code>make</code>
+</html><insert string>
+----
+# [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev)
+##### &#36; <code>make</code>
 
 	[ARGUMENTS]	
       args:
@@ -106,9 +49,9 @@ Use as base image in DockerFile:
         - PWD=/Users/git/stats.bitcoincore.dev
         - UMBREL=false
         - THIS_FILE=GNUmakefile
-        - TIME=1624647164
-        - HOST_USER=root
-        - HOST_UID=0
+        - TIME=1624732787
+        - HOST_USER=git
+        - HOST_UID=501
         - PUBLIC_PORT=80
         - NODE_PORT=8333
         - SERVICE_TARGET=shell
@@ -129,7 +72,7 @@ Use as base image in DockerFile:
         - GIT_SERVER=https://github.com
         - GIT_PROFILE=bitcoincore-dev
         - GIT_BRANCH=master
-        - GIT_HASH=b25c70d61919b1801f133bc72eb473c1ccce9032
+        - GIT_HASH=165238549a4e8e63d22d9edad2e49a10d29f9f83
         - GIT_REPO_ORIGIN=git@github.com:bitcoincore-dev/stats.bitcoincore.dev.git
         - GIT_REPO_NAME=stats.bitcoincore.dev
         - GIT_REPO_PATH=/Users/git/stats.bitcoincore.dev
@@ -153,7 +96,7 @@ Use as base image in DockerFile:
 
 		make header user=root
 		make shell  user=root
-		make shell  user=root
+		make shell  user=git
 
 	[EXTRA_ARGUMENTS]:	set build variables	
 
