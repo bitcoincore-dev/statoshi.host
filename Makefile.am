@@ -20,6 +20,18 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libbitcoinconsensus.pc
 endif
 
+BITCOIN_DAEMON_NAME =: statoshid
+BITCOIN_GUI_NAME    =: statoshi
+BITCOIN_CLI_NAME    =: statoshi-cli
+BITCOIN_TX_NAME     =: statoshi-tx
+PACKAGE             =: statoshi
+
+export BITCOIN_DAEMON_NAME
+export BITCOIN_GUI_NAME
+export BITCOIN_CLI_NAME
+export BITCOIN_TX_NAME
+export PACKAGE            
+
 BITCOIND_BIN=$(top_builddir)/src/$(BITCOIN_DAEMON_NAME)$(EXEEXT)
 BITCOIN_QT_BIN=$(top_builddir)/src/qt/$(BITCOIN_GUI_NAME)$(EXEEXT)
 BITCOIN_CLI_BIN=$(top_builddir)/src/$(BITCOIN_CLI_NAME)$(EXEEXT)
@@ -30,7 +42,7 @@ BITCOIN_WIN_INSTALLER=$(PACKAGE)-$(PACKAGE_VERSION)-win64-setup$(EXEEXT)
 empty :=
 space := $(empty) $(empty)
 
-OSX_APP=Bitcoin-Qt.app
+OSX_APP=$(BITCOIN_GUI_NAME)-Qt.app
 OSX_VOLNAME = $(subst $(space),-,$(PACKAGE_NAME))
 OSX_DMG = $(OSX_VOLNAME).dmg
 OSX_BACKGROUND_SVG=background.svg
