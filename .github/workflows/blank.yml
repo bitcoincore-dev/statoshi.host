@@ -65,6 +65,9 @@ jobs:
   ubuntu18-make-docs:
     runs-on: ubuntu-18.04
     steps:
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
       - uses: actions/checkout@master
         with:
         # Fetch the last 2 commits instead of just 1.
