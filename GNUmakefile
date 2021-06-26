@@ -525,10 +525,7 @@ docs:
 	bash -c "echo '# [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME))'  >> README.md"
 	bash -c "echo '##### &#36; <code>make</code>' >> README.md"
 	bash -c "make help >> README.md"
-	bash -c "if hash open 2>/dev/null; then \
-		open README.md; \
-		fi \
-		|| failed to open README.md"
+	bash -c "if hash open 2>/dev/null; then open README.md; fi || echo failed to open README.md"
 .PHONY: push-docs
 push-docs: docs
 	bash -c "git add README.md docker/README.md docker/DOCKER.md *.md docker/*.md || failed to add docs..."
