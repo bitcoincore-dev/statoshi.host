@@ -20,6 +20,10 @@ jobs:
   ubuntu-latest-docker-shell:
     runs-on: ubuntu-latest
     steps:
+## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
       - uses: actions/checkout@v2
       - name: Make
         run: |
@@ -65,9 +69,6 @@ jobs:
   ubuntu18-make-docs:
     runs-on: ubuntu-18.04
     steps:
-      - uses: styfle/cancel-workflow-action@0.8.0
-        with:
-          access_token: ${{ github.token }}
       - uses: actions/checkout@master
         with:
         # Fetch the last 2 commits instead of just 1.
