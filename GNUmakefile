@@ -119,7 +119,7 @@ GIT_PROFILE								:= bitcoincore-dev
 export GIT_PROFILE
 GIT_BRANCH								:= $(shell git rev-parse --abbrev-ref HEAD)
 export GIT_BRANCH
-GIT_HASH								:= $(shell git rev-parse HEAD)
+GIT_HASH								:= $(shell git rev-parse --short HEAD)
 export GIT_HASH
 GIT_REPO_ORIGIN							:= $(shell git remote get-url origin)
 export GIT_REPO_ORIGIN
@@ -526,8 +526,9 @@ docs:
 	bash -c "echo '##### &#36; <code>make</code>' >> README.md"
 	bash -c "make help >> README.md"
 	bash -c "if hash open 2>/dev/null; then open README.md; fi || echo failed to open README.md"
-.PHONY: push-docs
-push-docs: docs
+.PHONY: push
+push: docs
+	@echo 'push'
 	bash -c "git add README.md docker/README.md docker/DOCKER.md *.md docker/*.md || echo failed to add docs..."
 	bash -c "git commit --amend --no-edit || failed to commit --amend --no-edit"
 	bash -c "git push -f git@github.com:$(GIT_PROFILE)/$(PROJECT_NAME).git || echo failed to push docs"
