@@ -71,10 +71,10 @@ jobs:
         # (Fetching just 1 commit would overwrite the whole history)
           fetch-depth: 2
         # Other steps in your workflow to trigger a changed file
-      - name: make docs
+      - name: make docs 
         id: last-commit-message
         run: |
-          make docs user=runner uid=$(HOST_UID)
+          make docs user=runner-generated nocache=true verbose=true
           echo "::set-output name=msg::$(git log -1 --pretty=%s)"
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
