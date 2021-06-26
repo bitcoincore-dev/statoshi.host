@@ -517,7 +517,7 @@ docs:
 	bash -c "curl https://raw.githubusercontent.com/jlopp/statoshi/master/README.md -o ./docker/README.md"
 	bash -c "cat ./docker/README.md >  README.md"
 	bash -c "cat ./docker/DOCKER.md >> README.md"
-	bash -c "echo '<insert string>' >> README.md"
+#	bash -c "echo '<insert string>' >> README.md"
 	bash -c "echo '----' >> README.md"
 	bash -c "echo '# [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME))'  >> README.md"
 	bash -c "echo '##### &#36; <code>make</code>' >> README.md"
@@ -525,6 +525,7 @@ docs:
 	bash -c "if hash open 2>/dev/null; then open README.md; fi"
 .PHONY: push-docs
 push-docs: docs
+	bash -c "git add README.md docker/README.md docker/DOCKER.md *.md docker/*.md"
 	bash -c "git commit --amend --no-edit"
 	bash -c "git push -f git@github.com:$(GIT_PROFILE)/$(PROJECT_NAME).git"
 	bash -c "git push -f git@github.com:$(GIT_PROFILE)/statoshi.host.git"
