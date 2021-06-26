@@ -527,12 +527,15 @@ docs:
 	bash -c "make help >> README.md"
 	bash -c "if hash open 2>/dev/null; then open README.md; fi || echo failed to open README.md"
 .PHONY: push
-push: docs
+push:
 	@echo 'push'
 	bash -c "git add README.md docker/README.md docker/DOCKER.md *.md docker/*.md || echo failed to add docs..."
 	bash -c "git commit --amend --no-edit || failed to commit --amend --no-edit"
 	bash -c "git push -f git@github.com:$(GIT_PROFILE)/$(PROJECT_NAME).git || echo failed to push docs"
 	bash -c "git push -f git@github.com:$(GIT_PROFILE)/statoshi.host.git || echo failed to push to statoshi.host"
+.PHONY: push-docs
+push-docs: docs push
+	@echo 'push-docs'
 #######################
 package: init build
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
