@@ -96,7 +96,7 @@ RUN apk add --no-cache gnupg
 RUN gpg --import  ${GIT_REPO_NAME}/conf/usr/local/bin/randymcmillan2.asc
 #RUN gpg --refresh-keys
 
-RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  ${iGIT_REPO_NAME}/conf/usr/local/bin/keys.txt
+RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  ${GIT_REPO_NAME}/conf/usr/local/bin/keys.txt
 
 RUN gpg --verify ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind.gpg    ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind
 
