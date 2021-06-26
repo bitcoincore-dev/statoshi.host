@@ -1,6 +1,8 @@
 # REF: https://github.com/LINKIT-Group/dockerbuild/blob/master/Makefile
 # Make searches for this file first per make default search hierarchy
 
+SHELL := /bin/bash
+
 PWD 									?= pwd_unknown
 
 THIS_FILE								:= $(lastword $(MAKEFILE_LIST))
@@ -512,6 +514,7 @@ prune-network:
 .PHONY: docs
 docs:
 #$ make report no-cache=true verbose=true cmd='make doc' user=root doc
+#SHELL := /bin/bash
 	@echo 'docs'
 	bash -c "if pgrep MacDown; then pkill MacDown; fi"
 	bash -c "curl https://raw.githubusercontent.com/jlopp/statoshi/master/README.md -o ./docker/README.md"
@@ -522,7 +525,10 @@ docs:
 	bash -c "echo '# [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME))'  >> README.md"
 	bash -c "echo '##### &#36; <code>make</code>' >> README.md"
 	bash -c "make help >> README.md"
-	bash -c "if hash open 2>/dev/null; then open README.md; fi || failed to open README.md"
+	bash -c "if hash open 2>/dev/null; then \
+		open README.md; \
+		fi \
+		|| failed to open README.md"
 .PHONY: push-docs
 push-docs: docs
 	bash -c "git add README.md docker/README.md docker/DOCKER.md *.md docker/*.md || failed to add docs..."
