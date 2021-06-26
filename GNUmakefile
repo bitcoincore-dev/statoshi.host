@@ -522,13 +522,13 @@ docs:
 	bash -c "echo '# [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME))'  >> README.md"
 	bash -c "echo '##### &#36; <code>make</code>' >> README.md"
 	bash -c "make help >> README.md"
-	bash -c "if hash open 2>/dev/null; then open README.md; fi"
+	bash -c "if hash open 2>/dev/null; then open README.md; fi || failed to open README.md"
 .PHONY: push-docs
 push-docs: docs
-	bash -c "git add README.md docker/README.md docker/DOCKER.md *.md docker/*.md"
-	bash -c "git commit --amend --no-edit"
-	bash -c "git push -f git@github.com:$(GIT_PROFILE)/$(PROJECT_NAME).git"
-	bash -c "git push -f git@github.com:$(GIT_PROFILE)/statoshi.host.git"
+	bash -c "git add README.md docker/README.md docker/DOCKER.md *.md docker/*.md || failed to add docs..."
+	bash -c "git commit --amend --no-edit || failed to commit --amend --no-edit"
+	bash -c "git push -f git@github.com:$(GIT_PROFILE)/$(PROJECT_NAME).git || echo failed to push docs"
+	bash -c "git push -f git@github.com:$(GIT_PROFILE)/statoshi.host.git || echo failed to push to statoshi.host"
 #######################
 package: init build
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
