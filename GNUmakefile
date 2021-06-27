@@ -525,7 +525,7 @@ docs:
 	bash -c "cat ./docker/DOCKER.md >> README.md"
 #	bash -c "echo '<insert string>' >> README.md"
 	bash -c "echo '----' >> README.md"
-	bash -c "echo '## [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)) [$(GIT_HASH)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)/commit/$(GIT_PREVIOUS_HASH))' >> README.md"
+	bash -c "echo '## [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)) [$(GIT_HASH)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)/commit/$(GIT_HASH))' >> README.md"
 	bash -c "echo '##### &#36; <code>make</code>' >> README.md"
 	bash -c "make help >> README.md"
 	bash -c "if hash open 2>/dev/null; then open README.md; fi || echo failed to open README.md"
