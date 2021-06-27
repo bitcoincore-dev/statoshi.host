@@ -121,6 +121,8 @@ GIT_BRANCH								:= $(shell git rev-parse --abbrev-ref HEAD)
 export GIT_BRANCH
 GIT_HASH								:= $(shell git rev-parse --short HEAD)
 export GIT_HASH
+GIT_PREVIOUS_HASH						:= $(shell git rev-parse --short master@{1})
+export GIT_PREVIOUS_HASH
 GIT_REPO_ORIGIN							:= $(shell git remote get-url origin)
 export GIT_REPO_ORIGIN
 GIT_REPO_NAME							:= $(PROJECT_NAME)
@@ -305,6 +307,7 @@ report:
 	@echo '        - GIT_PROFILE=${GIT_PROFILE}'
 	@echo '        - GIT_BRANCH=${GIT_BRANCH}'
 	@echo '        - GIT_HASH=${GIT_HASH}'
+	@echo '        - GIT_PREVIOUS_HASH=${GIT_PREVIOUS_HASH}'
 	@echo '        - GIT_REPO_ORIGIN=${GIT_REPO_ORIGIN}'
 	@echo '        - GIT_REPO_NAME=${GIT_REPO_NAME}'
 	@echo '        - GIT_REPO_PATH=${GIT_REPO_PATH}'
@@ -522,15 +525,17 @@ docs:
 	bash -c "cat ./docker/DOCKER.md >> README.md"
 #	bash -c "echo '<insert string>' >> README.md"
 	bash -c "echo '----' >> README.md"
-	bash -c "echo '## [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)) [$(GIT_HASH)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)/commit/$(GIT_HASH))' >> README.md"
+	bash -c "echo '## [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)) [$(GIT_HASH)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)/commit/$(GIT_PREVIOUS_HASH))' >> README.md"
 	bash -c "echo '##### &#36; <code>make</code>' >> README.md"
 	bash -c "make help >> README.md"
 	bash -c "if hash open 2>/dev/null; then open README.md; fi || echo failed to open README.md"
 .PHONY: push
 push:
 	@echo 'push'
+	bash -c "git reset --soft HEAD~1 || echo failed to add docs..."
 	bash -c "git add README.md docker/README.md docker/DOCKER.md *.md docker/*.md || echo failed to add docs..."
-	bash -c "git commit --amend --no-edit || echo failed to commit --amend --no-edit"
+	#bash -c "git commit --amend --no-edit --allow-empty -m '$(GIT_HASH)'          || echo failed to commit --amend --no-edit"
+	bash -c "git commit         --no-edit --allow-empty -m '$(GIT_PREVIOUS_HASH)' || echo failed to commit --amend --no-edit"
 	bash -c "git push -f git@github.com:$(GIT_PROFILE)/$(PROJECT_NAME).git || echo failed to push docs"
 	bash -c "git push -f git@github.com:$(GIT_PROFILE)/statoshi.host.git || echo failed to push to statoshi.host"
 .PHONY: push-docs
