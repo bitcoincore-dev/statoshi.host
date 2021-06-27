@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: u-latest-d-shell
+name: u-l-d-shell
 
 # Controls when the action will run. 
 on:

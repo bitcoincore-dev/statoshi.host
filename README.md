@@ -36,7 +36,7 @@ In order to facilitate this, you can add a line to bitcoin.conf that will partit
 metric by the name of the host: statshostname=yourNodeName
 
 ----
-## [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev) [f5ad0fe56](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/commit/f5ad0fe56)
+## [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev) [0806b5af3](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/commit/0806b5af3)
 ##### &#36; <code>make</code>
 
 	[ARGUMENTS]	
@@ -45,7 +45,7 @@ metric by the name of the host: statshostname=yourNodeName
         - PWD=/Users/git/stats.bitcoincore.dev
         - UMBREL=false
         - THIS_FILE=GNUmakefile
-        - TIME=1624757402
+        - TIME=1624758995
         - HOST_USER=git
         - HOST_UID=501
         - PUBLIC_PORT=80
@@ -68,7 +68,7 @@ metric by the name of the host: statshostname=yourNodeName
         - GIT_SERVER=https://github.com
         - GIT_PROFILE=bitcoincore-dev
         - GIT_BRANCH=master
-        - GIT_HASH=f5ad0fe56
+        - GIT_HASH=0806b5af3
         - GIT_REPO_ORIGIN=git@github.com:bitcoincore-dev/stats.bitcoincore.dev.git
         - GIT_REPO_NAME=stats.bitcoincore.dev
         - GIT_REPO_PATH=/Users/git/stats.bitcoincore.dev
