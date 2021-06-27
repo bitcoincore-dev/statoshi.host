@@ -28,9 +28,9 @@ jobs:
         with:
         # Fetch the last 2 commits instead of just 1.
         # (Fetching just 1 commit would overwrite the whole history)
-          fetch-depth: 2
+          fetch-depth: 10
         # Other steps in your workflow to trigger a changed file
-      - name: make --silent init help docs 
+      - name: make init docs 
         id: last-commit-message
         run: |
           make init docs nocache=true verbose=true
