@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: push
 
 # Controls when the action will run. 
 on:
@@ -17,7 +17,7 @@ on:
 jobs:
 
 ## Docker Configs
-  ubuntu-latest-make-docs:
+  u-l-make-docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -38,7 +38,7 @@ jobs:
           push_options: '--force'
           skip_fetch: true
 
-  ubuntu-latest-docker-shell:
+  u-l-d-shell:
     runs-on: ubuntu-latest
     steps:
 ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
@@ -51,8 +51,8 @@ jobs:
          make init help shell
          stats
 
-  ubuntu-latest-docker-header:
-    needs: ubuntu-latest-docker-shell
+  u-l-d-header:
+    needs: u-l-d-shell
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -61,8 +61,8 @@ jobs:
          make init help header user=root
          stats
 
-  ubuntu-latest-docker:
-    needs: ubuntu-latest-docker-header
+  u-l-docker:
+    needs: u-l-d-header
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -71,8 +71,8 @@ jobs:
          make init help header run user=root
          stats
 
-  ubuntu20-docker:
-    needs: ubuntu-latest-docker-header
+  u20-d:
+    needs: u-l-d-header
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -81,8 +81,8 @@ jobs:
          make init help header run user=root
          stats
 
-  ubuntu18-docker:
-    needs: ubuntu-latest-docker-header
+  u18-d:
+    needs: u-l-d-header
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
@@ -90,69 +90,4 @@ jobs:
         run: |
          make init help header run user=root
          stats
-
-#  ubuntu18-make-docs:
-#    runs-on: ubuntu-18.04
-#    steps:
-#      - uses: actions/checkout@master
-#        with:
-#        # Fetch the last 2 commits instead of just 1.
-#        # (Fetching just 1 commit would overwrite the whole history)
-#          fetch-depth: 2
-#        # Other steps in your workflow to trigger a changed file
-#      - name: make --silent init help docs 
-#        id: last-commit-message
-#        run: |
-#          make init docs nocache=true verbose=true
-#          echo "::set-output name=msg::$(git log -1 --pretty=%s)"
-#      - uses: stefanzweifel/git-auto-commit-action@v4
-#        with:
-#          commit_message: ${{ steps.last-commit-message.outputs.msg }}
-#          commit_options: '--amend --no-edit'
-#          push_options: '--force'
-#          skip_fetch: true
-
-### Make Host
-#  ubuntu-latest-host:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Make
-#        run: |
-#         make init
-#         make ./host
-#
-#  ubuntu20-host:
-#    runs-on: ubuntu-20.04
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Make
-#        run: |
-#         make init
-#         make ./host
-#
-#  ubuntu18-host:
-#    runs-on: ubuntu-18.04
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Make
-#        run: |
-#         make init
-#         make ./host
-
-## Cross Compile 
-#  ubuntu-latest-build-on-host-cross-compile:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Make
-#        run: |
-#         make init
-#         sudo apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
-#         sudo apt install g++-arm-linux-gnueabihf curl
-#         make -C depends HOST=arm-linux-gnueabihf NO_QT=1
-#         ./autogen.sh
-#         ./configure --disable-wallet --disable-tests --disable-bench --disable-docs --prefix=$PWD/depends/arm-linux-gnueabihf --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++
-#         make
-#         make install
 

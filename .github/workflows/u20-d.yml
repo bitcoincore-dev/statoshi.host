@@ -1,0 +1,49 @@
+# This is a basic workflow to help you get started with Actions
+
+name: u-20.04
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  u20-d:
+    runs-on: ubuntu-20.04
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init help header run user=root
+
+# Cross Compile 
+  u-l-host-x-compile:
+    runs-on: ubuntu-20.04
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         make init
+         sudo apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
+         sudo apt install g++-arm-linux-gnueabihf curl
+         make -C depends HOST=arm-linux-gnueabihf NO_QT=1
+         ./autogen.sh
+         ./configure --disable-wallet --disable-tests --disable-bench --disable-docs --prefix=$PWD/depends/arm-linux-gnueabihf --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++
+         make
+         make install
+

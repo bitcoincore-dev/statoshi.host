@@ -530,7 +530,7 @@ docs:
 push:
 	@echo 'push'
 	bash -c "git add README.md docker/README.md docker/DOCKER.md *.md docker/*.md || echo failed to add docs..."
-	bash -c "git commit --amend --no-edit || failed to commit --amend --no-edit"
+	bash -c "git commit --amend --no-edit || echo failed to commit --amend --no-edit"
 	bash -c "git push -f git@github.com:$(GIT_PROFILE)/$(PROJECT_NAME).git || echo failed to push docs"
 	bash -c "git push -f git@github.com:$(GIT_PROFILE)/statoshi.host.git || echo failed to push to statoshi.host"
 .PHONY: push-docs
