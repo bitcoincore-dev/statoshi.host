@@ -1,0 +1,57 @@
+# This is a basic workflow to help you get started with Actions
+
+name: macos-10.15-host
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    paths:
+      - '.github/workflows/macos-10.15.yml'
+    branches:       #[ master ]
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - 'master'    # includes master
+      - 'main'      # includes main
+      #- '!master'   # excludes master
+    #branches-ignore:
+      #- 'v*'
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  github-workspace:
+    name: Look at the environment
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Print github workspace
+        run: |
+          echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
+          echo "github.workspace = ${{ github.workspace }}"
+          echo "pr.ref = ${{github.event.pull_request.head.ref}}"
+          echo "github.ref = ${{ github.ref }}"
+          echo "$GITHUB_CONTEXT"
+# Cross Compile 
+  macos-10-15:
+    runs-on: macos-10.15
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+         brew install wget curl
+         brew install autoconf automake berkeley-db4 libtool boost miniupnpc pkg-config python qt libevent qrencode librsvg codespell shellcheck
+         #make -C depends #HOST=arm-linux-gnueabihf NO_QT=1
+         ./autogen.sh
+         ./configure --disable-wallet --disable-tests --disable-bench --disable-docs #--prefix=$PWD/depends/arm-linux-gnueabihf --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++
+         make
+         make install
+

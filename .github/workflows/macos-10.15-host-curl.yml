@@ -1,0 +1,56 @@
+# This is a basic workflow to help you get started with Actions
+
+name: macos-10.15-host-curl
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    paths:
+      - '.github/workflows/macos-10.15-curl.yml'
+      - '.github/workflows/install*.sh'
+    branches:       #[ master ]
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - 'master'    # includes master
+      - 'main'      # includes main
+      #- '!master'   # excludes master
+    #branches-ignore:
+      #- 'v*'
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  github-workspace:
+    name: github-workspace
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Print github workspace
+        run: |
+          echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
+          echo "github.workspace = ${{ github.workspace }}"
+          echo "pr.ref = ${{github.event.pull_request.head.ref}}"
+          echo "github.ref = ${{ github.ref }}"
+          echo "$GITHUB_CONTEXT"
+
+  macos-10-15-host-curl:
+    runs-on: macos-10.15
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/RandyMcMillan/bitcoin/randymcmillan-deliverables/.github/workflows/install-bitcoin-libs.sh)"
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/RandyMcMillan/bitcoin/randymcmillan-deliverables/.github/workflows/install-qt5.sh)"
+
+          /bin/bash -c "$(curl -fsSL .github/workflows/install-bitcoin-libs.sh)"
+          /bin/bash -c "$(curl -fsSL .github/workflows/install-qt5.sh)"
+

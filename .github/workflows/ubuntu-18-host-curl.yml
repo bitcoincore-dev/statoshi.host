@@ -1,0 +1,53 @@
+# This is a basic workflow to help you get started with Actions
+
+name: ubuntu-18.04-host-curl
+
+# Controls when the action will run. 
+on:
+  push:
+    paths:
+      - '.github/workflows/u18-host-curl.yml'
+      - '.github/workflows/install*'
+        
+    branches:       #[ master ]
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - 'master'    # includes master
+      - 'main'      # includes main
+      #- '!master'   # excludes master
+    #branches-ignore:
+      #- 'v*'
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  github-workspace:
+    name: Look at the environment
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Print github workspace
+        run: |
+          echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
+          echo "github.workspace = ${{ github.workspace }}"
+          echo "pr.ref = ${{github.event.pull_request.head.ref}}"
+          echo "github.ref = ${{ github.ref }}"
+          echo "$GITHUB_CONTEXT"
+
+  ubuntu-18-host-curl:
+    runs-on: ubuntu-18.04
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+          sudo apt install curl bash
+          /bin/bash -c "$(sudo curl -fsSL https://raw.githubusercontent.com/RandyMcMillan/bitcoin/randymcmillan-deliverables/.github/workflows/install-qt5.sh)"
+          /bin/bash -c "$(sudo curl -fsSL https://raw.githubusercontent.com/RandyMcMillan/bitcoin/randymcmillan-deliverables/.github/workflows/install-bitcoin-libs.sh)"

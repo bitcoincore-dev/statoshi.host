@@ -7,14 +7,24 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  u-l-d-header-self:
+    runs-on: slef-hosted
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - name: make-init-header-help-user-root
+        run: |
+         make init help header user=root verbose=true nocache=true
+
   u-l-d-header:
     runs-on: ubuntu-latest
     steps:
@@ -26,4 +36,3 @@ jobs:
       - name: make-init-header-help-user-root
         run: |
          make init help header user=root verbose=true nocache=true
-
