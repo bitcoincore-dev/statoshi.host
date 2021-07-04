@@ -38,4 +38,5 @@ else
     echo this was trigger from blocknotify in bitcoin.conf
 fi
 
-#
+bitcoin-cli gettxoutsetinfo
+bitcoin-cli getmininginfo

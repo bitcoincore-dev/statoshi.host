@@ -9,7 +9,7 @@ on:
     #paths:
     #  - '.github/workflows/automate.yml'
     schedule:
-      - cron: "*/3 * * * *"
+      - cron: "*/5 * * * *"
 
     branches:       #[ master ]
       - '*'         # matches every branch that doesn't contain a '/'
@@ -43,7 +43,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make
         run: |
-          make init run user=root verbose=true nocache=true
+          ./automate.sh
 
 # Cross Compile 
   ubuntu-18-host:
@@ -57,7 +57,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make
         run: |
+          make header   user=root verbose=true nocache=true
           make init run user=root verbose=true nocache=true
+          stats
 
 # Cross Compile 
   macos-10-host:
@@ -71,5 +73,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make
         run: |
+          make header   user=root verbose=true nocache=true
           make init run user=root verbose=true nocache=true
+          stats
 
