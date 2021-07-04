@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 #ENV VARS
-#TEST
 OS=$(uname)
 OS_VERSION=$(uname -r)
 UNAME_M=$(uname -m)
@@ -9,7 +8,6 @@ export OS
 export OS_VERSION
 export UNAME_M
 export ARCH
-
 report() {
 echo OS:
 echo "$OS" | awk '{print tolower($0)}'
@@ -22,23 +20,27 @@ echo "$ARCH" | awk '{print tolower($0)}'
 echo OSTYPE:
 echo "$OSTYPE" | awk '{print tolower($0)}'
 }
-
 checkbrew() {
-
     if hash brew 2>/dev/null; then
-        brew install awk git qt@5 automake libtool pkg-config boost libevent berkeley-db@4 qrencode zeromq sqlite \
-        miniupnpc libnatpmp python3 librsvg
-        pip3 install ds_store mac_alias
-        export PKG_CONFIG_PATH="/usr/local/opt/qt@5/lib/pkgconfig"
-        echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> /Users/git/.bash_profile
-        echo
+        if !hash $AWK 2>/dev/null; then
+            brew install $AWK
+        fi
+        if !hash git 2>/dev/null; then
+            brew install git
+        fi
+        #if !hash pandoc 2>/dev/null; then
+            brew install pandoc
+            pip  install --user blockcypher
+            pip3 install --user blockcypher
+            brew install libevent docker docker-compose
+        #fi
+        #pip install -U sphinx
     else
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
         checkbrew
     fi
 }
 checkraspi(){
-
     echo 'Checking Raspi'
     if [ -e /etc/rpi-issue ]; then
     echo "- Original Installation"
@@ -57,34 +59,56 @@ checkraspi(){
     echo "- Firmware"
     /opt/vc/bin/vcgencmd version
 }
-
 if [[ "$OSTYPE" == "linux"* ]]; then
     #CHECK APT
     if [[ "$OSTYPE" == "linux-gnu" ]]; then
+        PACKAGE_MANAGER=apt
+        export PACKAGE_MANAGER
+        INSTALL=install
+        export INSTALL
+        AWK=gawk
+        export AWK
         if hash apt 2>/dev/null; then
-            apt install awk
+            sudo $PACKAGE_MANAGER $INSTALL $AWK pandoc
             report
-            echo 'Using apt...'
+            pandoc -s README.md -o index.html
         fi
     fi
     if [[ "$OSTYPE" == "linux-musl" ]]; then
+        PACKAGE_MANAGER=apk
+        export PACKAGE_MANAGER
+        INSTALL=install
+        export INSTALL
+        AWK=gawk
+        export AWK
         if hash apk 2>/dev/null; then
-            apk add awk
+            $PACKAGE_MANAGER $INSTALL $AWK
             report
-            echo 'Using apk...'
         fi
     fi
     if [[ "$OSTYPE" == "linux-arm"* ]]; then
+        PACKAGE_MANAGER=apt
+        export PACKAGE_MANAGER
+        INSTALL=install
+        export INSTALL
+        AWK=gawk
+        echo $AWK
+        export AWK
         checkraspi
         if hash apt 2>/dev/null; then
-            apt install awk
+            $PACKAGE_MANAGER $INSTALL $AWK
             report
-            echo 'Using apt...'
         fi
     fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    report
-    checkbrew
+        report
+        PACKAGE_MANAGER=brew
+        export PACKAGE_MANAGER
+        INSTALL=install
+        export INSTALL
+        AWK=awk
+        export AWK
+        checkbrew
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     echo TODO add support for $OSTYPE
 elif [[ "$OSTYPE" == "msys" ]]; then
