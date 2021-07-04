@@ -33,6 +33,7 @@ checkbrew() {
             pip  install --user blockcypher
             pip3 install --user blockcypher
             brew install libevent
+            ./install-bitcoin-libs.sh
         #fi
         #pip install -U sphinx
     else

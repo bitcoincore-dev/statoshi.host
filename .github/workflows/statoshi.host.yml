@@ -51,6 +51,7 @@ jobs:
       - name: Make
         run: |
           make automate
+          make -C depends
           make host
 
   macos-10-host:
@@ -64,5 +65,6 @@ jobs:
       - name: Make
         run: |
           make automate
+          make -C depends
           make host
 
