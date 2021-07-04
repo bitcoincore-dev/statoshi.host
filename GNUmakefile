@@ -548,6 +548,9 @@ package: init build
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
 	bash -c 'docker push docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(TIME):$(HOST_USER)'
 ########################
+.PHONY: automate
+automate:
+	./.github/workflows/automate.sh
 -include funcs.mk
 -include Makefile
 
