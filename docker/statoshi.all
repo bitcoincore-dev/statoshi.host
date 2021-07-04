@@ -59,6 +59,8 @@ FROM strip-binaries as statoshi
 ###########################
 
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /etc/periodic/15min/blocknotify
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind /etc/periodic/15min/bitcoind
 #RUN test -d /home/root/.bitcoin && echo Exists || conf/usr/local/bin/fastcopy-chaindata.py /home/root/.bitcoin /home/root/.statoshi
 
 RUN ${GIT_REPO_NAME}/conf/config.bitcoin.conf.sh
