@@ -104,7 +104,7 @@ RUN apk add --update ${VERBOSE} ${NOCACHE} nodejs nodejs-npm
 
 #NOTE: simply exposing the ports in the dockerfile isnt enough
 #REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
-EXPOSE ${PUBLIC_PORT} 2003-2004 2013-2014 2023-2024 3000 8080 8118 8333 8332 18333 8125 8125/udp 8126 9050 9051
+EXPOSE ${PUBLIC_PORT} ${NODE_PORT} 2003-2004 2013-2014 2023-2024 3000 8080 8118 8333 8332 18333 8125 8125/udp 8126 9050 9051
 RUN git config --global advice.detachedHead false
 
 RUN df -H
