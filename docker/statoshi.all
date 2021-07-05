@@ -11,9 +11,7 @@ FROM config-final as clone-stats-bitcoincore-dev
 ENV REPO=stats.bitcoincore.dev
 # Change to your fork
 RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${GIT_REPO_NAME}
-#RUN cd ${REPO} 
-#RUN ${REPO}/conf/usr/local/bin/get-branches.sh
-RUN mkdir -p ${REPO}/depends/SDKs
+RUN mkdir -p ${GIT_REPO_NAME}/depends/SDKs
 
 ################################################
 FROM clone-stats-bitcoincore-dev as make-depends
@@ -23,7 +21,7 @@ FROM clone-stats-bitcoincore-dev as make-depends
 #RUN make -j $(nproc) install -C ${REPO}/depends
 RUN apk add libzmq
 RUN pip3 install pyzmq
-#RUN python3 ${REPO}/contrib/zmq/zmq_sub.py &
+#RUN python3 ${GIT_REPO_NAME}/contrib/zmq/zmq_sub.py &
 
 ############################
 FROM make-depends as autogen
@@ -35,7 +33,7 @@ RUN cd ${GIT_REPO_NAME} && ./autogen.sh
 FROM autogen as configure
 #########################
 
-RUN cd ${GIT_REPO_NAME}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+RUN cd ${GIT_REPO_NAME}  && ./configure --disable-wallet --disable-tests --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
 
 ######################
 FROM configure as make
