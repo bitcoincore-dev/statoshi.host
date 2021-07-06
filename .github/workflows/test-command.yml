@@ -25,7 +25,7 @@ on:
 jobs:
 
   ubuntu-18-host:
-    runs-on: [ubuntu-18.04, self-hosted]
+    runs-on: ubuntu-18.04
     steps:
       ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
       - uses: styfle/cancel-workflow-action@0.8.0
@@ -33,13 +33,14 @@ jobs:
           access_token: ${{ github.token }}
       - name: statoshi-command
         run: |
+          sudo apt install -y bash
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
           brew install docker docker-compose make && \
           git clone https://github.com/bitcoincore-dev/statoshi.host.git ~/statoshi.host && \
           cd ~/statoshi.host && make init run user=root port=80
 
   macos-10-host:
-    runs-on: [macos-10.15, self-hosted]
+    runs-on: macos-10.15
     steps:
       ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
       - uses: styfle/cancel-workflow-action@0.8.0
