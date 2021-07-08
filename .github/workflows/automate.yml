@@ -62,20 +62,20 @@ jobs:
           sudo -s make run user=root verbose=true nocache=true
           sudo -s stats -h
 
-          ## Cross Compile 
-          #  macos-10-host:
-          #    runs-on: macos-10.15
-          #    steps:
-          #      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
-          #      - uses: styfle/cancel-workflow-action@0.8.0
-          #        with:
-          #          access_token: ${{ github.token }}
-          #
-          #      - uses: actions/checkout@v2
-          #      - name: Make
-          #        run: |
-          #          sudo -s make init
-          #          sudo -s make build
-          #          sudo -s make run user=root verbose=true nocache=true
-          #          sudo -s stats -h
+# Cross Compile 
+  ubuntu-20-host:
+    runs-on: ubuntu-20.04
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+          sudo -s make init
+          sudo -s make build
+          sudo -s make run user=root verbose=true nocache=true
+          sudo -s stats -h
 
