@@ -33,44 +33,28 @@ do
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
 
-    elif [ ${!i} = "-prune" ]; then
+    elif [[ ${!i} = *-prune* ]]; then
         ((i++))
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
 
-    elif [ ${!i} = "-cli" ]; then
+    elif [[ ${!i} = *-cli* ]]; then
         ((i++))
-        #echo ${!i};
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
-        #var2=${!i};
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
 
-    elif [ ${!i} = "-d" ]; then
+    elif [[ ${!i} = *-d* ]]; then
         ((i++))
-        #echo ${!i};
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
-        #var2=${!i};
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
 
-    elif [ ${!i} = "-ep" ]; then
+    elif [[ ${!i} = *-ep* ]]; then
         ((i++))
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
 
-    elif [ ${!i} = "-b" ]; then
-        ((i++))
-        var4=${!i};
-
-    elif [ ${!i} = "-l" ]; then
-        ((i++))
-        var5=${!i};
-
-    elif [ ${!i} = "-a" ]; then
-        ((i++))
-        var6=${!i};
-
-    elif [ ${!i} = "-h" ]; then
+    elif [[ ${!i} == *-h* ]]; then
         ((i++))
         echo
-        echo "stats <command> #- execute shell command in container"
-        echo "stats -d <command> #- send command to bitcoind"
-        echo "stats -cli <command> #- send command to bitcoin-cli"
+        echo "stats <command>          - execute shell command in container"
+        echo "stats -d <command>       - send command to bitcoind"
+        echo "stats -cli <command>     - send command to bitcoin-cli"
         echo
         echo "Examples:"
         echo
@@ -84,10 +68,9 @@ do
         echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli getmininginfo'"
         echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli $1'"
 
-    elif [ -n ${!i} ]; then
-        ((i++))
-        echo 'execute in container'
-	docker exec -it $STATS_ID sh -c  "$1"
+    else
+
+        docker exec -it $STATS_ID sh -c  "$1"
     fi
 
 done;
