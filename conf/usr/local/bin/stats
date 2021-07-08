@@ -18,38 +18,42 @@ export STATS_IMAGE
 for ((i=1;i<=$#;i++));
 do
 
-    if [ ${!i} = "-id" ]; then
+    if [[ ${!i} = *id* ]]; then
         ((i++))
 	echo STATS_ID: $STATS_ID
 
-    elif [ ${!i} = "-image" ]; then
+    elif [[ ${!i} = *image* ]]; then
         ((i++))
 	echo STATS_IMAGE: $STATS_IMAGE
 
-    elif [ ${!i} = "-start" ]; then
+    elif [[ ${!i} = *top* ]]; then
+        ((i++))
+    docker top $STATS_ID
+
+    elif [[ ${!i} = *start* ]]; then
         ((i++))
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon &"
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
 
-    elif [[ ${!i} = *-prune* ]]; then
+    elif [[ ${!i} = *prune* ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
 
-    elif [[ ${!i} = *-cli* ]]; then
+    elif [[ ${!i} = *cli* ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
 
-    elif [[ ${!i} = *-d* ]]; then
+    elif [[ ${!i} = *d* ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
 
-    elif [[ ${!i} = *-ep* ]]; then
+    elif [[ ${!i} = *ep* ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
 
-    elif [[ ${!i} == *-h* ]]; then
+    elif [[ ${!i} == *h* ]]; then
         ((i++))
         echo
         echo "stats <command>          - execute shell command in container"
