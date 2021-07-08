@@ -1,6 +1,13 @@
 #!/bin/bash
-# Execute on the most recent composed image
-D_ID1=$(echo $(docker ps | awk '{print $1}' | awk 'NR==2'))
-echo Container: $D_ID1
-docker exec -it $D_ID1 sh -c  "whoami && echo $PWD && sh && cd /"
+if hash docker 2>/dev/null; then
+    STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
+    export STATS_ID
+    echo STATS_ID: $STATS_ID
+
+    STATS_IMAGE=$(echo $(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1'))
+    export STATS_IMAGE
+    echo STATS_TAG: $STATS_TAG
+
+    docker exec -it  $STATS_ID sh -c  "whoami && sh && cd /"
+fi
 
