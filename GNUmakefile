@@ -36,53 +36,50 @@ endif
 export SERVICE_TARGET
 
 ifeq ($(docker),)
-#DOCKER							        := $(shell find /usr/local/bin -name 'docker')
-DOCKER							        := $(shell which docker)
+#DOCKER                                 := $(shell find /usr/local/bin -name 'docker')
+DOCKER                                  := $(shell which docker)
 else
-DOCKER   							:= $(docker)
+DOCKER                                  := $(docker)
 endif
 export DOCKER
 
-ifeq ($(compose),)
-#DOCKER_COMPOSE						        := $(shell find /usr/local/bin -name 'docker-compose')
-DOCKER_COMPOSE						        := $(shell which docker-compose)
-else
-DOCKER_COMPOSE							:= $(compose)
-endif
+DOCKER_COMPOSE                          := $(shell find /usr/local/bin -name 'docker-compose')
+#DOCKER_COMPOSE                         := $(shell which docker-compose)
+#DOCKER_COMPOSE                         := docker-compose
 export DOCKER_COMPOSE
 
 ifeq ($(alpine),)
-ALPINE_VERSION							:= 3.11.6
+ALPINE_VERSION                          := 3.11.6
 else
-ALPINE_VERSION							:= $(alpine)
+ALPINE_VERSION                          := $(alpine)
 endif
 export ALPINE_VERSION
 
 ifeq ($(whisper),)
-WHISPER_VERSION							:= 1.1.7
+WHISPER_VERSION                         := 1.1.7
 else
-WHISPER_VERSION							:= $(grafana)
+WHISPER_VERSION                         := $(grafana)
 endif
 export WHISPER_VERSION
 
 ifeq ($(carbon),)
-CARBON_VERSION							:= 1.1.7
+CARBON_VERSION                          := 1.1.7
 else
-CARBON_VERSION							:= $(carbon)
+CARBON_VERSION                          := $(carbon)
 endif
 export CARBON_VERSION
 
 ifeq ($(graphite),)
-GRAPHITE_VERSION						:= 1.1.7
+GRAPHITE_VERSION                        := 1.1.7
 else
-GRAPHITE_VERSION						:= $(graphite)
+GRAPHITE_VERSION                        := $(graphite)
 endif
 export GRAPHITE_VERSION
 
 ifeq ($(statsd),)
-STATSD_VERSION							:= 0.8.6
+STATSD_VERSION                          := 0.8.6
 else
-STATSD_VERSION							:= $(statsd)
+STATSD_VERSION                          := $(statsd)
 endif
 export STATSD_VERSION
 
@@ -191,6 +188,13 @@ NODE_PORT								:= $(nodeport)
 endif
 export NODE_PORT
 
+ifeq ($(rpcport),)
+RPC_PORT                                := 8332
+else
+RPC_PORT                                := $(rpcport)
+endif
+export RPC_PORT
+
 ifneq ($(passwd),)
 PASSWORD								:= $(passwd)
 else 
@@ -288,6 +292,7 @@ report:
 	@echo '        - HOST_UID=${HOST_UID}'
 	@echo '        - PUBLIC_PORT=${PUBLIC_PORT}'
 	@echo '        - NODE_PORT=${NODE_PORT}'
+	@echo '        - RPC_PORT=${RPC_PORT}'
 	@echo '        - SERVICE_TARGET=${SERVICE_TARGET}'
 	@echo '        - ALPINE_VERSION=${ALPINE_VERSION}'
 	@echo '        - WHISPER_VERSION=${WHISPER_VERSION}'
@@ -335,9 +340,6 @@ export TARGET_DIR
 super:
 ifneq ($(shell id -u),0)
 	@echo switch to superuser
-	@echo cd $(TARGET_DIR)
-	#sudo ln -s $(PWD) $(TARGET_DIR)
-#.ONESHELL:
 	sudo -s
 endif
 #######################
@@ -370,12 +372,12 @@ host:
 .PHONY: init
 init: report
 ifneq ($(shell id -u),0)
-	@echo 'sudo make init #try if permissions issue'
+	@echo 'sudo -s make init #try if permissions issue'
 endif
 	@echo 'init'
 	git config --global core.editor vim
-	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
-	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
+	bash -c 'cat $(PWD)/docker/header				> $(PWD)/$(DOCKERFILE)'
+	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)				>> $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
 	@echo ''
@@ -384,7 +386,7 @@ endif
 	bash -c 'mkdir -p /usr/local/bin'
 	bash -c 'mkdir -p /usr/local/include'
 ifneq ($(shell id -u),0)
-	sudo bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
+	sudo -s bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
 else
 	bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
 endif
@@ -395,9 +397,9 @@ endif
 	bash -c 'install -v $(PWD)/conf/additional.conf $(STATOSHI_DATA_DIR)/additional.conf'
 	bash -c 'install -v $(PWD)/docker/docker-compose.yml .'
 ifneq ($(shell id -u),0)
-	sudo bash -c 'mkdir -p /usr/local/include/'
-	sudo bash -c 'install -v $(PWD)/src/statsd_client.h		/usr/local/include/statsd_client.h'
-	sudo bash -c 'install -v $(PWD)/src/statsd_client.cpp		/usr/local/include/statsd_client.cpp'
+	sudo -s bash -c 'mkdir -p /usr/local/include/'
+	sudo -s bash -c 'install -v $(PWD)/src/statsd_client.h		/usr/local/include/statsd_client.h'
+	sudo -s bash -c 'install -v $(PWD)/src/statsd_client.cpp	/usr/local/include/statsd_client.cpp'
 endif
 	@echo ''
 #######################
@@ -439,15 +441,15 @@ header: report build-header
 .PHONY: test
 test:
 	@echo 'test'
-	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm shell sh -c '\
-	echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
-	&& echo success
+	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm shell sh -c \
+		'echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
+		&& echo success
 	@echo ''
 #######################
 .PHONY: build
 build: report
 	@echo 'build'
-	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) statoshi
+	bash -c "$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) statoshi"
 	@echo ''
 #######################
 .PHONY: run
@@ -455,11 +457,17 @@ run: init build
 	@echo 'run'
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
-	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --publish 8332:8332 statoshi sh
+	bash -c "$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run -d \
+		--publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 \
+		--publish $(NODE_PORT):8333 --publish $(RPC_PORT):8332 \
+		statoshi sh"
 	@echo ''
 else
 	@echo ''
-	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --publish 8332:8332 statoshi sh -c "$(CMD_ARGUMENTS)"
+	bash -c "$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run -d \
+		--publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 \
+		--publish $(NODE_PORT):8333 --publish $(RPC_PORT):8332 \
+		statoshi sh -c '$(CMD_ARGUMENTS)'"
 	@echo ''
 endif
 	@echo 'Give grafana a few minutes to set up...'
@@ -482,7 +490,7 @@ torproxy:
 	#bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -p 9051:9051 -d dperson/torproxy'
 	@echo ''
 ifneq ($(shell id -u),0)
-	bash -c 'sudo make torproxy user=root &'
+	bash -c 'sudo -s make torproxy user=root &'
 endif
 ifeq ($(CMD_ARGUMENTS),)
 	$(DOCKER_COMPOSE) $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118 --publish 9050:9050  --publish 9051:9051 --rm torproxy
@@ -545,8 +553,8 @@ push-docs: docs push
 package: init build
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 #TODO: use $(PROJECT_NAME)?
-	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
-	bash -c 'docker push docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(TIME):$(HOST_USER)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(HOST_USER):$(TIME)'
+	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(HOST_USER):$(TIME)'
 ########################
 .PHONY: automate
 automate:
