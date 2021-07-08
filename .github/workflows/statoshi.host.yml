@@ -60,7 +60,7 @@ jobs:
           #avoid port conflict with runner
           sudo -s make init build
           sudo -s make run
-          stats
+          stats -h
 
 # Cross Compile 
   ubuntu-20-host:
@@ -77,5 +77,5 @@ jobs:
           #avoid port conflict with runner
           sudo -s make init build
           sudo -s make run
-          stats
+          stats -h
 
