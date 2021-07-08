@@ -304,6 +304,7 @@ report:
 	@echo '        - PROJECT_NAME=${PROJECT_NAME}'
 	@echo '        - DOCKER_BUILD_TYPE=${DOCKER_BUILD_TYPE}'
 	@echo '        - SLIM=${SLIM}'
+	@echo '        - DOCKER_COMPOSE=${DOCKER_COMPOSE}'
 	@echo '        - DOCKERFILE=${DOCKERFILE}'
 	@echo '        - DOCKERFILE_BODY=${DOCKERFILE_BODY}'
 	@echo '        - GIT_USER_NAME=${GIT_USER_NAME}'
