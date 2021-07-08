@@ -485,7 +485,8 @@ extract:
 	rm -f  $(DOCKERFILE_EXTRACT)
 #######################
 .PHONY: torproxy
-torproxy:
+.ONESHELL:
+torproxy: init
 	@echo ''
 	#REF: https://hub.docker.com/r/dperson/torproxy
 	#bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -p 9051:9051 -d dperson/torproxy'
