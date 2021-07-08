@@ -44,6 +44,7 @@ ARG NOCACHE=${NOCACHE}
 ARG VERBOSE=${VERBOSE}
 ARG PUBLIC_PORT=${PUBLIC_PORT}
 ARG NODE_PORT=${NODE_PORT}
+ARG RPC_PORT=${RPC_PORT}
 ARG PASSWORD=${PASSWORD}
 ARG CMD_ARGUMENTS=${CMD_ARGUMENTS}
 
@@ -87,6 +88,7 @@ ENV NOCACHE=${NOCACHE}
 ENV VERBOSE=${VERBOSE}
 ENV PUBLIC_PORT=${PUBLIC_PORT}
 ENV NODE_PORT=${NODE_PORT}
+ENV RPC_PORT=${RPC_PORT}
 ENV PASSWORD=${PASSWORD}
 ENV CMD_ARGUMENTS=${CMD_ARGUMENTS}
 
@@ -94,8 +96,9 @@ ENV CMD_ARGUMENTS=${CMD_ARGUMENTS}
 ENV REPO=/${PROJECT_NAME}
 
 RUN apk update && apk upgrade && apk add ${VERBOSE} ${NOCACHE} musl busybox bash-completion git
-RUN git clone ${GIT_SERVER}/${GIT_PROFILE}/${PROJECT_NAME} --depth 1 ${REPO}
-RUN ${REPO}/conf/install_packages.sh
+#RUN git clone ${GIT_SERVER}/${GIT_PROFILE}/${PROJECT_NAME} --depth 1 ${REPO}
+COPY ./conf/install_packages.sh install_packages.sh
+RUN ./install_packages.sh
 RUN mkdir -p /usr/local/bin/
 #RUN install -v ${REPO}/contrib/zmq/zmq_sub.py /usr/local/bin/zmq_sub.py
 
