@@ -61,7 +61,7 @@ jobs:
         run: |
           sudo -s make init
           sudo -s make build
-          sudo -s make run
+          #sudo -s make run
           sudo -s stats -h
           sudo -s stats ls
 
@@ -79,7 +79,7 @@ jobs:
         run: |
           sudo -s make init
           sudo -s make build
-          sudo -s make run user=root verbose=true nocache=true
+          #sudo -s make run user=root verbose=true nocache=true
           sudo -s stats -h
           sudo -s stats ls
 

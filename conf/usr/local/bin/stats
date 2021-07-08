@@ -2,84 +2,78 @@
 
 if hash docker 2>/dev/null; then
 
+    STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
+    export STATS_ID
+    STATS_IMAGE=$(echo $(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1'))
+    export STATS_IMAGE
 
-STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
-export STATS_ID
-#echo STATS_ID: $STATS_ID
+    for ((i=1;i<=$#;i++));
+    do
 
-STATS_IMAGE=$(echo $(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1'))
-export STATS_IMAGE
-#echo STATS_TAG: $STATS_TAG
+        if [[ ${!i} = *id* ]]; then
+            ((i++))
+        echo STATS_ID: $STATS_ID
 
-#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon"
-#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
-#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
+        elif [[ ${!i} = *image* ]]; then
+            ((i++))
+        echo STATS_IMAGE: $STATS_IMAGE
 
-for ((i=1;i<=$#;i++));
-do
+        elif [[ ${!i} = *top* ]]; then
+            ((i++))
+        docker top $STATS_ID
 
-    if [[ ${!i} = *id* ]]; then
-        ((i++))
-	echo STATS_ID: $STATS_ID
-
-    elif [[ ${!i} = *image* ]]; then
-        ((i++))
-	echo STATS_IMAGE: $STATS_IMAGE
-
-    elif [[ ${!i} = *top* ]]; then
-        ((i++))
-    docker top $STATS_ID
-
-    elif [[ ${!i} = *start* ]]; then
-        ((i++))
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon &"
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
-
-    elif [[ ${!i} = *prune* ]]; then
-        ((i++))
-        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
-
-    elif [[ ${!i} = *cli* ]]; then
-        ((i++))
-        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
-
-    elif [[ ${!i} = *d* ]]; then
-        ((i++))
-        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
-
-    elif [[ ${!i} = *ep* ]]; then
-        ((i++))
+        elif [[ ${!i} = *start* ]]; then
+            ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon &"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
 
-    elif [[ ${!i} == *h* ]]; then
-        ((i++))
-        echo
-        echo "stats <command>          - execute shell command in container"
-        echo "stats -d <command>       - send command to bitcoind"
-        echo "stats -cli <command>     - send command to bitcoin-cli"
-        echo
-        echo "Examples:"
-        echo
-        echo "stats ls"
-        echo "stats cd / & ls -a"
-        echo "stats -cli gettxoutsetinfo"
-        echo "stats -cli getmininginfo"
-        echo
-        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoind -daemon -prune=550'"
-        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli gettxoutsetinfo'"
-        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli getmininginfo'"
-        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli $1'"
+        elif [[ ${!i} = *prune* ]]; then
+            ((i++))
+            docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
 
-    else
+        elif [[ ${!i} = *cli* ]]; then
+            ((i++))
+            docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
 
-        docker exec -it $STATS_ID sh -c  "$1"
-    fi
+        elif [[ ${!i} = *d* ]]; then
+            ((i++))
+            docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
 
-done;
+        elif [[ ${!i} = *ep* ]]; then
+            ((i++))
+            docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
+
+        elif [[ ${!i} == *h* ]]; then
+            ((i++))
+            echo
+            echo "stats <command>          - execute shell command in container"
+            echo "stats -d <command>       - send command to bitcoind"
+            echo "stats -cli <command>     - send command to bitcoin-cli"
+            echo
+            echo "Examples:"
+            echo
+            echo "stats ls"
+            echo "stats cd / & ls -a"
+            echo "stats -cli gettxoutsetinfo"
+            echo "stats -cli getmininginfo"
+            echo
+            echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoind -daemon -prune=550'"
+            echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli gettxoutsetinfo'"
+            echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli getmininginfo'"
+            echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli $1'"
+
+        else
+
+            docker exec -it $STATS_ID sh -c  "$1"
+        fi
+
+    done;
 
 #docker exec -it $STATS_ID sh -c "find /usr/local -maxdepth 2 -type f -name 'stats'"
 #docker exec -it $STATS_ID sh -c "find /usr/local -maxdepth 2 -type f -name 'stats*'"
 #echo stats-cli $1 
+else
+    whatami
 fi #end if docker hash
