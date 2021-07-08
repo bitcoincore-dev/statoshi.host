@@ -21,19 +21,18 @@ RUN rm -rf /opt/graphite/examples/*
 
 RUN npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y npm
 
-#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/tabs/*.gif
-#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/grid/*.gif
-#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/window/*.gif
-#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/layout/*.gif
-#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/toolbar/*.gif
-#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/button/*.gif
-#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/icons/fam/*.gif
-#RUN rm -rf /opt/graphite/webapp/content/img/*.png
-#RUN rm -rf /opt/graphite/webapp/content/css/default/*.gif
+RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/tabs/*.gif
+RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/grid/*.gif
+RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/window/*.gif
+RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/layout/*.gif
+RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/toolbar/*.gif
+RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/button/*.gif
+RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/icons/fam/*.gif
+RUN rm -rf /opt/graphite/webapp/content/img/*.png
+RUN rm -rf /opt/graphite/webapp/content/css/default/*.gif
 RUN rm -rf /opt/graphite/examples/*
-
+RUN rm -rf /tmp/*
 RUN df -H
-
 ENTRYPOINT ["/usr/local/bin/./entrypoint"]
 #CMD ["bitcoind", "-daemon", "&", "wait", "&"]
 #END FOOTER
