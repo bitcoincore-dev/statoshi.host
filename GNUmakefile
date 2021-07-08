@@ -326,6 +326,7 @@ report:
 	@echo '        - VERBOSE=${VERBOSE}'
 	@echo '        - PUBLIC_PORT=${PUBLIC_PORT}'
 	@echo '        - NODE_PORT=${NODE_PORT}'
+	@echo '        - RPC_PORT=${RPC_PORT}'
 	@echo '        - PASSWORD=${PASSWORD}'
 	@echo '        - CMD_ARGUMENTS=${CMD_ARGUMENTS}'
 
