@@ -390,6 +390,7 @@ else
 	bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
 endif
 	@echo ''
+	#TODO:
 	#bash -c '$(GIT_REPO_PATH)/conf/config.bitcoin.conf.sh'
 	@echo ''
 	bash -c 'install -v $(PWD)/conf/bitcoin.conf    $(STATOSHI_DATA_DIR)/bitcoin.conf'
@@ -544,10 +545,10 @@ push-docs: docs push
 	@echo 'push-docs'
 #######################
 package: init build
+	@echo "legit . -m "$(HOST_USER):$(TIME)" -p 0000000 && make user=root package && GPF"
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
-#TODO: use $(PROJECT_NAME)?
-	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(HOST_UID):$(HOST_USER)'
-	bash -c 'docker push docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(GIT_HASH).$(TIME):$(HOST_USER)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
+	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
 ########################
 .PHONY: automate
 automate:
