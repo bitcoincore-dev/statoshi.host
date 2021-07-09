@@ -60,7 +60,6 @@ jobs:
           sudo -s make init
           sudo -s make build
           sudo -s make run user=root verbose=true nocache=true
-          sudo -s stats -h
 
 # Cross Compile 
   ubuntu-20-host:
@@ -77,5 +76,4 @@ jobs:
           sudo -s make init
           sudo -s make build
           sudo -s make run user=root verbose=true nocache=true
-          sudo -s stats -h
 
