@@ -11,9 +11,6 @@ FROM config-final as clone-stats-bitcoincore-dev
 ENV REPO=stats.bitcoincore.dev
 # Change to your fork
 RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${GIT_REPO_NAME}
-#RUN cd ${REPO} 
-#RUN ${REPO}/conf/usr/local/bin/get-branches.sh
-RUN mkdir -p ${REPO}/depends/SDKs
 
 ################################################
 FROM clone-stats-bitcoincore-dev as make-depends
@@ -29,30 +26,25 @@ RUN pip3 install pyzmq
 FROM make-depends as autogen
 ############################
 
-RUN cd ${GIT_REPO_NAME} && ./autogen.sh
+#RUN cd ${GIT_REPO_NAME} && ./autogen.sh
 
 #########################
 FROM autogen as configure
 #########################
 
-RUN cd ${GIT_REPO_NAME}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+#RUN cd ${GIT_REPO_NAME}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
 
 ######################
 FROM configure as make
 ######################
 
-RUN cd ${GIT_REPO_NAME} && make -f Makefile -j $(nproc)
-RUN cd ${GIT_REPO_NAME} && make install
+#RUN cd ${GIT_REPO_NAME} && make -f Makefile -j $(nproc)
+#RUN cd ${GIT_REPO_NAME} && make install
 
 ###########################
 FROM make as strip-binaries
 ###########################
 
-#RUN strip ${REPO}/src/bitcoind
-#
-#RUN strip ${REPO}/src/bitcoin-cli
-#
-#RUN strip ${REPO}/src/bitcoin-tx
 RUN echo statoshi.all
 ###########################
 FROM strip-binaries as statoshi
@@ -61,7 +53,6 @@ FROM strip-binaries as statoshi
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /etc/periodic/15min/blocknotify
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind /etc/periodic/15min/bitcoind
-#RUN test -d /home/root/.bitcoin && echo Exists || conf/usr/local/bin/fastcopy-chaindata.py /home/root/.bitcoin /home/root/.statoshi
 
 RUN ${GIT_REPO_NAME}/conf/config.bitcoin.conf.sh
 
