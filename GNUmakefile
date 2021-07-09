@@ -451,7 +451,7 @@ build: report
 	@echo ''
 #######################
 .PHONY: run
-run: build
+run: init build
 	@echo 'run'
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''
