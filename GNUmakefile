@@ -437,7 +437,7 @@ build-header:
 header: report build-header
 	@echo 'header'
 	@echo ''
-	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd / && ls"
+	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh
 	@echo ''
 #######################
 .PHONY: test

@@ -89,6 +89,7 @@ services:
     # Copy current (git-) project into container.
     volumes:
       - ${HOME:-.}:/home/${HOST_USER}:consistent
+      - ${HOME:-.}:/root:consistent
 
   header:
     # Makefile fills PROJECT_NAME to current directory name.
@@ -177,6 +178,7 @@ services:
     # Copy current (git-) project into container.
     volumes:
       - ${HOME:-.}:/home/${HOST_USER}:consistent
+      - ${HOME:-.}:/root:consistent
 
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
@@ -216,6 +218,7 @@ services:
       - VERBOSE=${VERBOSE}
       - PUBLIC_PORT=${PUBLIC_PORT}
       - NODE_PORT=${NODE_PORT}
+      - RPC_PORT=${RPC_PORT}
       - PASSWORD=${PASSWORD}
       - CMD_ARGUMENTS=${CMD_ARGUMENTS}
     # Run with user priviliges by default.
@@ -259,18 +262,22 @@ services:
         - VERBOSE=${VERBOSE}
         - PUBLIC_PORT=${PUBLIC_PORT}
         - NODE_PORT=${NODE_PORT}
+        - RPC_PORT=${RPC_PORT}
         - PASSWORD=${PASSWORD}
         - CMD_ARGUMENTS=${CMD_ARGUMENTS}
     # Run container as a service. Replace with something useful.
     #command: ["tail", "-f", "/dev/null"]
-    command:  ["/usr/local/bin/entrypoint"]
+    command:  ["/usr/local/bin/./entrypoint"]
     # Expose current project folder to container.
     volumes:
+    #/root ?
+      - ${HOME:-.}:/root:consistent
       - ${HOME:-.}:/home/${HOST_USER}:consistent
     ports:
        #hostPORT:imagePORT
-     - "8332:8332"
+     - "${PUBLIC_PORT}:3000"
      - "${NODE_PORT}:8333"
+     - "${RPC_PORT}:8332"
      - "18333:18333"
 
   torproxy:

@@ -1,14 +1,20 @@
+FROM config-final as statoshi-all
+
 #BEGIN statoshi.all
 RUN echo statoshi.all
 RUN echo statoshi.all
 RUN echo statoshi.all
 RUN echo statoshi.all
 RUN df -H
+
 ###########################################
 # We build Statoshi last
-FROM config-final as clone-stats-bitcoincore-dev
+FROM statoshi-all as clone-stats-bitcoincore-dev
 ###########################################
-RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${GIT_REPO_NAME}
+ENV GIT_REPO_NAME=${GIT_REPO_NAME}
+RUN echo ${GIT_REPO_NAME}
+#RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${GIT_REPO_NAME}
+COPY . ${GIT_REPO_NAME}
 ################################################
 FROM clone-stats-bitcoincore-dev as make-depends
 ################################################
@@ -36,7 +42,7 @@ FROM configure as make
 ######################
 
 RUN cd ${GIT_REPO_NAME} && make -f Makefile -j $(nproc)
-RUN cd ${GIT_REPO_NAME} && make install && ls -a /usr/local
+RUN cd ${GIT_REPO_NAME} && make install
 
 ###########################
 FROM make as strip-binaries
