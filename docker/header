@@ -90,18 +90,16 @@ ENV NODE_PORT=${NODE_PORT}
 ENV PASSWORD=${PASSWORD}
 ENV CMD_ARGUMENTS=${CMD_ARGUMENTS}
 
-
 ENV REPO=/${PROJECT_NAME}
 
+FROM set-initial-env as install-packages
+
 RUN apk update && apk upgrade && apk add ${VERBOSE} ${NOCACHE} musl busybox bash-completion git
-#RUN git clone ${GIT_SERVER}/${GIT_PROFILE}/${PROJECT_NAME} --depth 1 ${REPO}
-#COPY . ${REPO}
-#RUN ${REPO}/conf/install_packages.sh
 COPY ./conf/install_packages.sh /tmp/install_packages.sh
 RUN /tmp/install_packages.sh
 
 RUN mkdir -p /usr/local/bin/
-#RUN install -v ${REPO}/contrib/zmq/zmq_sub.py /usr/local/bin/zmq_sub.py
+#COPY ./contrib/zmq/zmq_sub.py /usr/local/bin/zmq_sub.py
 
 RUN apk -U add ${VERBOSE} ${NOCACHE} coreutils
 RUN apk add --update ${VERBOSE} ${NOCACHE} nodejs nodejs-npm
@@ -111,9 +109,8 @@ RUN apk add --update ${VERBOSE} ${NOCACHE} nodejs nodejs-npm
 EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8118 8333 8332 18333 8125 8125/udp 8126 9050 9051
 RUN git config --global advice.detachedHead false
 
-RUN df -H
 #########################################
-FROM set-initial-env as grafana-download
+FROM install-packages as grafana-download
 #########################################
 
 ENV GRAFANA_VERSION=7.0.0
