@@ -375,8 +375,8 @@ ifneq ($(shell id -u),0)
 endif
 	@echo 'init'
 	git config --global core.editor vim
-	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
-	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
+	#bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
+	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
 	@echo ''
 	bash -c 'mkdir -p $(BITCOIN_DATA_DIR)'
@@ -403,7 +403,7 @@ endif
 	@echo ''
 #######################
 .PHONY: build-header
-build-header:
+build-header: init
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) build --no-rm $(NOCACHE) header
 	@echo ''
@@ -413,16 +413,20 @@ header: report build-header
 	@echo 'header'
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd / && ls"
+	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/header-$(HOST_USER)
+	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/header-$(HOST_USER)'
+
 	@echo ''
 #######################
 .PHONY: build
-build: report
+build:
 	@echo 'build'
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) statoshi
 	@echo ''
 #######################
 .PHONY: run
-run: init build
+run: build
 	@echo 'run'
 ifeq ($(CMD_ARGUMENTS),)
 	@echo ''

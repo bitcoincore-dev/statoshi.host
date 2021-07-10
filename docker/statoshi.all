@@ -1,12 +1,10 @@
 #BEGIN statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN df -H
+#ENV HOST_USER=${HOST_USER}
+#FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/header-${HOST_USER}:latest
+FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/header-root:latest as clone-stats-bitcoincore-dev
 ###########################################
 # We build Statoshi last
-FROM config-final as clone-stats-bitcoincore-dev
+#FROM ${PROJECT_NAME} as clone-stats-bitcoincore-dev
 ###########################################
 ENV REPO=stats.bitcoincore.dev
 # Change to your fork
