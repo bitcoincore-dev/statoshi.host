@@ -58,9 +58,9 @@ jobs:
       - name: Make
         run: |
           #avoid port conflict with runner
-          sudo -s make init build
-          sudo -s make run
-          stats
+          sudo -s make init
+          sudo -s make header
+          sudo -s make run user=root verbose=true nocache=true
 
 # Cross Compile 
   ubuntu-20-host:
@@ -75,7 +75,7 @@ jobs:
       - name: Make
         run: |
           #avoid port conflict with runner
-          sudo -s make init build
-          sudo -s make run
-          stats
+          sudo -s make init
+          sudo -s make header
+          sudo -s make run user=root verbose=true nocache=true
 

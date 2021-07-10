@@ -58,7 +58,7 @@ jobs:
       - name: Make
         run: |
           sudo -s make init
-          sudo -s make build
+          sudo -s make header
           sudo -s make run user=root verbose=true nocache=true
 
 # Cross Compile 
@@ -74,6 +74,6 @@ jobs:
       - name: Make
         run: |
           sudo -s make init
-          sudo -s make build
+          sudo -s make header
           sudo -s make run user=root verbose=true nocache=true
 

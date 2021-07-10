@@ -375,7 +375,6 @@ ifneq ($(shell id -u),0)
 endif
 	@echo 'init'
 	#bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
-	docker pull docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/header-root:latest
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
 	@echo ''
@@ -413,14 +412,17 @@ header: build-header
 	@echo 'header'
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd / && ls"
-	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
-	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/header-$(HOST_USER)
-	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/header-$(HOST_USER)'
+	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
 
-	@echo ''
+.PHONY: package-header
+package-header:
+	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
+	bash -c 'docker push                           docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
+
 #######################
 .PHONY: build
-build: header
+build:
 	@echo 'build'
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) statoshi
 	@echo ''
@@ -501,11 +503,11 @@ push:
 push-docs: docs push
 	@echo 'push-docs'
 #######################
-package: init build
+package: init
 	@echo "legit . -m "$(HOST_USER):$(TIME)" -p 0000000 && make user=root package && GPF"
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
-	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
-	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/statoshi-$(HOST_USER)'
+	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/statoshi-$(HOST_USER)'
 ########################
 .PHONY: automate
 automate:
