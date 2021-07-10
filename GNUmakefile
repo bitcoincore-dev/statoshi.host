@@ -416,6 +416,9 @@ header: build-header
 
 .PHONY: package-header
 package-header:
+	touch TIME && echo $(TIME) > TIME
+	legit . -m "make package-header at $(TIME)" -p 0000000
+	git commit --amend --no-edit --allow-empty
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
 	bash -c 'docker push                           docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
