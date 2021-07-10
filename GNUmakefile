@@ -456,13 +456,12 @@ package-header:
 	bash -c 'docker push                           docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
 
 #######################
-.PHONY: test
-test:
-	@echo 'test'
-	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm shell sh -c '\
-	echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
-	&& echo success
+.PHONY: shell
+shell: header
+	@echo 'header'
 	@echo ''
+	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh
+
 #######################
 .PHONY: build
 build: report
