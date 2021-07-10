@@ -378,7 +378,6 @@ endif
 	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
-	bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
 	@echo ''
 	bash -c 'mkdir -p $(BITCOIN_DATA_DIR)'
 	bash -c 'mkdir -p $(STATOSHI_DATA_DIR)'
@@ -403,28 +402,6 @@ ifneq ($(shell id -u),0)
 endif
 	@echo ''
 #######################
-.PHONY: build-shell
-build-shell:
-	@echo ''
-	bash -c 'cat ./docker/shell                > shell'
-	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) shell
-	@echo ''
-#######################
-.PHONY: shell
-shell: report build-shell
-	@echo 'shell'
-ifeq ($(CMD_ARGUMENTS),)
-	# no command is given, default to shell
-	@echo ''
-	$(DOCKER_COMPOSE) --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
-	@echo ''
-else
-	# run the command
-	@echo ''
-	$(DOCKER_COMPOSE) --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
-	@echo ''
-endif
-#######################
 .PHONY: build-header
 build-header:
 	@echo ''
@@ -436,14 +413,6 @@ header: report build-header
 	@echo 'header'
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd / && ls"
-	@echo ''
-#######################
-.PHONY: test
-test:
-	@echo 'test'
-	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm shell sh -c '\
-	echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
-	&& echo success
 	@echo ''
 #######################
 .PHONY: build
@@ -476,22 +445,6 @@ extract:
 	docker run --name $(DOCKERFILE_EXTRACT) $(DOCKERFILE_EXTRACT) /bin/true
 	docker rm $(DOCKERFILE_EXTRACT)
 	rm -f  $(DOCKERFILE_EXTRACT)
-#######################
-.PHONY: torproxy
-torproxy:
-	@echo ''
-	#REF: https://hub.docker.com/r/dperson/torproxy
-	#bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -p 9051:9051 -d dperson/torproxy'
-	@echo ''
-ifneq ($(shell id -u),0)
-	bash -c 'sudo make torproxy user=root &'
-endif
-ifeq ($(CMD_ARGUMENTS),)
-	$(DOCKER_COMPOSE) $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118 --publish 9050:9050  --publish 9051:9051 --rm torproxy
-else
-	$(DOCKER_COMPOSE) $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118 --publish 9050:9050  --publish 9051:9051 --rm torproxy sh -c "$(CMD_ARGUMENTS)"
-endif
-	@echo ''
 #######################
 .PHONY: clean
 clean:
