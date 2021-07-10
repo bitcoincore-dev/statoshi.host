@@ -405,7 +405,7 @@ endif
 .PHONY: build-header
 build-header:
 	@echo ''
-	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) header
+	$(DOCKER_COMPOSE) $(VERBOSE) build --no-rm $(NOCACHE) header
 	@echo ''
 #######################
 .PHONY: header
