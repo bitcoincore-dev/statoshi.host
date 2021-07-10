@@ -1,7 +1,7 @@
 #BEGIN statoshi.all
 #ENV HOST_USER=${HOST_USER}
 #FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/header-${HOST_USER}:latest
-FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/header-root:latest as clone-stats-bitcoincore-dev
+FROM docker.pkg.github.com/bitcoincore-dev/stats.bitcoincore.dev/header-root as clone-stats-bitcoincore-dev
 ###########################################
 # We build Statoshi last
 #FROM ${PROJECT_NAME} as clone-stats-bitcoincore-dev
