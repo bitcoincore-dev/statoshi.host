@@ -32,7 +32,11 @@ RUN npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y np
 #RUN rm -rf /opt/graphite/webapp/content/css/default/*.gif
 RUN rm -rf /opt/graphite/examples/*
 
+RUN apk -v cache clean
+
 RUN df -H
+
+RUN apk -v cache clean
 
 ENTRYPOINT ["/usr/local/bin/./entrypoint"]
 #CMD ["bitcoind", "-daemon", "&", "wait", "&"]
