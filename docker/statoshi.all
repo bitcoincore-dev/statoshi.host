@@ -1,19 +1,9 @@
-#BEGIN statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN df -H
+FROM header as clone-statoshi
 ###########################################
-# We build Statoshi last
-FROM config-final as clone-stats-bitcoincore-dev
-###########################################
-ENV REPO=stats.bitcoincore.dev
-# Change to your fork
 RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${GIT_REPO_NAME}
 
 ################################################
-FROM clone-stats-bitcoincore-dev as make-depends
+FROM clone-statoshi as make-depends
 ################################################
 
 # Install before autogen.sh and configure

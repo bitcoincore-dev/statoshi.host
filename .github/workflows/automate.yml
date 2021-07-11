@@ -39,7 +39,8 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
       - uses: actions/checkout@v2
       - name: Make
         run: |
@@ -53,12 +54,17 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
       - uses: actions/checkout@v2
-      - name: Make
+      - name: sudo -s make init
         run: |
           sudo -s make init
-          sudo -s make build
+      - name: sudo -s make header
+        run: |
+          sudo -s make header
+      - name: sudo -s make run
+        run: |
           sudo -s make run user=root verbose=true nocache=true
 
 # Cross Compile 
@@ -69,11 +75,17 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
       - uses: actions/checkout@v2
-      - name: Make
+      - name: sudo -s make init
         run: |
           sudo -s make init
-          sudo -s make build
+      - name: sudo -s make header
+        run: |
+          sudo -s make header
+      - name: sudo -s make run
+        run: |
           sudo -s make run user=root verbose=true nocache=true
+
 

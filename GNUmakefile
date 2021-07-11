@@ -1,51 +1,50 @@
 # REF: https://github.com/LINKIT-Group/dockerbuild/blob/master/Makefile
 # Make searches for this file first per make default search hierarchy
-
-SHELL := /bin/bash
-
+SHELL                                   := /bin/bash
 PWD 									?= pwd_unknown
-
 THIS_FILE								:= $(lastword $(MAKEFILE_LIST))
 export THIS_FILE
 TIME									:= $(shell date +%s)
 export TIME
 
 ifeq ($(user),)
-## USER retrieved from env, UID from shell.
-HOST_USER								?=  $(strip $(if $(USER),$(USER),nodummy))
-HOST_UID								?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
-#BY PASS host user 
-#HOST_USER								= root
-#HOST_UID								= $(strip $(if $(uid),$(uid),0))
+HOST_USER								:= root
+HOST_UID								:= $(strip $(if $(uid),$(uid),0))
 else
-# allow override by adding user= and/ or uid=  (lowercase!).
-# uid= defaults to 0 if user= set (i.e. root).
-HOST_USER								= $(user)
-HOST_UID								= $(strip $(if $(uid),$(uid),0))
+HOST_USER								:=  $(user) #$(strip $(if $(USER),$(USER),nodummy))
+HOST_UID								:=  $(strip $(if $(shell id -u),$(shell id -u),4000))
 endif
 export HOST_USER
 export HOST_UID
 
+# PROJECT_NAME defaults to name of the current directory.
+ifeq ($(project),)
+PROJECT_NAME							:= $(notdir $(PWD))
+else
+PROJECT_NAME							:= $(project)
+endif
+export PROJECT_NAME
+
 # Note the different service configs in docker-compose.yml.
 # We override this default for different build/run configs
 ifeq ($(target),)
-SERVICE_TARGET							?= shell
+SERVICE_TARGET							?= $(PROJECT_NAME)
 else
 SERVICE_TARGET							:= $(target)
 endif
 export SERVICE_TARGET
 
 ifeq ($(docker),)
-#DOCKER							        := $(shell find /usr/local/bin -name 'docker')
+#DOCKER							         := $(shell find /usr/local/bin -name 'docker')
 DOCKER							        := $(shell which docker)
 else
-DOCKER   							:= $(docker)
+DOCKER                                  := $(docker)
 endif
 export DOCKER
 
 ifeq ($(compose),)
-#DOCKER_COMPOSE						        := $(shell find /usr/local/bin -name 'docker-compose')
-DOCKER_COMPOSE						        := $(shell which docker-compose)
+#DOCKER_COMPOSE                         := $(shell find /usr/local/bin -name 'docker-compose')
+DOCKER_COMPOSE                          := $(shell which docker-compose)
 else
 DOCKER_COMPOSE							:= $(compose)
 endif
@@ -100,14 +99,6 @@ DJANGO_VERSION							:= $(django)
 endif
 export DJANGO_VERSION
 
-# PROJECT_NAME defaults to name of the current directory.
-ifeq ($(project),)
-PROJECT_NAME							:= $(notdir $(PWD))
-else
-PROJECT_NAME							:= $(project)
-endif
-export PROJECT_NAME
-
 #GIT CONFIG
 GIT_USER_NAME							:= $(shell git config user.name)
 export GIT_USER_NAME
@@ -129,19 +120,18 @@ GIT_REPO_NAME							:= $(PROJECT_NAME)
 export GIT_REPO_NAME
 GIT_REPO_PATH							:= $(HOME)/$(GIT_REPO_NAME)
 export GIT_REPO_PATH
-ifeq ($(slim),true)
-DOCKER_BUILD_TYPE						:= slim
-export DOCKER_BUILD_TYPE
-DOCKERFILE_BODY							:= docker/statoshi.$(DOCKER_BUILD_TYPE)
-SLIM                                    := $(slim)
-else
+
+#DOCKER_BUILD_TYPE
+ifeq ($(type),)
 DOCKER_BUILD_TYPE						:= all
-export DOCKER_BUILD_TYPE
 DOCKERFILE_BODY							:= docker/statoshi.$(DOCKER_BUILD_TYPE)
-SLIM                                    := false
+else
+DOCKER_BUILD_TYPE						:= $(type)
+DOCKERFILE_BODY							:= docker/statoshi.$(DOCKER_BUILD_TYPE)
 endif
+export DOCKER_BUILD_TYPE
 export DOCKERFILE_BODY
-export SLIM
+
 DOCKERFILE								:= $(PROJECT_NAME)
 export DOCKERFILE
 DOCKERFILE_PATH							:= $(HOME)/$(PROJECT_NAME)/$(DOCKERFILE)
@@ -162,9 +152,9 @@ export STATOSHI_DATA_DIR
 #- ${APP_DATA_DIR}/data:/data
 
 ifeq ($(nocache),true)
-NOCACHE								:= --no-cache
+NOCACHE                                 := --no-cache
 else
-NOCACHE								:=	
+NOCACHE                                 :=	
 endif
 export NOCACHE
 
@@ -174,7 +164,6 @@ else
 VERBOSE									:=	
 endif
 export VERBOSE
-
 
 #TODO more umbrel config testing
 ifeq ($(port),)
@@ -205,23 +194,15 @@ CMD_ARGUMENTS							:= $(cmd)
 endif
 export CMD_ARGUMENTS
 
-# ref: https://github.com/linkit-group/dockerbuild/blob/master/makefile
-# if you see pwd_unknown showing up, check user permissions.
-#todo: more umbrel support
-#todo: umbrel root no good
 #todo: ref: https://github.com/getumbrel/umbrel/blob/master/security.md
 ifeq ($(umbrel),true)
-#comply with umbrel conventions
-PWD=/home/umbrel/umbrel/apps/$(PROJECT_NAME)
+#comply with umbrel conventions - super?
 UMBREL=true
 else
-pwd ?= pwd_unknown
 UMBREL=false
 endif
-export PWD
 export UMBREL
 #######################
-
 .PHONY: help
 help: report
 	@echo ''
@@ -297,10 +278,9 @@ report:
 	@echo '        - GRAFANA_VERSION=${GRAFANA_VERSION}'
 	@echo '        - DJANGO_VERSION=${DJANGO_VERSION}'
 	@echo '        - PROJECT_NAME=${PROJECT_NAME}'
-	@echo '        - DOCKER_BUILD_TYPE=${DOCKER_BUILD_TYPE}'
-	@echo '        - SLIM=${SLIM}'
 	@echo '        - DOCKER_COMPOSE=${DOCKER_COMPOSE}'
 	@echo '        - DOCKERFILE=${DOCKERFILE}'
+	@echo '        - DOCKER_BUILD_TYPE=${DOCKER_BUILD_TYPE}'
 	@echo '        - DOCKERFILE_BODY=${DOCKERFILE_BODY}'
 	@echo '        - GIT_USER_NAME=${GIT_USER_NAME}'
 	@echo '        - GIT_USER_EMAIL=${GIT_USER_EMAIL}'
@@ -323,25 +303,13 @@ report:
 	@echo '        - NODE_PORT=${NODE_PORT}'
 	@echo '        - PASSWORD=${PASSWORD}'
 	@echo '        - CMD_ARGUMENTS=${CMD_ARGUMENTS}'
-
 #######################
-
-ORIGIN_DIR:=$(PWD)
-MACOS_TARGET_DIR:=/var/root/$(PROJECT_NAME)
-LINUX_TARGET_DIR:=/root/$(PROJECT_NAME)
-export ORIGIN_DIR
-export TARGET_DIR
-
 .PHONY: super
 super:
 ifneq ($(shell id -u),0)
 	@echo switch to superuser
-	@echo cd $(TARGET_DIR)
-	#sudo ln -s $(PWD) $(TARGET_DIR)
-#.ONESHELL:
 	sudo -s
 endif
-#######################
 #######################
 # Backup $HOME/.bitcoin
 ########################
@@ -360,25 +328,15 @@ endif
 #######################
 # Some initial setup
 ########################
-#######################
-
-.PHONY: host
-host:
-	@echo 'host'
-	bash -c './host'
-
-#######################
 .PHONY: init
 init: report
 ifneq ($(shell id -u),0)
 	@echo 'sudo make init #try if permissions issue'
 endif
 	@echo 'init'
-	git config --global core.editor vim
 	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
-	bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
 	@echo ''
 	bash -c 'mkdir -p $(BITCOIN_DATA_DIR)'
 	bash -c 'mkdir -p $(STATOSHI_DATA_DIR)'
@@ -403,51 +361,39 @@ ifneq ($(shell id -u),0)
 endif
 	@echo ''
 #######################
-.PHONY: build-shell
-build-shell:
-	@echo ''
-	bash -c 'cat ./docker/shell                > shell'
-	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) shell
-	@echo ''
-#######################
-.PHONY: shell
-shell: report build-shell
-	@echo 'shell'
-ifeq ($(CMD_ARGUMENTS),)
-	# no command is given, default to shell
-	@echo ''
-	$(DOCKER_COMPOSE) --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
-	@echo ''
-else
-	# run the command
-	@echo ''
-	$(DOCKER_COMPOSE) --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
-	@echo ''
-endif
-#######################
 .PHONY: build-header
-build-header:
+build-header: init
 	@echo ''
-	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) header
+	$(DOCKER_COMPOSE) $(VERBOSE) build --no-rm $(NOCACHE) header
+	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
 	@echo ''
 #######################
 .PHONY: header
-header: report build-header
+header: build-header
 	@echo 'header'
 	@echo ''
-	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd / && ls"
-	@echo ''
+	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c 'cd /home/root && echo /home/root && ls -a > home_root.log && cd /root && echo /root > root.log &&  ls -a && cd / && echo / && ls -a > slash.log'
+
+.PHONY: login
+login:
+	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+
+.PHONY: package-header
+package-header:
+	touch TIME && echo $(TIME) > TIME && git add -f TIME
+	legit . -m "make package-header at $(TIME)" -p 00000
+	git commit --amend --no-edit --allow-empty
+	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
+	bash -c 'docker push                           docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
 #######################
-.PHONY: test
-test:
-	@echo 'test'
-	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run -d --rm shell sh -c '\
-	echo "I am `whoami`. My uid is `id -u`." && echo "Docker runs!"' \
-	&& echo success
+.PHONY: shell
+shell:
+	@echo 'make header?'
 	@echo ''
+	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh
 #######################
 .PHONY: build
-build: report
+build:
 	@echo 'build'
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) statoshi
 	@echo ''
@@ -466,32 +412,6 @@ else
 endif
 	@echo 'Give grafana a few minutes to set up...'
 	@echo 'http://localhost:$(PUBLIC_PORT)'
-#######################
-.PHONY: extract
-extract:
-	@echo 'extract'
-	#extract TODO CREATE PACKAGE for distribution
-	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
-	docker build -f $(DOCKERFILE_EXTRACT) --rm -t $(DOCKERFILE_EXTRACT) .
-	docker run --name $(DOCKERFILE_EXTRACT) $(DOCKERFILE_EXTRACT) /bin/true
-	docker rm $(DOCKERFILE_EXTRACT)
-	rm -f  $(DOCKERFILE_EXTRACT)
-#######################
-.PHONY: torproxy
-torproxy:
-	@echo ''
-	#REF: https://hub.docker.com/r/dperson/torproxy
-	#bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -p 9051:9051 -d dperson/torproxy'
-	@echo ''
-ifneq ($(shell id -u),0)
-	bash -c 'sudo make torproxy user=root &'
-endif
-ifeq ($(CMD_ARGUMENTS),)
-	$(DOCKER_COMPOSE) $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118 --publish 9050:9050  --publish 9051:9051 --rm torproxy
-else
-	$(DOCKER_COMPOSE) $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118 --publish 9050:9050  --publish 9051:9051 --rm torproxy sh -c "$(CMD_ARGUMENTS)"
-endif
-	@echo ''
 #######################
 .PHONY: clean
 clean:
@@ -518,14 +438,11 @@ prune-network:
 #######################
 .PHONY: docs
 docs:
-#$ make report no-cache=true verbose=true cmd='make doc' user=root doc
-#SHELL := /bin/bash
 	@echo 'docs'
 	bash -c "if pgrep MacDown; then pkill MacDown; fi"
 	bash -c "curl https://raw.githubusercontent.com/jlopp/statoshi/master/README.md -o ./docker/README.md"
 	bash -c "cat ./docker/README.md >  README.md"
 	bash -c "cat ./docker/DOCKER.md >> README.md"
-#	bash -c "echo '<insert string>' >> README.md"
 	bash -c "echo '----' >> README.md"
 	bash -c "echo '## [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)) [$(GIT_HASH)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)/commit/$(GIT_HASH))' >> README.md"
 	bash -c "echo '##### &#36; <code>make</code>' >> README.md"
@@ -544,11 +461,14 @@ push:
 push-docs: docs push
 	@echo 'push-docs'
 #######################
-package: init build
+package-statoshi: init
 	@echo "legit . -m "$(HOST_USER):$(TIME)" -p 0000000 && make user=root package && GPF"
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
-	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
-	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/statoshi-$(HOST_USER)'
+	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/statoshi-$(HOST_USER)'
+########################
+.PHONY: package-all
+package-all: header package-header build package-statoshi
 ########################
 .PHONY: automate
 automate:

@@ -39,11 +39,13 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
       - uses: actions/checkout@v2
       - name: Make
         run: |
           ./automate.sh
+          make super
 
 # Cross Compile 
   ubuntu-18-host:
@@ -53,14 +55,19 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
       - uses: actions/checkout@v2
-      - name: Make
+      - name: sudo -s make init
         run: |
-          #avoid port conflict with runner
-          sudo -s make init build
-          sudo -s make run
-          stats
+          sudo -s make init
+      - name: sudo -s make build-header
+        run: |
+          sudo -s make build-header
+      - name: sudo -s make run
+        run: |
+          sudo -s make run user=root verbose=true nocache=true
+
 
 # Cross Compile 
   ubuntu-20-host:
@@ -70,12 +77,16 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
       - uses: actions/checkout@v2
-      - name: Make
+      - name: sudo -s make init
         run: |
-          #avoid port conflict with runner
-          sudo -s make init build
-          sudo -s make run
-          stats
+          sudo -s make init
+      - name: sudo -s make build-header
+        run: |
+          sudo -s make build-header
+      - name: sudo -s make run
+        run: |
+          sudo -s make run user=root verbose=true nocache=true
 
