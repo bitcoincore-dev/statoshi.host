@@ -447,6 +447,20 @@ header: report build-header
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd / && ls"
 	@echo ''
+	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
+
+.PHONY: signin
+signin:
+	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+
+.PHONY: package-header
+package-header:
+	touch TIME && echo $(TIME) > TIME && git add -f TIME
+	legit . -m "make package-header at $(TIME)" -p 00000
+	git commit --amend --no-edit --allow-empty
+	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
+	bash -c 'docker push                           docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
+
 #######################
 .PHONY: test
 test:
