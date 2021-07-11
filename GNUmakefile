@@ -507,11 +507,14 @@ push:
 push-docs: docs push
 	@echo 'push-docs'
 #######################
-package: init
+package-statoshi: init
 	@echo "legit . -m "$(HOST_USER):$(TIME)" -p 0000000 && make user=root package && GPF"
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/statoshi-$(HOST_USER)'
 	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/statoshi-$(HOST_USER)'
+########################
+.PHONY: package-all
+package-all: header package-header build package-statoshi
 ########################
 .PHONY: automate
 automate:
