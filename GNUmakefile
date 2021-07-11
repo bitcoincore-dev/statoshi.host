@@ -1,10 +1,7 @@
 # REF: https://github.com/LINKIT-Group/dockerbuild/blob/master/Makefile
 # Make searches for this file first per make default search hierarchy
-
-SHELL := /bin/bash
-
+SHELL                                   := /bin/bash
 PWD 									?= pwd_unknown
-
 THIS_FILE								:= $(lastword $(MAKEFILE_LIST))
 export THIS_FILE
 TIME									:= $(shell date +%s)
@@ -30,16 +27,16 @@ endif
 export SERVICE_TARGET
 
 ifeq ($(docker),)
-#DOCKER							        := $(shell find /usr/local/bin -name 'docker')
+#DOCKER							         := $(shell find /usr/local/bin -name 'docker')
 DOCKER							        := $(shell which docker)
 else
-DOCKER   							:= $(docker)
+DOCKER                                  := $(docker)
 endif
 export DOCKER
 
 ifeq ($(compose),)
-#DOCKER_COMPOSE						        := $(shell find /usr/local/bin -name 'docker-compose')
-DOCKER_COMPOSE						        := $(shell which docker-compose)
+#DOCKER_COMPOSE                         := $(shell find /usr/local/bin -name 'docker-compose')
+DOCKER_COMPOSE                          := $(shell which docker-compose)
 else
 DOCKER_COMPOSE							:= $(compose)
 endif
@@ -156,9 +153,9 @@ export STATOSHI_DATA_DIR
 #- ${APP_DATA_DIR}/data:/data
 
 ifeq ($(nocache),true)
-NOCACHE								:= --no-cache
+NOCACHE                                 := --no-cache
 else
-NOCACHE								:=	
+NOCACHE                                 :=	
 endif
 export NOCACHE
 
@@ -168,7 +165,6 @@ else
 VERBOSE									:=	
 endif
 export VERBOSE
-
 
 #TODO more umbrel config testing
 ifeq ($(port),)
@@ -199,23 +195,15 @@ CMD_ARGUMENTS							:= $(cmd)
 endif
 export CMD_ARGUMENTS
 
-# ref: https://github.com/linkit-group/dockerbuild/blob/master/makefile
-# if you see pwd_unknown showing up, check user permissions.
-#todo: more umbrel support
-#todo: umbrel root no good
 #todo: ref: https://github.com/getumbrel/umbrel/blob/master/security.md
 ifeq ($(umbrel),true)
-#comply with umbrel conventions
-PWD=/home/umbrel/umbrel/apps/$(PROJECT_NAME)
+#comply with umbrel conventions - super?
 UMBREL=true
 else
-pwd ?= pwd_unknown
 UMBREL=false
 endif
-export PWD
 export UMBREL
 #######################
-
 .PHONY: help
 help: report
 	@echo ''
@@ -317,25 +305,13 @@ report:
 	@echo '        - NODE_PORT=${NODE_PORT}'
 	@echo '        - PASSWORD=${PASSWORD}'
 	@echo '        - CMD_ARGUMENTS=${CMD_ARGUMENTS}'
-
 #######################
-
-ORIGIN_DIR:=$(PWD)
-MACOS_TARGET_DIR:=/var/root/$(PROJECT_NAME)
-LINUX_TARGET_DIR:=/root/$(PROJECT_NAME)
-export ORIGIN_DIR
-export TARGET_DIR
-
 .PHONY: super
 super:
 ifneq ($(shell id -u),0)
 	@echo switch to superuser
-	@echo cd $(TARGET_DIR)
-	#sudo ln -s $(PWD) $(TARGET_DIR)
-#.ONESHELL:
 	sudo -s
 endif
-#######################
 #######################
 # Backup $HOME/.bitcoin
 ########################
@@ -354,14 +330,6 @@ endif
 #######################
 # Some initial setup
 ########################
-#######################
-
-.PHONY: host
-host:
-	@echo 'host'
-	bash -c './host'
-
-#######################
 .PHONY: init
 init: report
 ifneq ($(shell id -u),0)
@@ -407,7 +375,6 @@ header: build-header
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd / && ls"
 	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
-
 .PHONY: package-header
 package-header:
 	touch TIME && echo $(TIME) > TIME && git add -f TIME
@@ -416,14 +383,12 @@ package-header:
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
 	bash -c 'docker push                           docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
-
 #######################
 .PHONY: shell
 shell: header
 	@echo 'header'
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh
-
 #######################
 .PHONY: build
 build:
@@ -445,16 +410,6 @@ else
 endif
 	@echo 'Give grafana a few minutes to set up...'
 	@echo 'http://localhost:$(PUBLIC_PORT)'
-#######################
-.PHONY: extract
-extract:
-	@echo 'extract'
-	#extract TODO CREATE PACKAGE for distribution
-	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
-	docker build -f $(DOCKERFILE_EXTRACT) --rm -t $(DOCKERFILE_EXTRACT) .
-	docker run --name $(DOCKERFILE_EXTRACT) $(DOCKERFILE_EXTRACT) /bin/true
-	docker rm $(DOCKERFILE_EXTRACT)
-	rm -f  $(DOCKERFILE_EXTRACT)
 #######################
 .PHONY: clean
 clean:
@@ -481,14 +436,11 @@ prune-network:
 #######################
 .PHONY: docs
 docs:
-#$ make report no-cache=true verbose=true cmd='make doc' user=root doc
-#SHELL := /bin/bash
 	@echo 'docs'
 	bash -c "if pgrep MacDown; then pkill MacDown; fi"
 	bash -c "curl https://raw.githubusercontent.com/jlopp/statoshi/master/README.md -o ./docker/README.md"
 	bash -c "cat ./docker/README.md >  README.md"
 	bash -c "cat ./docker/DOCKER.md >> README.md"
-#	bash -c "echo '<insert string>' >> README.md"
 	bash -c "echo '----' >> README.md"
 	bash -c "echo '## [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)) [$(GIT_HASH)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)/commit/$(GIT_HASH))' >> README.md"
 	bash -c "echo '##### &#36; <code>make</code>' >> README.md"
