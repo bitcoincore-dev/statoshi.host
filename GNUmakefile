@@ -378,8 +378,9 @@ header: build-header
 login:
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 
-.PHONY: package-header
-package-header:
+#######################
+.PHONY: package-header-host
+package-header-host:
 	@echo 'make package-header'
 
 	touch TIME && echo $(TIME) > TIME && git add -f TIME
@@ -387,6 +388,17 @@ package-header:
 	git commit --amend --no-edit --allow-empty
 	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
 	bash -c 'docker push                           docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
+
+#######################
+.PHONY: package-header-dev
+package-header-dev:
+	@echo 'make package-header'
+
+	touch TIME && echo $(TIME) > TIME && git add -f TIME
+	legit . -m "make package-header at $(TIME)" -p 00000
+	git commit --amend --no-edit --allow-empty
+	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_USER_NAME)/$(PROJECT_NAME)/header-$(HOST_USER)
+	bash -c 'docker push                           docker.pkg.github.com/$(GIT_USER_NAME)/$(PROJECT_NAME)/header-$(HOST_USER)'
 
 #######################
 .PHONY: shell
@@ -464,11 +476,19 @@ push:
 push-docs: docs push
 	@echo 'push-docs'
 #######################
-package-statoshi: init
+.PHONY:package-statoshi-host
+package-statoshi-host: init
 	@echo "legit . -m "$(HOST_USER):$(TIME)" -p 0000000 && make user=root package && GPF"
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/statoshi-$(HOST_USER)'
 	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/statoshi-$(HOST_USER)'
+#######################
+.PHONY:package-statoshi-dev
+package-statoshi-dev: init
+	@echo "legit . -m "$(HOST_USER):$(TIME)" -p 0000000 && make user=root package && GPF"
+	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_USER_NAME)/$(PROJECT_NAME)/statoshi-$(HOST_USER)'
+	bash -c 'docker push                             docker.pkg.github.com/$(GIT_USER_NAME)/$(PROJECT_NAME)/statoshi-$(HOST_USER)'
 ########################
 .PHONY: package-all
 package-all: header package-header build package-statoshi
