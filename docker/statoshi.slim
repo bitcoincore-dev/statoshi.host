@@ -1,4 +1,6 @@
 #BEGIN statoshi.all
+ARG GIT_PROFILE=${GIT_PROFILE}
+ARG GIT_REPO_NAME=${GIT_REPO_NAME}
 FROM docker.pkg.github.com/${GIT_PROFILE}/${GIT_REPO_NAME}/header-root:latest as config-final
 RUN echo statoshi.all
 RUN echo statoshi.all
