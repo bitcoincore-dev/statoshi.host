@@ -10,13 +10,13 @@ export THIS_FILE
 TIME									:= $(shell date +%s)
 export TIME
 
-ifeq ($(user),)
+ifneq ($(user),)
 ## USER retrieved from env, UID from shell.
-HOST_USER								?=  $(strip $(if $(USER),$(USER),nodummy))
-HOST_UID								?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
+#HOST_USER								?=  $(strip $(if $(USER),$(USER),nodummy))
+#HOST_UID								?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
 #BY PASS host user 
-#HOST_USER								= root
-#HOST_UID								= $(strip $(if $(uid),$(uid),0))
+HOST_USER								= root
+HOST_UID								= $(strip $(if $(uid),$(uid),0))
 else
 # allow override by adding user= and/ or uid=  (lowercase!).
 # uid= defaults to 0 if user= set (i.e. root).
@@ -115,8 +115,18 @@ GIT_USER_EMAIL							:= $(shell git config user.email)
 export GIT_USER_EMAIL
 GIT_SERVER								:= https://github.com
 export GIT_SERVER
-GIT_PROFILE								:= bitcoincore-dev
+
+
+ifeq ($(profile),)
+GIT_PROFILE								:= $(shell git config user.name)
+endif
 export GIT_PROFILE
+ifneq ($(GIT_PROFILE),randymcmillan)
+GIT_PROFILE								:= bitcoincore-dev
+endif
+export GIT_PROFILE
+
+
 GIT_BRANCH								:= $(shell git rev-parse --abbrev-ref HEAD)
 export GIT_BRANCH
 GIT_HASH								:= $(shell git rev-parse --short HEAD)
@@ -223,7 +233,7 @@ export UMBREL
 #######################
 
 .PHONY: help
-help: report
+help:
 	@echo ''
 	@echo '	[USAGE]:	make [BUILD] run [EXTRA_ARGUMENTS]	'
 	@echo ''
