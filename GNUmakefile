@@ -578,7 +578,14 @@ package-statoshi: init
 	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER)'
 ########################
 .PHONY: package-all
-package-all: init header package-header build package-statoshi
+package-all:
+
+ifeq ($(slim),true)
+	make package-all slim=false
+endif
+	make header package-header build package-statoshi
+
+
 ########################
 .PHONY: automate
 automate:
