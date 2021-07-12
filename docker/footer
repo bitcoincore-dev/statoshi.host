@@ -7,6 +7,8 @@
 #################
 ENV REPO=stats.bitcoincore.dev
 
+RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /etc/periodic/15min/blocknotify
+RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /usr/local/bin/blocknotify
 RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/entrypoint /entrypoint
 RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/entrypoint /usr/local/bin/entrypoint
 RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/systemMetrics.Daemon.py /usr/local/bin/systemMetrics.Daemon.py

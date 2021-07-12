@@ -133,6 +133,8 @@ GIT_REPO_NAME							:= $(PROJECT_NAME)
 export GIT_REPO_NAME
 GIT_REPO_PATH							:= $(HOME)/$(GIT_REPO_NAME)
 export GIT_REPO_PATH
+
+#TODO imp build type better
 ifeq ($(slim),true)
 DOCKER_BUILD_TYPE						:= slim
 export DOCKER_BUILD_TYPE
@@ -379,8 +381,13 @@ ifneq ($(shell id -u),0)
 endif
 	@echo 'init'
 	git config --global core.editor vim
+ifeq ($(slim),true)
+	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
+	docker pull -q docker.pkg.github.com/randymcmillan/statoshi.dev/header-root:1626074825
+else
 	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
+endif
 	bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
 	@echo ''
