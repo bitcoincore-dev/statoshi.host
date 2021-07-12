@@ -110,16 +110,17 @@ export GIT_USER_EMAIL
 GIT_SERVER								:= https://github.com
 export GIT_SERVER
 
+GIT_REPO_NAME							:= $(PROJECT_NAME)
+export GIT_REPO_NAME
 
-ifeq ($(profile),)
-GIT_PROFILE								:= $(shell git config user.name)
-endif
+ifeq ($(GIT_REPO_NAME),statoshi.dev)
+GIT_PROFILE								:= randymcmillan
 export GIT_PROFILE
-ifneq ($(GIT_PROFILE),randymcmillan)
+endif
+ifeq ($(GIT_REPO_NAME),statoshi.host)
 GIT_PROFILE								:= bitcoincore-dev
-endif
 export GIT_PROFILE
-
+endif
 
 GIT_BRANCH								:= $(shell git rev-parse --abbrev-ref HEAD)
 export GIT_BRANCH
@@ -129,8 +130,6 @@ GIT_PREVIOUS_HASH						:= $(shell git rev-parse --short master@{1})
 export GIT_PREVIOUS_HASH
 GIT_REPO_ORIGIN							:= $(shell git remote get-url origin)
 export GIT_REPO_ORIGIN
-GIT_REPO_NAME							:= $(PROJECT_NAME)
-export GIT_REPO_NAME
 GIT_REPO_PATH							:= $(HOME)/$(GIT_REPO_NAME)
 export GIT_REPO_PATH
 
@@ -565,7 +564,7 @@ push:
 	#bash -c "git commit --amend --no-edit --allow-empty -m '$(GIT_HASH)'          || echo failed to commit --amend --no-edit"
 	#bash -c "git commit         --no-edit --allow-empty -m '$(GIT_PREVIOUS_HASH)' || echo failed to commit --amend --no-edit"
 	bash -c "git push -f --all git@github.com:$(GIT_PROFILE)/$(PROJECT_NAME).git || echo failed to push docs"
-	bash -c "git push -f --all git@github.com:$(GIT_PROFILE)/statoshi.host.git || echo failed to push to statoshi.host"
+	bash -c "git push -f --all git@github.com:bitcoincore-dev/statoshi.host.git || echo failed to push to statoshi.host"
 .PHONY: push-docs
 push-docs: docs push
 	@echo 'push-docs'
