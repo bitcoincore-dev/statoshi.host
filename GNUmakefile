@@ -379,8 +379,8 @@ ifneq ($(shell id -u),0)
 endif
 	@echo 'init'
 	git config --global core.editor vim
-	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
-	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
+	#bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
+	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
 	@echo ''
