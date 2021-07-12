@@ -10,7 +10,7 @@ export THIS_FILE
 TIME									:= $(shell date +%s)
 export TIME
 
-ifneq ($(user),)
+ifeq ($(user),)
 ## USER retrieved from env, UID from shell.
 #HOST_USER								?=  $(strip $(if $(USER),$(USER),nodummy))
 #HOST_UID								?=  $(strip $(if $(shell id -u),$(shell id -u),4000))
