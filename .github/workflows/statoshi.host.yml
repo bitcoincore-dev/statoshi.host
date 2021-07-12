@@ -42,10 +42,12 @@ jobs:
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
       - uses: actions/checkout@v2
-      - name: Make
+        with:
+          fetch-depth: 2
+      - name: automate.sh
         run: |
-          ./automate.sh
           make super
+          ./.github/workflows/automate.sh
 
 # Cross Compile 
   ubuntu-18-host:
@@ -58,15 +60,17 @@ jobs:
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
       - uses: actions/checkout@v2
-      - name: sudo -s make init
+        with:
+          fetch-depth: 2
+      - name: make init
         run: |
-          sudo -s make init
-      - name: sudo -s make build-header
+          make init
+      - name: make build-header
         run: |
-          sudo -s make build-header
-      - name: sudo -s make run
+          make build-header
+      - name: make init build user=root verbose=true nocache=true
         run: |
-          sudo -s make run user=root verbose=true nocache=true
+          make init build user=root verbose=true nocache=true
 
 
 # Cross Compile 
@@ -80,13 +84,15 @@ jobs:
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
       - uses: actions/checkout@v2
-      - name: sudo -s make init
+        with:
+          fetch-depth: 2
+      - name: make init
         run: |
-          sudo -s make init
-      - name: sudo -s make build-header
+          make init
+      - name: make build-header
         run: |
-          sudo -s make build-header
-      - name: sudo -s make run
+          make build-header
+      - name: make init build user=root verbose=true nocache=true
         run: |
-          sudo -s make run user=root verbose=true nocache=true
+          make init build user=root verbose=true nocache=true
 

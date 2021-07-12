@@ -154,14 +154,14 @@ export STATOSHI_DATA_DIR
 ifeq ($(nocache),true)
 NOCACHE                                 := --no-cache
 else
-NOCACHE                                 :=	
+NOCACHE                                 := 
 endif
 export NOCACHE
 
 ifeq ($(verbose),true)
 VERBOSE									:= --verbose
 else
-VERBOSE									:=	
+VERBOSE									:= 
 endif
 export VERBOSE
 
@@ -204,7 +204,7 @@ endif
 export UMBREL
 #######################
 .PHONY: help
-help: report
+help:
 	@echo ''
 	@echo '	[USAGE]:	make [BUILD] run [EXTRA_ARGUMENTS]	'
 	@echo ''
@@ -364,7 +364,7 @@ endif
 .PHONY: build-header
 build-header: init
 	@echo ''
-	$(DOCKER_COMPOSE) $(VERBOSE) build --no-rm $(NOCACHE) header
+	$(DOCKER_COMPOSE) $(VERBOSE) build header
 	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
 	@echo ''
 #######################
@@ -380,11 +380,14 @@ login:
 
 .PHONY: package-header
 package-header:
+	@echo 'make package-header'
+
 	touch TIME && echo $(TIME) > TIME && git add -f TIME
 	legit . -m "make package-header at $(TIME)" -p 00000
 	git commit --amend --no-edit --allow-empty
 	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
 	bash -c 'docker push                           docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
+
 #######################
 .PHONY: shell
 shell:
@@ -392,10 +395,10 @@ shell:
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh
 #######################
-.PHONY: build
-build:
+.PHONY: init build
+build: init
 	@echo 'build'
-	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) statoshi
+	$(DOCKER_COMPOSE) $(VERBOSE) build statoshi
 	@echo ''
 #######################
 .PHONY: run
@@ -419,9 +422,9 @@ clean:
 	@$(DOCKER_COMPOSE) -p $(PROJECT_NAME)_$(HOST_UID) down --remove-orphans --rmi all 2>/dev/null \
 	&& echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" removed.' \
 	|| echo 'Image(s) for "$(PROJECT_NAME):$(HOST_USER)" already removed.'
-	@rm -f $(DOCKERFILE)*
-	@rm -f shell
-	@rm -f torproxy
+	@rm -f $(DOCKERFILE)
+	@rm -f TIME
+	@rm -f docker-compose.yml
 	@rm -f Makefile
 #######################
 .PHONY: prune
