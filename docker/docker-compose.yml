@@ -132,7 +132,7 @@ services:
       - CMD_ARGUMENTS=${CMD_ARGUMENTS}
     # Run with user priviliges by default.
     user: ${HOST_USER:-nodummy}
-    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+    image: ${PROJECT_NAME}:header-${HOST_USER:-nodummy}
     restart: unless-stopped
     build:
       context: .

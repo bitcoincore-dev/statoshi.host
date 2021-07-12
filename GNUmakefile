@@ -430,7 +430,7 @@ else
 endif
 #######################
 .PHONY: build-header
-build-header:
+build-header: init
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) header
 	@echo ''
