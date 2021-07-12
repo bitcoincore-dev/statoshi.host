@@ -1,6 +1,6 @@
 # REF: https://github.com/LINKIT-Group/dockerbuild/blob/master/Makefile
 # Make searches for this file first per make default search hierarchy
-SHELL                                   := /bin/bash
+#SHELL                                   := /bin/bash
 PWD 									?= pwd_unknown
 THIS_FILE								:= $(lastword $(MAKEFILE_LIST))
 export THIS_FILE
@@ -407,7 +407,7 @@ shell:
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh
 #######################
-.PHONY: init build
+.PHONY: build
 build: init
 	@echo 'build'
 	$(DOCKER_COMPOSE) $(VERBOSE) build statoshi

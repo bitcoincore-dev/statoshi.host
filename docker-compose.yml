@@ -43,6 +43,7 @@ services:
       - CMD_ARGUMENTS=${CMD_ARGUMENTS}
     # Run with user priviliges by default.
     user: root #${HOST_USER:-nodummy}
+#NOTE: container_name: ${PROJECT_NAME}:header-${HOST_USER}
     image: ${PROJECT_NAME}:header-${HOST_USER}
     restart: unless-stopped
     build:
@@ -95,7 +96,8 @@ services:
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
     # add UID to allow multiple users run this in parallel
-    container_name: ${PROJECT_NAME}_${HOST_UID:-4000}
+#NOTE: container_name: ${PROJECT_NAME}:header-${HOST_USER}
+    container_name: ${PROJECT_NAME}:statoshi-${HOST_USER}
     hostname: ${PROJECT_NAME}
     # These variables are passed into the container.
     environment:
@@ -134,7 +136,8 @@ services:
       - CMD_ARGUMENTS=${CMD_ARGUMENTS}
     # Run with user priviliges by default.
     user: ${HOST_USER:-nodummy}
-    image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
+#NOTE:image: ${PROJECT_NAME}:header-${HOST_USER}
+    image: ${PROJECT_NAME}:statoshi-${HOST_USER}
     restart: unless-stopped
     build:
       context: .
