@@ -2,70 +2,80 @@
 
 if hash docker 2>/dev/null; then
 
-
 STATS_ID=$(echo $(docker ps | awk '/statoshi/'|awk ' {print $1}' | awk 'NR==1'))
 export STATS_ID
-#echo STATS_ID: $STATS_ID
 
 STATS_IMAGE=$(echo $(docker ps | awk '/statoshi/'|awk ' {print $2}' | awk 'NR==1'))
 export STATS_IMAGE
-#echo STATS_TAG: $STATS_TAG
-
-#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon"
-#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
-#docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
 
 for ((i=1;i<=$#;i++));
 do
 
     if [[ ${!i} = *id* ]]; then
         ((i++))
-	echo STATS_ID: $STATS_ID
+        echo $STATS_ID
+        exit
 
     elif [[ ${!i} = *image* ]]; then
         ((i++))
-	echo STATS_IMAGE: $STATS_IMAGE
+        echo $STATS_IMAGE
+        exit
 
     elif [[ ${!i} = *top* ]]; then
         ((i++))
-    docker top $STATS_ID
+        docker top $STATS_ID
+        exit
 
     elif [[ ${!i} = *start* ]]; then
         ((i++))
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon &"
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon &"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
+        exit
 
     elif [[ ${!i} = *prune* ]]; then
         ((i++))
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
+        exit
 
     elif [[ ${!i} = *cli* ]]; then
         ((i++))
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
+        exit
 
     elif [[ ${!i} = *d* ]]; then
         ((i++))
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
+        exit
 
     elif [[ ${!i} = *ep* ]]; then
         ((i++))
-	docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
+        exit
+
+    elif [[ ${!i} = *whatami* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/whatami"
+        exit
+
+    elif [[ ${!i} = *console* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID bash
 
     elif [[ ${!i} == *h* ]]; then
         ((i++))
         echo
-        echo "stats <command> #- execute shell command in container"
-        echo "stats -d <command> #- send command to bitcoind"
-        echo "stats -cli <command> #- send command to bitcoin-cli"
+        echo "statoshi                 <command> - execute shell command in container"
+        echo "statoshi -d              <command> - send command to bitcoind"
+        echo "statoshi -cli            <command> - send command to bitcoin-cli"
         echo
         echo "Examples:"
         echo
-        echo "stats ls"
-        echo "stats cd / & ls -a"
-        echo "stats -cli gettxoutsetinfo"
-        echo "stats -cli getmininginfo"
+        echo "statoshi                 ls"
+        echo "statoshi                 cd / & ls -a"
+        echo "statoshi                 -cli gettxoutsetinfo"
+        echo "statoshi                 -cli getmininginfo"
         echo
         echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoind -daemon -prune=550'"
         echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli gettxoutsetinfo'"
@@ -74,9 +84,10 @@ do
 
     elif [ -n ${!i} ]; then
         ((i++))
-	docker exec -it $STATS_ID sh -c  "$1"
+        docker exec -it $STATS_ID sh -c  "$1"
+        exit
     fi
 
 done;
-
+echo statoshi help
 fi #end if docker hash
