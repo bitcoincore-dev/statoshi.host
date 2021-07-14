@@ -29,7 +29,7 @@ do
     elif [[ ${!i} = *start* ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
-        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon &"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -datadir=/home/root/.statoshi -addnode=statoshi.host:8333 -addnode=umbrel.local &"
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
         exit
@@ -66,6 +66,10 @@ do
     elif [[ ${!i} = *console* ]]; then
         ((i++))
         docker exec -it $STATS_ID bash
+
+    elif [[ ${!i} = *debug* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID sh -c "tail -f /home/root/.bitcoin"
 
     elif [[ ${!i} == *h* ]]; then
         ((i++))
