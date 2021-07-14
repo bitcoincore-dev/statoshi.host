@@ -1,0 +1,535 @@
+#BEGIN HEADER
+ARG BASE_IMAGE=alpine:3.11.6
+#####################################
+FROM ${BASE_IMAGE} as set-initial-env
+#####################################
+
+ARG HOME=${HOME}
+ARG PWD=${PWD}
+ARG UMBREL=${UMBREL}
+ARG THIS_FILE=${THIS_FILE}
+ARG TIME=${TIME}
+ARG HOST_USER=${HOST_USER}
+ARG HOST_UID=${HOST_UID}
+ARG PUBLIC_PORT=${PUBLIC_PORT}
+ARG NODE_PORT=${NODE_PORT}
+ARG SERVICE_TARGET=${SERVICE_TARGET}
+ARG ALPINE_VERSION=${ALPINE_VERSION}
+ARG WHISPER_VERSION=${WHISPER_VERSION}
+ARG CARBON_VERSION=${CARBON_VERSION}
+ARG GRAPHITE_VERSION=${GRAPHITE_VERSION}
+ARG STATSD_VERSION=${STATSD_VERSION}
+ARG GRAFANA_VERSION=${GRAFANA_VERSION}
+ARG DJANGO_VERSION=${DJANGO_VERSION}
+ARG PROJECT_NAME=${PROJECT_NAME}
+ARG DOCKER_BUILD_TYPE=${DOCKER_BUILD_TYPE}
+ARG SLIM=${SLIM}
+ARG DOCKERFILE=${DOCKERFILE}
+ARG DOCKERFILE_BODY=${DOCKERFILE_BODY}
+ARG GIT_USER_NAME=${GIT_USER_NAME}
+ARG GIT_USER_EMAIL=${GIT_USER_EMAIL}
+ARG GIT_SERVER=${GIT_SERVER}
+ARG GIT_PROFILE=${GIT_PROFILE}
+ARG GIT_BRANCH=${GIT_BRANCH}
+ARG GIT_HASH=${GIT_HASH}
+ARG GIT_REPO_ORIGIN=${GIT_REPO_ORIGIN}
+ARG GIT_REPO_NAME=${GIT_REPO_NAME}
+ARG GIT_REPO_PATH=${GIT_REPO_PATH}
+ARG DOCKERFILE=${DOCKERFILE}
+ARG DOCKERFILE_PATH=${DOCKERFILE_PATH}
+ARG BITCOIN_CONF=${BITCOIN_CONF}
+ARG BITCOIN_DATA_DIR=${BITCOIN_DATA_DIR}
+ARG STATOSHI_DATA_DIR=${STATOSHI_DATA_DIR}
+ARG NOCACHE=${NOCACHE}
+ARG VERBOSE=${VERBOSE}
+ARG PUBLIC_PORT=${PUBLIC_PORT}
+ARG NODE_PORT=${NODE_PORT}
+ARG PASSWORD=${PASSWORD}
+ARG CMD_ARGUMENTS=${CMD_ARGUMENTS}
+
+ENV HOME=${HOME}
+ENV PWD=${PWD}
+ENV UMBREL=${UMBREL}
+ENV THIS_FILE=${THIS_FILE}
+ENV TIME=${TIME}
+ENV HOST_USER=${HOST_USER}
+ENV HOST_UID=${HOST_UID}
+ENV PUBLIC_PORT=${PUBLIC_PORT}
+ENV NODE_PORT=${NODE_PORT}
+ENV SERVICE_TARGET=${SERVICE_TARGET}
+ENV ALPINE_VERSION=${ALPINE_VERSION}
+ENV WHISPER_VERSION=${WHISPER_VERSION}
+ENV CARBON_VERSION=${CARBON_VERSION}
+ENV GRAPHITE_VERSION=${GRAPHITE_VERSION}
+ENV STATSD_VERSION=${STATSD_VERSION}
+ENV GRAFANA_VERSION=${GRAFANA_VERSION}
+ENV DJANGO_VERSION=${DJANGO_VERSION}
+ENV PROJECT_NAME=${PROJECT_NAME}
+ENV DOCKER_BUILD_TYPE=${DOCKER_BUILD_TYPE}
+ENV SLIM=${SLIM}
+ENV DOCKERFILE=${DOCKERFILE}
+ENV DOCKERFILE_BODY=${DOCKERFILE_BODY}
+ENV GIT_USER_NAME=${GIT_USER_NAME}
+ENV GIT_USER_EMAIL=${GIT_USER_EMAIL}
+ENV GIT_SERVER=${GIT_SERVER}
+ENV GIT_PROFILE=${GIT_PROFILE}
+ENV GIT_BRANCH=${GIT_BRANCH}
+ENV GIT_HASH=${GIT_HASH}
+ENV GIT_REPO_ORIGIN=${GIT_REPO_ORIGIN}
+ENV GIT_REPO_NAME=${GIT_REPO_NAME}
+ENV GIT_REPO_PATH=${GIT_REPO_PATH}
+ENV DOCKERFILE=${DOCKERFILE}
+ENV DOCKERFILE_PATH=${DOCKERFILE_PATH}
+ENV BITCOIN_CONF=${BITCOIN_CONF}
+ENV BITCOIN_DATA_DIR=${BITCOIN_DATA_DIR}
+ENV STATOSHI_DATA_DIR=${STATOSHI_DATA_DIR}
+ENV NOCACHE=${NOCACHE}
+ENV VERBOSE=${VERBOSE}
+ENV PUBLIC_PORT=${PUBLIC_PORT}
+ENV NODE_PORT=${NODE_PORT}
+ENV PASSWORD=${PASSWORD}
+ENV CMD_ARGUMENTS=${CMD_ARGUMENTS}
+
+
+ENV REPO=/${PROJECT_NAME}
+
+RUN apk update && apk upgrade && apk add ${VERBOSE} ${NOCACHE} musl busybox bash-completion git
+RUN git clone ${GIT_SERVER}/${GIT_PROFILE}/${PROJECT_NAME} --depth 1 ${REPO}
+RUN ${REPO}/conf/install_packages.sh
+RUN mkdir -p /usr/local/bin/
+#RUN install -v ${REPO}/contrib/zmq/zmq_sub.py /usr/local/bin/zmq_sub.py
+
+RUN apk -U add ${VERBOSE} ${NOCACHE} coreutils
+RUN apk add --update ${VERBOSE} ${NOCACHE} nodejs nodejs-npm
+
+#NOTE: simply exposing the ports in the dockerfile isnt enough
+#REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
+EXPOSE 80 2003-2004 2013-2014 2023-2024 3000 8080 8118 8333 8332 18333 8125 8125/udp 8126 9050 9051
+RUN git config --global advice.detachedHead false
+
+RUN df -H
+#########################################
+FROM set-initial-env as grafana-download
+#########################################
+
+ENV GRAFANA_VERSION=7.0.0
+RUN mkdir -p /tmp/grafana \
+  && wget -P /tmp/ https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
+  && tar xfz /tmp/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz --strip-components=1 -C /tmp/grafana
+
+RUN df -H
+########################################
+FROM grafana-download as grafana-config
+########################################
+#REF:https://github.com/orangesys/alpine-grafana/blob/master/Dockerfile
+
+ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    GF_PATHS_CONFIG_DEFAULTS="/usr/share/grafana/conf/defaults.ini" \
+    GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
+    GF_PATHS_DATA="/var/lib/grafana" \
+    GF_PATHS_HOME="/usr/share/grafana" \
+    GF_PATHS_HOME_DASHBOARD="/usr/share/grafana/public/dashboards/home.json" \
+    GF_PATHS_LOGS="/var/log/grafana" \
+    GF_PATHS_PLUGINS="/var/lib/grafana/plugins" \
+    GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
+
+RUN df -H
+######################################
+FROM grafana-config as set-grafana-env
+######################################
+
+WORKDIR $GF_PATHS_HOME
+
+RUN set -ex \
+    && addgroup -S grafana \
+    && adduser -S -G grafana grafana \
+    #&& apk add --no-cache libc6-compat ca-certificates su-exec bash
+    && apk add ${VERBOSE} ${NOCACHE} libc6-compat su-exec
+
+#NOTE Once /tmp/grafana is copied to GF_PATHS_HOME we are free to modify the default configuration
+COPY --from=grafana-config /tmp/grafana "$GF_PATHS_HOME"
+RUN mkdir -p "$GF_PATHS_HOME/.aws" \
+    && mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
+        "$GF_PATHS_PROVISIONING/dashboards" \
+        "$GF_PATHS_PROVISIONING/notifiers" \
+        "$GF_PATHS_LOGS" \
+        "$GF_PATHS_PLUGINS" \
+        "$GF_PATHS_DATA" \
+    && chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" \
+    && chmod -R 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
+
+#NOTE:/usr/share/grafana/conf/defaults.ini is read first
+COPY ./conf/defaults.ini "$GF_PATHS_CONFIG_DEFAULTS"
+COPY ./conf/grafana.ini "$GF_PATHS_CONFIG"
+COPY ./conf/run-grafana.sh /usr/local/bin/
+COPY ./conf/dashboards/* $GF_PATHS_PROVISIONING/dashboards/
+COPY ./conf/dashboards/overview.json $GF_PATHS_HOME_DASHBOARD
+COPY ./conf/datasources/* $GF_PATHS_PROVISIONING/datasources/
+
+COPY ./conf/dashboards/* $GF_PATHS_HOME/dashboards/
+
+RUN rm -f $GF_PATHS_HOME/public/img/grafana_icon.svg
+RUN rm -f $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
+
+COPY ./src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_icon.svg
+COPY ./src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/grafana_mask_icon.svg
+COPY ./src/qt/res/src/bitcoin.svg  $GF_PATHS_HOME/public/img/bitcoin.svg
+
+RUN df -H
+#########################################
+FROM set-grafana-env as apk-add-packages1
+#########################################
+
+WORKDIR /
+
+RUN apk update && apk upgrade
+RUN apk add ${VERBOSE} ${NOCACHE} \
+    autoconf \
+    automake \
+    binutils \
+    ca-certificates \
+    cmake \
+    curl \
+    doxygen \
+    git \
+    libtool \
+    make \
+    patch \
+    pkgconfig \
+    python3 \
+    py3-psutil \
+    vim
+
+RUN apk add ${VERBOSE} ${NOCACHE} \
+    g++ \
+    build-base \
+    boost-libs \
+    libgcc \
+    libstdc++ \
+    musl \
+    boost-system \
+    boost-build \
+    boost-dev \
+    openssl-dev \
+    libevent-dev \
+    libzmq \
+    zeromq-dev \
+    protobuf-dev \
+    linux-headers \
+    libbz2 \
+    libcap-dev \
+    librsvg \
+    tiff-tools \
+    zlib-dev \
+    py3-setuptools
+
+RUN df -H
+###########################################
+FROM apk-add-packages1 as apk-add-packages2
+###########################################
+
+RUN apk add ${VERBOSE} ${NOCACHE} \
+      cairo \
+      collectd \
+      collectd-disk \
+      collectd-nginx \
+      findutils \
+      librrd \
+      logrotate \
+      memcached \
+      nginx \
+      nodejs \
+      npm \
+      nodejs-npm \
+      py3-pyldap \
+      redis \
+      runit \
+      sqlite \
+      expect \
+      dcron \
+      py3-mysqlclient \
+      mysql-dev \
+      mysql-client \
+      postgresql-dev \
+      postgresql-client \
+      iptables \
+ && rm -rf \
+#TODO: SSL
+      /etc/nginx/conf.d/default.conf \ 
+ && mkdir -p \
+      /var/log/carbon \
+      /var/log/graphite
+
+RUN df -H
+###########################################
+FROM apk-add-packages2 as apk-add-packages3
+###########################################
+
+RUN apk add ${VERBOSE} ${NOCACHE} \
+      alpine-sdk \
+      git \
+      libffi-dev \
+      pkgconfig \
+      py3-cairo \
+      py3-pip \
+      py3-virtualenv==16.7.8-r0 \
+      openldap-dev \
+      python3-dev \
+      rrdtool-dev \
+      wget
+
+RUN df -H
+#################################
+FROM apk-add-packages3 as config1
+#################################
+
+RUN virtualenv /opt/graphite \
+ && . /opt/graphite/bin/activate \
+ && pip3 install \
+      django==2.2.24 \
+      django-statsd-mozilla \
+      fadvise \
+      gunicorn==20.0.4 \
+      msgpack-python \
+      redis \
+      rrdtool \
+      python-ldap \
+      mysqlclient \
+      psycopg2 \
+      twisted \
+      django-cockroachdb==2.2.*
+
+RUN df -H
+#######################
+FROM config1 as config2
+#######################
+
+# install whisper
+ARG version=1.1.7
+ARG whisper_version=${version}
+ARG whisper_repo=https://github.com/graphite-project/whisper.git
+RUN git clone -b ${whisper_version} --depth 1 ${whisper_repo} /usr/local/src/whisper \
+ && cd /usr/local/src/whisper \
+ && . /opt/graphite/bin/activate \
+ && python3 ./setup.py install
+
+# install carbon
+ARG carbon_version=${version}
+ARG carbon_repo=https://github.com/graphite-project/carbon.git
+RUN . /opt/graphite/bin/activate \
+ && git clone -b ${carbon_version} --depth 1 ${carbon_repo} /usr/local/src/carbon \
+ && cd /usr/local/src/carbon \
+ && pip3 install -r requirements.txt \
+ && python3 ./setup.py install
+
+# install graphite
+ARG graphite_version=${version}
+ARG graphite_repo=https://github.com/graphite-project/graphite-web.git
+RUN . /opt/graphite/bin/activate \
+ && git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/graphite-web \
+ && cd /usr/local/src/graphite-web \
+ && pip3 install -r requirements.txt \
+ && python3 ./setup.py install
+
+# install statsd (as we have to use this ugly way)
+ARG statsd_version=0.8.6
+ARG statsd_repo=https://github.com/statsd/statsd.git
+WORKDIR /opt
+RUN git clone ${statsd_repo} \
+ && cd /opt/statsd \
+ && git checkout tags/v${statsd_version} \
+ && npm install
+
+RUN df -H
+#######################
+FROM config2 as config3
+#######################
+#TODO Why?
+COPY conf/opt/graphite/conf/                             /opt/defaultconf/graphite/
+COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/local_settings.py
+#COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/settings.py
+#TODO Why?
+# config graphite
+COPY conf/opt/graphite/conf/*.conf /opt/graphite/conf/
+COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+#COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/settings.py
+WORKDIR /opt/graphite/webapp
+RUN mkdir -p /var/log/graphite/ \
+  && PYTHONPATH=/opt/graphite/webapp /opt/graphite/bin/django-admin.py collectstatic --noinput --settings=graphite.settings
+
+# config statsd
+COPY conf/opt/statsd/config/ /opt/defaultconf/statsd/config/
+
+RUN df -H
+#######################
+FROM config3 as config4
+#######################
+
+ENV STATSD_INTERFACE udp
+#TODO Why?
+#ENV STATSD_INTERFACE tcp/udp
+
+COPY conf /
+
+# copy /opt from build image
+COPY --from=config3 /opt /opt
+
+VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd/config", "/etc/logrotate.d", "/var/log", "/var/lib/redis", "${BITCOIN_DATA_DIR}", "${STATOSHI_DATA_DIR}"]
+
+RUN df -H
+#######################
+FROM config4 as config-final
+#######################
+STOPSIGNAL SIGHUP
+
+#################
+#################
+#################
+#################
+#################
+#END HEADER
+#BEGIN INSERT
+
+#BEGIN statoshi.all
+RUN echo statoshi.all
+RUN echo statoshi.all
+RUN echo statoshi.all
+RUN echo statoshi.all
+RUN df -H
+###########################################
+# We build Statoshi last
+FROM config-final as clone-stats-bitcoincore-dev
+###########################################
+ENV REPO=stats.bitcoincore.dev
+# Change to your fork
+RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${GIT_REPO_NAME}
+
+################################################
+FROM clone-stats-bitcoincore-dev as make-depends
+################################################
+
+# Install before autogen.sh and configure
+#RUN make -j $(nproc) install -C ${REPO}/depends
+RUN apk add libzmq
+RUN pip3 install pyzmq
+#RUN python3 ${REPO}/contrib/zmq/zmq_sub.py &
+
+############################
+FROM make-depends as autogen
+############################
+
+#RUN cd ${GIT_REPO_NAME} && ./autogen.sh
+
+#########################
+FROM autogen as configure
+#########################
+
+#RUN cd ${GIT_REPO_NAME}  && ./configure --disable-wallet --disable-tests --disable-hardening --disable-man --enable-util-cli --enable-util-tx --with-gui=no --without-miniupnpc --disable-bench
+
+######################
+FROM configure as make
+######################
+
+#RUN cd ${GIT_REPO_NAME} && make -f Makefile -j $(nproc)
+#RUN cd ${GIT_REPO_NAME} && make install
+
+###########################
+FROM make as strip-binaries
+###########################
+
+RUN echo statoshi.all
+###########################
+FROM strip-binaries as statoshi
+###########################
+
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /etc/periodic/15min/blocknotify
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind /etc/periodic/15min/bitcoind
+
+RUN ${GIT_REPO_NAME}/conf/config.bitcoin.conf.sh
+
+# These should be the mounted volume
+#TODO mimic the bitcoin package install?
+RUN mkdir -p /etc/bitcoin
+RUN mkdir -p /var/lib/bitcoin
+RUN mkdir -p /root/.bitcoin
+RUN mkdir -p /home/root/.bitcoin
+RUN ln -s /root/.bitcoin /var/lib/bitcoin
+RUN install -v ${GIT_REPO_NAME}/conf/bitcoin.conf /etc/bitcoin/bitcoin.conf
+RUN install -v ${GIT_REPO_NAME}/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
+RUN install -v ${GIT_REPO_NAME}/conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
+RUN install -v ${GIT_REPO_NAME}/conf/additional.conf /etc/bitcoin/additional.conf
+RUN install -v ${GIT_REPO_NAME}/conf/additional.conf /root/.bitcoin/additional.conf
+RUN install -v ${GIT_REPO_NAME}/conf/additional.conf /home/root/.bitcoin/additional.conf
+
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind /usr/local/bin/bitcoind
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind /usr/bin/bitcoind
+
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli /usr/local/bin/bitcoin-cli
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli /usr/bin/bitcoin-cli
+
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx /usr/bin/bitcoin-tx
+
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
+
+###########################
+# Micro containers may not be able to compile from source - signed binaries verified here
+###########################
+
+RUN apk add --no-cache gnupg
+RUN gpg --import  ${GIT_REPO_NAME}/conf/usr/local/bin/randymcmillan2.asc
+#RUN gpg --refresh-keys
+
+RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  ${GIT_REPO_NAME}/conf/usr/local/bin/keys.txt
+
+RUN gpg --verify ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind.gpg    ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind
+
+RUN gpg --verify ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli.gpg ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli
+
+RUN gpg --verify ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx.gpg  ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx
+
+RUN df -H
+#END statoshi.all
+
+#END INSERT
+#BEGIN FOOTER
+#################
+#################
+#################
+#################
+#################
+ENV REPO=stats.bitcoincore.dev
+
+RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /etc/periodic/15min/blocknotify
+RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /usr/local/bin/blocknotify
+RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/entrypoint /entrypoint
+RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/entrypoint /usr/local/bin/entrypoint
+RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/systemMetrics.Daemon.py /usr/local/bin/systemMetrics.Daemon.py
+RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/systemMetrics.Daemon.py /systemMetrics.Daemon.py
+RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/requirements.txt /requirements.txt
+RUN install ${GIT_REPO_NAME}/conf/usr/local/bin/requirements.txt /usr/local/bin/requirements.txt
+
+RUN rm -rf  ${REPO}/
+
+RUN rm -rf /var/cache/man/*
+RUN rm -rf /opt/graphite/examples/*
+
+RUN npm --force cache clean # && cd /usr/lib/node_modules && npm uninstall -y npm
+
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/tabs/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/grid/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/window/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/layout/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/toolbar/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/images/default/button/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/js/ext/resources/icons/fam/*.gif
+#RUN rm -rf /opt/graphite/webapp/content/img/*.png
+#RUN rm -rf /opt/graphite/webapp/content/css/default/*.gif
+RUN rm -rf /opt/graphite/examples/*
+
+RUN df -H
+
+ENTRYPOINT ["/usr/local/bin/./entrypoint"]
+#CMD ["bitcoind", "-daemon", "&", "wait", "&"]
+#END FOOTER
