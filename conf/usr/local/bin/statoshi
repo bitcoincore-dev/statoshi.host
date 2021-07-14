@@ -43,27 +43,15 @@ do
 
     elif [[ ${!i} = *cli* ]]; then
         ((i++))
-        #echo ${!i};
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
-        #var2=${!i};
 
     elif [[ ${!i} = *d* ]]; then
         ((i++))
-        #echo ${!i};
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
-        #var2=${!i};
 
     elif [[ ${!i} = *ep* ]]; then
         ((i++))
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
-
-    elif [ ${!i} = "-b" ]; then
-        ((i++))
-        var4=${!i};
-
-    elif [ ${!i} = "-l" ]; then
-        ((i++))
-        var5=${!i};
 
     elif [[ ${!i} == *h* ]]; then
         ((i++))
@@ -86,13 +74,9 @@ do
 
     elif [ -n ${!i} ]; then
         ((i++))
-        echo 'execute in container'
 	docker exec -it $STATS_ID sh -c  "$1"
     fi
 
 done;
 
-#docker exec -it $STATS_ID sh -c "find /usr/local -maxdepth 2 -type f -name 'stats'"
-#docker exec -it $STATS_ID sh -c "find /usr/local -maxdepth 2 -type f -name 'stats*'"
-#echo stats-cli $1 
 fi #end if docker hash
