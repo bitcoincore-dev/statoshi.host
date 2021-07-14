@@ -1,25 +1,11 @@
-*After branching off for a major version release of Bitcoin Core, use this
-template to create the initial release notes draft.*
+0.21.1 Release Notes
+====================
 
-*The release notes draft is a temporary file that can be added to by anyone. See
-[/doc/developer-notes.md#release-notes](/doc/developer-notes.md#release-notes)
-for the process.*
+Bitcoin Core version 0.21.1 is now available from:
 
-*Create the draft, named* "*version* Release Notes Draft"
-*(e.g. "0.20.0 Release Notes Draft"), as a collaborative wiki in:*
+  <https://bitcoincore.org/bin/bitcoin-core-0.21.1/>
 
-https://github.com/bitcoin-core/bitcoin-devwiki/wiki/
-
-*Before the final release, move the notes back to this git repository.*
-
-*version* Release Notes Draft
-===============================
-
-Bitcoin Core version *version* is now available from:
-
-  <https://bitcoincore.org/bin/bitcoin-core-*version*/>
-
-This release includes new features, various bug fixes and performance
+This minor release includes various bug fixes and performance
 improvements, as well as updated translations.
 
 Please report bugs using the issue tracker at GitHub:
@@ -58,204 +44,160 @@ when macOS "dark mode" is activated.
 Notable changes
 ===============
 
-P2P and network changes
------------------------
+## Taproot Soft Fork
 
-- The mempool now tracks whether transactions submitted via the wallet or RPCs
-  have been successfully broadcast. Every 10-15 minutes, the node will try to
-  announce unbroadcast transactions until a peer requests it via a `getdata`
-  message or the transaction is removed from the mempool for other reasons.
-  The node will not track the broadcast status of transactions submitted to the
-  node using P2P relay. This version reduces the initial broadcast guarantees
-  for wallet transactions submitted via P2P to a node running the wallet. (#18038)
+Included in this release are the mainnet and testnet activation
+parameters for the taproot soft fork (BIP341) which also adds support
+for schnorr signatures (BIP340) and tapscript (BIP342).
+
+If activated, these improvements will allow users of single-signature
+scripts, multisignature scripts, and complex contracts to all use
+identical-appearing commitments that enhance their privacy and the
+fungibility of all bitcoins. Spenders will enjoy lower fees and the
+ability to resolve many multisig scripts and complex contracts with the
+same efficiency, low fees, and large anonymity set as single-sig users.
+Taproot and schnorr also include efficiency improvements for full nodes
+such as the ability to batch signature verification.  Together, the
+improvements lay the groundwork for future potential
+upgrades that may improve efficiency, privacy, and fungibility further.
+
+Activation for taproot is being managed using a variation of BIP9
+versionbits called Speedy Trial (described in BIP341). Taproot's
+versionbit is bit 2, and nodes will begin tracking which blocks signal
+support for taproot at the beginning of the first retarget period after
+taproot’s start date of 24 April 2021.  If 90% of blocks within a
+2,016-block retarget period (about two weeks) signal support for taproot
+prior to the first retarget period beginning after the time of 11 August
+2021, the soft fork will be locked in, and taproot will then be active
+as of block 709632 (expected in early or mid November).
+
+Should taproot not be locked in via Speedy Trial activation, it is
+expected that a follow-up activation mechanism will be deployed, with
+changes to address the reasons the Speedy Trial method failed.
+
+This release includes the ability to pay taproot addresses, although
+payments to such addresses are not secure until taproot activates.
+It also includes the ability to relay and mine taproot transactions
+after activation.  Beyond those two basic capabilities, this release
+does not include any code that allows anyone to directly use taproot.
+The addition of taproot-related features to Bitcoin Core's wallet is
+expected in later releases once taproot activation is assured.
+
+All users, businesses, and miners are encouraged to upgrade to this
+release (or a subsequent compatible release) unless they object to
+activation of taproot.  If taproot is locked in, then upgrading before
+block 709632 is highly recommended to help enforce taproot's new rules
+and to avoid the unlikely case of seeing falsely confirmed transactions.
+
+Miners who want to activate Taproot should preferably use this release
+to control their signaling.  The `getblocktemplate` RPC results will
+automatically be updated to signal once the appropriate start has been
+reached and continue signaling until the timeout occurs or taproot
+activates.  Alternatively, miners may manually start signaling on bit 2
+at any time; if taproot activates, they will need to ensure they update
+their nodes before block 709632 or non-upgraded nodes could cause them to mine on
+an invalid chain.  See the [versionbits
+FAQ](https://bitcoincore.org/en/2016/06/08/version-bits-miners-faq/) for
+details.
+
+
+For more information about taproot, please see the following resources:
+
+- Technical specifications
+  - [BIP340 Schnorr signatures for secp256k1](https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki)
+  - [BIP341 Taproot: SegWit version 1 spending rules](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki)
+  - [BIP342 Validation of Taproot scripts](https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki)
+
+- Popular articles;
+  - [Taproot Is Coming: What It Is, and How It Will Benefit Bitcoin](https://bitcoinmagazine.com/technical/taproot-coming-what-it-and-how-it-will-benefit-bitcoin)
+  - [What do Schnorr Signatures Mean for Bitcoin?](https://academy.binance.com/en/articles/what-do-schnorr-signatures-mean-for-bitcoin)
+  - [The Schnorr Signature & Taproot Softfork Proposal](https://blog.bitmex.com/the-schnorr-signature-taproot-softfork-proposal/)
+
+- Development history overview
+  - [Taproot](https://bitcoinops.org/en/topics/taproot/)
+  - [Schnorr signatures](https://bitcoinops.org/en/topics/schnorr-signatures/)
+  - [Tapscript](https://bitcoinops.org/en/topics/tapscript/)
+  - [Soft fork activation](https://bitcoinops.org/en/topics/soft-fork-activation/)
+
+- Other
+  - [Questions and answers related to taproot](https://bitcoin.stackexchange.com/questions/tagged/taproot)
+  - [Taproot review](https://github.com/ajtowns/taproot-review)
 
 Updated RPCs
 ------------
 
-- `getmempoolinfo` now returns an additional `unbroadcastcount` field. The
-  mempool tracks locally submitted transactions until their initial broadcast
-  is acknowledged by a peer. This field returns the count of transactions
-  waiting for acknowledgement.
+- Due to [BIP 350](https://github.com/bitcoin/bips/blob/master/bip-0350.mediawiki)
+  being implemented, behavior for all RPCs that accept addresses is changed when
+  a native witness version 1 (or higher) is passed. These now require a Bech32m
+  encoding instead of a Bech32 one, and Bech32m encoding will be used for such
+  addresses in RPC output as well. No version 1 addresses should be created
+  for mainnet until consensus rules are adopted that give them meaning
+  (e.g. through [BIP 341](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki)).
+  Once that happens, Bech32m is expected to be used for them, so this shouldn't
+  affect any production systems, but may be observed on other networks where such
+  addresses already have meaning (like signet).
 
-- Mempool RPCs such as `getmempoolentry` and `getrawmempool` with
-  `verbose=true` now return an additional `unbroadcast` field. This indicates
-  whether initial broadcast of the transaction has been acknowledged by a
-  peer. `getmempoolancestors` and `getmempooldescendants` are also updated.
-
-
-Changes to Wallet or GUI related RPCs can be found in the GUI or Wallet section below.
-
-New RPCs
---------
-
-Build System
-------------
-
-Updated settings
-----------------
-
-Changes to Wallet or GUI related settings can be found in the GUI or Wallet  section below.
-
-New settings
-------------
-
-Wallet
-------
-
-- To improve wallet privacy, the frequency of wallet rebroadcast attempts is
-  reduced from approximately once every 15 minutes to once every 12-36 hours.
-  To maintain a similar level of guarantee for initial broadcast of wallet
-  transactions, the mempool tracks these transactions as a part of the newly
-  introduced unbroadcast set. See the "P2P and network changes" section for
-  more information on the unbroadcast set. (#18038)
-
-- The wallet can create a transaction without change even when the keypool is
-  empty. Previously it failed. (#17219)
-
-- The `-salvagewallet` startup option has been removed. A new `salvage` command
-  has been added to the `bitcoin-wallet` tool which performs the salvage
-  operations that `-salvagewallet` did. (#18918)
-
-### Experimental Descriptor Wallets
-
-Please note that Descriptor Wallets are still experimental and not all expected functionality
-is available. Additionally there may be some bugs and current functions may change in the future.
-Bugs and missing functionality can be reported to the [issue tracker](https://github.com/bitcoin/bitcoin/issues).
-
-0.21 introduces a new type of wallet - Descriptor Wallets. Descriptor Wallets store
-scriptPubKey information using descriptors. This is in contrast to the Legacy Wallet
-structure where keys are used to generate scriptPubKeys and addresses. Because of this
-shift to being script based instead of key based, many of the confusing things that Legacy
-Wallets do are not possible with Descriptor Wallets. Descriptor Wallets use a definition
-of "mine" for scripts which is simpler and more intuitive than that used by Legacy Wallets.
-Descriptor Wallets also uses different semantics for watch-only things and imports.
-
-As Descriptor Wallets are a new type of wallet, their introduction does not affect existing wallets.
-Users who already have a Bitcoin Core wallet can continue to use it as they did before without
-any change in behavior. Newly created Legacy Wallets (which is the default type of wallet) will
-behave as they did in previous versions of Bitcoin Core.
-
-The differences between Descriptor Wallets and Legacy Wallets are largely limited to non user facing
-things. They are intended to behave similarly except for the import/export and watchonly functionality
-as described below.
-
-#### Creating Descriptor Wallets
-
-Descriptor Wallets are not created by default. They must be explicitly created using the
-`createwallet` RPC or via the GUI. A `descriptors` option has been added to `createwallet`.
-Setting `descriptors` to `true` will create a Descriptor Wallet instead of a Legacy Wallet.
-
-In the GUI, a checkbox has been added to the Create Wallet Dialog to indicate that a
-Descriptor Wallet should be created.
-
-Without those options being set, a Legacy Wallet will be created instead. Additionally the
-Default Wallet created upon first startup of Bitcoin Core will be a Legacy Wallet.
-
-#### `IsMine` Semantics
-
-`IsMine` refers to the function used to determine whether a script belongs to the wallet.
-This is used to determine whether an output belongs to the wallet. `IsMine` in Legacy Wallets
-returns true if the wallet would be able to sign an input that spends an output with that script.
-Since keys can be involved in a variety of different scripts, this definition for `IsMine` can
-lead to many unexpected scripts being considered part of the wallet.
-
-With Descriptor Wallets, descriptors explicitly specify the set of scripts that are owned by
-the wallet. Since descriptors are deterministic and easily enumerable, users will know exactly
-what scripts the wallet will consider to belong to it. Additionally the implementation of `IsMine`
-in Descriptor Wallets is far simpler than for Legacy Wallets. Notably, in Legacy Wallets, `IsMine`
-allowed for users to take one type of address (e.g. P2PKH), mutate it into another address type
-(e.g. P2WPKH), and the wallet would still detect outputs sending to the new address type
-even without that address being requested from the wallet. Descriptor Wallets does not
-allow for this and will only watch for the addresses that were explicitly requested from the wallet.
-
-These changes to `IsMine` will make it easier to reason about what scripts the wallet will
-actually be watching for in outputs. However for the vast majority of users, this change is
-largely transparent and will not have noticeable effect.
-
-#### Imports and Exports
-
-In Legacy Wallets, raw scripts and keys could be imported to the wallet. Those imported scripts
-and keys are treated separately from the keys generated by the wallet. This complicates the `IsMine`
-logic as it has to distinguish between spendable and watchonly.
-
-Descriptor Wallets handle importing scripts and keys differently. Only complete descriptors can be
-imported. These descriptors are then added to the wallet as if it were a descriptor generated by
-the wallet itself. This simplifies the `IsMine` logic so that it no longer has to distinguish
-between spendable and watchonly. As such, the watchonly model for Descriptor Wallets is also
-different and described in more detail in the next section.
-
-To import into a Descriptor Wallet, a new `importdescriptors` RPC has been added that uses a syntax
-similar to that of `importmulti`.
-
-As Legacy Wallets and Descriptor Wallets use different mechanisms for storing and importing scripts and keys
-the existing import RPCs have been disabled for descriptor wallets.
-New export RPCs for Descriptor Wallets have not yet been added.
-
-The following RPCs are disabled for Descriptor Wallets:
-
-* importprivkey
-* importpubkey
-* importaddress
-* importwallet
-* dumpprivkey
-* dumpwallet
-* importmulti
-* addmultisigaddress
-* sethdseed
-
-#### Watchonly Wallets
-
-A Legacy Wallet contains both private keys and scripts that were being watched.
-Those watched scripts would not contribute to your normal balance. In order to see the watchonly
-balance and to use watchonly things in transactions, an `include_watchonly` option was added
-to many RPCs that would allow users to do that. However it is easy to forget to include this option.
-
-Descriptor Wallets move to a per-wallet watchonly model. Instead an entire wallet is considered to be
-watchonly depending on whether it was created with private keys disabled. This eliminates the need
-to distinguish between things that are watchonly and things that are not within a wallet itself.
-
-This change does have a caveat. If a Descriptor Wallet with private keys *enabled* has
-a multiple key descriptor without all of the private keys (e.g. `multi(...)` with only one private key),
-then the wallet will fail to sign and broadcast transactions. Such wallets would need to use the PSBT
-workflow but the typical GUI Send, `sendtoaddress`, etc. workflows would still be available, just
-non-functional.
-
-This issue is worsened if the wallet contains both single key (e.g. `wpkh(...)`) descriptors and such
-multiple key descriptors as some transactions could be signed and broadast and others not. This is
-due to some transactions containing only single key inputs, while others would contain both single
-key and multiple key inputs, depending on which are available and how the coin selection algorithm
-selects inputs. However this is not considered to be a supported use case; multisigs
-should be in their own wallets which do not already have descriptors. Although users cannot export
-descriptors with private keys for now as explained earlier.
-
-#### BIP 44/49/84 Support
-
-The change to using descriptors changes the default derivation paths used by Bitcoin Core
-to adhere to BIP 44/49/84. Descriptors with different derivation paths can be imported without
-issue.
-
-### Wallet RPC changes
-
-- The `upgradewallet` RPC replaces the `-upgradewallet` command line option.
-  (#15761)
-- The `settxfee` RPC will fail if the fee was set higher than the `-maxtxfee`
-  command line setting. The wallet will already fail to create transactions
-  with fees higher than `-maxtxfee`. (#18467)
-
-GUI changes
------------
-
-Low-level changes
+0.21.1 change log
 =================
 
-Tests
------
+### Consensus
+- #21377 Speedy trial support for versionbits (ajtowns)
+- #21686 Speedy trial activation parameters for Taproot (achow101)
+
+### P2P protocol and network code
+- #20852 allow CSubNet of non-IP networks (vasild)
+- #21043 Avoid UBSan warning in ProcessMessage(…) (practicalswift)
+
+### Wallet
+- #21166 Introduce DeferredSignatureChecker and have SignatureExtractorClass subclass it (achow101)
+- #21083 Avoid requesting fee rates multiple times during coin selection (achow101)
+
+### RPC and other APIs
+- #21201 Disallow sendtoaddress and sendmany when private keys disabled (achow101)
+
+### Build system
+- #21486 link against -lsocket if required for `*ifaddrs` (fanquake)
+- #20983 Fix MSVC build after gui#176 (hebasto)
+
+### Tests and QA
+- #21380 Add fuzzing harness for versionbits (ajtowns)
+- #20812 fuzz: Bump FuzzedDataProvider.h (MarcoFalke)
+- #20740 fuzz: Update FuzzedDataProvider.h from upstream (LLVM) (practicalswift)
+- #21446 Update vcpkg checkout commit (sipsorcery)
+- #21397 fuzz: Bump FuzzedDataProvider.h (MarcoFalke)
+- #21081 Fix the unreachable code at `feature_taproot` (brunoerg)
+- #20562 Test that a fully signed tx given to signrawtx is unchanged (achow101)
+- #21571 Make sure non-IP peers get discouraged and disconnected (vasild, MarcoFalke)
+- #21489 fuzz: cleanups for versionbits fuzzer (ajtowns)
+
+### Miscellaneous
+- #20861 BIP 350: Implement Bech32m and use it for v1+ segwit addresses (sipa)
+
+### Documentation
+- #21384 add signet to bitcoin.conf documentation (jonatack)
+- #21342 Remove outdated comment (hebasto)
 
 Credits
 =======
 
 Thanks to everyone who directly contributed to this release:
 
+- Aaron Clauson
+- Andrew Chow
+- Anthony Towns
+- Bruno Garcia
+- Fabian Jahr
+- fanquake
+- Hennadii Stepanov
+- Jon Atack
+- Luke Dashjr
+- MarcoFalke
+- Pieter Wuille
+- practicalswift
+- randymcmillan
+- Sjors Provoost
+- Vasil Dimov
+- W. J. van der Laan
 
 As well as to everyone that helped with translations on
 [Transifex](https://www.transifex.com/bitcoin/bitcoin/).
