@@ -34,6 +34,10 @@ do
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
         exit
 
+    elif [[ ${!i} = *stop* ]]; then
+        ((i++))
+        docker stop $STATS_ID
+        exit
     elif [[ ${!i} = *prune* ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
