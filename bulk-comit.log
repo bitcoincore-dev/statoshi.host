@@ -1,0 +1,1367 @@
+[14JUL2021-rebase-begin b4140f0e6] bulk edit
+ 1842 files changed, 1519189 insertions(+), 36620 deletions(-)
+ create mode 100644 .github/ISSUE_TEMPLATE/gui_issue.md
+ delete mode 100755 .github/workflows/TEMPLATE.sh
+ delete mode 100644 .github/workflows/TEMPLATE.yml
+ delete mode 100755 .github/workflows/automate.sh
+ delete mode 100644 .github/workflows/automate.yml
+ mode change 100755 => 100644 .github/workflows/install-bitcoin-libs.sh
+ create mode 100644 .github/workflows/u18-host.yml
+ rewrite .travis.yml (62%)
+ create mode 100644 CODEOWNERS
+ create mode 100644 GNUmakefile.rej
+ create mode 100644 Makefile.in
+ create mode 100644 aclocal.m4
+ create mode 100644 autom4te.cache/output.0
+ create mode 100644 autom4te.cache/output.1
+ create mode 100644 autom4te.cache/output.2
+ create mode 100644 autom4te.cache/output.3
+ create mode 100644 autom4te.cache/output.4
+ create mode 100644 autom4te.cache/output.5
+ create mode 100644 autom4te.cache/requests
+ create mode 100644 autom4te.cache/traces.0
+ create mode 100644 autom4te.cache/traces.1
+ create mode 100644 autom4te.cache/traces.2
+ create mode 100644 autom4te.cache/traces.3
+ create mode 100644 autom4te.cache/traces.4
+ create mode 100644 autom4te.cache/traces.5
+ create mode 100644 bitcoin.21.1.patch
+ create mode 100755 build-aux/compile
+ create mode 100755 build-aux/config.guess
+ create mode 100755 build-aux/config.guess~
+ create mode 100755 build-aux/config.sub
+ create mode 100755 build-aux/config.sub~
+ create mode 100755 build-aux/depcomp
+ create mode 100755 build-aux/install-sh
+ create mode 100644 build-aux/ltmain.sh
+ create mode 100644 build-aux/m4/ax_boost_process.m4
+ create mode 100644 build-aux/m4/l_socket.m4
+ create mode 100644 build-aux/m4/libtool.m4
+ create mode 100644 build-aux/m4/ltoptions.m4
+ create mode 100644 build-aux/m4/ltsugar.m4
+ create mode 100644 build-aux/m4/ltversion.m4
+ create mode 100644 build-aux/m4/lt~obsolete.m4
+ create mode 100755 build-aux/missing
+ create mode 100755 build-aux/test-driver
+ delete mode 100644 build_msvc/vcpkg-packages.txt
+ create mode 100644 build_msvc/vcpkg.json
+ create mode 100644 ci/test/00_setup_env_native_msan.sh
+ create mode 100755 ci/test/wrap-wine.sh
+ create mode 100644 conf/.DS_Store
+ create mode 100644 conf/etc/.DS_Store
+ create mode 100644 conf/etc/nginx/.DS_Store
+ create mode 100644 conf/usr/.DS_Store
+ create mode 100644 conf/usr/local/.DS_Store
+ create mode 100644 conf/usr/local/bin/.DS_Store
+ rename doc/release-notes-16528.md => conf/usr/local/bin/error.trap.log (100%)
+ delete mode 100755 conf/usr/local/bin/stats-cli
+ delete mode 100755 conf/usr/local/bin/stats-console
+ delete mode 100755 conf/usr/local/bin/stats-d
+ delete mode 100755 conf/usr/local/bin/stats-debug
+ create mode 100644 config.log
+ create mode 100755 config.status
+ create mode 100755 configure
+ create mode 100755 configure~
+ create mode 100644 containerlist.log
+ create mode 100644 contrib/.DS_Store
+ delete mode 100755 contrib/devtools/previous_release.sh
+ create mode 100755 contrib/devtools/split-debug.sh
+ create mode 100755 contrib/macdeploy/gen-sdk
+ create mode 100644 contrib/seeds/.gitignore
+ rewrite contrib/seeds/nodes_main.txt (75%)
+ mode change 100644 => 100755 contrib/zmq/zmq_sub.py
+ create mode 100644 depends/packages/sqlite.mk
+ create mode 100644 depends/patches/bdb/clang_cxx_11.patch
+ create mode 100644 depends/patches/boost/unused_var_in_process.patch
+ create mode 100644 depends/patches/fontconfig/gperf_header_regen.patch
+ create mode 100644 depends/patches/fontconfig/remove_char_width_usage.patch
+ create mode 100644 depends/patches/libevent/0001-fix-windows-getaddrinfo.patch
+ create mode 100644 depends/patches/miniupnpc/dont_use_wingen.patch
+ create mode 100644 depends/patches/native_cctools/ld64_disable_threading.patch
+ create mode 100644 depends/patches/qt/dont_hardcode_pwd.patch
+ create mode 100644 depends/patches/qt/drop_lrelease_dependency.patch
+ create mode 100644 depends/patches/qt/fix_powerpc_libpng.patch
+ create mode 100644 depends/patches/qt/fix_qpainter_non_determinism.patch
+ create mode 100644 depends/patches/qt/freetype_back_compat.patch
+ delete mode 100644 depends/patches/zeromq/0001-fix-build-with-older-mingw64.patch
+ delete mode 100644 depends/patches/zeromq/0002-disable-pthread_set_name_np.patch
+ create mode 100644 depends/patches/zeromq/remove_libstd_link.patch
+ create mode 100644 depends/sources/biplist-1.0.3.tar.gz
+ create mode 100644 depends/sources/boost_1_70_0.tar.bz2
+ create mode 100644 depends/sources/db-4.8.30.NC.tar.gz
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-bdb-db-4.8.30.NC.tar.gz.hash
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-boost-boost_1_70_0.tar.bz2.hash
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-libevent-release-2.1.11-stable.tar.gz.hash
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-miniupnpc-miniupnpc-2.0.20180203.tar.gz.hash
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-native_biplist-biplist-1.0.3.tar.gz.hash
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-native_ds_store-v1.1.2.tar.gz.hash
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-native_mac_alias-v2.0.7.tar.gz.hash
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-qrencode-qrencode-3.4.4.tar.bz2.hash
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-qt-qtbase-opensource-src-5.9.8.tar.xz.hash
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-zeromq-zeromq-4.3.1.tar.gz.hash
+ create mode 100644 depends/sources/download-stamps/.stamp_fetched-zlib-zlib-1.2.11.tar.gz.hash
+ create mode 100644 depends/sources/miniupnpc-2.0.20180203.tar.gz
+ create mode 100644 depends/sources/qrencode-3.4.4.tar.bz2
+ create mode 100644 depends/sources/qtbase-opensource-src-5.9.8.tar.xz
+ create mode 100644 depends/sources/qttools-opensource-src-5.9.8.tar.xz
+ create mode 100644 depends/sources/qttranslations-opensource-src-5.9.8.tar.xz
+ create mode 100644 depends/sources/release-2.1.11-stable.tar.gz
+ create mode 100644 depends/sources/v1.1.2.tar.gz
+ create mode 100644 depends/sources/v2.0.7.tar.gz
+ create mode 100644 depends/sources/zeromq-4.3.1.tar.gz
+ create mode 100644 depends/sources/zlib-1.2.11.tar.gz
+ create mode 100644 doc/Doxyfile
+ create mode 100644 doc/man/Makefile
+ create mode 100644 doc/man/Makefile.in
+ rewrite doc/release-notes.md (86%)
+ create mode 100644 doc/release-notes/release-notes-0.20.1.md
+ create mode 100644 doc/release-notes/release-notes-0.21.0.md
+ create mode 100644 docker/.DS_Store
+ create mode 100755 git-commit-loop.sh
+ delete mode 100755 host
+ delete mode 120000 install-bitcoin-libs.sh
+ create mode 100755 install-qt4.sh
+ create mode 100755 install-qt5.sh
+ create mode 100644 libbitcoinconsensus.pc
+ create mode 100755 libtool
+ create mode 100644 randymcmillan-deliverables.md
+ create mode 100644 share/.DS_Store
+ create mode 100644 share/qt/Info.plist
+ create mode 100644 share/setup.nsi
+ create mode 100644 src/.deps/bitcoin_cli-bitcoin-cli.Po
+ create mode 100644 src/.deps/bitcoin_node-bitcoind.Po
+ create mode 100644 src/.deps/bitcoin_tx-bitcoin-tx.Po
+ create mode 100644 src/.deps/bitcoin_wallet-bitcoin-wallet.Po
+ create mode 100644 src/.deps/bitcoind-bitcoind.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-base58.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-bech32.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-bloom.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-chainparams.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-coins.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-compressor.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-core_read.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-core_write.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-key.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-key_io.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-merkleblock.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-net_permissions.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-netaddress.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-netbase.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-outputtype.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-protocol.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-psbt.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-scheduler.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-versionbitsinfo.Po
+ create mode 100644 src/.deps/libbitcoin_common_a-warnings.Po
+ create mode 100644 src/.deps/libbitcoin_consensus_a-arith_uint256.Po
+ create mode 100644 src/.deps/libbitcoin_consensus_a-hash.Po
+ create mode 100644 src/.deps/libbitcoin_consensus_a-pubkey.Po
+ create mode 100644 src/.deps/libbitcoin_consensus_a-uint256.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-addrdb.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-addrman.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-banman.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-blockencodings.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-blockfilter.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-chain.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-dbwrapper.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-dummywallet.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-flatfile.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-httprpc.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-httpserver.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-init.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-miner.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-net.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-net_processing.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-noui.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-pow.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-rest.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-shutdown.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-statsd_client.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-timedata.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-torcontrol.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-txdb.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-txmempool.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-ui_interface.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-validation.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-validationinterface.Po
+ create mode 100644 src/.deps/libbitcoin_server_a-versionbits.Po
+ create mode 100644 src/.deps/libbitcoin_util_a-chainparamsbase.Po
+ create mode 100644 src/.deps/libbitcoin_util_a-clientversion.Po
+ create mode 100644 src/.deps/libbitcoin_util_a-fs.Po
+ create mode 100644 src/.deps/libbitcoin_util_a-logging.Po
+ create mode 100644 src/.deps/libbitcoin_util_a-random.Po
+ create mode 100644 src/.deps/libbitcoin_util_a-randomenv.Po
+ create mode 100644 src/.deps/libbitcoin_util_a-sync.Po
+ create mode 100644 src/.deps/libbitcoin_util_a-threadinterrupt.Po
+ create mode 100644 src/.deps/libbitcoinconsensus_la-arith_uint256.Plo
+ create mode 100644 src/.deps/libbitcoinconsensus_la-hash.Plo
+ create mode 100644 src/.deps/libbitcoinconsensus_la-pubkey.Plo
+ create mode 100644 src/.deps/libbitcoinconsensus_la-uint256.Plo
+ create mode 100644 src/Makefile
+ create mode 100644 src/Makefile.in
+ rewrite src/bech32.h (66%)
+ create mode 100644 src/bench/.deps/bench_bitcoin-addrman.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-base58.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-bech32.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-bench.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-bench_bitcoin.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-block_assemble.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-ccoins_caching.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-chacha20.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-chacha_poly_aead.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-checkblock.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-checkqueue.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-coin_selection.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-crypto_hash.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-data.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-duplicate_inputs.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-examples.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-gcs_filter.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-hashpadding.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-lockedpool.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-mempool_eviction.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-mempool_stress.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-merkle_root.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-poly1305.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-prevector.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-rollingbloom.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-rpc_blockchain.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-rpc_mempool.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-util_time.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-verify_script.Po
+ create mode 100644 src/bench/.deps/bench_bitcoin-wallet_balance.Po
+ rewrite src/bench/bench.cpp (82%)
+ rewrite src/bench/bench.h (81%)
+ rewrite src/bench/bench_bitcoin.cpp (71%)
+ create mode 100644 src/bench/nanobench.cpp
+ create mode 100644 src/bench/nanobench.h
+ rename doc/release-notes-18918.md => src/compat/.deps/.dirstamp (100%)
+ create mode 100644 src/compat/.deps/libbitcoin_cli_a-stdin.Po
+ create mode 100644 src/compat/.deps/libbitcoin_util_a-glibc_compat.Po
+ create mode 100644 src/compat/.deps/libbitcoin_util_a-glibc_sanity.Po
+ create mode 100644 src/compat/.deps/libbitcoin_util_a-glibcxx_sanity.Po
+ create mode 100644 src/compat/.deps/libbitcoin_util_a-strnlen.Po
+ create mode 100644 src/compat/.deps/libbitcoinconsensus_la-glibc_compat.Plo
+ rename test/functional/data/wallets/high_minversion/.walletlock => src/compat/.dirstamp (100%)
+ create mode 100644 src/config/bitcoin-config.h
+ create mode 100644 src/config/bitcoin-config.h.in
+ create mode 100644 src/config/bitcoin-config.h.in~
+ create mode 100644 src/config/stamp-h1
+ rename test/functional/data/wallets/high_minversion/db.log => src/consensus/.deps/.dirstamp (100%)
+ create mode 100644 src/consensus/.deps/libbitcoin_consensus_a-merkle.Po
+ create mode 100644 src/consensus/.deps/libbitcoin_consensus_a-tx_check.Po
+ create mode 100644 src/consensus/.deps/libbitcoin_server_a-tx_verify.Po
+ create mode 100644 src/consensus/.deps/libbitcoinconsensus_la-merkle.Plo
+ create mode 100644 src/consensus/.deps/libbitcoinconsensus_la-tx_check.Plo
+ create mode 100644 src/consensus/.dirstamp
+ delete mode 100644 src/consensus/statsd_client.cpp
+ delete mode 100644 src/consensus/statsd_client.h
+ create mode 100644 src/crc32c/.dirstamp
+ create mode 100644 src/crc32c/src/.deps/.dirstamp
+ create mode 100644 src/crc32c/src/.deps/libcrc32c_a-crc32c.Po
+ create mode 100644 src/crc32c/src/.deps/libcrc32c_a-crc32c_portable.Po
+ create mode 100644 src/crc32c/src/.deps/libcrc32c_arm_crc_a-crc32c_arm64.Po
+ create mode 100644 src/crc32c/src/.deps/libcrc32c_sse42_a-crc32c_sse42.Po
+ create mode 100644 src/crc32c/src/.dirstamp
+ create mode 100644 src/crypto/.deps/.dirstamp
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_avx2_a-sha256_avx2.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-aes.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-chacha20.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-chacha_poly_aead.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-hkdf_sha256_32.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-hmac_sha256.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-hmac_sha512.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-poly1305.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-ripemd160.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-sha1.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-sha256.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-sha256_sse4.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-sha512.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_base_a-siphash.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_shani_a-sha256_shani.Po
+ create mode 100644 src/crypto/.deps/libbitcoin_crypto_sse41_a-sha256_sse41.Po
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-aes.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-chacha20.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-chacha_poly_aead.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-hkdf_sha256_32.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-hmac_sha256.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-hmac_sha512.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-poly1305.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-ripemd160.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-sha1.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-sha256.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-sha256_sse4.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-sha512.Plo
+ create mode 100644 src/crypto/.deps/libbitcoinconsensus_la-siphash.Plo
+ create mode 100644 src/crypto/.dirstamp
+ create mode 100644 src/crypto/sha3.cpp
+ create mode 100644 src/crypto/sha3.h
+ create mode 100644 src/index/.deps/.dirstamp
+ create mode 100644 src/index/.deps/libbitcoin_server_a-base.Po
+ create mode 100644 src/index/.deps/libbitcoin_server_a-blockfilterindex.Po
+ create mode 100644 src/index/.deps/libbitcoin_server_a-txindex.Po
+ create mode 100644 src/index/.dirstamp
+ create mode 100644 src/index/disktxpos.h
+ create mode 100644 src/interfaces/.deps/.dirstamp
+ create mode 100644 src/interfaces/.deps/libbitcoin_server_a-chain.Po
+ create mode 100644 src/interfaces/.deps/libbitcoin_server_a-node.Po
+ create mode 100644 src/interfaces/.deps/libbitcoin_util_a-handler.Po
+ create mode 100644 src/interfaces/.deps/libbitcoin_wallet_a-wallet.Po
+ create mode 100644 src/interfaces/.dirstamp
+ create mode 100644 src/leveldb/.dirstamp
+ create mode 100644 src/leveldb/db/.deps/.dirstamp
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-builder.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-c.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-db_impl.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-db_iter.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-dbformat.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-dumpfile.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-filename.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-log_reader.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-log_writer.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-memtable.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-repair.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-table_cache.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-version_edit.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-version_set.Po
+ create mode 100644 src/leveldb/db/.deps/libleveldb_a-write_batch.Po
+ create mode 100644 src/leveldb/db/.dirstamp
+ create mode 100644 src/leveldb/helpers/memenv/.deps/.dirstamp
+ create mode 100644 src/leveldb/helpers/memenv/.deps/libmemenv_a-memenv.Po
+ create mode 100644 src/leveldb/helpers/memenv/.dirstamp
+ create mode 100644 src/leveldb/table/.deps/.dirstamp
+ create mode 100644 src/leveldb/table/.deps/libleveldb_a-block.Po
+ create mode 100644 src/leveldb/table/.deps/libleveldb_a-block_builder.Po
+ create mode 100644 src/leveldb/table/.deps/libleveldb_a-filter_block.Po
+ create mode 100644 src/leveldb/table/.deps/libleveldb_a-format.Po
+ create mode 100644 src/leveldb/table/.deps/libleveldb_a-iterator.Po
+ create mode 100644 src/leveldb/table/.deps/libleveldb_a-merger.Po
+ create mode 100644 src/leveldb/table/.deps/libleveldb_a-table.Po
+ create mode 100644 src/leveldb/table/.deps/libleveldb_a-table_builder.Po
+ create mode 100644 src/leveldb/table/.deps/libleveldb_a-two_level_iterator.Po
+ create mode 100644 src/leveldb/table/.dirstamp
+ create mode 100644 src/leveldb/util/.deps/.dirstamp
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-arena.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-bloom.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-cache.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-coding.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-comparator.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-crc32c.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-env.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-env_posix.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-env_windows.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-filter_policy.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-hash.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-histogram.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-logging.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-options.Po
+ create mode 100644 src/leveldb/util/.deps/libleveldb_a-status.Po
+ create mode 100644 src/leveldb/util/.dirstamp
+ delete mode 100644 src/limitedmap.h
+ create mode 100644 src/node/.deps/.dirstamp
+ create mode 100644 src/node/.deps/libbitcoin_server_a-coin.Po
+ create mode 100644 src/node/.deps/libbitcoin_server_a-coinstats.Po
+ create mode 100644 src/node/.deps/libbitcoin_server_a-context.Po
+ create mode 100644 src/node/.deps/libbitcoin_server_a-psbt.Po
+ create mode 100644 src/node/.deps/libbitcoin_server_a-transaction.Po
+ create mode 100644 src/node/.dirstamp
+ create mode 100644 src/node/ui_interface.cpp
+ create mode 100644 src/node/ui_interface.h
+ create mode 100644 src/policy/.deps/.dirstamp
+ create mode 100644 src/policy/.deps/libbitcoin_common_a-feerate.Po
+ create mode 100644 src/policy/.deps/libbitcoin_common_a-policy.Po
+ create mode 100644 src/policy/.deps/libbitcoin_server_a-fees.Po
+ create mode 100644 src/policy/.deps/libbitcoin_server_a-rbf.Po
+ create mode 100644 src/policy/.deps/libbitcoin_server_a-settings.Po
+ create mode 100644 src/policy/.dirstamp
+ create mode 100644 src/primitives/.deps/.dirstamp
+ create mode 100644 src/primitives/.deps/libbitcoin_consensus_a-block.Po
+ create mode 100644 src/primitives/.deps/libbitcoin_consensus_a-transaction.Po
+ create mode 100644 src/primitives/.deps/libbitcoinconsensus_la-block.Plo
+ create mode 100644 src/primitives/.deps/libbitcoinconsensus_la-transaction.Plo
+ create mode 100644 src/primitives/.dirstamp
+ create mode 100644 src/qt/.deps/.dirstamp
+ create mode 100644 src/qt/.deps/bitcoin_gui-main.Po
+ create mode 100644 src/qt/.deps/bitcoin_qt-main.Po
+ create mode 100644 src/qt/.deps/bitcoin_qt-main.Tpo
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-addressbookpage.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-addresstablemodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-askpassphrasedialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-bantablemodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-bitcoin.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-bitcoinaddressvalidator.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-bitcoinamountfield.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-bitcoingui.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-bitcoinunits.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-clientmodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-coincontroldialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-coincontroltreewidget.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-createwalletdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-csvmodelwriter.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-editaddressdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-guiutil.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-intro.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-macdockiconhandler.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-macnotificationhandler.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-macos_appnap.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_addressbookpage.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_addresstablemodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_askpassphrasedialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_bantablemodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_bitcoin.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_bitcoinaddressvalidator.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_bitcoinamountfield.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_bitcoingui.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_bitcoinunits.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_clientmodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_coincontroldialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_coincontroltreewidget.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_createwalletdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_csvmodelwriter.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_editaddressdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_guiutil.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_intro.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_macdockiconhandler.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_macnotificationhandler.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_modaloverlay.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_notificator.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_openuridialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_optionsdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_optionsmodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_overviewpage.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_paymentserver.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_peertablemodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_qrimagewidget.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_qvalidatedlineedit.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_qvaluecombobox.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_receivecoinsdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_receiverequestdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_recentrequeststablemodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_rpcconsole.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_sendcoinsdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_sendcoinsentry.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_signverifymessagedialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_splashscreen.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_trafficgraphwidget.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_transactiondesc.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_transactiondescdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_transactionfilterproxy.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_transactiontablemodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_transactionview.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_utilitydialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_walletcontroller.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_walletframe.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_walletmodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-moc_walletview.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-modaloverlay.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-networkstyle.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-notificator.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-openuridialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-optionsdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-optionsmodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-overviewpage.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-paymentserver.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-peertablemodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-platformstyle.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-qrc_bitcoin.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-qrc_bitcoin_locale.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-qrimagewidget.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-qvalidatedlineedit.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-qvaluecombobox.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-receivecoinsdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-receiverequestdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-recentrequeststablemodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-rpcconsole.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-sendcoinsdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-sendcoinsentry.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-signverifymessagedialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-splashscreen.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-trafficgraphwidget.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-transactiondesc.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-transactiondescdialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-transactionfilterproxy.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-transactionrecord.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-transactiontablemodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-transactionview.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-utilitydialog.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-walletcontroller.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-walletframe.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-walletmodel.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-walletmodeltransaction.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-walletview.Po
+ create mode 100644 src/qt/.deps/libbitcoinqt_a-winshutdownmonitor.Po
+ create mode 100644 src/qt/.dirstamp
+ rewrite src/qt/forms/createwalletdialog.ui (70%)
+ create mode 100644 src/qt/forms/psbtoperationsdialog.ui
+ create mode 100644 src/qt/locale/bitcoin_gl_ES.ts
+ delete mode 100644 src/qt/locale/bitcoin_ms.ts
+ rewrite src/qt/locale/bitcoin_tr.ts (71%)
+ create mode 100644 src/qt/locale/bitcoin_zu.ts
+ create mode 100644 src/qt/psbtoperationsdialog.cpp
+ create mode 100644 src/qt/psbtoperationsdialog.h
+ rename src/qt/res/{movies => animation}/makespinner.sh (100%)
+ rename src/qt/res/{movies => animation}/spinner-000.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-001.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-002.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-003.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-004.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-005.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-006.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-007.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-008.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-009.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-010.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-011.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-012.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-013.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-014.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-015.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-016.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-017.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-018.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-019.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-020.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-021.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-022.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-023.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-024.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-025.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-026.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-027.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-028.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-029.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-030.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-031.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-032.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-033.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-034.png (100%)
+ rename src/qt/res/{movies => animation}/spinner-035.png (100%)
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-addressbooktests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-apptests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-compattests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-moc_addressbooktests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-moc_apptests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-moc_compattests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-moc_rpcnestedtests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-moc_uritests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-moc_wallettests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-rpcnestedtests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-test_main.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-uritests.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-util.Po
+ create mode 100644 src/qt/test/.deps/test_bitcoin_qt-wallettests.Po
+ create mode 100644 src/qt/transactionoverviewwidget.h
+ create mode 100644 src/rpc/.deps/.dirstamp
+ create mode 100644 src/rpc/.deps/libbitcoin_cli_a-client.Po
+ create mode 100644 src/rpc/.deps/libbitcoin_common_a-rawtransaction_util.Po
+ create mode 100644 src/rpc/.deps/libbitcoin_common_a-util.Po
+ create mode 100644 src/rpc/.deps/libbitcoin_server_a-blockchain.Po
+ create mode 100644 src/rpc/.deps/libbitcoin_server_a-mining.Po
+ create mode 100644 src/rpc/.deps/libbitcoin_server_a-misc.Po
+ create mode 100644 src/rpc/.deps/libbitcoin_server_a-net.Po
+ create mode 100644 src/rpc/.deps/libbitcoin_server_a-rawtransaction.Po
+ create mode 100644 src/rpc/.deps/libbitcoin_server_a-server.Po
+ create mode 100644 src/rpc/.deps/libbitcoin_util_a-request.Po
+ create mode 100644 src/rpc/.dirstamp
+ create mode 100644 src/rpc/mining.h
+ create mode 100644 src/script/.deps/.dirstamp
+ create mode 100644 src/script/.deps/libbitcoin_common_a-descriptor.Po
+ create mode 100644 src/script/.deps/libbitcoin_common_a-sign.Po
+ create mode 100644 src/script/.deps/libbitcoin_common_a-signingprovider.Po
+ create mode 100644 src/script/.deps/libbitcoin_common_a-standard.Po
+ create mode 100644 src/script/.deps/libbitcoin_consensus_a-bitcoinconsensus.Po
+ create mode 100644 src/script/.deps/libbitcoin_consensus_a-interpreter.Po
+ create mode 100644 src/script/.deps/libbitcoin_consensus_a-script.Po
+ create mode 100644 src/script/.deps/libbitcoin_consensus_a-script_error.Po
+ create mode 100644 src/script/.deps/libbitcoin_server_a-sigcache.Po
+ create mode 100644 src/script/.deps/libbitcoinconsensus_la-bitcoinconsensus.Plo
+ create mode 100644 src/script/.deps/libbitcoinconsensus_la-interpreter.Plo
+ create mode 100644 src/script/.deps/libbitcoinconsensus_la-script.Plo
+ create mode 100644 src/script/.deps/libbitcoinconsensus_la-script_error.Plo
+ create mode 100644 src/script/.dirstamp
+ rewrite src/secp256k1/.travis.yml (70%)
+ create mode 100644 src/secp256k1/Makefile
+ create mode 100644 src/secp256k1/Makefile.in
+ create mode 100644 src/secp256k1/SECURITY.md
+ delete mode 100644 src/secp256k1/TODO
+ create mode 100644 src/secp256k1/aclocal.m4
+ create mode 100644 src/secp256k1/autom4te.cache/output.0
+ create mode 100644 src/secp256k1/autom4te.cache/output.1
+ create mode 100644 src/secp256k1/autom4te.cache/output.2
+ create mode 100644 src/secp256k1/autom4te.cache/output.3
+ create mode 100644 src/secp256k1/autom4te.cache/output.4
+ create mode 100644 src/secp256k1/autom4te.cache/output.5
+ create mode 100644 src/secp256k1/autom4te.cache/output.6
+ create mode 100644 src/secp256k1/autom4te.cache/requests
+ create mode 100644 src/secp256k1/autom4te.cache/traces.0
+ create mode 100644 src/secp256k1/autom4te.cache/traces.1
+ create mode 100644 src/secp256k1/autom4te.cache/traces.2
+ create mode 100644 src/secp256k1/autom4te.cache/traces.3
+ create mode 100644 src/secp256k1/autom4te.cache/traces.4
+ create mode 100644 src/secp256k1/autom4te.cache/traces.5
+ create mode 100644 src/secp256k1/autom4te.cache/traces.6
+ create mode 100755 src/secp256k1/build-aux/compile
+ create mode 100755 src/secp256k1/build-aux/config.guess
+ create mode 100755 src/secp256k1/build-aux/config.guess~
+ create mode 100755 src/secp256k1/build-aux/config.sub
+ create mode 100755 src/secp256k1/build-aux/config.sub~
+ create mode 100755 src/secp256k1/build-aux/depcomp
+ create mode 100755 src/secp256k1/build-aux/install-sh
+ create mode 100644 src/secp256k1/build-aux/ltmain.sh
+ delete mode 100644 src/secp256k1/build-aux/m4/ax_jni_include_dir.m4
+ create mode 100644 src/secp256k1/build-aux/m4/libtool.m4
+ create mode 100644 src/secp256k1/build-aux/m4/ltoptions.m4
+ create mode 100644 src/secp256k1/build-aux/m4/ltsugar.m4
+ create mode 100644 src/secp256k1/build-aux/m4/ltversion.m4
+ create mode 100644 src/secp256k1/build-aux/m4/lt~obsolete.m4
+ create mode 100755 src/secp256k1/build-aux/missing
+ create mode 100755 src/secp256k1/build-aux/test-driver
+ create mode 100644 src/secp256k1/config.log
+ create mode 100755 src/secp256k1/config.status
+ create mode 100755 src/secp256k1/configure
+ create mode 100755 src/secp256k1/configure~
+ create mode 100755 src/secp256k1/contrib/travis.sh
+ create mode 100644 src/secp256k1/include/secp256k1_extrakeys.h
+ create mode 100644 src/secp256k1/include/secp256k1_preallocated.h
+ create mode 100644 src/secp256k1/include/secp256k1_schnorrsig.h
+ create mode 100644 src/secp256k1/libsecp256k1.pc
+ create mode 100755 src/secp256k1/libtool
+ create mode 100644 src/secp256k1/sage/gen_exhaustive_groups.sage
+ create mode 100644 src/secp256k1/src/.deps/.dirstamp
+ create mode 100644 src/secp256k1/src/.deps/bench_ecdh.Po
+ create mode 100644 src/secp256k1/src/.deps/bench_ecmult-bench_ecmult.Po
+ create mode 100644 src/secp256k1/src/.deps/bench_internal-bench_internal.Po
+ create mode 100644 src/secp256k1/src/.deps/bench_recover.Po
+ create mode 100644 src/secp256k1/src/.deps/bench_sign.Po
+ create mode 100644 src/secp256k1/src/.deps/bench_verify.Po
+ create mode 100644 src/secp256k1/src/.deps/exhaustive_tests-tests_exhaustive.Po
+ create mode 100644 src/secp256k1/src/.deps/libsecp256k1_la-secp256k1.Plo
+ create mode 100644 src/secp256k1/src/.deps/tests-tests.Po
+ create mode 100644 src/secp256k1/src/.dirstamp
+ create mode 100644 src/secp256k1/src/assumptions.h
+ create mode 100644 src/secp256k1/src/bench_schnorrsig.c
+ create mode 100644 src/secp256k1/src/java/.deps/libsecp256k1_jni_la-org_bitcoin_NativeSecp256k1.Plo
+ create mode 100644 src/secp256k1/src/java/.deps/libsecp256k1_jni_la-org_bitcoin_Secp256k1Context.Plo
+ delete mode 100644 src/secp256k1/src/java/org/bitcoin/NativeSecp256k1.java
+ delete mode 100644 src/secp256k1/src/java/org/bitcoin/NativeSecp256k1Test.java
+ delete mode 100644 src/secp256k1/src/java/org/bitcoin/NativeSecp256k1Util.java
+ delete mode 100644 src/secp256k1/src/java/org/bitcoin/Secp256k1Context.java
+ delete mode 100644 src/secp256k1/src/java/org_bitcoin_NativeSecp256k1.c
+ delete mode 100644 src/secp256k1/src/java/org_bitcoin_NativeSecp256k1.h
+ delete mode 100644 src/secp256k1/src/java/org_bitcoin_Secp256k1Context.c
+ delete mode 100644 src/secp256k1/src/java/org_bitcoin_Secp256k1Context.h
+ create mode 100644 src/secp256k1/src/libsecp256k1-config.h
+ create mode 100644 src/secp256k1/src/libsecp256k1-config.h.in
+ create mode 100644 src/secp256k1/src/libsecp256k1-config.h.in~
+ create mode 100644 src/secp256k1/src/modules/extrakeys/Makefile.am.include
+ create mode 100644 src/secp256k1/src/modules/extrakeys/main_impl.h
+ create mode 100644 src/secp256k1/src/modules/extrakeys/tests_exhaustive_impl.h
+ create mode 100644 src/secp256k1/src/modules/extrakeys/tests_impl.h
+ mode change 100755 => 100644 src/secp256k1/src/modules/recovery/main_impl.h
+ create mode 100644 src/secp256k1/src/modules/recovery/tests_exhaustive_impl.h
+ create mode 100644 src/secp256k1/src/modules/schnorrsig/Makefile.am.include
+ create mode 100644 src/secp256k1/src/modules/schnorrsig/main_impl.h
+ create mode 100644 src/secp256k1/src/modules/schnorrsig/tests_exhaustive_impl.h
+ create mode 100644 src/secp256k1/src/modules/schnorrsig/tests_impl.h
+ rewrite src/secp256k1/src/scratch_impl.h (71%)
+ create mode 100644 src/secp256k1/src/selftest.h
+ create mode 100644 src/secp256k1/src/stamp-h1
+ create mode 100644 src/secp256k1/src/valgrind_ctime_test.c
+ create mode 100644 src/signet.cpp
+ create mode 100644 src/signet.h
+ delete mode 100644 src/statsd_client.cpp
+ delete mode 100644 src/statsd_client.h
+ create mode 100644 src/support/.deps/.dirstamp
+ create mode 100644 src/support/.deps/libbitcoin_util_a-cleanse.Po
+ create mode 100644 src/support/.deps/libbitcoin_util_a-lockedpool.Po
+ create mode 100644 src/support/.deps/libbitcoinconsensus_la-cleanse.Plo
+ create mode 100644 src/support/.dirstamp
+ create mode 100644 src/test/.deps/test_bitcoin-addrman_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-allocator_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-amount_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-arith_uint256_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-base32_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-base58_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-base64_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-bech32_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-bip32_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-blockchain_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-blockencodings_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-blockfilter_index_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-blockfilter_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-bloom_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-bswap_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-checkqueue_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-coins_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-compilerbug_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-compress_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-crypto_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-cuckoocache_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-dbwrapper_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-denialofservice_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-descriptor_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-flatfile_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-fs_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-getarg_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-hash_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-interfaces_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-key_io_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-key_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-limitedmap_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-logging_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-main.Po
+ create mode 100644 src/test/.deps/test_bitcoin-mempool_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-merkle_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-merkleblock_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-miner_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-multisig_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-net_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-netbase_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-pmt_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-policyestimator_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-pow_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-prevector_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-raii_event_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-random_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-ref_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-reverselock_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-rpc_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-sanity_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-scheduler_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-script_p2sh_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-script_standard_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-script_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-scriptnum_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-serialize_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-settings_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-sighash_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-sigopcount_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-skiplist_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-streams_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-sync_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-timedata_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-torcontrol_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-transaction_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-txindex_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-txvalidation_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-txvalidationcache_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-uint256_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-util_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-util_threadnames_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-validation_block_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-validation_chainstatemanager_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-validation_flush_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-validation_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-validationinterface_tests.Po
+ create mode 100644 src/test/.deps/test_bitcoin-versionbits_tests.Po
+ rewrite src/test/data/key_io_invalid.json (82%)
+ rewrite src/test/data/key_io_valid.json (71%)
+ create mode 100644 src/test/fuzz/.deps/addition_overflow-addition_overflow.Po
+ create mode 100644 src/test/fuzz/.deps/addr_info_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/addrdb-addrdb.Po
+ create mode 100644 src/test/fuzz/.deps/address_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/addrman_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/asmap-asmap.Po
+ create mode 100644 src/test/fuzz/.deps/asmap_direct-asmap_direct.Po
+ create mode 100644 src/test/fuzz/.deps/banentry_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/base_encode_decode-base_encode_decode.Po
+ create mode 100644 src/test/fuzz/.deps/bech32-bech32.Po
+ create mode 100644 src/test/fuzz/.deps/block-block.Po
+ create mode 100644 src/test/fuzz/.deps/block_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/block_file_info_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/block_filter_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/block_header-block_header.Po
+ create mode 100644 src/test/fuzz/.deps/block_header_and_short_txids_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/blockfilter-blockfilter.Po
+ create mode 100644 src/test/fuzz/.deps/blockheader_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/blocklocator_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/blockmerkleroot-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/blocktransactions_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/blocktransactionsrequest_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/blockundo_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/bloom_filter-bloom_filter.Po
+ create mode 100644 src/test/fuzz/.deps/bloomfilter_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/chain-chain.Po
+ create mode 100644 src/test/fuzz/.deps/checkqueue-checkqueue.Po
+ create mode 100644 src/test/fuzz/.deps/coins_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/coins_view-coins_view.Po
+ create mode 100644 src/test/fuzz/.deps/cuckoocache-cuckoocache.Po
+ create mode 100644 src/test/fuzz/.deps/decode_tx-decode_tx.Po
+ create mode 100644 src/test/fuzz/.deps/descriptor_parse-descriptor_parse.Po
+ create mode 100644 src/test/fuzz/.deps/diskblockindex_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/eval_script-eval_script.Po
+ create mode 100644 src/test/fuzz/.deps/fee_rate-fee_rate.Po
+ create mode 100644 src/test/fuzz/.deps/fee_rate_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/fees-fees.Po
+ create mode 100644 src/test/fuzz/.deps/flat_file_pos_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/flatfile-flatfile.Po
+ create mode 100644 src/test/fuzz/.deps/float-float.Po
+ create mode 100644 src/test/fuzz/.deps/golomb_rice-golomb_rice.Po
+ create mode 100644 src/test/fuzz/.deps/hex-hex.Po
+ create mode 100644 src/test/fuzz/.deps/http_request-http_request.Po
+ create mode 100644 src/test/fuzz/.deps/integer-integer.Po
+ create mode 100644 src/test/fuzz/.deps/inv_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/key-key.Po
+ create mode 100644 src/test/fuzz/.deps/key_io-key_io.Po
+ create mode 100644 src/test/fuzz/.deps/key_origin_info_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/kitchen_sink-kitchen_sink.Po
+ create mode 100644 src/test/fuzz/.deps/libtest_fuzz_a-fuzz.Po
+ create mode 100644 src/test/fuzz/.deps/locale-locale.Po
+ create mode 100644 src/test/fuzz/.deps/merkle_block_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/merkleblock-merkleblock.Po
+ create mode 100644 src/test/fuzz/.deps/message-message.Po
+ create mode 100644 src/test/fuzz/.deps/messageheader_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/multiplication_overflow-multiplication_overflow.Po
+ create mode 100644 src/test/fuzz/.deps/net_permissions-net_permissions.Po
+ create mode 100644 src/test/fuzz/.deps/netaddr_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/netaddress-netaddress.Po
+ create mode 100644 src/test/fuzz/.deps/out_point_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/p2p_transport_deserializer-p2p_transport_deserializer.Po
+ create mode 100644 src/test/fuzz/.deps/parse_hd_keypath-parse_hd_keypath.Po
+ create mode 100644 src/test/fuzz/.deps/parse_iso8601-parse_iso8601.Po
+ create mode 100644 src/test/fuzz/.deps/parse_numbers-parse_numbers.Po
+ create mode 100644 src/test/fuzz/.deps/parse_script-parse_script.Po
+ create mode 100644 src/test/fuzz/.deps/parse_univalue-parse_univalue.Po
+ create mode 100644 src/test/fuzz/.deps/partial_merkle_tree_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/partially_signed_transaction_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/policy_estimator-policy_estimator.Po
+ create mode 100644 src/test/fuzz/.deps/pow-pow.Po
+ create mode 100644 src/test/fuzz/.deps/prefilled_transaction_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/prevector-prevector.Po
+ create mode 100644 src/test/fuzz/.deps/primitives_transaction-primitives_transaction.Po
+ create mode 100644 src/test/fuzz/.deps/process_message-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_addr-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_block-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_blocktxn-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_cmpctblock-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_feefilter-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_filteradd-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_filterclear-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_filterload-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_getaddr-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_getblocks-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_getblocktxn-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_getdata-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_getheaders-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_headers-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_inv-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_mempool-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_notfound-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_ping-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_pong-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_sendcmpct-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_sendheaders-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_tx-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_verack-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_message_version-process_message.Po
+ create mode 100644 src/test/fuzz/.deps/process_messages-process_messages.Po
+ create mode 100644 src/test/fuzz/.deps/protocol-protocol.Po
+ create mode 100644 src/test/fuzz/.deps/psbt-psbt.Po
+ create mode 100644 src/test/fuzz/.deps/psbt_input_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/psbt_output_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/pub_key_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/random-random.Po
+ create mode 100644 src/test/fuzz/.deps/rbf-rbf.Po
+ create mode 100644 src/test/fuzz/.deps/rolling_bloom_filter-rolling_bloom_filter.Po
+ create mode 100644 src/test/fuzz/.deps/script-script.Po
+ create mode 100644 src/test/fuzz/.deps/script_bitcoin_consensus-script_bitcoin_consensus.Po
+ create mode 100644 src/test/fuzz/.deps/script_descriptor_cache-script_descriptor_cache.Po
+ create mode 100644 src/test/fuzz/.deps/script_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/script_flags-script_flags.Po
+ create mode 100644 src/test/fuzz/.deps/script_interpreter-script_interpreter.Po
+ create mode 100644 src/test/fuzz/.deps/script_ops-script_ops.Po
+ create mode 100644 src/test/fuzz/.deps/script_sigcache-script_sigcache.Po
+ create mode 100644 src/test/fuzz/.deps/script_sign-script_sign.Po
+ create mode 100644 src/test/fuzz/.deps/scriptnum_ops-scriptnum_ops.Po
+ create mode 100644 src/test/fuzz/.deps/service_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/signature_checker-signature_checker.Po
+ create mode 100644 src/test/fuzz/.deps/snapshotmetadata_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/span-span.Po
+ create mode 100644 src/test/fuzz/.deps/spanparsing-spanparsing.Po
+ create mode 100644 src/test/fuzz/.deps/string-string.Po
+ create mode 100644 src/test/fuzz/.deps/strprintf-strprintf.Po
+ create mode 100644 src/test/fuzz/.deps/sub_net_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/system-system.Po
+ create mode 100644 src/test/fuzz/.deps/timedata-timedata.Po
+ create mode 100644 src/test/fuzz/.deps/transaction-transaction.Po
+ create mode 100644 src/test/fuzz/.deps/tx_in-tx_in.Po
+ create mode 100644 src/test/fuzz/.deps/tx_in_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/tx_out-tx_out.Po
+ create mode 100644 src/test/fuzz/.deps/txoutcompressor_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/txundo_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/uint160_deserialize-deserialize.Po
+ create mode 100644 src/test/fuzz/.deps/uint256_deserialize-deserialize.Po
+ rewrite src/test/fuzz/FuzzedDataProvider.h (82%)
+ create mode 100644 src/test/fuzz/addrman.cpp
+ create mode 100644 src/test/fuzz/autofile.cpp
+ create mode 100644 src/test/fuzz/banman.cpp
+ create mode 100644 src/test/fuzz/buffered_file.cpp
+ create mode 100644 src/test/fuzz/connman.cpp
+ create mode 100644 src/test/fuzz/crypto.cpp
+ create mode 100644 src/test/fuzz/crypto_aes256.cpp
+ create mode 100644 src/test/fuzz/crypto_aes256cbc.cpp
+ create mode 100644 src/test/fuzz/crypto_chacha20.cpp
+ create mode 100644 src/test/fuzz/crypto_chacha20_poly1305_aead.cpp
+ create mode 100644 src/test/fuzz/crypto_common.cpp
+ create mode 100644 src/test/fuzz/crypto_hkdf_hmac_sha256_l32.cpp
+ create mode 100644 src/test/fuzz/crypto_poly1305.cpp
+ create mode 100644 src/test/fuzz/load_external_block_file.cpp
+ create mode 100644 src/test/fuzz/net.cpp
+ create mode 100644 src/test/fuzz/policy_estimator_io.cpp
+ create mode 100644 src/test/fuzz/script_assets_test_minimizer.cpp
+ create mode 100644 src/test/fuzz/secp256k1_ec_seckey_import_export_der.cpp
+ create mode 100644 src/test/fuzz/secp256k1_ecdsa_signature_parse_der_lax.cpp
+ create mode 100644 src/test/fuzz/signet.cpp
+ create mode 100644 src/test/fuzz/txrequest.cpp
+ create mode 100644 src/test/fuzz/versionbits.cpp
+ delete mode 100644 src/test/limitedmap_tests.cpp
+ create mode 100644 src/test/policy_fee_tests.cpp
+ create mode 100644 src/test/system_tests.cpp
+ create mode 100644 src/test/txrequest_tests.cpp
+ create mode 100644 src/test/util/.deps/libtest_util_a-blockfilter.Po
+ create mode 100644 src/test/util/.deps/libtest_util_a-logging.Po
+ create mode 100644 src/test/util/.deps/libtest_util_a-mining.Po
+ create mode 100644 src/test/util/.deps/libtest_util_a-net.Po
+ create mode 100644 src/test/util/.deps/libtest_util_a-setup_common.Po
+ create mode 100644 src/test/util/.deps/libtest_util_a-str.Po
+ create mode 100644 src/test/util/.deps/libtest_util_a-transaction_utils.Po
+ create mode 100644 src/test/util/.deps/libtest_util_a-wallet.Po
+ create mode 100644 src/test/util/validation.cpp
+ create mode 100644 src/test/util/validation.h
+ create mode 100644 src/test/validation_chainstate_tests.cpp
+ create mode 100644 src/txrequest.cpp
+ create mode 100644 src/txrequest.h
+ delete mode 100644 src/ui_interface.cpp
+ delete mode 100644 src/ui_interface.h
+ create mode 100644 src/univalue/Makefile
+ create mode 100644 src/univalue/Makefile.in
+ create mode 100644 src/univalue/aclocal.m4
+ create mode 100644 src/univalue/autom4te.cache/output.0
+ create mode 100644 src/univalue/autom4te.cache/output.1
+ create mode 100644 src/univalue/autom4te.cache/output.2
+ create mode 100644 src/univalue/autom4te.cache/output.3
+ create mode 100644 src/univalue/autom4te.cache/output.4
+ create mode 100644 src/univalue/autom4te.cache/output.5
+ create mode 100644 src/univalue/autom4te.cache/requests
+ create mode 100644 src/univalue/autom4te.cache/traces.0
+ create mode 100644 src/univalue/autom4te.cache/traces.1
+ create mode 100644 src/univalue/autom4te.cache/traces.2
+ create mode 100644 src/univalue/autom4te.cache/traces.3
+ create mode 100644 src/univalue/autom4te.cache/traces.4
+ create mode 100644 src/univalue/autom4te.cache/traces.5
+ create mode 100755 src/univalue/build-aux/compile
+ create mode 100755 src/univalue/build-aux/config.guess
+ create mode 100755 src/univalue/build-aux/config.guess~
+ create mode 100755 src/univalue/build-aux/config.sub
+ create mode 100755 src/univalue/build-aux/config.sub~
+ create mode 100755 src/univalue/build-aux/depcomp
+ create mode 100755 src/univalue/build-aux/install-sh
+ create mode 100644 src/univalue/build-aux/ltmain.sh
+ create mode 100644 src/univalue/build-aux/m4/libtool.m4
+ create mode 100644 src/univalue/build-aux/m4/ltoptions.m4
+ create mode 100644 src/univalue/build-aux/m4/ltsugar.m4
+ create mode 100644 src/univalue/build-aux/m4/ltversion.m4
+ create mode 100644 src/univalue/build-aux/m4/lt~obsolete.m4
+ create mode 100755 src/univalue/build-aux/missing
+ create mode 100755 src/univalue/build-aux/test-driver
+ create mode 100644 src/univalue/config.log
+ create mode 100755 src/univalue/config.status
+ create mode 100755 src/univalue/configure
+ create mode 100755 src/univalue/configure~
+ create mode 100644 src/univalue/lib/.deps/.dirstamp
+ create mode 100644 src/univalue/lib/.deps/libunivalue_la-univalue.Plo
+ create mode 100644 src/univalue/lib/.deps/libunivalue_la-univalue_get.Plo
+ create mode 100644 src/univalue/lib/.deps/libunivalue_la-univalue_read.Plo
+ create mode 100644 src/univalue/lib/.deps/libunivalue_la-univalue_write.Plo
+ create mode 100644 src/univalue/lib/.dirstamp
+ create mode 100755 src/univalue/libtool
+ create mode 100644 src/univalue/pc/libunivalue-uninstalled.pc
+ create mode 100644 src/univalue/pc/libunivalue.pc
+ create mode 100644 src/univalue/stamp-h1
+ create mode 100644 src/univalue/test/.deps/no_nul-no_nul.Po
+ create mode 100644 src/univalue/test/.deps/object-object.Po
+ create mode 100644 src/univalue/test/.deps/test_json-test_json.Po
+ create mode 100644 src/univalue/test/.deps/unitester-unitester.Po
+ create mode 100644 src/univalue/univalue-config.h
+ create mode 100644 src/univalue/univalue-config.h.in
+ create mode 100644 src/univalue/univalue-config.h.in~
+ create mode 100644 src/util/.deps/.dirstamp
+ create mode 100644 src/util/.deps/libbitcoin_consensus_a-strencodings.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-asmap.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-bip32.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-bytevectorhash.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-error.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-fees.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-message.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-moneystr.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-rbf.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-settings.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-spanparsing.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-strencodings.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-string.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-system.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-threadnames.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-time.Po
+ create mode 100644 src/util/.deps/libbitcoin_util_a-url.Po
+ create mode 100644 src/util/.deps/libbitcoinconsensus_la-strencodings.Plo
+ create mode 100644 src/util/.dirstamp
+ create mode 100644 src/util/ui_change_type.h
+ create mode 100644 src/wallet/.deps/.dirstamp
+ create mode 100644 src/wallet/.deps/libbitcoin_server_a-init.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-coincontrol.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-coinselection.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-context.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-crypter.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-db.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-feebumper.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-fees.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-load.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-rpcdump.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-rpcwallet.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-salvage.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-scriptpubkeyman.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-wallet.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-walletdb.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_a-walletutil.Po
+ create mode 100644 src/wallet/.deps/libbitcoin_wallet_tool_a-wallettool.Po
+ create mode 100644 src/wallet/.dirstamp
+ create mode 100644 src/wallet/bdb.cpp
+ create mode 100644 src/wallet/bdb.h
+ rewrite src/wallet/db.cpp (96%)
+ rewrite src/wallet/db.h (82%)
+ rewrite src/wallet/init.cpp (69%)
+ create mode 100644 src/wallet/sqlite.cpp
+ create mode 100644 src/wallet/sqlite.h
+ create mode 100644 src/wallet/test/.deps/qt_test_test_bitcoin_qt-wallet_test_fixture.Po
+ create mode 100644 src/wallet/test/.deps/test_test_bitcoin-coinselector_tests.Po
+ create mode 100644 src/wallet/test/.deps/test_test_bitcoin-db_tests.Po
+ create mode 100644 src/wallet/test/.deps/test_test_bitcoin-init_test_fixture.Po
+ create mode 100644 src/wallet/test/.deps/test_test_bitcoin-init_tests.Po
+ create mode 100644 src/wallet/test/.deps/test_test_bitcoin-ismine_tests.Po
+ create mode 100644 src/wallet/test/.deps/test_test_bitcoin-psbt_wallet_tests.Po
+ create mode 100644 src/wallet/test/.deps/test_test_bitcoin-scriptpubkeyman_tests.Po
+ create mode 100644 src/wallet/test/.deps/test_test_bitcoin-wallet_crypto_tests.Po
+ create mode 100644 src/wallet/test/.deps/test_test_bitcoin-wallet_test_fixture.Po
+ create mode 100644 src/wallet/test/.deps/test_test_bitcoin-wallet_tests.Po
+ rewrite src/wallet/walletutil.cpp (63%)
+ rewrite src/warnings.cpp (66%)
+ create mode 100644 src/zmq/.deps/.dirstamp
+ create mode 100644 src/zmq/.deps/libbitcoin_zmq_a-zmqabstractnotifier.Po
+ create mode 100644 src/zmq/.deps/libbitcoin_zmq_a-zmqnotificationinterface.Po
+ create mode 100644 src/zmq/.deps/libbitcoin_zmq_a-zmqpublishnotifier.Po
+ create mode 100644 src/zmq/.deps/libbitcoin_zmq_a-zmqrpc.Po
+ create mode 100644 src/zmq/.dirstamp
+ delete mode 100644 src/zmq/zmqconfig.h
+ create mode 100644 src/zmq/zmqutil.cpp
+ create mode 100644 src/zmq/zmqutil.h
+ create mode 100644 statoshi.dev
+ create mode 100644 test/config.ini
+ delete mode 100644 test/functional/data/wallets/high_minversion/GENERATE.md
+ create mode 100755 test/functional/feature_settings.py
+ create mode 100755 test/functional/feature_signet.py
+ create mode 100755 test/functional/feature_taproot.py
+ create mode 100755 test/functional/mempool_compatibility.py
+ create mode 100755 test/functional/p2p_addrv2_relay.py
+ create mode 100755 test/functional/p2p_eviction.py
+ rewrite test/functional/p2p_feefilter.py (60%)
+ create mode 100755 test/functional/p2p_getaddr_caching.py
+ create mode 100755 test/functional/p2p_ibd_txrelay.py
+ rewrite test/functional/p2p_invalid_messages.py (71%)
+ delete mode 100755 test/functional/p2p_mempool.py
+ create mode 100755 test/functional/p2p_nobloomfilter_messages.py
+ create mode 100755 test/functional/p2p_ping.py
+ create mode 100755 test/functional/rpc_generate.py
+ delete mode 100755 test/functional/rpc_getaddressinfo_label_deprecation.py
+ delete mode 100755 test/functional/rpc_getaddressinfo_labels_purpose_deprecation.py
+ create mode 100755 test/functional/rpc_getpeerinfo_deprecation.py
+ create mode 100755 test/functional/rpc_invalid_address_message.py
+ create mode 100644 test/functional/test_framework/bdb.py
+ create mode 100644 test/functional/test_framework/bip340_test_vectors.csv
+ delete mode 100755 test/functional/test_framework/mininode.py
+ create mode 100644 test/functional/test_framework/muhash.py
+ create mode 100755 test/functional/test_framework/p2p.py
+ create mode 100644 test/functional/test_framework/wallet.py
+ create mode 100755 test/functional/wallet_send.py
+ create mode 100755 test/functional/wallet_startup.py
+ delete mode 100755 test/functional/wallet_zapwallettxes.py
+ create mode 100755 test/get_previous_releases.py
+ create mode 100755 test/lint/lint-cpp.sh
+ create mode 100755 test/lint/lint-git-commit-check.sh
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+On branch 14JUL2021-rebase-begin
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-commit-loop.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[14JUL2021-rebase-begin 14166f562] bulk edit
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
+On branch 14JUL2021-rebase-begin
+nothing to commit, working tree clean
