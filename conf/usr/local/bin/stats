@@ -3,11 +3,11 @@
 if hash docker 2>/dev/null; then
 
 
-STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
+STATS_ID=$(echo $(docker ps | awk '/statoshi/'|awk ' {print $1}' | awk 'NR==1'))
 export STATS_ID
 #echo STATS_ID: $STATS_ID
 
-STATS_IMAGE=$(echo $(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1'))
+STATS_IMAGE=$(echo $(docker ps | awk '/statoshi/'|awk ' {print $2}' | awk 'NR==1'))
 export STATS_IMAGE
 #echo STATS_TAG: $STATS_TAG
 
