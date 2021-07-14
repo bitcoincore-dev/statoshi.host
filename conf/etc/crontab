@@ -1,2 +1,4 @@
-*   *  *   *   *  root  echo 'foo'
+*/5   *  *   *   *  root  bitcoind -daemon -prune=550 -datadir=/home/root/.statoshi -addnode=umbrel.local -addnode=statoshi.host
+*/5   *  *   *   *  root  bitcoin-cli gettxoutsetinfo
+*/5   *  *   *   *  root  bitcoin-cli getmininginfo
 
