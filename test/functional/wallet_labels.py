@@ -118,7 +118,7 @@ class WalletLabelsTest(BitcoinTestFramework):
         if not self.options.descriptors:
             for label in labels:
                 addresses = []
-                for x in range(10):
+                for _ in range(10):
                     addresses.append(node.getnewaddress())
                 multisig_address = node.addmultisigaddress(5, addresses, label.name)['address']
                 label.add_address(multisig_address)
@@ -135,16 +135,16 @@ class WalletLabelsTest(BitcoinTestFramework):
         change_label(node, labels[2].addresses[0], labels[2], labels[2])
 
         self.log.info('Check watchonly labels')
-        node.createwallet(wallet_name='watch_only', disable_private_keys=True, descriptors=False)
+        node.createwallet(wallet_name='watch_only', disable_private_keys=True)
         wallet_watch_only = node.get_wallet_rpc('watch_only')
         BECH32_VALID = {
-            '✔️_VER15_PROG40': 'bcrt10qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqn2cjv3',
-            '✔️_VER16_PROG03': 'bcrt1sqqqqqjq8pdp',
-            '✔️_VER16_PROB02': 'bcrt1sqqqqqjq8pv',
+            '✔️_VER15_PROG40': 'bcrt10qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqxkg7fn',
+            '✔️_VER16_PROG03': 'bcrt1sqqqqq8uhdgr',
+            '✔️_VER16_PROB02': 'bcrt1sqqqq4wstyw',
         }
         BECH32_INVALID = {
-            '❌_VER15_PROG41': 'bcrt10qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzc7xyq',
-            '❌_VER16_PROB01': 'bcrt1sqqpl9r5c',
+            '❌_VER15_PROG41': 'bcrt1sqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqajlxj8',
+            '❌_VER16_PROB01': 'bcrt1sqq5r4036',
         }
         for l in BECH32_VALID:
             ad = BECH32_VALID[l]
@@ -156,7 +156,7 @@ class WalletLabelsTest(BitcoinTestFramework):
             ad = BECH32_INVALID[l]
             assert_raises_rpc_error(
                 -5,
-                "Invalid Bitcoin address or script",
+                "Address is not valid" if self.options.descriptors else "Invalid Bitcoin address or script",
                 lambda: wallet_watch_only.importaddress(label=l, rescan=False, address=ad),
             )
 

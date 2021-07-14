@@ -39,7 +39,6 @@ enabled=(
     E711 # comparison to None should be 'if cond is None:'
     E714 # test for object identity should be "is not"
     E721 # do not compare types, use "isinstance()"
-    E741 # do not use variables named "l", "O", or "I"
     E742 # do not define classes named "l", "O", or "I"
     E743 # do not define functions named "l", "O", or "I"
     E901 # SyntaxError: invalid syntax
@@ -56,6 +55,7 @@ enabled=(
     F621 # too many expressions in an assignment with star-unpacking
     F622 # two or more starred expressions in an assignment (a, *b, *c = d)
     F631 # assertion test is a tuple, which are always True
+    F632 # use ==/!= to compare str, bytes, and int literals
     F701 # a break statement outside of a while or for loop
     F702 # a continue statement outside of a while or for loop
     F703 # a continue statement in a finally block in a loop
