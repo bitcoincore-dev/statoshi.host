@@ -229,7 +229,8 @@ void test_one_input(const std::vector<uint8_t>& buffer)
             break;
         }
         case 1: {
-            (void)AreInputsStandard(CTransaction{random_mutable_transaction}, coins_view_cache);
+            (void)AreInputsStandard(CTransaction{random_mutable_transaction}, coins_view_cache, false);
+            (void)AreInputsStandard(CTransaction{random_mutable_transaction}, coins_view_cache, true);
             break;
         }
         case 2: {
@@ -278,7 +279,7 @@ void test_one_input(const std::vector<uint8_t>& buffer)
             CCoinsStats stats;
             bool expected_code_path = false;
             try {
-                (void)GetUTXOStats(&coins_view_cache, stats);
+                (void)GetUTXOStats(&coins_view_cache, stats, CoinStatsHashType::HASH_SERIALIZED);
             } catch (const std::logic_error&) {
                 expected_code_path = true;
             }

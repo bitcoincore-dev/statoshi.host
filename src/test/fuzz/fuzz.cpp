@@ -12,7 +12,7 @@
 
 const std::function<void(const std::string&)> G_TEST_LOG_FUN{};
 
-#if defined(__AFL_COMPILER)
+#if defined(PROVIDE_MAIN_FUNCTION)
 static bool read_stdin(std::vector<uint8_t>& data)
 {
     uint8_t buffer[1024];
@@ -44,9 +44,8 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
     return 0;
 }
 
-// Generally, the fuzzer will provide main(), except for AFL
-#if defined(__AFL_COMPILER)
-int main(int argc, char** argv)
+#if defined(PROVIDE_MAIN_FUNCTION)
+__attribute__((weak)) int main(int argc, char** argv)
 {
     initialize();
 #ifdef __AFL_INIT
