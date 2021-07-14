@@ -29,21 +29,16 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     sudo apt-get install libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools
     sudo apt-get install libqrencode-dev
 
-    #git clone https://github.com/randymcmillan/bitcoin ~/bitcoin
-    #cd ~/bitcoin && git checkout randymcmillan-deliverables
-    #./contrib/install_db4.sh .
-    #./autogen.sh && ./configure --disable-wallet && sudo make install
+    git clone https://github.com/bitcoin/bitcoin ~/bitcoin
+    cd ~/gui && ./contrib/install_db4.sh .
+    ./autogen.sh && ./configure && make appbundle
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     checkbrew
-    #test workflow
-    #test workflow
-    #test workflow
-    #test workflow
-    #git clone https://github.com/randymcmillan/bitcoin ~/bitcoin
-    #cd ~/bitcoin && git checkout randymcmillan-deliverables
-    #./contrib/install_db4.sh .
-    #./autogen.sh && ./configure --disable-wallet && sudo make install
+
+    git clone https://github.com/bitcoin/bitcoin ~/bitcoin
+    cd ~/bitcoin && ./contrib/install_db4.sh .
+    ./autogen.sh && ./configure && make appbundle
 
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     echo TODO add support for $OSTYPE
@@ -56,6 +51,3 @@ elif [[ "$OSTYPE" == "freebsd"* ]]; then
 else
     echo TODO add support for $OSTYPE
 fi
-
-
-
