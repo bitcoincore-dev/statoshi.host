@@ -21,7 +21,7 @@ do
         echo $STATS_IMAGE
         exit
 
-    elif [[ ${!i} = *top* ]]; then
+    elif [[ ${!i} = top ]]; then
         ((i++))
         docker top $STATS_ID
         exit
@@ -34,7 +34,7 @@ do
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
         exit
 
-    elif [[ ${!i} = *stop* ]]; then
+    elif [[ ${!i} = stop ]]; then
         ((i++))
         docker stop $STATS_ID
         exit

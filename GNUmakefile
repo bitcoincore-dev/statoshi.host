@@ -382,7 +382,7 @@ endif
 	git config --global core.editor vim
 ifeq ($(slim),true)
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
-	docker pull -q docker.pkg.github.com/randymcmillan/statoshi.dev/header-root:1626074825
+	docker pull docker.pkg.github.com/randymcmillan/statoshi.dev/header-root:latest
 else
 	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
