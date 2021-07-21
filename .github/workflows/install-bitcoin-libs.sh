@@ -5,9 +5,6 @@ checkbrew() {
     if hash brew 2>/dev/null; then
         brew update
         brew upgrade
-        #install brew libs
-        brew install wget
-        brew install curl
         brew install autoconf automake berkeley-db4 libtool boost miniupnpc pkg-config python qt libevent qrencode
         brew install librsvg codespell shellcheck
     else
@@ -16,35 +13,21 @@ checkbrew() {
         checkbrew
     fi
 }
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    checkbrew
-    sudo apt install linuxbrew-wrapper
-    sudo apt-get install autoconf
-    sudo apt-get install libdb4.8++-dev
-    sudo apt-get -y install libboost libevent miniupnpc libdb4.8 qt libqrencode univalue libzmq3
-    sudo apt-get install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
-    sudo apt-get install libevent-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev
-    sudo apt-get install libminiupnpc-dev
-    sudo apt-get install libzmq3-dev
-    sudo apt-get install libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools
-    sudo apt-get install libqrencode-dev
 
-    #git clone https://github.com/randymcmillan/bitcoin ~/bitcoin
-    #cd ~/bitcoin && git checkout randymcmillan-deliverables
-    #./contrib/install_db4.sh .
-    #./autogen.sh && ./configure --disable-wallet && sudo make install
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+
+    apt install autoconf
+    apt install libdb4.8++-dev
+    apt -y install libboost libevent miniupnpc libdb4.8 qt libqrencode univalue libzmq3
+    apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
+    apt install libevent-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev
+    apt install libminiupnpc-dev
+    apt install libzmq3-dev
+    apt install libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools
+    apt install libqrencode-dev
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     checkbrew
-    #test workflow
-    #test workflow
-    #test workflow
-    #test workflow
-    #git clone https://github.com/randymcmillan/bitcoin ~/bitcoin
-    #cd ~/bitcoin && git checkout randymcmillan-deliverables
-    #./contrib/install_db4.sh .
-    #./autogen.sh && ./configure --disable-wallet && sudo make install
-
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     echo TODO add support for $OSTYPE
 elif [[ "$OSTYPE" == "msys" ]]; then
@@ -56,6 +39,4 @@ elif [[ "$OSTYPE" == "freebsd"* ]]; then
 else
     echo TODO add support for $OSTYPE
 fi
-
-
 
