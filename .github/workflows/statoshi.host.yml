@@ -53,10 +53,10 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@v2
-      - name: make init build
+      - name: make init build shell
         run: |
           #avoid port conflict with runner
-          sudo -s make init build
+          sudo -s make init build shell
       - name: make run
         run: |
           sudo -s make run
@@ -79,9 +79,9 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@v2
-      - name: make init build
+      - name: make init build shell
         run: |
-          sudo -s make init build
+          sudo -s make init build shell
       - name: make run
         run: |
           sudo -s make run

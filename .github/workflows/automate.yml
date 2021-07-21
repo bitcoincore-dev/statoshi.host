@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: install-bitcoin-libs.sh
         run: |
-          ./.github/workflows/./install-bitcoin-libs.sh
+          sudo -s ./.github/workflows/./install-bitcoin-libs.sh
 
 # Cross Compile 
   ubuntu-18-host:
