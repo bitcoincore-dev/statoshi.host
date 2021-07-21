@@ -45,6 +45,19 @@ jobs:
           ./automate.sh
 
 # Cross Compile 
+  run-automate-sh:
+    runs-on: ubuntu-18.04
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - name: install-bitcoin-libs.sh
+        run: |
+          ./.github/workflows/./install-bitcoin-libs.sh
+
+# Cross Compile 
   ubuntu-18-host:
     runs-on: ubuntu-18.04
     steps:
