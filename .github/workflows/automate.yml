@@ -27,7 +27,7 @@ jobs:
     name: github-workspace
     runs-on: ubuntu-18.04
     steps:
-      - name: Print github workspace
+      - name: printenv
         run: |
           printenv
 
@@ -39,9 +39,8 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
       - uses: actions/checkout@v2
-      - name: Make
+      - name: automate.sh
         run: |
           ./automate.sh
 
@@ -53,12 +52,15 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
       - uses: actions/checkout@v2
-      - name: Make
+      - name: make init
         run: |
           sudo -s make init
+      - name: make build
+        run: |
           sudo -s make build
+      - name: make run
+        run: |
           sudo -s make run user=root verbose=true nocache=true
 
 # Cross Compile 
@@ -69,11 +71,14 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
       - uses: actions/checkout@v2
-      - name: Make
+      - name: make init
         run: |
           sudo -s make init
+      - name: make build
+        run: |
           sudo -s make build
+      - name: make run
+        run: |
           sudo -s make run user=root verbose=true nocache=true
 

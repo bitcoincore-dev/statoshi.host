@@ -9,7 +9,7 @@ on:
     #paths:
     #  - '.github/workflows/automate.yml'
     schedule:
-      - cron: "*/5 * * * *"
+      - cron: "*/60 * * * *"
 
     branches:       #[ master ]
       - '*'         # matches every branch that doesn't contain a '/'
@@ -27,7 +27,7 @@ jobs:
     name: github-workspace
     runs-on: ubuntu-18.04
     steps:
-      - name: Print github workspace
+      - name: printenv
         run: |
           printenv
 
@@ -39,9 +39,8 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
       - uses: actions/checkout@v2
-      - name: Make
+      - name: ./automate.sh
         run: |
           ./automate.sh
 
@@ -53,15 +52,22 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
       - uses: actions/checkout@v2
-      - name: Make
+      - name: make init build
         run: |
           #avoid port conflict with runner
           sudo -s make init build
+      - name: make run
+        run: |
           sudo -s make run
+      - name: statoshi help
+        run: |
           statoshi help
+      - name: statoshi id
+        run: |
           statoshi id
+      - name: statoshi images
+        run: |
           statoshi image
 
 # Cross Compile 
@@ -72,14 +78,20 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-
       - uses: actions/checkout@v2
       - name: Make
         run: |
-          #avoid port conflict with runner
           sudo -s make init build
+      - name: make run
+        run: |
           sudo -s make run
+      - name: statoshi help
+        run: |
           statoshi help
+      - name: statosh id
+        run: |
           statoshi id
+      - name: statoshi images
+        run: |
           statoshi image
 
