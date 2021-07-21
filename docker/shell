@@ -5,7 +5,8 @@ FROM alpine:3.11.6 as base
 
 RUN apk update \
     && apk add --no-cache \
-        coreutils musl busybox bash-completion vim git make su-exec
+        coreutils musl busybox bash-completion vim git make su-exec \
+        autoconf automake libtool g++ libevent-dev boost-dev
 RUN git config --global advice.detachedHead false
 WORKDIR /
 

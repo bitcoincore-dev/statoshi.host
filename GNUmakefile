@@ -416,7 +416,7 @@ endif
 .PHONY: build-shell
 build-shell:
 	@echo ''
-	bash -c 'cat ./docker/shell                > shell'
+	bash -c 'cat ./docker/shell                 > shell'
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) shell
 	@echo ''
 #######################
@@ -438,6 +438,7 @@ endif
 .PHONY: build-header
 build-header:
 	@echo ''
+	bash -c 'cat ./docker/header                > header'
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) header
 	@echo ''
 #######################

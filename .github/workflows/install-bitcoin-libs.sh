@@ -26,6 +26,18 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     apt install libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools
     apt install libqrencode-dev
 
+elif [[ "$OSTYPE" == "linux-musl" ]]; then
+
+    apt install autoconf
+    apt install libdb4.8++-dev
+    apt -y install libboost libevent miniupnpc libdb4.8 qt libqrencode univalue libzmq3
+    apt install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3
+    apt install libevent-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev
+    apt install libminiupnpc-dev
+    apt install libzmq3-dev
+    apt install libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools
+    apt install libqrencode-dev
+
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     checkbrew
 elif [[ "$OSTYPE" == "cygwin" ]]; then
