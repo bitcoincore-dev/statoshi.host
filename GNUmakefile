@@ -464,11 +464,11 @@ package-header:
 	bash -c 'docker push                                    docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
 
 #######################
-.PHONY: shell
-shell: header
-	@echo 'header'
-	@echo ''
-	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh
+#.PHONY: shell
+#shell: header
+#	@echo 'header'
+#	@echo ''
+#	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh
 
 #######################
 .PHONY: build
