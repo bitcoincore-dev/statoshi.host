@@ -58,6 +58,7 @@ jobs:
       - name: Make
         run: |
           #avoid port conflict with runner
+          sudo -s make init build-shell shell
           sudo -s make init build
           sudo -s make run
           statoshi help
@@ -77,6 +78,7 @@ jobs:
       - name: Make
         run: |
           #avoid port conflict with runner
+          sudo -s make init build-shell shell
           sudo -s make init build
           sudo -s make run
           statoshi help

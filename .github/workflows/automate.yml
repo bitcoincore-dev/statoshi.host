@@ -58,6 +58,8 @@ jobs:
       - name: Make
         run: |
           sudo -s make init
+          sudo -s make build-shell
+          sudo -s make shell
           sudo -s make build
           sudo -s make run user=root verbose=true nocache=true
 
@@ -74,6 +76,8 @@ jobs:
       - name: Make
         run: |
           sudo -s make init
+          sudo -s make build-shell
+          sudo -s make shell
           sudo -s make build
           sudo -s make run user=root verbose=true nocache=true
 
