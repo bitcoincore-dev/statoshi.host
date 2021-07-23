@@ -542,11 +542,11 @@ prune-network:
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME)_$(HOST_UID) down
 	docker network prune -f
 #######################
-.PHONY: docs
-docs:
+.PHONY: statoshi-docs
+statoshi-docs:
 #$ make report no-cache=true verbose=true cmd='make doc' user=root doc
 #SHELL := /bin/bash
-	@echo 'docs'
+	@echo 'statoshi-docs'
 	bash -c "if pgrep MacDown; then pkill MacDown; fi"
 	bash -c "curl https://raw.githubusercontent.com/jlopp/statoshi/master/README.md -o ./docker/README.md"
 	bash -c "cat ./docker/README.md >  README.md"
@@ -567,7 +567,7 @@ push:
 	bash -c "git push -f --all git@github.com:$(GIT_PROFILE)/$(PROJECT_NAME).git || echo failed to push docs"
 	bash -c "git push -f --all git@github.com:bitcoincore-dev/statoshi.host.git || echo failed to push to statoshi.host"
 .PHONY: push-docs
-push-docs: docs push
+push-docs: statoshi-docs push
 	@echo 'push-docs'
 #######################
 package-statoshi: init
