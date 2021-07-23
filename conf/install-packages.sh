@@ -85,7 +85,7 @@ rm -rf \
      /var/log/graphite
 df -H
 
-REPO=stats.bitcoincore.dev
+REPO=$PROJECT_NAME
 export REPO
 apk add libzmq
 pip3 install pyzmq
