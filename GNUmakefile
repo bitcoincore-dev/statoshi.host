@@ -10,6 +10,9 @@ export THIS_FILE
 TIME									:= $(shell date +%s)
 export TIME
 
+ARCH                                    := $(shell uname -m)
+export ARCH
+
 ifeq ($(user),)
 HOST_USER								:= root
 HOST_UID								:= $(strip $(if $(uid),$(uid),0))
@@ -289,6 +292,7 @@ report:
 	@echo '        - UMBREL=${UMBREL}'
 	@echo '        - THIS_FILE=${THIS_FILE}'
 	@echo '        - TIME=${TIME}'
+	@echo '        - ARCH=${ARCH}'
 	@echo '        - HOST_USER=${HOST_USER}'
 	@echo '        - HOST_UID=${HOST_UID}'
 	@echo '        - PUBLIC_PORT=${PUBLIC_PORT}'
@@ -382,7 +386,7 @@ endif
 	git config --global core.editor vim
 ifeq ($(slim),true)
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
-	docker pull -q docker.pkg.github.com/randymcmillan/statoshi.dev/header-root:1626074825
+	docker pull ghcr.io/randymcmillan/statoshi.dev/${ARCH}/header-root:latest
 else
 	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
@@ -427,12 +431,12 @@ shell: report build-shell
 ifeq ($(CMD_ARGUMENTS),)
 	# no command is given, default to shell
 	@echo ''
-	$(DOCKER_COMPOSE) --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
+	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh
 	@echo ''
 else
 	# run the command
 	@echo ''
-	$(DOCKER_COMPOSE) --verbose -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
+	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
 #######################
@@ -448,7 +452,7 @@ header: report build-header
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd /home/${HOST_USER} && ls"
 	@echo ''
-	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
+	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER)
 
 .PHONY: signin
 signin:
@@ -459,10 +463,10 @@ package-header:
 	touch TIME && echo $(TIME) > TIME && git add -f TIME
 	#legit . -m "make package-header at $(TIME)" -p 00000
 	git commit --amend --no-edit --allow-empty
-	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER):$(TIME)'
-	bash -c 'docker push                                    docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER):$(TIME)'
-	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)' #defaults to latest
-	bash -c 'docker push                                    docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
+	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER):$(TIME)'
+	bash -c 'docker push                                    docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER):$(TIME)'
+	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER)' #defaults to latest
+	bash -c 'docker push                                    docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER)'
 
 #######################
 #.PHONY: shell
@@ -573,10 +577,10 @@ push-docs: statoshi-docs push
 package-statoshi: init
 	#@echo "legit . -m "$(HOST_USER):$(TIME)" -p 0000000 && make user=root package && GPF"
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
-	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
-	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
-	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER)'
-	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(ARCH)/$(HOST_USER):$(TIME)'
+	bash -c 'docker push                             ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(ARCH)/$(HOST_USER):$(TIME)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(ARCH)/$(HOST_USER)'
+	bash -c 'docker push                             ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(ARCH)/$(HOST_USER)'
 ########################
 .PHONY: package-all
 package-all:
