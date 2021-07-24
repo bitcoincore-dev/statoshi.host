@@ -1,0 +1,66 @@
+# USAGE:
+# $ make shell
+# from command line
+FROM alpine:3.11.6 as base
+
+RUN apk update \
+    && apk add --no-cache \
+        coreutils musl busybox bash-completion git
+RUN git config --global advice.detachedHead false
+WORKDIR /
+
+RUN apk update && apk upgrade
+RUN apk add -v \
+    autoconf \
+    automake \
+    binutils \
+    ca-certificates \
+    cmake \
+    curl \
+    doxygen \
+    git \
+    libtool \
+    make \
+    patch \
+    pkgconfig \
+    python3 \
+    py3-psutil \
+    vim
+
+RUN apk add -v \
+    g++ \
+    build-base \
+    boost-libs \
+    libgcc \
+    libstdc++ \
+    musl \
+    boost-system \
+    boost-build \
+    boost-dev \
+    openssl-dev \
+    libevent-dev \
+    libzmq \
+    zeromq-dev \
+    protobuf-dev \
+    linux-headers \
+    libbz2 \
+    libcap-dev \
+    librsvg \
+    tiff-tools \
+    zlib-dev \
+    py3-setuptools
+
+RUN df -H
+
+FROM scratch as statoshi
+COPY --from=base . .
+
+ARG HOST_UID=${HOST_UID:-4000}
+ARG HOST_USER=${HOST_USER:-nodummy}
+
+RUN [ "${HOST_USER}" == "root" ] || \
+    (adduser -h /home/${HOST_USER} -D -u ${HOST_UID} ${HOST_USER} \
+    && chown -R "${HOST_UID}:${HOST_UID}" /home/${HOST_USER})
+
+USER ${HOST_USER}
+WORKDIR /home/${HOST_USER}

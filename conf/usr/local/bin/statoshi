@@ -1,0 +1,102 @@
+#!/bin/bash
+
+if hash docker 2>/dev/null; then
+
+STATS_ID=$(echo $(docker ps | awk '/statoshi/'|awk ' {print $1}' | awk 'NR==1'))
+export STATS_ID
+
+STATS_IMAGE=$(echo $(docker ps | awk '/statoshi/'|awk ' {print $2}' | awk 'NR==1'))
+export STATS_IMAGE
+
+for ((i=1;i<=$#;i++));
+do
+
+    if [[ ${!i} = *id* ]]; then
+        ((i++))
+        echo $STATS_ID
+        exit
+
+    elif [[ ${!i} = *image* ]]; then
+        ((i++))
+        echo $STATS_IMAGE
+        exit
+
+    elif [[ ${!i} = *top* ]]; then
+        ((i++))
+        docker top $STATS_ID
+        exit
+
+    elif [[ ${!i} = *start* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -datadir=/home/root/.statoshi -addnode=statoshi.host:8333 -addnode=umbrel.local &"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
+        exit
+
+    elif [[ ${!i} = *stop* ]]; then
+        ((i++))
+        docker stop $STATS_ID
+        exit
+    elif [[ ${!i} = *prune* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
+        exit
+
+    elif [[ ${!i} = *cli* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
+        exit
+
+    elif [[ ${!i} = *d* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
+        exit
+
+    elif [[ ${!i} = *ep* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
+        exit
+
+    elif [[ ${!i} = *whatami* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID sh -c  "/usr/local/bin/whatami"
+        exit
+
+    elif [[ ${!i} = *console* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID bash
+
+    elif [[ ${!i} = *debug* ]]; then
+        ((i++))
+        docker exec -it $STATS_ID sh -c "tail -f /home/root/.bitcoin"
+
+    elif [[ ${!i} == *h* ]]; then
+        ((i++))
+        echo
+        echo "statoshi                  <command> - execute shell command in container"
+        echo "statoshi -d              '<command>' - send command to bitcoind"
+        echo "statoshi -cli            '<command>' - send command to bitcoin-cli"
+        echo
+        echo "Examples:"
+        echo
+        echo "statoshi                 ls"
+        echo "statoshi                 cd / & ls -a"
+        echo "statoshi                 -cli gettxoutsetinfo"
+        echo "statoshi                 -cli getmininginfo"
+        echo "statoshi                 -cli 'getblockhash 1000'"
+        echo
+        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoind -daemon -prune=550'"
+        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli gettxoutsetinfo'"
+        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli getmininginfo'"
+        echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli $1'"
+
+    elif [ -n ${!i} ]; then
+        ((i++))
+        docker exec -it $STATS_ID sh -c  "$1"
+        exit
+    fi
+
+done;
+#echo statoshi help
+fi #end if docker hash
