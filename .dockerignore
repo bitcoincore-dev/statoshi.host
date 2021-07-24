@@ -1,0 +1,15 @@
+!.gitignore
+.git
+.github
+db-4.8.30.NC.tar.gz
+depends/*
+depends/sources/*
+autom4te.cache/*
+build_msvc/*
+build-aux/*
+contrib/
+ci/*
+test/*
+db4/*
+doc/*
+#docker/*

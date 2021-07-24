@@ -1,0 +1,55 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": "-- Grafana --",
+                "enable": false,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+  "dashboard": {
+    "id": null,
+    "uid": null,
+    "title": "dashlist 1",
+    "panels": [ {
+        "datasource": null,
+        "fieldConfig": {
+            "defaults": {
+                "custom": {}
+            },
+            "overrides": []
+        },
+        "folderId": null,
+        "gridPos": {
+            "h": 15,
+            "w": 7,
+            "x": 0,
+            "y": 0
+        },
+        "headings": false,
+        "id": 2,
+        "limit": 100,
+        "links": [],
+        "query": "",
+        "recent": true,
+        "search": false,
+        "starred": false,
+        "tags": [
+            "stats"
+        ],
+        "title": "",
+        "type": "dashlist"
+    }],
+    "tags": [ "templated" ],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 0
+  },
+  "folderId": 0,
+  "overwrite": false
+}
