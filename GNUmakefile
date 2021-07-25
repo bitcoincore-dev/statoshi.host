@@ -464,24 +464,16 @@ signin:
 .PHONY: signin
 signin:
 	bash -c 'cat ~/GH_TOKEN.txt | docker login $(PACKAGE_PREFIX) -u $(GIT_USER_NAME) --password-stdin'
->>>>>>> 06fb9dd30 (add $(PACKAGE_PREFIX))
 
 .PHONY: package-header
 package-header:
 	touch TIME && echo $(TIME) > TIME && git add -f TIME
 	#legit . -m "make package-header at $(TIME)" -p 00000
 	git commit --amend --no-edit --allow-empty
-<<<<<<< HEAD
-	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER):$(TIME)'
-	bash -c 'docker push                                    ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER):$(TIME)'
-	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)' #defaults to latest
-	bash -c 'docker push                                    ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
-=======
 	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER):$(TIME)'
 	bash -c 'docker push                                    $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER):$(TIME)'
 	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER)' #defaults to latest
 	bash -c 'docker push                                    $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER)'
->>>>>>> 06fb9dd30 (add $(PACKAGE_PREFIX))
 
 #######################
 .PHONY: shell
@@ -608,7 +600,11 @@ package-statoshi: signin
 
 ########################
 .PHONY: package-all
+<<<<<<< HEAD
 package-all:
+=======
+package-all: init signin header build package-header package-statoshi
+>>>>>>> dd4928e23 (make: package-all)
 
 ifeq ($(slim),true)
 	make package-all slim=false
