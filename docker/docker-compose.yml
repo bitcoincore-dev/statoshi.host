@@ -12,6 +12,8 @@ services:
       - UMBREL=${UMBREL}
       - THIS_FILE=${THIS_FILE}
       - TIME=${TIME}
+      - PACKAGE_PREFIX=ghcr.io
+      - ARCH=x86_64
       - HOST_USER=${HOST_USER}
       - HOST_UID=${HOST_UID}
       - SERVICE_TARGET=${SERVICE_TARGET}
@@ -55,6 +57,8 @@ services:
         - UMBREL=${UMBREL}
         - THIS_FILE=${THIS_FILE}
         - TIME=${TIME}
+        - PACKAGE_PREFIX=ghcr.io
+        - ARCH=x86_64
         - HOST_USER=${HOST_USER}
         - HOST_UID=${HOST_UID}
         - SERVICE_TARGET=${SERVICE_TARGET}
@@ -103,6 +107,8 @@ services:
       - UMBREL=${UMBREL}
       - THIS_FILE=${THIS_FILE}
       - TIME=${TIME}
+      - PACKAGE_PREFIX=ghcr.io
+      - ARCH=x86_64
       - HOST_USER=${HOST_USER}
       - HOST_UID=${HOST_UID}
       - SERVICE_TARGET=${SERVICE_TARGET}
@@ -146,6 +152,8 @@ services:
         - UMBREL=${UMBREL}
         - THIS_FILE=${THIS_FILE}
         - TIME=${TIME}
+        - PACKAGE_PREFIX=ghcr.io
+        - ARCH=x86_64
         - HOST_USER=${HOST_USER}
         - HOST_UID=${HOST_UID}
         - SERVICE_TARGET=${SERVICE_TARGET}
@@ -193,6 +201,8 @@ services:
       - UMBREL=${UMBREL}
       - THIS_FILE=${THIS_FILE}
       - TIME=${TIME}
+      - PACKAGE_PREFIX=ghcr.io
+      - ARCH=x86_64
       - HOST_USER=${HOST_USER}
       - HOST_UID=${HOST_UID}
       - SERVICE_TARGET=${SERVICE_TARGET}
@@ -235,6 +245,8 @@ services:
         - PWD=${PWD}
         - UMBREL=${UMBREL}
         - THIS_FILE=${THIS_FILE}
+        - PACKAGE_PREFIX=ghcr.io
+        - ARCH=x86_64
         - TIME=${TIME}
         - HOST_USER=${HOST_USER}
         - HOST_UID=${HOST_UID}
@@ -290,6 +302,8 @@ services:
       - UMBREL=${UMBREL}
       - THIS_FILE=${THIS_FILE}
       - TIME=${TIME}
+      - PACKAGE_PREFIX=ghcr.io
+      - ARCH=x86_64
       - HOST_USER=${HOST_USER}
       - HOST_UID=${HOST_UID}
       - SERVICE_TARGET=${SERVICE_TARGET}
@@ -332,6 +346,8 @@ services:
         - UMBREL=${UMBREL}
         - THIS_FILE=${THIS_FILE}
         - TIME=${TIME}
+        - PACKAGE_PREFIX=ghcr.io
+        - ARCH=x86_64
         - HOST_USER=${HOST_USER}
         - HOST_UID=${HOST_UID}
         - SERVICE_TARGET=${SERVICE_TARGET}

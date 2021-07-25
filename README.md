@@ -36,7 +36,7 @@ In order to facilitate this, you can add a line to bitcoin.conf that will partit
 metric by the name of the host: statshostname=yourNodeName
 
 ----
-## [statoshi.dev](https://github.com/randymcmillan/statoshi.dev) [c5da6a856](https://github.com/randymcmillan/statoshi.dev/commit/c5da6a856)
+## [statoshi.dev](https://github.com/randymcmillan/statoshi.dev) [dd4928e23](https://github.com/randymcmillan/statoshi.dev/commit/dd4928e23)
 ##### &#36; <code>make</code>
 
 	[ARGUMENTS]	
@@ -45,7 +45,8 @@ metric by the name of the host: statshostname=yourNodeName
         - PWD=/Users/git/statoshi.dev
         - UMBREL=false
         - THIS_FILE=GNUmakefile
-        - TIME=1627240731
+        - TIME=1627254921
+        - PACKAGE_PREFIX=ghcr.io
         - ARCH=x86_64
         - HOST_USER=root
         - HOST_UID=0
@@ -70,8 +71,8 @@ metric by the name of the host: statshostname=yourNodeName
         - GIT_SERVER=https://github.com
         - GIT_PROFILE=randymcmillan
         - GIT_BRANCH=master
-        - GIT_HASH=c5da6a856
-        - GIT_PREVIOUS_HASH=685148962
+        - GIT_HASH=dd4928e23
+        - GIT_PREVIOUS_HASH=2be53dd2d
         - GIT_REPO_ORIGIN=git@github.com:RandyMcMillan/statoshi.dev.git
         - GIT_REPO_NAME=statoshi.dev
         - GIT_REPO_PATH=/Users/git/statoshi.dev
