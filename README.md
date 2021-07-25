@@ -36,7 +36,8 @@ In order to facilitate this, you can add a line to bitcoin.conf that will partit
 metric by the name of the host: statshostname=yourNodeName
 
 ----
-## [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev) [407c26d55](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/commit/33d2d5108)
+=======
+## [statoshi.dev](https://github.com/randymcmillan/statoshi.dev) [dd4928e23](https://github.com/randymcmillan/statoshi.dev/commit/dd4928e23)
 ##### &#36; <code>make</code>
 
 	[ARGUMENTS]	
@@ -48,6 +49,13 @@ metric by the name of the host: statshostname=yourNodeName
         - TIME=1624773426
         - HOST_USER=git
         - HOST_UID=501
+=======
+        - TIME=1627254921
+        - PACKAGE_PREFIX=ghcr.io
+        - ARCH=x86_64
+        - HOST_USER=root
+        - HOST_UID=0
+>>>>>>> 233260ed9 (docker-compose add  - PACKAGE_PREFIX=ghcr.io - ARCH=x86_64)
         - PUBLIC_PORT=80
         - NODE_PORT=8333
         - SERVICE_TARGET=shell
@@ -68,6 +76,7 @@ metric by the name of the host: statshostname=yourNodeName
         - GIT_SERVER=https://github.com
         - GIT_PROFILE=bitcoincore-dev
         - GIT_BRANCH=master
+<<<<<<< HEAD
         - GIT_HASH=407c26d55
         - GIT_PREVIOUS_HASH=33d2d5108
         - GIT_REPO_ORIGIN=git@github.com:bitcoincore-dev/stats.bitcoincore.dev.git
@@ -76,6 +85,16 @@ metric by the name of the host: statshostname=yourNodeName
         - DOCKERFILE=stats.bitcoincore.dev
         - DOCKERFILE_PATH=/Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev
         - BITCOIN_CONF=/Users/git/stats.bitcoincore.dev/conf/bitcoin.conf
+=======
+        - GIT_HASH=dd4928e23
+        - GIT_PREVIOUS_HASH=2be53dd2d
+        - GIT_REPO_ORIGIN=git@github.com:RandyMcMillan/statoshi.dev.git
+        - GIT_REPO_NAME=statoshi.dev
+        - GIT_REPO_PATH=/Users/git/statoshi.dev
+        - DOCKERFILE=statoshi.dev
+        - DOCKERFILE_PATH=/Users/git/statoshi.dev/statoshi.dev
+        - BITCOIN_CONF=/Users/git/statoshi.dev/conf/bitcoin.conf
+>>>>>>> 233260ed9 (docker-compose add  - PACKAGE_PREFIX=ghcr.io - ARCH=x86_64)
         - BITCOIN_DATA_DIR=/Users/git/.bitcoin
         - STATOSHI_DATA_DIR=/Users/git/.statoshi
         - NOCACHE=
