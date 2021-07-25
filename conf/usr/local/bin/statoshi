@@ -28,6 +28,7 @@ do
 
     elif [[ ${!i} = start ]]; then
         ((i++))
+        [ -z "$var" ] && echo "statoshi not running" && echo "make run from statoshi.* folder" && exit
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -datadir=/home/root/.statoshi -addnode=statoshi.host:8333 -addnode=umbrel.local &"
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"

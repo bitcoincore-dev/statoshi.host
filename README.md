@@ -36,19 +36,74 @@ In order to facilitate this, you can add a line to bitcoin.conf that will partit
 metric by the name of the host: statshostname=yourNodeName
 
 ----
-## [statoshi.dev](https://github.com/randymcmillan/statoshi.dev) [00e226e76](https://github.com/randymcmillan/statoshi.dev/commit/00e226e76)
+## [statoshi.dev](https://github.com/randymcmillan/statoshi.dev) [c5da6a856](https://github.com/randymcmillan/statoshi.dev/commit/c5da6a856)
 ##### &#36; <code>make</code>
-CDPATH="${ZSH_VERSION+.}:" && cd . && /bin/sh /home/root/statoshi.dev/build-aux/missing aclocal-1.16 -I build-aux/m4
 
-	[USAGE]:	make [BUILD] run [EXTRA_ARGUMENTS]	
+	[ARGUMENTS]	
+      args:
+        - HOME=/Users/git
+        - PWD=/Users/git/statoshi.dev
+        - UMBREL=false
+        - THIS_FILE=GNUmakefile
+        - TIME=1627240731
+        - ARCH=x86_64
+        - HOST_USER=root
+        - HOST_UID=0
+        - PUBLIC_PORT=80
+        - NODE_PORT=8333
+        - SERVICE_TARGET=shell
+        - ALPINE_VERSION=3.11.6
+        - WHISPER_VERSION=1.1.7
+        - CARBON_VERSION=1.1.7
+        - GRAPHITE_VERSION=1.1.7
+        - STATSD_VERSION=0.8.6
+        - GRAFANA_VERSION=7.0.0
+        - DJANGO_VERSION=2.2.24
+        - PROJECT_NAME=statoshi.dev
+        - DOCKER_BUILD_TYPE=all
+        - SLIM=false
+        - DOCKER_COMPOSE=/usr/local/bin/docker-compose
+        - DOCKERFILE=statoshi.dev
+        - DOCKERFILE_BODY=docker/statoshi.all
+        - GIT_USER_NAME=randymcmillan
+        - GIT_USER_EMAIL=randy.lee.mcmillan@gmail.com
+        - GIT_SERVER=https://github.com
+        - GIT_PROFILE=randymcmillan
+        - GIT_BRANCH=master
+        - GIT_HASH=c5da6a856
+        - GIT_PREVIOUS_HASH=685148962
+        - GIT_REPO_ORIGIN=git@github.com:RandyMcMillan/statoshi.dev.git
+        - GIT_REPO_NAME=statoshi.dev
+        - GIT_REPO_PATH=/Users/git/statoshi.dev
+        - DOCKERFILE=statoshi.dev
+        - DOCKERFILE_PATH=/Users/git/statoshi.dev/statoshi.dev
+        - BITCOIN_CONF=/Users/git/statoshi.dev/conf/bitcoin.conf
+        - BITCOIN_DATA_DIR=/Users/git/.bitcoin
+        - STATOSHI_DATA_DIR=/Users/git/.statoshi
+        - NOCACHE=
+        - VERBOSE=
+        - PUBLIC_PORT=80
+        - NODE_PORT=8333
+        - PASSWORD=changeme
+        - CMD_ARGUMENTS=
 
-		make init header build run user=root uid=0 nocache=false verbose=true
+	[USAGE]: make [COMMAND] [EXTRA_ARGUMENTS]	
+
+		 make init
+		 make report
+		 make header
+		 make build
+		 make run
+		                       user=root uid=0 nocache=false verbose=false
 
 	[DEV ENVIRONMENT]:	
 
-		make header user=root
-		make shell  user=root
-		make shell  user=root
+		 make shell            compiling environment on host machine
+		 make signin           ~/GH_TOKEN.txt required from github.com
+		 make header package-header
+		 make build
+		 make build package-statoshi
+		 make package-all
 
 	[EXTRA_ARGUMENTS]:	set build variables	
 
@@ -68,7 +123,7 @@ CDPATH="${ZSH_VERSION+.}:" && cd . && /bin/sh /home/root/statoshi.dev/build-aux/
 		cmd="command"	
 		             	send CMD_ARGUMENTS to the [TARGET]
 
-	[EXAMPLE]:
+	[EXAMPLES]:
 
 		make all run user=root uid=0 no-cache=true verbose=true
 		make report all run user=root uid=0 no-cache=true verbose=true cmd="top"
@@ -86,5 +141,5 @@ CDPATH="${ZSH_VERSION+.}:" && cd . && /bin/sh /home/root/statoshi.dev/build-aux/
 
 	#### WARNING: (effects host datadir) ####
 	
-	stats-prune                # default in bitcoin.conf is prune=1 - start pruning node
+	statoshi prune                # default in bitcoin.conf is prune=1 - start pruning node
 	

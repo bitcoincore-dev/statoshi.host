@@ -330,3 +330,4 @@ statoshi.build.slim.dockerfile
 shell
 conf/grafana_api_key
 statoshi.dev
+torproxy
