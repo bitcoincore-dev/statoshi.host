@@ -36,54 +36,9 @@ In order to facilitate this, you can add a line to bitcoin.conf that will partit
 metric by the name of the host: statshostname=yourNodeName
 
 ----
-## [stats.bitcoincore.dev](https://github.com/bitcoincore-dev/stats.bitcoincore.dev) [407c26d55](https://github.com/bitcoincore-dev/stats.bitcoincore.dev/commit/33d2d5108)
+## [statoshi.dev](https://github.com/randymcmillan/statoshi.dev) [00e226e76](https://github.com/randymcmillan/statoshi.dev/commit/00e226e76)
 ##### &#36; <code>make</code>
-
-	[ARGUMENTS]	
-      args:
-        - HOME=/Users/git
-        - PWD=/Users/git/stats.bitcoincore.dev
-        - UMBREL=false
-        - THIS_FILE=GNUmakefile
-        - TIME=1624773426
-        - HOST_USER=git
-        - HOST_UID=501
-        - PUBLIC_PORT=80
-        - NODE_PORT=8333
-        - SERVICE_TARGET=shell
-        - ALPINE_VERSION=3.11.6
-        - WHISPER_VERSION=1.1.7
-        - CARBON_VERSION=1.1.7
-        - GRAPHITE_VERSION=1.1.7
-        - STATSD_VERSION=0.8.6
-        - GRAFANA_VERSION=7.0.0
-        - DJANGO_VERSION=2.2.24
-        - PROJECT_NAME=stats.bitcoincore.dev
-        - DOCKER_BUILD_TYPE=all
-        - SLIM=false
-        - DOCKERFILE=stats.bitcoincore.dev
-        - DOCKERFILE_BODY=docker/statoshi.all
-        - GIT_USER_NAME=randymcmillan
-        - GIT_USER_EMAIL=randy.lee.mcmillan@gmail.com
-        - GIT_SERVER=https://github.com
-        - GIT_PROFILE=bitcoincore-dev
-        - GIT_BRANCH=master
-        - GIT_HASH=407c26d55
-        - GIT_PREVIOUS_HASH=33d2d5108
-        - GIT_REPO_ORIGIN=git@github.com:bitcoincore-dev/stats.bitcoincore.dev.git
-        - GIT_REPO_NAME=stats.bitcoincore.dev
-        - GIT_REPO_PATH=/Users/git/stats.bitcoincore.dev
-        - DOCKERFILE=stats.bitcoincore.dev
-        - DOCKERFILE_PATH=/Users/git/stats.bitcoincore.dev/stats.bitcoincore.dev
-        - BITCOIN_CONF=/Users/git/stats.bitcoincore.dev/conf/bitcoin.conf
-        - BITCOIN_DATA_DIR=/Users/git/.bitcoin
-        - STATOSHI_DATA_DIR=/Users/git/.statoshi
-        - NOCACHE=
-        - VERBOSE=
-        - PUBLIC_PORT=80
-        - NODE_PORT=8333
-        - PASSWORD=changeme
-        - CMD_ARGUMENTS=
+CDPATH="${ZSH_VERSION+.}:" && cd . && /bin/sh /home/root/statoshi.dev/build-aux/missing aclocal-1.16 -I build-aux/m4
 
 	[USAGE]:	make [BUILD] run [EXTRA_ARGUMENTS]	
 
@@ -93,7 +48,7 @@ metric by the name of the host: statshostname=yourNodeName
 
 		make header user=root
 		make shell  user=root
-		make shell  user=git
+		make shell  user=root
 
 	[EXTRA_ARGUMENTS]:	set build variables	
 
@@ -121,13 +76,13 @@ metric by the name of the host: statshostname=yourNodeName
 
 	[COMMAND_LINE]:
 
-	stats-console              # container command line
-	stats-bitcoind             # start container bitcoind -daemon
-	stats-debug                # container debug.log output
-	stats-whatami              # container OS profile
+	statoshi help              # container command line
+	statoshi -d -daemon        # start container bitcoind -daemon
+	statoshi debug             # container debug.log output
+	statoshi whatami           # container OS profile
 
-	stats-cli -getmininginfo   # report mining info
-	stats-cli -gettxoutsetinfo # report txo info
+	statoshi cli -getmininginfo   # report mining info
+	statoshi cli -gettxoutsetinfo # report txo info
 
 	#### WARNING: (effects host datadir) ####
 	

@@ -400,6 +400,8 @@ endif
 	bash -c 'mkdir -p /usr/local/bin'
 	bash -c 'mkdir -p /usr/local/include'
 ifneq ($(shell id -u),0)
+	sudo bash -c 'rm -f /usr/local/bin/stats*'
+	sudo bash -c 'rm -f /usr/local/bin/stats-*'
 	sudo bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
 else
 	bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
@@ -546,11 +548,11 @@ prune-network:
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME)_$(HOST_UID) down
 	docker network prune -f
 #######################
-.PHONY: statoshi-docs
-statoshi-docs:
+.PHONY: readme
+readme:
 #$ make report no-cache=true verbose=true cmd='make doc' user=root doc
 #SHELL := /bin/bash
-	@echo 'statoshi-docs'
+	@echo 'readme'
 	bash -c "if pgrep MacDown; then pkill MacDown; fi"
 	bash -c "curl https://raw.githubusercontent.com/jlopp/statoshi/master/README.md -o ./docker/README.md"
 	bash -c "cat ./docker/README.md >  README.md"

@@ -5,28 +5,28 @@ if hash docker 2>/dev/null; then
 STATS_ID=$(echo $(docker ps | awk '/statoshi/'|awk ' {print $1}' | awk 'NR==1'))
 export STATS_ID
 
-STATS_IMAGE=$(echo $(docker ps | awk '/statoshi/'|awk ' {print $2}' | awk 'NR==1'))
+STATS_IMAGE=$(echo $(docker images | awk '/statoshi/'|awk ' {print $3}' | awk 'NR==1'))
 export STATS_IMAGE
 
 for ((i=1;i<=$#;i++));
 do
 
-    if [[ ${!i} = *id* ]]; then
+    if [[ ${!i} = *id ]]; then
         ((i++))
         echo $STATS_ID
         exit
 
-    elif [[ ${!i} = *image* ]]; then
+    elif [[ ${!i} = *image ]]; then
         ((i++))
         echo $STATS_IMAGE
         exit
 
-    elif [[ ${!i} = *top* ]]; then
+    elif [[ ${!i} = top ]]; then
         ((i++))
         docker top $STATS_ID
         exit
 
-    elif [[ ${!i} = *start* ]]; then
+    elif [[ ${!i} = start ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -datadir=/home/root/.statoshi -addnode=statoshi.host:8333 -addnode=umbrel.local &"
@@ -34,44 +34,44 @@ do
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
         exit
 
-    elif [[ ${!i} = *stop* ]]; then
+    elif [[ ${!i} = stop ]]; then
         ((i++))
         docker stop $STATS_ID
         exit
-    elif [[ ${!i} = *prune* ]]; then
+    elif [[ ${!i} = prune ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
         exit
 
-    elif [[ ${!i} = *cli* ]]; then
+    elif [[ ${!i} = *cli ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
         exit
 
-    elif [[ ${!i} = *d* ]]; then
+    elif [[ ${!i} = *d ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
         exit
 
-    elif [[ ${!i} = *ep* ]]; then
+    elif [[ ${!i} = *ep ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
         exit
 
-    elif [[ ${!i} = *whatami* ]]; then
+    elif [[ ${!i} = *whatami ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c  "/usr/local/bin/whatami"
         exit
 
-    elif [[ ${!i} = *console* ]]; then
+    elif [[ ${!i} = *console ]]; then
         ((i++))
         docker exec -it $STATS_ID bash
 
-    elif [[ ${!i} = *debug* ]]; then
+    elif [[ ${!i} = *debug ]]; then
         ((i++))
         docker exec -it $STATS_ID sh -c "tail -f /home/root/.bitcoin"
 
-    elif [[ ${!i} == *h* ]]; then
+    elif [[ ${!i} == *help ]]; then
         ((i++))
         echo
         echo "statoshi                  <command> - execute shell command in container"
