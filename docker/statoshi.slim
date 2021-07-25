@@ -1,6 +1,7 @@
 #BEGIN statoshi.all
 ARG GIT_PROFILE=${GIT_PROFILE}
 ARG GIT_REPO_NAME=${GIT_REPO_NAME}
+ARG ARCH=${ARCH}
 FROM ghcr.io/${GIT_PROFILE}/${GIT_REPO_NAME}/${ARCH}/header-root:latest as config-final
 RUN echo statoshi.all
 RUN echo statoshi.all
