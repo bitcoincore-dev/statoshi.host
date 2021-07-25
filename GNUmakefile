@@ -227,6 +227,9 @@ export PWD
 export UMBREL
 #######################
 
+PACKAGE_PREFIX                         := ghcr.io
+export PACKAGE_PREFIX
+
 .PHONY: help
 help:
 	@echo ''
@@ -289,6 +292,8 @@ report:
 	@echo '        - UMBREL=${UMBREL}'
 	@echo '        - THIS_FILE=${THIS_FILE}'
 	@echo '        - TIME=${TIME}'
+	@echo '        - PACKAGE_PREFIX=${PACKAGE_PREFIX}'
+	@echo '        - ARCH=${ARCH}'
 	@echo '        - HOST_USER=${HOST_USER}'
 	@echo '        - HOST_UID=${HOST_UID}'
 	@echo '        - PUBLIC_PORT=${PUBLIC_PORT}'
@@ -408,7 +413,7 @@ endif
 	bash -c 'install -v $(PWD)/docker/docker-compose.yml .'
 ifneq ($(shell id -u),0)
 	sudo bash -c 'mkdir -p /usr/local/include/'
-	sudo bash -c 'install -v $(PWD)/src/statsd_client.h		/usr/local/include/statsd_client.h'
+	sudo bash -c 'install -v $(PWD)/src/statsd_client.h		    /usr/local/include/statsd_client.h'
 	sudo bash -c 'install -v $(PWD)/src/statsd_client.cpp		/usr/local/include/statsd_client.cpp'
 endif
 	@echo ''
@@ -447,21 +452,36 @@ header: report build-header
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd /home/${HOST_USER} && ls"
 	@echo ''
+<<<<<<< HEAD
 	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
 
 .PHONY: signin
 signin:
 	bash -c 'cat ~/GH_TOKEN.txt | docker login ghcr.io -u RandyMcMillan --password-stdin'
+=======
+	docker tag $(PROJECT_NAME):header-$(HOST_USER) $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER)
+
+.PHONY: signin
+signin:
+	bash -c 'cat ~/GH_TOKEN.txt | docker login $(PACKAGE_PREFIX) -u $(GIT_USER_NAME) --password-stdin'
+>>>>>>> 06fb9dd30 (add $(PACKAGE_PREFIX))
 
 .PHONY: package-header
 package-header:
 	touch TIME && echo $(TIME) > TIME && git add -f TIME
 	#legit . -m "make package-header at $(TIME)" -p 00000
 	git commit --amend --no-edit --allow-empty
+<<<<<<< HEAD
 	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER):$(TIME)'
 	bash -c 'docker push                                    ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER):$(TIME)'
 	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)' #defaults to latest
 	bash -c 'docker push                                    ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
+=======
+	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER):$(TIME)'
+	bash -c 'docker push                                    $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER):$(TIME)'
+	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER)' #defaults to latest
+	bash -c 'docker push                                    $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER)'
+>>>>>>> 06fb9dd30 (add $(PACKAGE_PREFIX))
 
 #######################
 .PHONY: shell
@@ -576,6 +596,16 @@ package-statoshi: init
 	bash -c 'docker push                             ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER)'
 	bash -c 'docker push                             ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER)'
+package-statoshi: signin
+
+	touch TIME && echo $(TIME) > TIME && git add -f TIME
+	#legit . -m "make package-header at $(TIME)" -p 00000
+	git commit --amend --no-edit --allow-empty
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/$(HOST_USER):$(TIME)'
+	bash -c 'docker push                             $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/$(HOST_USER):$(TIME)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/$(HOST_USER)' #defaults to latest
+	bash -c 'docker push                             $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/$(HOST_USER)'
+
 ########################
 .PHONY: package-all
 package-all:
