@@ -233,15 +233,23 @@ export UMBREL
 .PHONY: help
 help:
 	@echo ''
-	@echo '	[USAGE]:	make [BUILD] run [EXTRA_ARGUMENTS]	'
+	@echo '	[USAGE]: make [COMMAND] [EXTRA_ARGUMENTS]	'
 	@echo ''
-	@echo '		make init header build run user=root uid=0 nocache=false verbose=true'
+	@echo '		 make init'
+	@echo '		 make report'
+	@echo '		 make header'
+	@echo '		 make build'
+	@echo '		 make run'
+	@echo '		                       user=root uid=0 nocache=false verbose=false'
 	@echo ''
 	@echo '	[DEV ENVIRONMENT]:	'
 	@echo ''
-	@echo '		make header user=root'
-	@echo '		make shell  user=root'
-	@echo '		make shell  user=$(HOST_USER)'
+	@echo '		 make shell            compiling environment on host machine'
+	@echo '		 make signin           ~/GH_TOKEN.txt required from github.com'
+	@echo '		 make header package-header'
+	@echo '		 make build'
+	@echo '		 make build package-statoshi'
+	@echo '		 make package-all'
 	@echo ''
 	@echo '	[EXTRA_ARGUMENTS]:	set build variables	'
 	@echo ''
@@ -261,7 +269,7 @@ help:
 	@echo '		cmd="command"	'
 	@echo '		             	send CMD_ARGUMENTS to the [TARGET]'
 	@echo ''
-	@echo '	[EXAMPLE]:'
+	@echo '	[EXAMPLES]:'
 	@echo ''
 	@echo '		make all run user=root uid=0 no-cache=true verbose=true'
 	@echo '		make report all run user=root uid=0 no-cache=true verbose=true cmd="top"'
@@ -279,7 +287,7 @@ help:
 	@echo ''
 	@echo '	#### WARNING: (effects host datadir) ####'
 	@echo '	'
-	@echo '	stats-prune                # default in bitcoin.conf is prune=1 - start pruning node'
+	@echo '	statoshi prune                # default in bitcoin.conf is prune=1 - start pruning node'
 	@echo '	'
 
 .PHONY: report
@@ -449,7 +457,7 @@ build-header:
 	@echo ''
 #######################
 .PHONY: header
-header: report build-header
+header: report signin build-header
 	@echo 'header'
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd /home/${HOST_USER} && ls"
@@ -458,10 +466,10 @@ header: report build-header
 
 .PHONY: signin
 signin:
-	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u $(GIT_USER_NAME) --password-stdin'
 
 .PHONY: package-header
-package-header:
+package-header: signin
 	touch TIME && echo $(TIME) > TIME && git add -f TIME
 	#legit . -m "make package-header at $(TIME)" -p 00000
 	git commit --amend --no-edit --allow-empty
@@ -479,7 +487,7 @@ package-header:
 #
 #######################
 .PHONY: build
-build: report
+build:
 	@echo 'build'
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) statoshi
 	@echo ''
@@ -561,7 +569,8 @@ readme:
 	bash -c "echo '----' >> README.md"
 	bash -c "echo '## [$(PROJECT_NAME)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)) [$(GIT_HASH)]($(GIT_SERVER)/$(GIT_PROFILE)/$(PROJECT_NAME)/commit/$(GIT_HASH))' >> README.md"
 	bash -c "echo '##### &#36; <code>make</code>' >> README.md"
-	bash -c "make help >> README.md"
+	bash -c "make report >> README.md"
+	bash -c "make help   >> README.md"
 	bash -c "if hash open 2>/dev/null; then open README.md; fi || echo failed to open README.md"
 .PHONY: push
 push:
@@ -576,16 +585,19 @@ push:
 push-docs: statoshi-docs push
 	@echo 'push-docs'
 #######################
-package-statoshi: init
-	#@echo "legit . -m "$(HOST_USER):$(TIME)" -p 0000000 && make user=root package && GPF"
-	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
-	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(ARCH)/$(HOST_USER):$(TIME)'
-	bash -c 'docker push                             ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(ARCH)/$(HOST_USER):$(TIME)'
-	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(ARCH)/$(HOST_USER)'
-	bash -c 'docker push                             ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(ARCH)/$(HOST_USER)'
+package-statoshi: signin
+
+	touch TIME && echo $(TIME) > TIME && git add -f TIME
+	#legit . -m "make package-header at $(TIME)" -p 00000
+	git commit --amend --no-edit --allow-empty
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/$(HOST_USER):$(TIME)'
+	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/$(HOST_USER):$(TIME)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/$(HOST_USER)' #defaults to latest
+	bash -c 'docker push                                    docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/$(HOST_USER)'
+
 ########################
 .PHONY: package-all
-package-all:
+package-all: signin
 
 ifeq ($(slim),true)
 	make package-all slim=false
