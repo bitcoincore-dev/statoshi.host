@@ -601,7 +601,7 @@ package-statoshi: signin
 
 ########################
 .PHONY: package-all
-package-all: signin
+package-all: signin header package-header build package-statoshi
 
 ifeq ($(slim),true)
 	make package-all slim=false
