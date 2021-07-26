@@ -10,8 +10,8 @@ FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
 ENV REPO=${GIT_REPO_NAME}
 # Change to your fork
-RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${GIT_REPO_NAME}
-
+#RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${GIT_REPO_NAME}
+COPY . ${GIT_REPO_NAME}
 ################################################
 FROM clone-stats-bitcoincore-dev as make-depends
 ################################################
@@ -52,7 +52,7 @@ FROM strip-binaries as statoshi
 
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /etc/periodic/15min/blocknotify
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind /etc/periodic/15min/bitcoind
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind-$(ARCH) /etc/periodic/15min/bitcoind
 
 RUN ${GIT_REPO_NAME}/conf/config.bitcoin.conf.sh
 
@@ -70,11 +70,11 @@ RUN install -v ${GIT_REPO_NAME}/conf/additional.conf /etc/bitcoin/additional.con
 RUN install -v ${GIT_REPO_NAME}/conf/additional.conf /root/.bitcoin/additional.conf
 RUN install -v ${GIT_REPO_NAME}/conf/additional.conf /home/root/.bitcoin/additional.conf
 
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind /usr/local/bin/bitcoind
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind /usr/bin/bitcoind
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind-$(ARCH) /usr/local/bin/bitcoind
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind-$(ARCH) /usr/bin/bitcoind
 
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli /usr/local/bin/bitcoin-cli
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli /usr/bin/bitcoin-cli
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli-$(ARCH) /usr/local/bin/bitcoin-cli
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli-$(ARCH) /usr/bin/bitcoin-cli
 
 #RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
 #RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx /usr/bin/bitcoin-tx
@@ -86,7 +86,7 @@ RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli /usr/bin/bitcoin-
 ###########################
 
 RUN apk add --no-cache gnupg
-RUN gpg --import  ${GIT_REPO_NAME}/conf/usr/local/bin/randymcmillan2.asc
+RUN gpg --import  ${GIT_REPO_NAME}/conf/usr/local/bin/randymcmillan.asc
 #RUN gpg --refresh-keys
 
 RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  ${GIT_REPO_NAME}/conf/usr/local/bin/keys.txt
