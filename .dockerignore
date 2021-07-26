@@ -1,3 +1,4 @@
+!conf/usr/local/bitcoin*
 !.gitignore
 .git
 .github
