@@ -4,6 +4,7 @@ RUN echo statoshi.all
 RUN echo statoshi.all
 RUN echo statoshi.all
 RUN df -H
+ARG ARCH=${ARCH}
 ###########################################
 # We build Statoshi last
 FROM config-final as clone-stats-bitcoincore-dev
@@ -50,11 +51,16 @@ RUN echo statoshi.all
 FROM strip-binaries as statoshi
 ###########################
 
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /etc/periodic/15min/blocknotify
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind-$(ARCH) /etc/periodic/15min/bitcoind
+#RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
+#RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /etc/periodic/15min/blocknotify
+#RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind-$(ARCH) /etc/periodic/15min/bitcoind
+#RUN ${GIT_REPO_NAME}/conf/config.bitcoin.conf.sh
 
-RUN ${GIT_REPO_NAME}/conf/config.bitcoin.conf.sh
+COPY ./conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
+COPY ./conf/usr/local/bin/blocknotify /etc/periodic/15min/blocknotify
+COPY ./conf/usr/local/bin/bitcoind-${ARCH} /etc/periodic/15min/bitcoind
+COPY ./conf/config.bitcoin.conf.sh /usr/local/bin/config.bitcoin.conf.sh
+RUN   /usr/local/bin/config.bitcoin.conf.sh
 
 # These should be the mounted volume
 #TODO mimic the bitcoin package install?
@@ -62,19 +68,18 @@ RUN mkdir -p /etc/bitcoin
 RUN mkdir -p /var/lib/bitcoin
 RUN mkdir -p /root/.bitcoin
 RUN mkdir -p /home/root/.bitcoin
-RUN ln -s /root/.bitcoin /var/lib/bitcoin
-RUN install -v ${GIT_REPO_NAME}/conf/bitcoin.conf /etc/bitcoin/bitcoin.conf
-RUN install -v ${GIT_REPO_NAME}/conf/bitcoin.conf /root/.bitcoin/bitcoin.conf
-RUN install -v ${GIT_REPO_NAME}/conf/bitcoin.conf /home/root/.bitcoin/bitcoin.conf
-RUN install -v ${GIT_REPO_NAME}/conf/additional.conf /etc/bitcoin/additional.conf
-RUN install -v ${GIT_REPO_NAME}/conf/additional.conf /root/.bitcoin/additional.conf
-RUN install -v ${GIT_REPO_NAME}/conf/additional.conf /home/root/.bitcoin/additional.conf
+RUN ln -s /root/.bitcoin    /var/lib/bitcoin
+COPY ./conf/bitcoin.conf    /etc/bitcoin/bitcoin.conf
+COPY ./conf/bitcoin.conf    /root/.bitcoin/bitcoin.conf
+COPY ./conf/bitcoin.conf    /home/root/.bitcoin/bitcoin.conf
+COPY ./conf/additional.conf /etc/bitcoin/additional.conf
+COPY ./conf/additional.conf /root/.bitcoin/additional.conf
+COPY ./conf/additional.conf /home/root/.bitcoin/additional.conf
 
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind-$(ARCH) /usr/local/bin/bitcoind
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind-$(ARCH) /usr/bin/bitcoind
-
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli-$(ARCH) /usr/local/bin/bitcoin-cli
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli-$(ARCH) /usr/bin/bitcoin-cli
+COPY ./conf/usr/local/bin/bitcoind-${ARCH} /usr/local/bin/bitcoind
+COPY ./conf/usr/local/bin/bitcoind-${ARCH} /usr/bin/bitcoind
+COPY ./conf/usr/local/bin/bitcoin-cli-${ARCH} /usr/local/bin/bitcoin-cli
+COPY ./conf/usr/local/bin/bitcoin-cli-${ARCH} /usr/bin/bitcoin-cli
 
 #RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx /usr/local/bin/bitcoin-tx
 #RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx /usr/bin/bitcoin-tx
@@ -91,11 +96,11 @@ RUN gpg --import  ${GIT_REPO_NAME}/conf/usr/local/bin/randymcmillan.asc
 
 RUN while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done <  ${GIT_REPO_NAME}/conf/usr/local/bin/keys.txt
 
-RUN gpg --verify ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind.gpg    ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind
+#RUN gpg --verify ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind.gpg    ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind
 
-RUN gpg --verify ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli.gpg ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli
+#RUN gpg --verify ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli.gpg ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli
 
-RUN gpg --verify ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx.gpg  ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx
+#RUN gpg --verify ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx.gpg  ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx
 
 RUN df -H
 #END statoshi.all
