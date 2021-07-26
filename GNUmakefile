@@ -403,6 +403,7 @@ else
 	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
 endif
+	docker pull ghcr.io/randymcmillan/statoshi.dev/${ARCH}/header-root:latest
 	bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
 	bash -c 'cat $(PWD)/docker/shell				> $(PWD)/shell'

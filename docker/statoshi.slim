@@ -1,21 +1,16 @@
-#BEGIN statoshi.all
+#BEGIN statoshi.slim
 ARG GIT_PROFILE=${GIT_PROFILE}
 ARG GIT_REPO_NAME=${GIT_REPO_NAME}
 ARG ARCH=${ARCH}
 ENV ARCH=${ARCH}
 FROM ghcr.io/${GIT_PROFILE}/${GIT_REPO_NAME}/${ARCH}/header-root:latest as config-final
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN echo statoshi.all
-RUN df -H
 ###########################################
 # We build Statoshi last
 FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
-ENV REPO=stats.bitcoincore.dev
+ENV REPO=${GIT_REPO_NAME}
 # Change to your fork
-RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${GIT_REPO_NAME}
+RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 1 ${GIT_REPO_NAME}
 #COPY . ${GIT_REPO_NAME}
 
 ################################################
@@ -58,7 +53,7 @@ FROM strip-binaries as statoshi
 
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/fastcopy-chaindata.py /usr/local/bin/fastcopy-chaindata.py
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/blocknotify /etc/periodic/15min/blocknotify
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind /etc/periodic/15min/bitcoind
+RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind-${ARCH} /etc/periodic/15min/bitcoind
 
 RUN ${GIT_REPO_NAME}/conf/config.bitcoin.conf.sh
 

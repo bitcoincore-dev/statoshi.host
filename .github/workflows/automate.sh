@@ -29,10 +29,10 @@ checkbrew() {
             brew install git
         fi
         #if !hash pandoc 2>/dev/null; then
-            brew install pandoc
-            pip  install --user blockcypher
-            pip3 install --user blockcypher
-            brew install libevent
+            #brew install pandoc
+            #pip  install --user blockcypher
+            #pip3 install --user blockcypher
+            brew install libevent llvm
             ./install-bitcoin-libs.sh
         #fi
         #pip install -U sphinx
