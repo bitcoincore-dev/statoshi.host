@@ -11,8 +11,8 @@ FROM config-final as clone-stats-bitcoincore-dev
 ###########################################
 ENV REPO=${GIT_REPO_NAME}
 # Change to your fork
-#RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 2 ${GIT_REPO_NAME}
-COPY . ${GIT_REPO_NAME}
+RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 1 ${GIT_REPO_NAME}
+#COPY . ${GIT_REPO_NAME}
 ################################################
 FROM clone-stats-bitcoincore-dev as make-depends
 ################################################
