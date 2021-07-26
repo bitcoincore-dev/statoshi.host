@@ -332,6 +332,9 @@ conf/grafana_api_key
 statoshi.dev
 torproxy
 
+conf/usr/local/bin/bitcoin-cli
+conf/usr/local/bin/bitcoind
+
 conf/usr/local/bin/bitcoin-tx
 conf/usr/local/bin/bitcoin-util
 conf/usr/local/bin/statoshi-cli
