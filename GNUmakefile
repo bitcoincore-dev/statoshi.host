@@ -455,7 +455,15 @@ else
 endif
 .PHONY: biticoin
 bitcoin:
-	bash -c "make shell cmd='cd /home/root/statoshi.dev && ./autogen.sh && ./configure --prefix=/home/root/statoshi.dev/conf/usr/local --without-bdb --disable-tests --disable-bench --disable-docs && make all && make install'"
+	bash -c "make shell cmd='cd /home/root/statoshi.dev && \
+		./autogen.sh && \
+		./configure --prefix=/home/root/statoshi.dev/conf/usr/local --without-bdb --disable-tests --disable-bench --disable-docs && \
+		make all && make install && \
+		strip -s conf/usr/local/bin/bitcoind    -o conf/usr/local/bin/bitcoind-$(ARCH)    && \
+		strip -s conf/usr/local/bin/bitcoind    -o conf/usr/local/bin/bitcoind            && \
+		strip -s conf/usr/local/bin/bitcoin-cli -o conf/usr/local/bin/bitcoin-cli-$(ARCH) && \
+		strip -s conf/usr/local/bin/bitcoin-cli -o conf/usr/local/bin/bitcoin-cli         && \
+		echo'"
 
 #######################
 .PHONY: build-header
