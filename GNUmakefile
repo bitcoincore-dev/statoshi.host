@@ -453,6 +453,10 @@ else
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
+.PHONY: biticoin
+bitcoin:
+	bash -c "make shell cmd='cd /home/root/statoshi.dev && ./autogen.sh && ./configure --prefix=/home/root/statoshi.dev/conf/usr/local --without-bdb --disable-tests --disable-bench --disable-docs && make all && make install'"
+
 #######################
 .PHONY: build-header
 build-header:
