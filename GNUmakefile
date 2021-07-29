@@ -389,8 +389,14 @@ host:
 	bash -c './host'
 
 #######################
+.PHONY: pull-header
+pull-header:
+
+	@echo 'pull-header'
+	docker pull ghcr.io/randymcmillan/statoshi.dev/${ARCH}/header-root:latest
+
 .PHONY: init
-init: report
+init: report pull-header
 ifneq ($(shell id -u),0)
 	@echo 'sudo make init #try if permissions issue'
 endif
@@ -398,7 +404,6 @@ endif
 	git config --global core.editor vim
 ifeq ($(slim),true)
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
-	docker pull ghcr.io/randymcmillan/statoshi.dev/${ARCH}/header-root:latest
 else
 	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
@@ -504,16 +509,16 @@ package-header: signin
 #
 #######################
 .PHONY: build
-build:
+build: init
 	@echo 'build'
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) statoshi
 	@echo ''
 #######################
 .PHONY: run
-run: init build
+run: build
 	@echo 'run'
 ifeq ($(CMD_ARGUMENTS),)
-	@echo ''
+	@echo '$(CMD_ARGUMENTS)'
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run -d --publish $(PUBLIC_PORT):3000 --publish 8125:8125 --publish 8126:8126 --publish 8333:8333 --publish 8332:8332 statoshi sh
 	@echo ''
 else
