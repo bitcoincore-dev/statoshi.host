@@ -74,8 +74,8 @@ RUN install -v  ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind-${ARCH} /usr/bin/bi
 RUN install -v  ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli-${ARCH} /usr/local/bin/bitcoin-cli
 RUN install -v  ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli-${ARCH} /usr/bin/bitcoin-cli
 
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx-${ARCH} /usr/local/bin/bitcoin-tx
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx-${ARCH} /usr/bin/bitcoin-tx
+#RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx-${ARCH} /usr/local/bin/bitcoin-tx
+#RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx-${ARCH} /usr/bin/bitcoin-tx
 
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
 
