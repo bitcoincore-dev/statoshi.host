@@ -64,17 +64,17 @@ jobs:
       - name: make run
         run: |
           sudo -s make run
-      - name: make init statoshi help
+      - name: make super init statoshi help
         run: |
-          make init
+          make super init
           statoshi help
-      - name: make init statoshi id
+      - name: make super init statoshi id
         run: |
-          make init
+          make super init
           statoshi id
-      - name: make init statoshi image
+      - name: make super init statoshi image
         run: |
-          make init
+          make super init
           statoshi image
 
 # Cross Compile 
@@ -96,15 +96,15 @@ jobs:
       - name: make run
         run: |
           sudo -s make run
-      - name: make init statoshi help
+      - name: make super init statoshi help
         run: |
-          make init
+          make super init
           statoshi help
-      - name: make init statoshi id
+      - name: make super init statoshi id
         run: |
-          make init
+          make super init
           statoshi id
-      - name: make init statoshi image
+      - name: make super init statoshi image
         run: |
-          make init
+          make super init
           statoshi image
