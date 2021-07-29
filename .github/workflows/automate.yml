@@ -58,7 +58,7 @@ jobs:
       - name: make init build-shell shell
         run: |
           sudo -s make init build-shell shell
-      - name: make init build-shell shell
+      - name: make init build
         run: |
           sudo -s make init build
       - name: make run

@@ -479,7 +479,7 @@ build-header:
 	@echo ''
 #######################
 .PHONY: header
-header: report signin build-header
+header: report build-header
 	@echo 'header'
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd /home/${HOST_USER} && ls"
