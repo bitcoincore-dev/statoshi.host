@@ -108,28 +108,28 @@ jobs:
       - name: make run
         run: |
           sudo -s make run
-      - name: make super init statoshi help
+      - name: make init statoshi help
         run: |
-          make super init
+          make init
           statoshi help
-      - name: make super init statoshi id
+      - name: make init statoshi id
         run: |
-          make super init
+          make init
           statoshi id
-      - name: make super init statoshi image
+      - name: make init statoshi image
         run: |
-          make super init
+          make init
           statoshi image
-      - name: make super init header
+      - name: make init header
         run: |
-          make super init
+          make init
           make header
-      - name: make super init build
+      - name: make init build
         run: |
-          make super init
+          make init
           make build
-      - name: make super init run
+      - name: make init run
         run: |
-          make super init
+          make init
           make run
 

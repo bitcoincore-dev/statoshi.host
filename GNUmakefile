@@ -403,38 +403,38 @@ endif
 	@echo 'init'
 	git config --global core.editor vim
 ifeq ($(slim),true)
-	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
+	sudo -s bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
 else
-	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
-	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
+	sudo -s bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
+	sudo -s bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
 endif
 	docker pull ghcr.io/randymcmillan/statoshi.dev/${ARCH}/header-root:latest
-	bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
-	bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
-	bash -c 'cat $(PWD)/docker/shell				> $(PWD)/shell'
+	sudo -s bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
+	sudo -s bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
+	sudo -s bash -c 'cat $(PWD)/docker/shell				> $(PWD)/shell'
 	@echo ''
-	bash -c 'mkdir -p $(BITCOIN_DATA_DIR)'
-	bash -c 'mkdir -p $(STATOSHI_DATA_DIR)'
-	bash -c 'mkdir -p /usr/local/bin'
-	bash -c 'mkdir -p /usr/local/include'
+	sudo -s bash -c 'mkdir -p $(BITCOIN_DATA_DIR)'
+	sudo -s bash -c 'mkdir -p $(STATOSHI_DATA_DIR)'
+	sudo -s bash -c 'mkdir -p /usr/local/bin'
+	sudo -s bash -c 'mkdir -p /usr/local/include'
 ifneq ($(shell id -u),0)
-	sudo bash -c 'rm -f /usr/local/bin/stats*'
-	sudo bash -c 'rm -f /usr/local/bin/stats-*'
-	sudo bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
+	sudo -s bash -c 'rm -f /usr/local/bin/stats*'
+	sudo -s bash -c 'rm -f /usr/local/bin/stats-*'
+	sudo -s bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
 else
-	bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
+	sudo -s bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
 endif
 	@echo ''
 	#TODO:
 	#bash -c '$(GIT_REPO_PATH)/conf/config.bitcoin.conf.sh'
 	@echo ''
-	bash -c 'install -v $(PWD)/conf/bitcoin.conf    $(STATOSHI_DATA_DIR)/bitcoin.conf'
-	bash -c 'install -v $(PWD)/conf/additional.conf $(STATOSHI_DATA_DIR)/additional.conf'
-	bash -c 'install -v $(PWD)/docker/docker-compose.yml .'
+	sudo -s bash -c 'install -v $(PWD)/conf/bitcoin.conf    $(STATOSHI_DATA_DIR)/bitcoin.conf'
+	sudo -s bash -c 'install -v $(PWD)/conf/additional.conf $(STATOSHI_DATA_DIR)/additional.conf'
+	sudo -s bash -c 'install -v $(PWD)/docker/docker-compose.yml .'
 ifneq ($(shell id -u),0)
-	sudo bash -c 'mkdir -p /usr/local/include/'
-	sudo bash -c 'install -v $(PWD)/src/statsd_client.h		    /usr/local/include/statsd_client.h'
-	sudo bash -c 'install -v $(PWD)/src/statsd_client.cpp		/usr/local/include/statsd_client.cpp'
+	sudo -s bash -c 'mkdir -p /usr/local/include/'
+	sudo -s bash -c 'install -v $(PWD)/src/statsd_client.h		    /usr/local/include/statsd_client.h'
+	sudo -s bash -c 'install -v $(PWD)/src/statsd_client.cpp		/usr/local/include/statsd_client.cpp'
 endif
 	@echo ''
 #######################
