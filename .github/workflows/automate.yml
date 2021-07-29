@@ -41,7 +41,7 @@ jobs:
           access_token: ${{ github.token }}
 
       - uses: actions/checkout@v2
-      - name: Make
+      - name: automate.sh
         run: |
           ./automate.sh
 
@@ -55,13 +55,39 @@ jobs:
           access_token: ${{ github.token }}
 
       - uses: actions/checkout@v2
-      - name: Make
+      - name: make init build-shell shell
         run: |
-          sudo -s make init
-          sudo -s make build-shell
-          sudo -s make shell
-          sudo -s make build
-          sudo -s make run user=root verbose=true nocache=true
+          sudo -s make init build-shell shell
+      - name: make init build-shell shell
+        run: |
+          sudo -s make init build
+      - name: make run
+        run: |
+          sudo -s make run
+      - name: make init statoshi help
+        run: |
+          make init
+          statoshi help
+      - name: make init statoshi id
+        run: |
+          make init
+          statoshi id
+      - name: make init statoshi image
+        run: |
+          make init
+          statoshi image
+      - name: make init header
+        run: |
+          make init
+          make header
+      - name: make init build
+        run: |
+          make init
+          make build
+      - name: make init run
+        run: |
+          make init
+          make run
 
 # Cross Compile 
   ubuntu-20-host:
@@ -73,11 +99,37 @@ jobs:
           access_token: ${{ github.token }}
 
       - uses: actions/checkout@v2
-      - name: Make
+      - name: make init build-shell shell
         run: |
-          sudo -s make init
-          sudo -s make build-shell
-          sudo -s make shell
-          sudo -s make build
-          sudo -s make run user=root verbose=true nocache=true
+          sudo -s make init build-shell shell
+      - name: make init build-shell shell
+        run: |
+          sudo -s make init build
+      - name: make run
+        run: |
+          sudo -s make run
+      - name: make init statoshi help
+        run: |
+          make init
+          statoshi help
+      - name: make init statoshi id
+        run: |
+          make init
+          statoshi id
+      - name: make init statoshi image
+        run: |
+          make init
+          statoshi image
+      - name: make init header
+        run: |
+          make init
+          make header
+      - name: make init build
+        run: |
+          make init
+          make build
+      - name: make init run
+        run: |
+          make init
+          make run
 
