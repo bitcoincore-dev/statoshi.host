@@ -396,7 +396,7 @@ pull-header:
 	docker pull ghcr.io/randymcmillan/statoshi.dev/${ARCH}/header-root:latest
 
 .PHONY: init
-init: report pull-header
+init: report
 ifneq ($(shell id -u),0)
 	@echo 'sudo make init #try if permissions issue'
 endif
@@ -408,7 +408,7 @@ else
 	sudo -s bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	sudo -s bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
 endif
-	docker pull ghcr.io/randymcmillan/statoshi.dev/${ARCH}/header-root:latest
+	#docker pull ghcr.io/randymcmillan/statoshi.dev/${ARCH}/header-root:latest
 	sudo -s bash -c 'cat $(PWD)/docker/footer				>> $(PWD)/$(DOCKERFILE)'
 	sudo -s bash -c 'cat $(PWD)/docker/torproxy				> $(PWD)/torproxy'
 	sudo -s bash -c 'cat $(PWD)/docker/shell				> $(PWD)/shell'
@@ -619,7 +619,7 @@ package-statoshi: signin
 
 ########################
 .PHONY: package-all
-package-all: init signin header build package-header package-statoshi
+package-all: init header package-header build package-statoshi
 
 ifeq ($(slim),true)
 	make package-all slim=false
