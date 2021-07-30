@@ -118,7 +118,7 @@ jobs:
         run: |
           make init
           make automate
-          make -C depends
+          make install -C depends
           ./autogen.sh && \
           ./configure --prefix=$GITHUB_WORKSPACE/conf/usr/local --without-bdb --disable-tests --disable-bench --disable-docs && \
           make all && make install && \
@@ -146,7 +146,7 @@ jobs:
         run: |
           make init
           make automate
-          make -C depends
+          make install -C depends
           ./autogen.sh && \
           ./configure --prefix=$GITHUB_WORKSPACE/conf/usr/local --without-bdb --disable-tests --disable-bench --disable-docs && \
           make all && make install && \
@@ -174,7 +174,7 @@ jobs:
         run: |
           make init
           make automate
-          make -C depends
+          make install -C depends
           ./autogen.sh && \
           ./configure --prefix=$GITHUB_WORKSPACE/conf/usr/local --without-bdb --disable-tests --disable-bench --disable-docs && \
           make all && make install && \

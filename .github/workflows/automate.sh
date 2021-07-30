@@ -32,7 +32,7 @@ checkbrew() {
             #brew install pandoc
             #pip  install --user blockcypher
             #pip3 install --user blockcypher
-            brew install libevent llvm
+            brew install openssl autoconf automake libtool pkg-config libevent llvm
             ./install-bitcoin-libs.sh
         #fi
         #pip install -U sphinx
@@ -70,6 +70,7 @@ if [[ "$OSTYPE" == "linux"* ]]; then
         AWK=gawk
         export AWK
         if hash apt 2>/dev/null; then
+            apt install autoconf automake libtool libevent-dev
             sudo $PACKAGE_MANAGER $INSTALL $AWK pandoc
             report
             pandoc -s README.md -o index.html
