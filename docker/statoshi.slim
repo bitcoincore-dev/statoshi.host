@@ -1,13 +1,13 @@
 #BEGIN statoshi.slim
+ARG ARCH=${ARCH}
+FROM ghcr.io/randymcmillan/statoshi.dev/x86_64/header-root@sha256:69269e2516e28644203ea6a6da0fd531c29f1b2c1d8f75443c6137e6f8ffc376 as clone-stats-bitcoincore-dev
+###########################################
+# We build Statoshi last
+###########################################
 ARG GIT_PROFILE=${GIT_PROFILE}
 ARG GIT_REPO_NAME=${GIT_REPO_NAME}
 ARG ARCH=${ARCH}
 ENV ARCH=${ARCH}
-FROM ghcr.io/${GIT_PROFILE}/${GIT_REPO_NAME}/${ARCH}/header-root:latest as config-final
-###########################################
-# We build Statoshi last
-FROM config-final as clone-stats-bitcoincore-dev
-###########################################
 ENV REPO=${GIT_REPO_NAME}
 # Change to your fork
 RUN git clone -b master ${GIT_SERVER}/${GIT_PROFILE}/${GIT_REPO_NAME} --depth 1 ${GIT_REPO_NAME}
@@ -77,8 +77,8 @@ RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoind-${ARCH} /usr/bin/bit
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli-${ARCH} /usr/local/bin/bitcoin-cli
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-cli-${ARCH} /usr/bin/bitcoin-cli
 
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx-${ARCH} /usr/local/bin/bitcoin-tx
-RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx-${ARCH} /usr/bin/bitcoin-tx
+#RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx-${ARCH} /usr/local/bin/bitcoin-tx
+#RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/bitcoin-tx-${ARCH} /usr/bin/bitcoin-tx
 
 RUN install -v ${GIT_REPO_NAME}/conf/usr/local/bin/check_synced.sh /usr/local/bin/checked_synced.sh
 

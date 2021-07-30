@@ -146,15 +146,8 @@ jobs:
         run: |
           make init
           make automate
-          make install -C depends
-          ./autogen.sh && \
-          ./configure --prefix=$GITHUB_WORKSPACE/conf/usr/local --without-bdb --disable-tests --disable-bench --disable-docs && \
-          make all && make install && \
-          strip -s conf/usr/local/bin/bitcoind    -o conf/usr/local/bin/bitcoind-$(ARCH)    && \
-          strip -s conf/usr/local/bin/bitcoind    -o conf/usr/local/bin/bitcoind            && \
-          strip -s conf/usr/local/bin/bitcoin-cli -o conf/usr/local/bin/bitcoin-cli-$(ARCH) && \
-          strip -s conf/usr/local/bin/bitcoin-cli -o conf/usr/local/bin/bitcoin-cli         && \
-          echo
+          make build-shell
+          make bitcoin
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -174,15 +167,8 @@ jobs:
         run: |
           make init
           make automate
-          make install -C depends
-          ./autogen.sh && \
-          ./configure --prefix=$GITHUB_WORKSPACE/conf/usr/local --without-bdb --disable-tests --disable-bench --disable-docs && \
-          make all && make install && \
-          strip -s conf/usr/local/bin/bitcoind    -o conf/usr/local/bin/bitcoind-$(ARCH)    && \
-          strip -s conf/usr/local/bin/bitcoind    -o conf/usr/local/bin/bitcoind            && \
-          strip -s conf/usr/local/bin/bitcoin-cli -o conf/usr/local/bin/bitcoin-cli-$(ARCH) && \
-          strip -s conf/usr/local/bin/bitcoin-cli -o conf/usr/local/bin/bitcoin-cli         && \
-          echo
+          make build-shell
+          make bitcoin
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
