@@ -459,7 +459,7 @@ else
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run --rm shell sh -c "$(CMD_ARGUMENTS)"
 	@echo ''
 endif
-.PHONY: biticoin
+.PHONY: bitcoin
 bitcoin:
 	bash -c "make shell cmd='cd /home/root/statoshi.dev && \
 		./autogen.sh && \
