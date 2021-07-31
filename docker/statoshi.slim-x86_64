@@ -1,0 +1,5 @@
+#BEGIN statoshi.slim
+ARG ARCH=${ARCH}
+FROM ghcr.io/randymcmillan/statoshi.dev/x86_64/header-root:latest as clone-stats-bitcoincore-dev
+#FROM ghcr.io/randymcmillan/statoshi.dev/x86_64/header-root@sha256:69269e2516e28644203ea6a6da0fd531c29f1b2c1d8f75443c6137e6f8ffc376 as clone-stats-bitcoincore-dev
+

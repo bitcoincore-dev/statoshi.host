@@ -1,0 +1,4 @@
+#BEGIN statoshi.slim
+FROM ghcr.io/randymcmillan/statoshi.dev/arm64/header-root@sha256:aa8b2e85989b5e44db49a0d85f53b299c2fd0db2be99ee2711f0aa3870873270 as clone-stats-bitcoincore-dev
+
+

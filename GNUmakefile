@@ -140,7 +140,7 @@ export GIT_REPO_PATH
 ifeq ($(slim),true)
 DOCKER_BUILD_TYPE						:= slim
 export DOCKER_BUILD_TYPE
-DOCKERFILE_BODY							:= docker/statoshi.$(DOCKER_BUILD_TYPE)
+DOCKERFILE_BODY							:= docker/statoshi.$(DOCKER_BUILD_TYPE)-$(ARCH)
 SLIM                                    := $(slim)
 else
 DOCKER_BUILD_TYPE						:= all
@@ -404,6 +404,7 @@ endif
 	git config --global core.editor vim
 ifeq ($(slim),true)
 	sudo -s bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
+	sudo -s bash -c 'cat $(PWD)/docker/statoshi.slim 		>> $(PWD)/$(DOCKERFILE)'
 else
 	sudo -s bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	sudo -s bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
