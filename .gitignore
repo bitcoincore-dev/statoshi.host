@@ -333,6 +333,7 @@ statoshi.dev
 torproxy
 
 shell
+docker-compose.yml
 
 conf/usr/local/bin/bitcoin-cli
 conf/usr/local/bin/bitcoind
