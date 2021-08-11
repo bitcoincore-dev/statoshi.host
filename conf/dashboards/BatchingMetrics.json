@@ -19,7 +19,7 @@
   "links": [],
   "panels": [
     {
-      "content": "# Batching\nThis graph shows new transactions bundled together by the number of ouputs they have.",
+      "content": "# Batching\nThis graph shows new transactions bundled together by the number of outputs they have.",
       "gridPos": {
         "h": 3,
         "w": 24,

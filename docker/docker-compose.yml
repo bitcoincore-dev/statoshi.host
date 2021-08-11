@@ -43,7 +43,7 @@ services:
       - NODE_PORT=${NODE_PORT}
       - PASSWORD=${PASSWORD}
       - CMD_ARGUMENTS=${CMD_ARGUMENTS}
-    # Run with user priviliges by default.
+    # Run with user privileges by default.
     user: ${HOST_USER:-nodummy}
     image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
     restart: unless-stopped
@@ -138,7 +138,7 @@ services:
       - NODE_PORT=${NODE_PORT}
       - PASSWORD=${PASSWORD}
       - CMD_ARGUMENTS=${CMD_ARGUMENTS}
-    # Run with user priviliges by default.
+    # Run with user privileges by default.
     user: ${HOST_USER:-nodummy}
     image: ${PROJECT_NAME}:header-${HOST_USER:-nodummy}
     restart: unless-stopped
@@ -232,7 +232,7 @@ services:
       - NODE_PORT=${NODE_PORT}
       - PASSWORD=${PASSWORD}
       - CMD_ARGUMENTS=${CMD_ARGUMENTS}
-    # Run with user priviliges by default.
+    # Run with user privileges by default.
     user: ${HOST_USER:-nodummy}
     image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
     restart: unless-stopped
@@ -332,7 +332,7 @@ services:
       - PUBLIC_PORT=${PUBLIC_PORT}
       - PASSWORD=${PASSWORD}
       - CMD_ARGUMENTS=${CMD_ARGUMENTS}
-    # Run with user priviliges by default.
+    # Run with user privileges by default.
     user: ${HOST_USER:-nodummy}
     image: ${PROJECT_NAME}_torproxy:${HOST_USER:-nodummy}
     restart: unless-stopped
