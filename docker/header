@@ -94,7 +94,7 @@ ENV CMD_ARGUMENTS=${CMD_ARGUMENTS}
 ENV REPO=/${PROJECT_NAME}
 
 RUN apk update && apk upgrade && apk add ${VERBOSE} ${NOCACHE} musl busybox bash-completion git
-RUN git clone ${GIT_SERVER}/${GIT_PROFILE}/${PROJECT_NAME} --depth 1 ${REPO}
+RUN git clone ${GIT_SERVER}/${GIT_PROFILE}/${PROJECT_NAME} --depth 2 ${REPO}
 RUN ${REPO}/conf/install_packages.sh
 RUN mkdir -p /usr/local/bin/
 #RUN install -v ${REPO}/contrib/zmq/zmq_sub.py /usr/local/bin/zmq_sub.py
