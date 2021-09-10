@@ -179,8 +179,7 @@ services:
     # Copy current (git-) project into container.
     volumes:
       - ${HOME:-.}:/home/${HOST_USER}:consistent
-      - ${HOME:-.}/.bitcoin:/home/${HOST_USER}/.bitcoin:consistent
-      - ${HOME:-.}/.statoshi:/home/${HOST_USER}/.statoshi:consistent
+      - ${HOME:-.}/.statoshi:/home/${HOST_USER}/.bitcoin:consistent
 
   statoshi:
     # Makefile fills PROJECT_NAME to current directory name.
@@ -271,8 +270,7 @@ services:
     # Expose current project folder to container.
     volumes:
       - ${HOME:-.}:/home/${HOST_USER}:consistent
-      - ${HOME:-.}/.bitcoin:/home/${HOST_USER}/.bitcoin:consistent
-      - ${HOME:-.}/.statoshi:/home/${HOST_USER}/.statoshi:consistent
+      - ${HOME:-.}/.statoshi:/home/${HOST_USER}/.bitcoin:consistent
     ports:
        #hostPORT:imagePORT
      - "8332:8332"
