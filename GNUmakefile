@@ -458,10 +458,10 @@ package-header:
 	touch TIME && echo $(TIME) > TIME && git add -f TIME
 	#legit . -m "make package-header at $(TIME)" -p 00000
 	git commit --amend --no-edit --allow-empty
-	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER):$(TIME)'
-	bash -c 'docker push                                    docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER):$(TIME)'
-	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)' #defaults to latest
-	bash -c 'docker push                                    docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
+	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER):$(TIME)'
+	bash -c 'docker push                                    ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER):$(TIME)'
+	bash -c 'docker tag $(PROJECT_NAME):header-$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)' #defaults to latest
+	bash -c 'docker push                                    ghcr.io/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)'
 
 #######################
 .PHONY: shell
@@ -572,10 +572,10 @@ push-docs: docs push
 package-statoshi: init
 	#@echo "legit . -m "$(HOST_USER):$(TIME)" -p 0000000 && make user=root package && GPF"
 	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
-	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
-	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
-	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER)'
-	bash -c 'docker push                             docker.pkg.github.com/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
+	bash -c 'docker push                             ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
+	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER)'
+	bash -c 'docker push                             ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER)'
 ########################
 .PHONY: package-all
 package-all:
