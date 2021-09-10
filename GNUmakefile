@@ -10,6 +10,9 @@ export THIS_FILE
 TIME									:= $(shell date +%s)
 export TIME
 
+ARCH                                    := $(shell uname -m)
+export ARCH
+
 ifeq ($(user),)
 HOST_USER								:= root
 HOST_UID								:= $(strip $(if $(uid),$(uid),0))
@@ -452,18 +455,12 @@ header: report build-header
 	@echo ''
 	$(DOCKER_COMPOSE) $(VERBOSE) -p $(PROJECT_NAME)_$(HOST_UID) run header sh -c "cd /home/${HOST_USER} && ls"
 	@echo ''
-<<<<<<< HEAD
 	docker tag $(PROJECT_NAME):header-$(HOST_USER) docker.pkg.github.com/$(GIT_PROFILE)/$(PROJECT_NAME)/header-$(HOST_USER)
 
 .PHONY: signin
 signin:
 	bash -c 'cat ~/GH_TOKEN.txt | docker login ghcr.io -u RandyMcMillan --password-stdin'
-=======
 	docker tag $(PROJECT_NAME):header-$(HOST_USER) $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/$(ARCH)/header-$(HOST_USER)
-
-.PHONY: signin
-signin:
-	bash -c 'cat ~/GH_TOKEN.txt | docker login $(PACKAGE_PREFIX) -u $(GIT_USER_NAME) --password-stdin'
 
 .PHONY: package-header
 package-header:
@@ -600,11 +597,7 @@ package-statoshi: signin
 
 ########################
 .PHONY: package-all
-<<<<<<< HEAD
-package-all:
-=======
 package-all: init signin header build package-header package-statoshi
->>>>>>> dd4928e23 (make: package-all)
 
 ifeq ($(slim),true)
 	make package-all slim=false
