@@ -382,7 +382,7 @@ endif
 	git config --global core.editor vim
 ifeq ($(slim),true)
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			 > $(PWD)/$(DOCKERFILE)'
-	docker pull -q docker.pkg.github.com/randymcmillan/statoshi.dev/header-root:latest
+	docker pull ghcr.io/randymcmillan/statoshi.dev/header-root:latest
 else
 	bash -c 'cat $(PWD)/docker/header				 > $(PWD)/$(DOCKERFILE)'
 	bash -c 'cat $(PWD)/$(DOCKERFILE_BODY)			>> $(PWD)/$(DOCKERFILE)'
@@ -451,7 +451,7 @@ header: report build-header
 
 .PHONY: signin
 signin:
-	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+	bash -c 'cat ~/GH_TOKEN.txt | docker login ghcr.io -u RandyMcMillan --password-stdin'
 
 .PHONY: package-header
 package-header:
@@ -571,7 +571,7 @@ push-docs: docs push
 #######################
 package-statoshi: init
 	#@echo "legit . -m "$(HOST_USER):$(TIME)" -p 0000000 && make user=root package && GPF"
-	bash -c 'cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u RandyMcMillan --password-stdin'
+	bash -c 'cat ~/GH_TOKEN.txt | docker login ghcr.io -u RandyMcMillan --password-stdin'
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
 	bash -c 'docker push                             ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER):$(TIME)'
 	bash -c 'docker tag $(PROJECT_NAME):$(HOST_USER) ghcr.io/$(GIT_PROFILE)/$(DOCKERFILE)/$(HOST_USER)'
