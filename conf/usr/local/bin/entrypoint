@@ -62,7 +62,7 @@ shutdown(){
 echo "################################### entrypoint ##################################"
 
 #start_bitcoin & wait
-su-exec root bitcoind -daemon & wait
+su-exec root bitcoind -daemon -prune=550 & wait
 su-exec root bitcoin-cli gettxoutsetinfo & wait
 su-exec root bitcoin-cli getmininginfo & wait
 su-exec root run-grafana.sh &
