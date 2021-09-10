@@ -21,14 +21,17 @@ do
     if [[ ${!i} = *id* ]]; then
         ((i++))
 	echo STATS_ID: $STATS_ID
+    exit
 
     elif [[ ${!i} = *image* ]]; then
         ((i++))
 	echo STATS_IMAGE: $STATS_IMAGE
+    exit
 
     elif [[ ${!i} = *top* ]]; then
         ((i++))
     docker top $STATS_ID
+    exit
 
     elif [[ ${!i} = *start* ]]; then
         ((i++))
@@ -36,34 +39,41 @@ do
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon &"
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli gettxoutsetinfo"
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli getmininginfo"
+    exit
 
     elif [[ ${!i} = *prune* ]]; then
         ((i++))
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind -daemon -prune=550"
+    exit
 
     elif [[ ${!i} = *cli* ]]; then
         ((i++))
         #echo ${!i};
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli ${!i}"
         #var2=${!i};
+    exit
 
     elif [[ ${!i} = *d* ]]; then
         ((i++))
         #echo ${!i};
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoind ${!i}"
         #var2=${!i};
+    exit
 
     elif [[ ${!i} = *ep* ]]; then
         ((i++))
 	docker exec -it $STATS_ID sh -c  "/usr/local/bin/entrypoint &"
+    exit
 
     elif [ ${!i} = "-b" ]; then
         ((i++))
         var4=${!i};
+    exit
 
     elif [ ${!i} = "-l" ]; then
         ((i++))
         var5=${!i};
+    exit
 
     elif [[ ${!i} == *h* ]]; then
         ((i++))
@@ -83,11 +93,13 @@ do
         echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli gettxoutsetinfo'"
         echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli getmininginfo'"
         echo "docker exec -it $STATS_ID sh -c  '/usr/local/bin/bitcoin-cli $1'"
+        exit
 
     elif [ -n ${!i} ]; then
         ((i++))
         echo 'execute in container'
 	docker exec -it $STATS_ID sh -c  "$1"
+    exit
     fi
 
 done;
@@ -96,3 +108,4 @@ done;
 #docker exec -it $STATS_ID sh -c "find /usr/local -maxdepth 2 -type f -name 'stats*'"
 #echo stats-cli $1 
 fi #end if docker hash
+stats h;
