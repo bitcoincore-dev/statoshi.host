@@ -108,26 +108,24 @@ do
     elif [[ ${!i} == *help ]]; then
         ((i++))
         echo
-        echo "play                     ids"
-        echo "play                     top   <CONTAINER_ID>"
-        echo "play                     start <CONTAINER_ID>"
-        echo "play                     stop  <CONTAINER_ID>"
+        echo "stats                     ids"
+        echo "stats                     top   <CONTAINER_ID>"
+        echo "stats                     start <CONTAINER_ID>"
+        echo "stats                     stop  <CONTAINER_ID>"
         echo
         echo "Examples:"
         echo
         echo "docker exec -it <CONTAINER_ID> sh    - enter container shell"
         echo
-        echo "playground-bitcoind"
-        echo
-        echo "play -cli gettxoutsetinfo"
+        echo "stats -cli gettxoutsetinfo"
         echo "docker exec -it $BITCOIND_ID sh -c  '/usr/local/bin/bitcoin-cli gettxoutsetinfo'"
-        echo "play -cli getmininginfo"
+        echo "stats -cli getmininginfo"
         echo "docker exec -it $BITCOIND_ID sh -c  '/usr/local/bin/bitcoin-cli getmininginfo'"
-        echo "play -cli 'getblockhash 1000'"
+        echo "stats -cli 'getblockhash 1000'"
         echo "docker exec -it $BITCOIND_ID sh -c  '/usr/local/bin/bitcoin-cli getblockhash 1000'"
-        echo "play -cli -netinfo"
+        echo "stats -cli -netinfo"
         echo "docker exec -it $BITCOIND_ID sh -c  '/usr/local/bin/bitcoin-cli -netinfo'"
-        echo "play -cli help"
+        echo "stats -cli help"
         echo "docker exec -it $BITCOIND_ID sh -c  '/usr/local/bin/bitcoin-cli $1'"
         echo
         exit
