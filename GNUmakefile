@@ -403,8 +403,10 @@ endif
 	bash -c 'mkdir -p /usr/local/bin'
 	bash -c 'mkdir -p /usr/local/include'
 ifneq ($(shell id -u),0)
+	rm -rf /usr/local/bin/stats*
 	sudo bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
 else
+	rm -rf /usr/local/bin/stats*
 	bash -c 'install -v $(PWD)/conf/usr/local/bin/*  /usr/local/bin'
 endif
 	@echo ''

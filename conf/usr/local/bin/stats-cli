@@ -1,8 +1,0 @@
-#!/bin/bash
-
-STATS_ID=$(echo $(docker ps | awk '/stats/'|awk ' {print $1}' | awk 'NR==1'))
-#echo STATS_ID: $STATS_ID
-STATS_TAG=$(echo $(docker ps | awk '/stats/'|awk ' {print $2}' | awk 'NR==1'))
-#echo STATS_TAG: $STATS_TAG
-docker exec -it $STATS_ID sh -c  "/usr/local/bin/bitcoin-cli $1"
-

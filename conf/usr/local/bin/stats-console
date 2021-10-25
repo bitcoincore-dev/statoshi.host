@@ -1,6 +1,0 @@
-#!/bin/bash
-# Execute on the most recent composed image
-D_ID1=$(echo $(docker ps | awk '{print $1}' | awk 'NR==2'))
-echo Container: $D_ID1
-docker exec -it $D_ID1 sh -c  "whoami && echo $PWD && sh && cd /"
-
