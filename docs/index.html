@@ -97,62 +97,78 @@
 <p>GPG stands for GNU Privacy Guard and it is vital tool for everyone who wants to protect the email and files. Like it's inspiration PGP, GPG uses public-key cryptography where each user owns two keys: for decryption (public key) and for encryption (private key).</p>
 <p>This cheatsheet is for quick reference and gives a brief description of that could be done with this security tool.</p>
 <hr>
+
 <h4 id="keys-management">Keys management</h4>
 <p>GPG has several switches that allows to generate a public-private keypar, revoke and delete keys. The viewing public and private keys are also supported.</p>
 <hr>
+
 <h4 id="generate-key-pair">Generate key pair</h4>
 <p>To generate a public-private key pair in the GPG keyring use the –gen-key switch. The below command will prompt for some details such the key-type, key-size, user ID to identify the key and the time period over which the generated key will be valid:</p>
 <h5 id="gpg-gen-key">gpg --gen-key</h5>
 <hr>
+
 <h4 id="revoke-keys">Revoke keys</h4>
 <p>In case if the secret key has been stolen, an existing key could be revoked with –gen-revoke switch. To be able to do this, is is needed for a secret key:</p>
 <h5 id="gpg-gen-revoke">gpg --gen-revoke</h5>
 <hr>
+
 <h4 id="delete-keys">Delete keys</h4>
 <p>The below commands are used to delete public and private keys from GPG keyring:</p>
 <h5 id="gpg-delete-key-keyid">gpg --delete-key KeyID</h5>
 <h5 id="gpg-delete-secret-key-keyid">gpg --delete-secret-key KeyID</h5>
 <h5 id="gpg-delete-secret-and-public-key-keyid">gpg --delete-secret-and-public-key KeyID</h5>
 <hr>
+
 <h4 id="view-keys">View keys</h4>
 <p>To view all types of keys, issue the command:</p>
 <h5 id="gpg-list-key">gpg --list-key</h5>
 <h5 id="gpg-list-public-keys">gpg --list-public-keys</h5>
 <h5 id="gpg-list-secret-keys">gpg --list-secret-keys</h5>
 <hr>
+
 <h4 id="keys-manipulations">Keys manipulations</h4>
 <p>GPG allows several key manipulation functions such importing and exporting the keys. Sending and receiving keys from server are also supported.</p>
 <hr>
+
 <h4 id="export-a-private-key-to-a-file">Export a private key to a file</h4>
 <h5 id="gpg-export-secret-key-a-fileout">gpg --export-secret-key -a &gt; file.out</h5>
 <hr>
+
 <h4 id="export-a-public-key-in-a-file">Export a public key in a file</h4>
 <h5 id="gpg-export-armor-keyid-fileout">gpg --export --armor KeyID &gt; file.out</h5>
 <hr>
+
 <h4 id="import-a-private-key-from-a-file">Import a private key from a file</h4>
 <h5 id="gpg-import-allow-secret-key-import-filein">gpg --import --allow-secret-key-import file.in</h5>
 <hr>
+
 <h4 id="import-a-public-key-from-a-file">Import a public key from a file</h4>
 <h5 id="gpg-import-filein">gpg --import file.in</h5>
 <hr>
+
 <h4 id="send-a-public-key-to-a-server">Send a public key to a server</h4>
 <h5 id="gpg-keyserver-dbmakeyserverca-send-key-keyid">gpg --keyserver dbma.keyserver.ca --send-key KeyID</h5>
 <hr>
 <h4 id="get-a-key-from-a-server">Get a Key from a server</h4>
 <h5 id="gpg-keyserver-dbmakeyserverca-recv-keys-keyid">gpg --keyserver dbma.keyserver.ca --recv-keys KeyID</h5>
 <hr>
+
 <h4 id="cryptographic-options">Cryptographic options</h4>
 <p>GPG allows file encryption and decryption. Another option is support for file signing that makes this program an alternative to PGP.</p>
 <hr>
+
 <h4 id="encrypt-decrypt-and-sign">Encrypt, decrypt and sign</h4>
 <h5 id="gpg-r-keyid-e-a-o-fileout-filein">gpg -r KeyID -e -a -o file.out file.in</h5>
 <hr>
+
 <h4 id="decrypt-file">Decrypt file</h4>
 <h5 id="gpg-r-keyid-d-o-fileout-filein">gpg -r KeyID -d -o file.out file.in</h5>
 <hr>
+
 <h4 id="create-signature-of-a-file">Create signature of a file</h4>
 <h5 id="gpg-b-a-keyid-o-fileout-filein">gpg -b -a KeyID -o file.out file.in</h5>
 <hr>
+
 <h5 id="also-you-might-check-the-gui-frontends-for-gnupg-for-easy-gpg-management">Also, you might check the GUI frontends for GnuPG for easy GPG management</h5></div>
             </div>
         </div>
@@ -234,5 +250,5 @@
 
 <!--
 MkDocs version : 1.3.0
-Build Date UTC : 2022-05-09 16:56:03.743134+00:00
+Build Date UTC : 2022-05-09 19:15:00.622143+00:00
 -->
