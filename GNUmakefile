@@ -6,4 +6,5 @@ PORT:=2323
 build:
 	mkdocs build
 serve: build
-	$(PYTHON3) -m http.server $(PORT) --bind 127.0.0.1 -d $(PWD)/docs > /dev/null 2>&1 || open http://127.0.0.1:$(PORT)
+	mkdocs serve & open 127.0.0.1:8000
+	#$(PYTHON3) -m http.server $(PORT) --bind 127.0.0.1 -d $(PWD)/docs > /dev/null 2>&1 || open http://127.0.0.1:$(PORT)

@@ -14,9 +14,19 @@ For a long time, GPG has had a way to publish keys in DNS, but it hasn't been we
 
 * Have learned a bit more about DNS
 
+<div style="padding-left: 20px;">
 The target audience for this guide is a technical one. It's expected you understand what DNS is, and what an RFC and a resource record is.
-
+</br></br>
 There are three ways to publish a PGP key in DNS. Most modern versions of GPG can retrieve from all three, although it's not enabled by default. There are no compile-time options you need to enable it, and it's simple to turn on. Of the three key-publishing methods, there are two that you probably shouldn't use at the same time, and there are advantages and disadvantages to each, which I hope to outline below, both in general and for each method.
+</br></br></div>
+
+<!--
+<div style="padding-left: 20px;">
+TEXT1
+</br></br>
+TEXT2
+</br></br></div>
+-->
 
 ### Advantages to DNS publishing of your keys
 
@@ -38,7 +48,7 @@ With two of the three methods listed here, you're going to need to be able to pu
 
 Using at least some of these methods, it's not always a "set it and forget it" procedure. You may need to periodically re-export your key and re-publish it, especially if you gain new signatures.
 
-Using some of these methods, you're going to be putting some pretty large, pretty unwiedly lines in your DNS zones. 
+Using some of these methods, you're going to be putting some pretty large, pretty unwiedly lines in your DNS zones.
 Not everyone will easily be able to retrieve them, but again, you can still publish other ways.
 
 Using some of these methods, DNS is just a means to an end: you still need to publish your key elsewhere, like a webpage, and the DNS records just point at it.
@@ -72,7 +82,7 @@ You can also use the same options on the command line (as you'll see in this doc
 
 ### DNS PKA Records
 
-Relevant RFCs: None that I can find. 
+Relevant RFCs: None that I can find.
 Other Docs: The GPG source and mailing lists.
 
 #### Advantages
@@ -127,9 +137,9 @@ Copy the file somewhere, like your webspace. It need not live on the same server
 %cp 624BB249.pub.asc public_html/danm.pubkey.txt
 Make up your text record. The format is:
 
-danm._pka.prime.gushi.org.  TXT         
+danm._pka.prime.gushi.org.  TXT
 "v=pka1;fpr=C2063054549295F3349037FFFBBE5A30624BB249;uri=http://prime.gushi.org/danm.pubkey.txt"
-We'll take this in several parts. The record label is simply the email address with "._pka." replacing the "@". 
+We'll take this in several parts. The record label is simply the email address with "._pka." replacing the "@".
 danm@prime.gushi.org becomes danm._pka.prime.gushi.org. Don't forget the trailing dot, if you're using the fully qualified name. I recommend sticking with fully-qualified, for simplicity.
 
 The body of the record is also simple. The v portion is just a version. There's only one version as far as I can tell, 'pka1'. The fpr is the fingerprint, with all whitespace stripped, and in uppercase. The uri is the location a key can be retrieved from. All the "names" are lowercase, separated by semicolons.
@@ -207,7 +217,7 @@ Ask other people to run it for you and send you the resulting blob. You should b
 
 ### PGP CERT Records
 
-Also known as: The "big" CERT record. 
+Also known as: The "big" CERT record.
 Relevant RFCs: RFC 2538, RFC 4398, specifically sections 2.1 and 3.3
 
 #### Advantages
@@ -287,7 +297,7 @@ The program prints that all on one line.
 
 Immediately, we notice a few things.
 
-The record type isn't "CERT", it's "TYPE37". This confused me for a while until I discovered RFC3597 Basically, it's a way that a DNS server can handle a resource 
+The record type isn't "CERT", it's "TYPE37". This confused me for a while until I discovered RFC3597 Basically, it's a way that a DNS server can handle a resource
 record it doesn't know about, by giving it some special fields like the "#", as well as a length (which is the 1298 you see there).
 
 The rest of the record is on one line. I wrapped it for the purposes of brevity. If I were using this in a zonefile, I would need to be careful that I wrapped it on a byte-boundary (every two characters is a byte). If I miss the boundary, named will refuse to load it, dnssec-signzone won't touch it, etc.
@@ -324,21 +334,21 @@ dig +short danm.prime.gushi.org CERT
 ```
 
 ```
-PGP 0 0 mQGiBDnY2vERBAD3cOxqoAYHYzS+xttvuyN9wZS8CrgwLIlT8Ewo/CCF I11PEO+gJyNPvWPRQsyt1SE60reaIsie2bQTg3DYIg0PmH+ZOlNkpKes 
-PULzdlw4Rx3dD/M3Lkrm977h4Y70ZKC+tbvoYKCCOIkUVevny1PVZ+mB 94rb0mMgawSTrct03QCg/w6aHNJFQV7O9ZQ1Fir85M3RS8cEAOo4/1AS 
-Vudz3qKZQEhU2Z9O2ydXqpEanHfGirjWYi5RelVsQ9IfBSPFaPAWzQ24 nvQ18NU7TgdDQhP4meZXiVXcLBR5Mee2kByf2KAnBUF9aah5s8wZbSrC 
-6u8xEZLuiauvWmCUIWe0Ylc1/L37XeDjrBI2pT+k183X119d6Fr1BACG fZVGsot5rxBUEFPPSrBqYXG/0hRYv9Eq8a4rJAHK2IUWYfivZgL4DtrJ 
-nHlha+H5EPQVYkIAN3nGjXoHmosY+J3Sk+GyR+dCBHEwCkoHMKph3igc zCEfxAWgqKeYd5mf+QQq2JKrkn2jceiIO7s3CrepeEFAjDSGuxhZjPJV 
-m7QoRGFuaWVsIFAuIE1haG9uZXkgPGRhbm1AcHJpbWUuZ3VzaGkub3Jn PohOBBARAgAOBQI52NrxBAsDAQICGQEACgkQ+75aMGJLskn6LgCbBXUD 
-7UmGla5e1zyhuY667hP3F+UAoJIeDZJyRFkQAmb+u8KekRyLD1MLtDJE YW5pZWwgTWFob25leSAoU2Vjb25kYXJ5IEVtYWlsKSA8Z3VzaGlAZ3Vz 
-aGkub3JnPohgBBMRAgAgBQJF1J/XAhsjBgsJCAcDAgQVAggDBBYCAwEC HgECF4AACgkQ+75aMGJLskkVhACggsivQ9qLhfdA1rGm6f8LRJBSC4wA 
-oI930h+/hshClj6AkNwGRtHdf5XJuQINBDnY2vQQCAD2Qle3CH8IF3Ki utapQvMF6PlTETlPtvFuuUs4INoBp1ajFOmPQFXz0AfGy0OplK33TGSG 
-SfgMg71l6RfUodNQ+PVZX9x2Uk89PY3bzpnhV5JZzf24rnRPxfx2vIPF RzBhznzJZv8V+bv9kV7HAarTW56NoKVyOtQa8L9GAFgr5fSI/VhOSdvN 
-ILSd5JEHNmszbDgNRR0PfIizHHxbLY7288kjwEPwpVsYjY67VYy4XTjT NP18F1dDox0YbN4zISy1Kv884bEpQBgRjXyEpwpy1obEAxnIByl6ypUM 
-2Zafq9AKUJsCRtMIPWakXUGfnHy9iUsiGSa6q6Jew1XpMgs7AAICB/9e GjzF2gDh6U7I72x/6bSdlExx2LvIF92OZKc0S55IOS4Lgzs7Hbfm1aOL 
-4oJt7wBg94xkF4cerxz7y8R9J+k3GNl14KOjbYaMAh1rdxdAzikYMH1p 1hS78GMtwxky6jE5en87BGGMmnbC84JlxwN+MD7diu8D0Gkgjj/pxOp3 
-2D5jEe02wBPVjFTpFLJjpFniLUY6AohRDEdSuZwWPuoKVWhpeWkasNn5 qgwGyDREbXpyPsU02BkwE4JiGs+JMMdOn9KMh5dxiuwsMM9gHiQZS3mS 
-NBBKPWI5ZXsdStVFvapjf2FUFDXLUbTROPv1Xhqf0u7YYORFnWeVtvzK IxVaiEYEGBECAAYFAjnY2vQACgkQ+75aMGJLsklBWgCeN7z9xk52y/ao 
+PGP 0 0 mQGiBDnY2vERBAD3cOxqoAYHYzS+xttvuyN9wZS8CrgwLIlT8Ewo/CCF I11PEO+gJyNPvWPRQsyt1SE60reaIsie2bQTg3DYIg0PmH+ZOlNkpKes
+PULzdlw4Rx3dD/M3Lkrm977h4Y70ZKC+tbvoYKCCOIkUVevny1PVZ+mB 94rb0mMgawSTrct03QCg/w6aHNJFQV7O9ZQ1Fir85M3RS8cEAOo4/1AS
+Vudz3qKZQEhU2Z9O2ydXqpEanHfGirjWYi5RelVsQ9IfBSPFaPAWzQ24 nvQ18NU7TgdDQhP4meZXiVXcLBR5Mee2kByf2KAnBUF9aah5s8wZbSrC
+6u8xEZLuiauvWmCUIWe0Ylc1/L37XeDjrBI2pT+k183X119d6Fr1BACG fZVGsot5rxBUEFPPSrBqYXG/0hRYv9Eq8a4rJAHK2IUWYfivZgL4DtrJ
+nHlha+H5EPQVYkIAN3nGjXoHmosY+J3Sk+GyR+dCBHEwCkoHMKph3igc zCEfxAWgqKeYd5mf+QQq2JKrkn2jceiIO7s3CrepeEFAjDSGuxhZjPJV
+m7QoRGFuaWVsIFAuIE1haG9uZXkgPGRhbm1AcHJpbWUuZ3VzaGkub3Jn PohOBBARAgAOBQI52NrxBAsDAQICGQEACgkQ+75aMGJLskn6LgCbBXUD
+7UmGla5e1zyhuY667hP3F+UAoJIeDZJyRFkQAmb+u8KekRyLD1MLtDJE YW5pZWwgTWFob25leSAoU2Vjb25kYXJ5IEVtYWlsKSA8Z3VzaGlAZ3Vz
+aGkub3JnPohgBBMRAgAgBQJF1J/XAhsjBgsJCAcDAgQVAggDBBYCAwEC HgECF4AACgkQ+75aMGJLskkVhACggsivQ9qLhfdA1rGm6f8LRJBSC4wA
+oI930h+/hshClj6AkNwGRtHdf5XJuQINBDnY2vQQCAD2Qle3CH8IF3Ki utapQvMF6PlTETlPtvFuuUs4INoBp1ajFOmPQFXz0AfGy0OplK33TGSG
+SfgMg71l6RfUodNQ+PVZX9x2Uk89PY3bzpnhV5JZzf24rnRPxfx2vIPF RzBhznzJZv8V+bv9kV7HAarTW56NoKVyOtQa8L9GAFgr5fSI/VhOSdvN
+ILSd5JEHNmszbDgNRR0PfIizHHxbLY7288kjwEPwpVsYjY67VYy4XTjT NP18F1dDox0YbN4zISy1Kv884bEpQBgRjXyEpwpy1obEAxnIByl6ypUM
+2Zafq9AKUJsCRtMIPWakXUGfnHy9iUsiGSa6q6Jew1XpMgs7AAICB/9e GjzF2gDh6U7I72x/6bSdlExx2LvIF92OZKc0S55IOS4Lgzs7Hbfm1aOL
+4oJt7wBg94xkF4cerxz7y8R9J+k3GNl14KOjbYaMAh1rdxdAzikYMH1p 1hS78GMtwxky6jE5en87BGGMmnbC84JlxwN+MD7diu8D0Gkgjj/pxOp3
+2D5jEe02wBPVjFTpFLJjpFniLUY6AohRDEdSuZwWPuoKVWhpeWkasNn5 qgwGyDREbXpyPsU02BkwE4JiGs+JMMdOn9KMh5dxiuwsMM9gHiQZS3mS
+NBBKPWI5ZXsdStVFvapjf2FUFDXLUbTROPv1Xhqf0u7YYORFnWeVtvzK IxVaiEYEGBECAAYFAjnY2vQACgkQ+75aMGJLsklBWgCeN7z9xk52y/ao
 aCuF6hYb0d+3k98AoMRxvHuXI1Nc2FXY/x65PwHiUbaY
 ```
 
@@ -419,7 +429,7 @@ Okay, as above, try to decrypt that with your private key.
 
 ### IPGP CERT Records
 
-Also known as: The "little" or "short" CERT record. (These terms are purely my own). 
+Also known as: The "little" or "short" CERT record. (These terms are purely my own).
 Relevant RFCs: RFC 2538, RFC 4398, specifically sections 2.1 and 3.3
 
 IPGP certs are interesting. It's basically the same pieces of infomation that are in the PKA record, as above, except that it's supported by an RFC. Despite the RFC compliance, I am not sure if any non-gpg client knows to look for them. However, because it's a DNS cert, make-dns-cert encodes the information in binary, and your DNS server will see it in base64. So verifying it visually is harder than verifying either of the above.
@@ -491,7 +501,7 @@ sub   2048g/DE20C529 2000-10-02
 5. As above, run make-dns-cert. This time we use the -n, -f, and -u options:
 
 %make-dns-cert -n danm.prime.gushi.org. -f C2063054549295F3349037FFFBBE5A30624BB249 -u http://prime.gushi.org/danm.pubkey.txt
-danm.prime.gushi.org.   TYPE37  \# 64 0006 0000 00 14 C2063054549295F3349037FFFBBE5A30624BB249 
+danm.prime.gushi.org.   TYPE37  \# 64 0006 0000 00 14 C2063054549295F3349037FFFBBE5A30624BB249
 687474703A2F2F7072696D652E67757368692E6F72672F64616E6D2E7075626B65792E747874
 %
 ```
