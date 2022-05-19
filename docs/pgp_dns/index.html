@@ -1,0 +1,2992 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://www.pgp.guide/pgp_dns/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Pgp dns - Pretty Good Privacy Guide</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Pretty Good Privacy Guide</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Pgp dns</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Emzy message <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../emzy_message/" class="dropdown-item">Index</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Openpgp.org <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../openpgp.org/" class="dropdown-item">openpgp.org</a>
+</li>
+                                    
+<li>
+    <a href="../openpgp.org/CHANGELOG/" class="dropdown-item">CHANGELOG</a>
+</li>
+                                    
+<li>
+    <a href="../openpgp.org/README.minimal-mistakes/" class="dropdown-item">[Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/)</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> about</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/_about/01-about/" class="dropdown-item">About</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_about/02-history/" class="dropdown-item">History</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_about/03-standard/" class="dropdown-item">Standard</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> community</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/_community/01-community/" class="dropdown-item">Community/Consulting</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> drafts</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/_drafts/04-why/" class="dropdown-item">Why OpenPGP’s PKI is better than an X.509 PKI</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> pages</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/_pages/404/" class="dropdown-item">Page Not Found</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_pages/home/" class="dropdown-item">Home</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> posts</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/_posts/2016-08-22-new-website/" class="dropdown-item">Welcome to openpgp.org</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_posts/2016-08-24-openpgp-conf/" class="dropdown-item">First OpenPGP conference</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> software</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/_software/01-01-gpg4o/" class="dropdown-item">gpg4o</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-02-gpg4win/" class="dropdown-item">Gpg4win</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-03-pep/" class="dropdown-item">p≡p</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-04-enigmail/" class="dropdown-item">Enigmail</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-05-gpgtools/" class="dropdown-item">GPG Tools</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-05-mutt/" class="dropdown-item">Mutt</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-06-openkeychain/" class="dropdown-item">OpenKeychain</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-07-r2mail2/" class="dropdown-item">R2Mail2</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-08-ipgmail/" class="dropdown-item">iPG Mail</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-09-seahorse/" class="dropdown-item">Seahorse</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-10-kleopatra/" class="dropdown-item">Kleopatra</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-11-mailvelope/" class="dropdown-item">Mailvelope</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-12-emclient/" class="dropdown-item">eM Client</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-13-psono/" class="dropdown-item">Psono</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-14-canary-mail/" class="dropdown-item">Canary Mail</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-15-everdesk/" class="dropdown-item">EverDesk</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-16-thebat/" class="dropdown-item">The Bat!</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-17-autocrypt/" class="dropdown-item">Autocrypt</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-18-fairemail/" class="dropdown-item">FairEmail</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-19-claws/" class="dropdown-item">Claws Mail</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-20-postbox/" class="dropdown-item">Postbox</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-20-safe/" class="dropdown-item">Safe Easy Privacy</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-21-pgpro/" class="dropdown-item">PGPro</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-22-thunderbird/" class="dropdown-item">Thunderbird</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/01-software/" class="dropdown-item">Email Encryption</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/02-server/" class="dropdown-item">Server</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/03-developer-tools/" class="dropdown-item">Developer Libraries/Tools</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/04-01-gpgfrontend/" class="dropdown-item">GPGFrontend</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/_software/04-misc/" class="dropdown-item">Miscellaneous Tools</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Vendor</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Bundle</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Ruby</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">2.6.0</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Gems</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Activesupport 6.0.5</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/activesupport-6.0.5/CHANGELOG/" class="dropdown-item">CHANGELOG</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Addressable 2.4.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/addressable-2.4.0/" class="dropdown-item">Addressable</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/addressable-2.4.0/CHANGELOG/" class="dropdown-item">Addressable 2.4.0</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Addressable 2.8.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/addressable-2.8.0/" class="dropdown-item">Addressable</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/addressable-2.8.0/CHANGELOG/" class="dropdown-item">Addressable 2.8.0</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Coffee script 2.4.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/coffee-script-2.4.1/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Colorator 0.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/colorator-0.1/" class="dropdown-item">colorator</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Colorator 1.1.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/colorator-1.1.0/" class="dropdown-item">colorator</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/colorator-1.1.0/History/" class="dropdown-item">History</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Commonmarker 0.23.4</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/commonmarker-0.23.4/" class="dropdown-item">CommonMarker</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Test</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Fixtures</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/commonmarker-0.23.4/test/fixtures/curly/" class="dropdown-item">Curly</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/commonmarker-0.23.4/test/fixtures/dingus/" class="dropdown-item">Dingus</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/commonmarker-0.23.4/test/fixtures/strong/" class="dropdown-item">Strong</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/commonmarker-0.23.4/test/fixtures/table/" class="dropdown-item">Table</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Concurrent ruby 1.1.10</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/concurrent-ruby-1.1.10/" class="dropdown-item">Concurrent Ruby</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/concurrent-ruby-1.1.10/CHANGELOG/" class="dropdown-item">CHANGELOG</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Dnsruby 1.61.9</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/dnsruby-1.61.9/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/dnsruby-1.61.9/RELEASE_NOTES/" class="dropdown-item">Release Notes</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Em websocket 0.5.3</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/em-websocket-0.5.3/" class="dropdown-item">EM-WebSocket</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Ethon 0.15.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/ethon-0.15.0/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/ethon-0.15.0/CHANGELOG/" class="dropdown-item">Changelog</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Ethon 0.9.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/ethon-0.9.0/" class="dropdown-item">Ethon [![Build Status](https://secure.travis-ci.org/typhoeus/ethon.png?branch=master)](http://travis-ci.org/typhoeus/ethon) [![Gem Version](https://badge.fury.io/rb/ethon.png)](http://badge.fury.io/rb/ethon)</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/ethon-0.9.0/CHANGELOG/" class="dropdown-item">Changelog</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Eventmachine 1.2.7</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/eventmachine-1.2.7/" class="dropdown-item">About EventMachine  [![Build Status](https://travis-ci.org/eventmachine/eventmachine.svg?branch=master)](https://travis-ci.org/eventmachine/eventmachine) [![Code Climate Maintainability](https://api.codeclimate.com/v1/badges/e9b0603462905d5b9118/maintainability)](https://codeclimate.com/github/eventmachine/eventmachine/maintainability)</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/eventmachine-1.2.7/CHANGELOG/" class="dropdown-item">Changelog</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Docs</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/eventmachine-1.2.7/docs/DocumentationGuidesIndex/" class="dropdown-item">EventMachine documentation guides #</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/eventmachine-1.2.7/docs/GettingStarted/" class="dropdown-item">@title Getting Started with Ruby EventMachine</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Execjs 2.7.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/execjs-2.7.0/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Execjs 2.8.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/execjs-2.8.1/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday 0.9.2</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-0.9.2/" class="dropdown-item">Faraday</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-0.9.2/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday 1.10.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-1.10.0/" class="dropdown-item">[![Faraday](./docs/assets/img/repo-card-slim.png)][website]</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-1.10.0/CHANGELOG/" class="dropdown-item">Faraday Changelog</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-1.10.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday em http 1.0.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-em_http-1.0.0/" class="dropdown-item">Faraday Em::Http adapter</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-em_http-1.0.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday em synchrony 1.0.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-em_synchrony-1.0.0/" class="dropdown-item">Faraday Em::Synchrony adapter</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-em_synchrony-1.0.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday excon 1.1.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-excon-1.1.0/" class="dropdown-item">Faraday Excon adapter</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-excon-1.1.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday httpclient 1.0.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-httpclient-1.0.1/" class="dropdown-item">Faraday HTTPClient adapter</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-httpclient-1.0.1/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday multipart 1.0.3</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-multipart-1.0.3/" class="dropdown-item">Faraday Multipart</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-multipart-1.0.3/CHANGELOG/" class="dropdown-item">Changelog</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-multipart-1.0.3/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday net http 1.0.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-net_http-1.0.1/" class="dropdown-item">Faraday Net::HTTP adapter</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-net_http-1.0.1/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday net http persistent 1.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-net_http_persistent-1.2.0/" class="dropdown-item">Faraday::NetHttpPersistent</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-net_http_persistent-1.2.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday patron 1.0.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-patron-1.0.0/" class="dropdown-item">Faraday Patron adapter</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-patron-1.0.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday rack 1.0.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-rack-1.0.0/" class="dropdown-item">Faraday Rack adapter</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-rack-1.0.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Faraday retry 1.0.3</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-retry-1.0.3/" class="dropdown-item">Faraday Retry</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-retry-1.0.3/CHANGELOG/" class="dropdown-item">Changelog</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/faraday-retry-1.0.3/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Ffi 1.15.5</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/ffi-1.15.5/" class="dropdown-item">Ruby-FFI https://github.com/ffi/ffi/wiki [![Build Status](https://travis-ci.com/ffi/ffi.svg?branch=master)](https://travis-ci.com/ffi/ffi) [![Build status Windows](https://ci.appveyor.com/api/projects/status/r8wxn1sd4s794gg1/branch/master?svg=true)](https://ci.appveyor.com/project/larskanis/ffi-aofqa/branch/master)</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/ffi-1.15.5/CHANGELOG/" class="dropdown-item">CHANGELOG</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Ext</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Ffi c</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Libffi</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/ffi-1.15.5/ext/ffi_c/libffi/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Ffi 1.9.14</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/ffi-1.9.14/" class="dropdown-item">ruby-ffi https://wiki.github.com/ffi/ffi [![Build Status](https://travis-ci.org/ffi/ffi.png?branch=master)](https://travis-ci.org/ffi/ffi)</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Gemoji 2.1.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/gemoji-2.1.0/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Gemoji 3.0.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/gemoji-3.0.1/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Github pages health check 1.1.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/github-pages-health-check-1.1.0/" class="dropdown-item">GitHub Pages Health Check</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/github-pages-health-check-1.1.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Github pages health check 1.17.9</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/github-pages-health-check-1.17.9/" class="dropdown-item">GitHub Pages Health Check</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/github-pages-health-check-1.17.9/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Html pipeline 2.14.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/html-pipeline-2.14.1/" class="dropdown-item">HTML::Pipeline [![Build Status](https://travis-ci.org/jch/html-pipeline.svg?branch=master)](https://travis-ci.org/jch/html-pipeline)</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/html-pipeline-2.14.1/CHANGELOG/" class="dropdown-item">CHANGELOG</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/html-pipeline-2.14.1/CONTRIBUTING/" class="dropdown-item">Contributing</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Http parser.rb 0.8.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/http_parser.rb-0.8.0/" class="dropdown-item">http_parser.rb</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Ext</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Ruby http parser</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Vendor</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Http parser</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser/vendor/http-parser/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Http parser java</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser/vendor/http-parser-java/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">I18n 0.7.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/i18n-0.7.0/" class="dropdown-item">Ruby I18n</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">I18n 0.9.5</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/i18n-0.9.5/" class="dropdown-item">Ruby I18n</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll 3.1.6</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-3.1.6/" class="dropdown-item">[Jekyll](http://jekyllrb.com/)</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Lib</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Site template</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-3.1.6/lib/site_template/about/" class="dropdown-item">About</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll 3.9.2</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-3.9.2/" class="dropdown-item">[Jekyll](https://jekyllrb.com/)</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Lib</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Site template</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-3.9.2/lib/site_template/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-3.9.2/lib/site_template/about/" class="dropdown-item">About</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Theme template</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Example</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-3.9.2/lib/theme_template/example/_post/" class="dropdown-item"> post</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll avatar 0.7.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-avatar-0.7.0/" class="dropdown-item">Jekyll Avatar</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Docs</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-avatar-0.7.0/docs/CODE_OF_CONDUCT/" class="dropdown-item">Contributor Covenant Code of Conduct</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-avatar-0.7.0/docs/CONTRIBUTING/" class="dropdown-item">Contributing to Jekyll Avatar</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-avatar-0.7.0/docs/SECURITY/" class="dropdown-item">Security Policy</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll commonmark 1.4.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-commonmark-1.4.0/History/" class="dropdown-item">History</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-commonmark-1.4.0/Readme/" class="dropdown-item">jekyll-commonmark</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll commonmark ghpages 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-commonmark-ghpages-0.2.0/" class="dropdown-item">jekyll-commonmark-ghpages</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll feed 0.15.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.15.1/" class="dropdown-item">Jekyll Feed plugin</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.15.1/History/" class="dropdown-item">History</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll feed 0.5.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.5.1/" class="dropdown-item">Jekyll Feed plugin</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.5.1/History/" class="dropdown-item">History</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Spec</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Fixtures</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> drafts</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.5.1/spec/fixtures/_drafts/2015-01-12-a-draft/" class="dropdown-item">2015 01 12 a draft</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> posts</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.5.1/spec/fixtures/_posts/2013-12-12-dec-the-second/" class="dropdown-item">December the twelfth, actually.</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.5.1/spec/fixtures/_posts/2014-03-02-march-the-second/" class="dropdown-item">2014 03 02 march the second</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.5.1/spec/fixtures/_posts/2014-03-04-march-the-fourth/" class="dropdown-item">2014 03 04 march the fourth</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.5.1/spec/fixtures/_posts/2015-01-18-jekyll-last-modified-at/" class="dropdown-item">2015 01 18 jekyll last modified at</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.5.1/spec/fixtures/_posts/2015-02-12-strip-newlines/" class="dropdown-item">The plugin will properly strip newlines.</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.5.1/spec/fixtures/_posts/2015-05-12-liquid/" class="dropdown-item">2015 05 12 liquid</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-feed-0.5.1/spec/fixtures/_posts/2015-05-18-author-detail/" class="dropdown-item">December the twelfth, actually.</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll gist 1.4.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-gist-1.4.0/" class="dropdown-item">Jekyll::Gist</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-gist-1.4.0/History/" class="dropdown-item">History</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll gist 1.5.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-gist-1.5.0/" class="dropdown-item">Jekyll::Gist</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-gist-1.5.0/History/" class="dropdown-item">History</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll paginate 1.1.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-paginate-1.1.0/" class="dropdown-item">Jekyll::Paginate</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-paginate-1.1.0/History/" class="dropdown-item">History</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll redirect from 0.11.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.11.0/" class="dropdown-item">JekyllRedirectFrom</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.11.0/History/" class="dropdown-item">History</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Spec</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Fixtures</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.11.0/spec/fixtures/multiple_redirect_tos/" class="dropdown-item">I have lots of redirect to urls</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.11.0/spec/fixtures/multiple_redirect_urls/" class="dropdown-item">I have lots of redirect urls</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.11.0/spec/fixtures/one_redirect_to/" class="dropdown-item">I am going somewhere else.</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.11.0/spec/fixtures/one_redirect_url/" class="dropdown-item">I only have one redirect url.</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> articles</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.11.0/spec/fixtures/_articles/redirect-me-plz/" class="dropdown-item">Please redirect me, sir.</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> authors</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.11.0/spec/fixtures/_authors/kansaichris/" class="dropdown-item">Kansaichris</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> posts</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.11.0/spec/fixtures/_posts/2014-01-03-redirect-me-plz/" class="dropdown-item">Please redirect me, sir.</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Tags</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.11.0/spec/fixtures/tags/how%20we%20work/" class="dropdown-item">How we work</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll redirect from 0.16.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/" class="dropdown-item">JekyllRedirectFrom</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/History/" class="dropdown-item">History</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Spec</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Fixtures</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/spec/fixtures/multiple_redirect_froms/" class="dropdown-item">I have lots of redirect urls</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/spec/fixtures/multiple_redirect_tos/" class="dropdown-item">I have lots of redirect to urls</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/spec/fixtures/one_redirect_from/" class="dropdown-item">I only have one redirect path</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/spec/fixtures/one_redirect_to_path/" class="dropdown-item">I am going somewhere external</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/spec/fixtures/one_redirect_to_url/" class="dropdown-item">I am going somewhere external</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> articles</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/spec/fixtures/_articles/redirect-me-plz/" class="dropdown-item">Please redirect me, sir.</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> authors</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/spec/fixtures/_authors/kansaichris/" class="dropdown-item">Kansaichris</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> posts</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/spec/fixtures/_posts/2014-01-03-redirect-me-plz/" class="dropdown-item">Please redirect me, sir.</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Tags</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-redirect-from-0.16.0/spec/fixtures/tags/how%20we%20work/" class="dropdown-item">How we work</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll seo tag 2.0.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-seo-tag-2.0.0/" class="dropdown-item">Jekyll SEO Tag</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll seo tag 2.8.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-seo-tag-2.8.0/History/" class="dropdown-item">History</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Docs</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-seo-tag-2.8.0/docs/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-seo-tag-2.8.0/docs/advanced-usage/" class="dropdown-item">Advanced usage</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-seo-tag-2.8.0/docs/installation/" class="dropdown-item">Installing Jekyll SEO Tag</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-seo-tag-2.8.0/docs/usage/" class="dropdown-item">Usage</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll sitemap 0.10.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/" class="dropdown-item">Jekyll Sitemap Generator Plugin</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/History/" class="dropdown-item">History</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Spec</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Fixtures</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> my collection</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/spec/fixtures/_my_collection/custom_permalink/" class="dropdown-item">Custom permalink</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/spec/fixtures/_my_collection/custom_permalink_2/" class="dropdown-item">Unique html name</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/spec/fixtures/_my_collection/this-has-non-standard-chars/" class="dropdown-item">URL contains characters that need to be URI encoded</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> posts</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/spec/fixtures/_posts/2013-12-12-dec-the-second/" class="dropdown-item">2013 12 12 dec the second</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/spec/fixtures/_posts/2014-03-02-march-the-second/" class="dropdown-item">2014 03 02 march the second</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/spec/fixtures/_posts/2014-03-04-march-the-fourth/" class="dropdown-item">2014 03 04 march the fourth</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/spec/fixtures/_posts/2014-05-11-exclude-this-post/" class="dropdown-item">2014 05 11 exclude this post</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-0.10.0/spec/fixtures/_posts/2015-01-18-jekyll-last-modified-at/" class="dropdown-item">2015 01 18 jekyll last modified at</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll sitemap 1.4.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/" class="dropdown-item">Jekyll Sitemap Generator Plugin</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/History/" class="dropdown-item">History</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Spec</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Fixtures</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/spec/fixtures/404/" class="dropdown-item">404</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> my collection</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/spec/fixtures/_my_collection/custom_permalink/" class="dropdown-item">Custom permalink</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/spec/fixtures/_my_collection/custom_permalink_2/" class="dropdown-item">Unique html name</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/spec/fixtures/_my_collection/this-has-non-standard-chars/" class="dropdown-item">URL contains characters that need to be URI encoded</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item"> posts</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/spec/fixtures/_posts/2013-12-12-dec-the-second/" class="dropdown-item">2013 12 12 dec the second</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/spec/fixtures/_posts/2014-03-02-march-the-second/" class="dropdown-item">2014 03 02 march the second</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/spec/fixtures/_posts/2014-03-04-march-the-fourth/" class="dropdown-item">2014 03 04 march the fourth</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/spec/fixtures/_posts/2014-05-11-exclude-this-post/" class="dropdown-item">2014 05 11 exclude this post</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-sitemap-1.4.0/spec/fixtures/_posts/2015-01-18-jekyll-last-modified-at/" class="dropdown-item">2015 01 18 jekyll last modified at</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll swiss 1.0.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-swiss-1.0.0/" class="dropdown-item">Swiss Jekyll Theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme architect 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-architect-0.2.0/" class="dropdown-item">The Architect theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme cayman 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-cayman-0.2.0/" class="dropdown-item">The Cayman theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme dinky 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-dinky-0.2.0/" class="dropdown-item">The Dinky theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme hacker 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-hacker-0.2.0/" class="dropdown-item">The Hacker theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme leap day 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-leap-day-0.2.0/" class="dropdown-item">The Leap day theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme merlot 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-merlot-0.2.0/" class="dropdown-item">The Merlot theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme midnight 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-midnight-0.2.0/" class="dropdown-item">The Midnight theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme minimal 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-minimal-0.2.0/" class="dropdown-item">The Minimal theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme modernist 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-modernist-0.2.0/" class="dropdown-item">The Modernist theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme primer 0.6.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-primer-0.6.0/" class="dropdown-item">The Primer theme</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-primer-0.6.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme slate 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-slate-0.2.0/" class="dropdown-item">The Slate theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme tactile 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-tactile-0.2.0/" class="dropdown-item">The Tactile theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll theme time machine 0.2.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-theme-time-machine-0.2.0/" class="dropdown-item">The Time machine theme</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Jekyll titles from headings 0.5.3</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-titles-from-headings-0.5.3/" class="dropdown-item">Jekyll Titles from Headings</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/jekyll-titles-from-headings-0.5.3/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Json 1.8.3</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/json-1.8.3/README-json-jruby/" class="dropdown-item">README json jruby</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Kramdown 1.11.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/kramdown-1.11.1/" class="dropdown-item">kramdown</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Doc</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/kramdown-1.11.1/doc/links/" class="dropdown-item">Links</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Kramdown 2.3.2</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/kramdown-2.3.2/" class="dropdown-item">kramdown</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Liquid 3.0.6</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/liquid-3.0.6/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/liquid-3.0.6/History/" class="dropdown-item">Liquid Version History</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Liquid 4.0.3</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/liquid-4.0.3/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/liquid-4.0.3/History/" class="dropdown-item">Liquid Change Log</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Listen 3.0.6</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/listen-3.0.6/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/listen-3.0.6/CHANGELOG/" class="dropdown-item">Moved to [GitHub releases](https://github.com/guard/listen/releases) page.</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/listen-3.0.6/CONTRIBUTING/" class="dropdown-item">CONTRIBUTING</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Listen 3.7.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/listen-3.7.1/" class="dropdown-item">Listen</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/listen-3.7.1/CHANGELOG/" class="dropdown-item">Moved to [GitHub releases](https://github.com/guard/listen/releases) page.</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/listen-3.7.1/CONTRIBUTING/" class="dropdown-item">CONTRIBUTING</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Mercenary 0.3.6</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/mercenary-0.3.6/" class="dropdown-item">Mercenary</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/mercenary-0.3.6/History/" class="dropdown-item">History</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Mini portile2 2.1.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/mini_portile2-2.1.0/" class="dropdown-item">MiniPortile</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/mini_portile2-2.1.0/CHANGELOG/" class="dropdown-item">CHANGELOG</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Mini portile2 2.8.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/mini_portile2-2.8.0/" class="dropdown-item">MiniPortile</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/mini_portile2-2.8.0/CHANGELOG/" class="dropdown-item">CHANGELOG</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/mini_portile2-2.8.0/SECURITY/" class="dropdown-item">Security and Vulnerability Reporting</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Minima 2.5.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/minima-2.5.1/" class="dropdown-item">minima</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Multipart post 2.0.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/multipart-post-2.0.0/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Multipart post 2.1.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/multipart-post-2.1.1/" class="dropdown-item">Multipart::Post</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Net dns 0.8.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/net-dns-0.8.0/" class="dropdown-item">Net::DNS</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/net-dns-0.8.0/CHANGELOG/" class="dropdown-item">Changelog</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Nokogiri 1.13.6</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.13.6/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.13.6/LICENSE-DEPENDENCIES/" class="dropdown-item">Vendored Dependency Licenses</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.13.6/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Gumbo parser</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.13.6/gumbo-parser/CHANGES/" class="dropdown-item">CHANGES</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Src</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.13.6/gumbo-parser/src/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Nokogiri 1.6.8</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.6.8/" class="dropdown-item">Nokogiri</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.6.8/CONTRIBUTING/" class="dropdown-item">Issue and Pull Request Guidelines</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.6.8/ROADMAP/" class="dropdown-item">Roadmap for API Changes</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.6.8/STANDARD_RESPONSES/" class="dropdown-item">Standard Responses to Requests</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.6.8/Y_U_NO_GEMSPEC/" class="dropdown-item">Y U NO GEMSPEC</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Octokit 4.22.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/octokit-4.22.0/" class="dropdown-item">Octokit</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/octokit-4.22.0/CONTRIBUTING/" class="dropdown-item">CONTRIBUTING</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/octokit-4.22.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Octokit 4.3.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/octokit-4.3.0/" class="dropdown-item">Octokit</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/octokit-4.3.0/CONTRIBUTING/" class="dropdown-item">CONTRIBUTING</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/octokit-4.3.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Public suffix 1.5.3</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/public_suffix-1.5.3/" class="dropdown-item">Public Suffix List</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/public_suffix-1.5.3/CHANGELOG/" class="dropdown-item">Changelog</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Public suffix 4.0.7</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/public_suffix-4.0.7/" class="dropdown-item">Public Suffix <small>for Ruby</small></a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/public_suffix-4.0.7/2.0-Upgrade/" class="dropdown-item">Welcome to PublicSuffix 2.0!</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/public_suffix-4.0.7/CHANGELOG/" class="dropdown-item">Changelog</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/public_suffix-4.0.7/SECURITY/" class="dropdown-item">Security Policy</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Rb fsevent 0.11.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/rb-fsevent-0.11.1/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Rb fsevent 0.9.7</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/rb-fsevent-0.9.7/" class="dropdown-item">Index</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Rb inotify 0.10.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/rb-inotify-0.10.1/" class="dropdown-item">rb-inotify</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/rb-inotify-0.10.1/LICENSE/" class="dropdown-item">The MIT License</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Rb inotify 0.9.7</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/rb-inotify-0.9.7/" class="dropdown-item">rb-inotify</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Rexml 3.2.5</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/rexml-3.2.5/" class="dropdown-item">REXML</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/rexml-3.2.5/NEWS/" class="dropdown-item">News</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Ruby2 keywords 0.0.5</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/ruby2_keywords-0.0.5/" class="dropdown-item">ruby2_keywords</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Rubyzip 2.3.2</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/rubyzip-2.3.2/" class="dropdown-item">rubyzip</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Safe yaml 1.0.4</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/safe_yaml-1.0.4/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/safe_yaml-1.0.4/CHANGES/" class="dropdown-item">CHANGES</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Safe yaml 1.0.5</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/safe_yaml-1.0.5/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/safe_yaml-1.0.5/CHANGES/" class="dropdown-item">CHANGES</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Sass 3.4.22</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-3.4.22/" class="dropdown-item">Sass [![Gem Version](https://badge.fury.io/rb/sass.png)](http://badge.fury.io/rb/sass) [![Inline docs](http://inch-ci.org/github/sass/sass.svg)](http://inch-ci.org/github/sass/sass)</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-3.4.22/CODE_OF_CONDUCT/" class="dropdown-item">CODE OF CONDUCT</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-3.4.22/CONTRIBUTING/" class="dropdown-item">CONTRIBUTING</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Vendor</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Listen</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-3.4.22/vendor/listen/" class="dropdown-item">Listen [![Gem Version](https://badge.fury.io/rb/listen.png)](http://badge.fury.io/rb/listen) [![Build Status](https://secure.travis-ci.org/guard/listen.png?branch=master)](http://travis-ci.org/guard/listen) [![Dependency Status](https://gemnasium.com/guard/listen.png)](https://gemnasium.com/guard/listen) [![Code Climate](https://codeclimate.com/github/guard/listen.png)](https://codeclimate.com/github/guard/listen) [![Coverage Status](https://coveralls.io/repos/guard/listen/badge.png?branch=master)](https://coveralls.io/r/guard/listen)</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-3.4.22/vendor/listen/CHANGELOG/" class="dropdown-item">Moved to [Github releases](https://github.com/guard/listen/releases) page.</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-3.4.22/vendor/listen/CONTRIBUTING/" class="dropdown-item">CONTRIBUTING</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Sass 3.7.4</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-3.7.4/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-3.7.4/CODE_OF_CONDUCT/" class="dropdown-item">CODE OF CONDUCT</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-3.7.4/CONTRIBUTING/" class="dropdown-item">CONTRIBUTING</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Sass listen 4.0.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-listen-4.0.0/" class="dropdown-item">This is a Fork</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-listen-4.0.0/CHANGELOG/" class="dropdown-item">Moved to [GitHub releases](https://github.com/guard/listen/releases) page.</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sass-listen-4.0.0/CONTRIBUTING/" class="dropdown-item">CONTRIBUTING</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Sawyer 0.7.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sawyer-0.7.0/" class="dropdown-item">Sawyer</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sawyer-0.7.0/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Sawyer 0.8.2</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sawyer-0.8.2/" class="dropdown-item">Sawyer</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/sawyer-0.8.2/LICENSE/" class="dropdown-item">LICENSE</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Thread safe 0.3.5</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/thread_safe-0.3.5/" class="dropdown-item">Threadsafe</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Thread safe 0.3.6</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/thread_safe-0.3.6/" class="dropdown-item">Threadsafe (Inactive, code moved to concurrent-ruby gem and repo.)</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Typhoeus 0.8.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/typhoeus-0.8.0/" class="dropdown-item">Typhoeus [![Build Status](https://img.shields.io/travis/typhoeus/typhoeus/master.svg)](https://travis-ci.org/typhoeus/typhoeus) [![Code Climate](https://img.shields.io/codeclimate/github/typhoeus/typhoeus.svg)](https://codeclimate.com/github/typhoeus/typhoeus) [![Gem Version](https://img.shields.io/gem/v/typhoeus.svg)](https://rubygems.org/gems/typhoeus)</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/typhoeus-0.8.0/CHANGELOG/" class="dropdown-item">Changelog</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/typhoeus-0.8.0/CONTRIBUTING/" class="dropdown-item">CONTRIBUTING</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/typhoeus-0.8.0/UPGRADE/" class="dropdown-item">Upgrade guide</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Typhoeus 1.4.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/typhoeus-1.4.0/" class="dropdown-item">Typhoeus [![Build Status](https://img.shields.io/travis/typhoeus/typhoeus/master.svg)](https://travis-ci.org/typhoeus/typhoeus) [![Code Climate](https://img.shields.io/codeclimate/maintainability/typhoeus/typhoeus.svg)](https://codeclimate.com/github/typhoeus/typhoeus) [![Gem Version](https://img.shields.io/gem/v/typhoeus.svg)](https://rubygems.org/gems/typhoeus)</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/typhoeus-1.4.0/CHANGELOG/" class="dropdown-item">Changelog</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/typhoeus-1.4.0/CONTRIBUTING/" class="dropdown-item">CONTRIBUTING</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/typhoeus-1.4.0/UPGRADE/" class="dropdown-item">Upgrade guide</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Tzinfo 1.2.2</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/tzinfo-1.2.2/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/tzinfo-1.2.2/CHANGES/" class="dropdown-item">CHANGES</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Tzinfo 1.2.9</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/tzinfo-1.2.9/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/tzinfo-1.2.9/CHANGES/" class="dropdown-item">CHANGES</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Unf 0.1.4</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/unf-0.1.4/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/unf-0.1.4/CHANGELOG/" class="dropdown-item">CHANGELOG</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Unf ext 0.0.8.1</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/unf_ext-0.0.8.1/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/unf_ext-0.0.8.1/CHANGELOG/" class="dropdown-item">CHANGELOG</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Unicode display width 1.8.0</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/unicode-display_width-1.8.0/" class="dropdown-item">Index</a>
+</li>
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/unicode-display_width-1.8.0/CHANGELOG/" class="dropdown-item">CHANGELOG</a>
+</li>
+    </ul>
+  </li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Zeitwerk 2.5.4</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../openpgp.org/vendor/bundle/ruby/2.6.0/gems/zeitwerk-2.5.4/" class="dropdown-item">Zeitwerk</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href=".." class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../emzy_message/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/pgp-guide/pgp.guide/edit/master/docs/pgp_dns.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#the-complete-guide-to-publishing-pgp-keys-in-dns" class="nav-link">The complete guide to publishing PGP keys in DNS</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#types-of-pgp-key-records" class="nav-link">Types of PGP Key Records</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#further-steps" class="nav-link">Further Steps</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="the-complete-guide-to-publishing-pgp-keys-in-dns">The complete guide to publishing PGP keys in DNS</h2>
+<h3 id="introduction">Introduction</h3>
+<p>Publishing PGP keys is a pain. There are many disjoint keyservers, three or four networks of which, which do (or don't) share information with each other. Some are corporate, some are private. And it's a crapshoot as to whose key is going to be on which, or worse, which will have the latest copy of a person's key.</p>
+<p>For a long time, GPG has had a way to publish keys in DNS, but it hasn't been well documented. This document hopes to change that.</p>
+<ul>
+<li>
+<p>After reading this, you should:</p>
+</li>
+<li>
+<p>Know the three ways to publish a key</p>
+</li>
+<li>
+<p>Have at least a couple tools to do so</p>
+</li>
+<li>
+<p>Have learned a bit more about DNS</p>
+</li>
+</ul>
+<p>The target audience for this guide is a technical one. It's expected you understand what DNS is, and what an RFC and a resource record is.</p>
+<p>There are three ways to publish a PGP key in DNS. Most modern versions of GPG can retrieve from all three, although it's not enabled by default. There are no compile-time options you need to enable it, and it's simple to turn on. Of the three key-publishing methods, there are two that you probably shouldn't use at the same time, and there are advantages and disadvantages to each, which I hope to outline below, both in general and for each method.</p>
+<h3 id="advantages-to-dns-publishing-of-your-keys">Advantages to DNS publishing of your keys</h3>
+<p>It's universal. Your DNS is your own, and you don't have to worry about which network of vastly-disconnected keyservers is caching your key.</p>
+<p>Using DNS does not stop you from publishing via other means.</p>
+<p>If you run an organization, you can easily publish all your employee-keys via this method, and in the same step, define a signing-policy, such that a person need only assign trust to your organization's "keysigning key" (or the CEO's key, or the CTO's), without the trouble of running a keyserver.</p>
+<p>DNSSEC can be (somewhat) used as an additional trust-path vector. More on this in the notes at the bottom.</p>
+<p>You do not have to be searching DNS for keys in order to publish. On the same note, you do not have to be publishing in this manner to search for others there.</p>
+<h3 id="disadvantages-to-dns-publishing">Disadvantages to DNS publishing</h3>
+<p>If you don't control your own DNS (or have a good relationship with your DNS admin), this isn't going to be as easy or even possible. Ideally, you want to be running BIND.</p>
+<p>With two of the three methods listed here, you're going to need to be able to put a CERT record into your DNS. Most web-enabled DNS tools probably will not give you this ability. The third uses TXT records, which SPF has caused to be fairly universal in web-interfaces. However, it's also the least standards-defined of the three.</p>
+<p>Using at least some of these methods, it's not always a "set it and forget it" procedure. You may need to periodically re-export your key and re-publish it, especially if you gain new signatures.</p>
+<p>Using some of these methods, you're going to be putting some pretty large, pretty unwiedly lines in your DNS zones. 
+Not everyone will easily be able to retrieve them, but again, you can still publish other ways.</p>
+<p>Using some of these methods, DNS is just a means to an end: you still need to publish your key elsewhere, like a webpage, and the DNS records just point at it.</p>
+<p>Initial verifications of most of these seem to imply that only DSA keys are supported, although I welcome feedback. It seems the community is trying to get RSA keys to make a comeback. They're the only type supported by the gpg2.0 card, and they are the default keytype. There was a while where they weren't, though. Since writing this document, I've discovered that "new" RSA keys work, but ancient RSA keys with no subkeys tend to misbehave.</p>
+<h3 id="turning-on-key-fetching-via-dns">Turning on key-fetching via DNS</h3>
+<p>Inside your GPG "options" file, find the "auto-key-locate" line, and add "cert" and/or "pka" to the options.</p>
+<p>auto-key-locate cert pka (as well as other methods, like keyserver URLs)
+Don't be surprised if a lot of people don't use this method.</p>
+<p>Note that you can also turn on two options during signature verification. They are specified in a "verify-options" clause in your config file, or on the command line, and they are (right from the GPG manpage):</p>
+<p>pka-lookups
+    Enable PKA lookups to verify sender addresses. Note that
+    PKA is based on DNS, and so enabling this option may dis-
+    close  information  on when and what signatures are veri-
+    fied or to whom data is encrypted. This is similar to the
+    "web bug" described for the auto-key-retrieve feature.
+And:</p>
+<p>pka-trust-increase
+    Raise  the  trust in a signature to full if the signature
+    passes PKA validation. This option is only meaningful  if
+    pka-lookups is set.
+You can also use the same options on the command line (as you'll see in this document).</p>
+<h2 id="types-of-pgp-key-records">Types of PGP Key Records</h2>
+<h3 id="dns-pka-records">DNS PKA Records</h3>
+<p>Relevant RFCs: None that I can find. 
+Other Docs: The GPG source and mailing lists.</p>
+<h4 id="advantages">Advantages</h4>
+<p>It's a TXT record. Easy to put in a zonefile with most management software.</p>
+<p>No special tools required to generate, just three simple pieces of data.</p>
+<p>Since it uses a special subzone, you can manage the _pka namespace in a separate zonefile.</p>
+<p>GPG has an option, when verifying a signature, to look up these records (--verify-options pka-lookups), so it's doubly useful, both from a distribution and a verification point.</p>
+<h4 id="disadvantages">Disadvantages</h4>
+<p>As with IPGP certs, you're at the mercy of the URL. This doesn't put your key in DNS, just the location of it, and the fingerprint. Some clients may not be able to support https or http 1.1.</p>
+<p>Not RFC standard.</p>
+<h4 id="howto">Howto</h4>
+<p>Figure out which key you want to export:</p>
+<p>%gpg --list-keys danm@prime.gushi.org
+Warning: using insecure memory!
+pub   1024D/624BB249 2000-10-02  &lt;-- I'm going to use this one.
+uid                  Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+uid                  Daniel Mahoney (Secondary Email) <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#103;&#117;&#115;&#104;&#105;&#64;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#103;&#117;&#115;&#104;&#105;&#64;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+sub   2048g/DE20C529 2000-10-02</p>
+<p>pub   1024R/309C17C5 1997-05-08
+uid                  Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+Export the key to a file (I use keyid.pub.asc, but it can be anything)</p>
+<p>%gpg --export --armor 624BB249 &gt; 624BB249.pub.asc
+Warning: using insecure memory!
+%
+Get the fingerprint for your key:</p>
+<p>%gpg --list-keys --fingerprint 624BB249</p>
+<p>gpg: WARNING: using insecure memory!
+gpg: please see http://www.gnupg.org/faq.html for more information
+pub   1024D/624BB249 2000-10-02
+      Key fingerprint = C206 3054 5492 95F3 3490  37FF FBBE 5A30 624B B249 &lt;-- That bit is your fingerprint.
+uid                  Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+uid                  Daniel Mahoney (Secondary Email) <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#103;&#117;&#115;&#104;&#105;&#64;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#103;&#117;&#115;&#104;&#105;&#64;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+sub   2048g/DE20C529 2000-10-02
+Copy the file somewhere, like your webspace. It need not live on the same server. It needs to be accessable by the url you create in the next step.</p>
+<p>%cp 624BB249.pub.asc public_html/danm.pubkey.txt
+Make up your text record. The format is:</p>
+<p>danm._pka.prime.gushi.org.  TXT       <br />
+"v=pka1;fpr=C2063054549295F3349037FFFBBE5A30624BB249;uri=http://prime.gushi.org/danm.pubkey.txt"
+We'll take this in several parts. The record label is simply the email address with "._pka." replacing the "@". 
+danm@prime.gushi.org becomes danm._pka.prime.gushi.org. Don't forget the trailing dot, if you're using the fully qualified name. I recommend sticking with fully-qualified, for simplicity.</p>
+<p>The body of the record is also simple. The v portion is just a version. There's only one version as far as I can tell, 'pka1'. The fpr is the fingerprint, with all whitespace stripped, and in uppercase. The uri is the location a key can be retrieved from. All the "names" are lowercase, separated by semicolons.</p>
+<p>Publish the above record in your DNS. Bump your serial number and reload your nameserver. If you're using DNSSEC, re-sign your zone.</p>
+<h4 id="testing">Testing</h4>
+<p>Most of the tests we're going to do for these are essentially the same activity. See if our DNS server is handing out an answer, and then see if GPG can retrieve it.</p>
+<p>A simple dig:</p>
+<p>%dig +short danm._pka.prime.gushi.org. TXT
+"v=pka1\;fpr=C2063054549295F3349037FFFBBE5A30624BB249\;uri=http://prime.gushi.org/danm.pubkey.txt"
+(The backslashes before the semicolons are normal). Other than that, it seems to make sense and match what I put in.)</p>
+<p>Test it with GPG. Rather than messing around with, and adding-from and deleting from live keyrings, you can do:</p>
+<p>%echo "foo" | gpg --no-default-keyring --keyring /tmp/gpg-$$ --encrypt --armor --auto-key-locate pka -r you@you.com
+(where you@you.com is the address of your primary key.)</p>
+<p>The /tmp/gpg-$$ creates a random file named after your PID. What you should see, and what I see, is something like this:</p>
+<p>gpg: WARNING: using insecure memory!
+gpg: please see http://www.gnupg.org/faq.html for more information
+gpg: keyring <code>/tmp/gpg-39996' created
+gpg: requesting key 624BB249 from http server prime.gushi.org
+gpg: key 624BB249: public key "Daniel P. Mahoney &lt;danm@prime.gushi.org&gt;" imported
+gpg: public key of ultimately trusted key CF45887D not found
+gpg: 3 marginal(s) needed, 1 complete(s) needed, PGP trust model
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+gpg: Total number processed: 1
+gpg:               imported: 1
+gpg: automatically retrieved</code>danm@prime.gushi.org' via PKA
+gpg: DE20C529: There is no assurance this key belongs to the named user</p>
+<p>pub  2048g/DE20C529 2000-10-02 Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+Primary key fingerprint: C206 3054 5492 95F3 3490  37FF FBBE 5A30 624B B249
+     Subkey fingerprint: CE40 B786 81E2 5CB9 F7D3  1318 9488 EB58 DE20 C529</p>
+<p>It is NOT certain that the key belongs to the person named
+in the user ID.  If you <em>really</em> know what you are doing,
+you may answer the next question with yes.</p>
+<p>Use this key anyway? (y/N) y
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.4.10 (FreeBSD)</p>
+<p>hQIOA5SI61jeIMUpEAf/UotgWP8VQC9VTY36HaZeXO1CTFk90x0qlPrAhJk9YaoA
+2eHNKZSoHKqaLjzTbaWnWHnNZu0IllIS+qrAwNeIAhswfzDoc8Q9+/4sGSR3LmxA
+8SEwrJIvLmGVbqJEtnH8TTHIEao/lpL/d+ul4nLfbXRn0NW+MsaCAi8UsjbLlJeV
+n4p0GQlpDoZCE55DTwMzfWMT84YVwuXTesuN+i7sSyJn2hT1rXuK1BCVcsgTcKdy
+QhIo3EfKBlfFp74yiU7QCmlAujD6U6a93mmxezPIHVx/WGXgPExVRGgEzfT/tUcI
+IQ2xMDUv4BF05hgm04GPGCbBY431j4UkdWWI6bvMLwgA2i01NmflH/6Z8+ss6J1M
+e3RWnR7TPl5lDkXFBtLGAzO+HrsC5A32SbkTw+WsljCQLifJ2EalfoJ1QGY4Sp3v
+H2YunwZLVPTc+D2JnrXfqNmi5zYZio8by3c8L0CgWdMwZ7PPxZpTOLN77/MIjBkJ
+EBb8Z6SZCgzTIhN5z56ZgWFvmSKf1vKkeUcrgxMs+DnA+XqBMJ9w520JwoTLjJza
+syrlYVhd+ktY21DYB9OJ5MZx2HMAtkUDRAzW1zoLcehk1kdZNzhpjU5hqSjT8/GN
+trKFeqkmKemrq2GvMNyJyrEOB8e7KgbmXa95YKH0Wh2D4SWpXukegyCspmY4tDE+
+uckaFSao+48g8D6vs1irGSxBRjyhD/jPDblrgpo=
+=NbgW
+-----END PGP MESSAGE-----
+%
+The "insecure memory" warning is a silly warning that the only way to turn off is to run GPG setuid root.</p>
+<p>You can see in the output that the key comes from PKA.</p>
+<p>The "it is NOT certain" warning has nothing to do with the fact that it came from DNS. You will get that warning every time you use that key (or any gpg key) until you have edited it and assigned ownertrust to it, or until the key is signed with a trusted signature, either from your personal web of trust, or from a signing service like the pgp.com directory.</p>
+<p>Ask other people to run it for you and send you the resulting blob. You should be able to decrypt it with your private key.</p>
+<h3 id="pgp-cert-records">PGP CERT Records</h3>
+<p>Also known as: The "big" CERT record. 
+Relevant RFCs: RFC 2538, RFC 4398, specifically sections 2.1 and 3.3</p>
+<h4 id="advantages_1">Advantages</h4>
+<p>DNS is all you need. You don't have to host the key elsewhere. As a DNS nerd, this strikes me as very cool.</p>
+<p>Suprisingly easy to verify with dig, if you have a base64 converter handy (openssl includes one)</p>
+<h4 id="disadvantages_1">Disadvantages</h4>
+<p>These records can get big. Really big. Especially if you have photo-ids on your keys. You can play with export-options to shrink it somewhat. Big dns packets may require EDNS, or dns-over-tcp, which not everyone supports, but support is becoming more widespread as a result of DNSSEC awareness.</p>
+<p>Requires the make-dns-cert tool, which isn't built by default.</p>
+<p>Requires you to have some control over your actual zonefile. Most control panels won't cut it.</p>
+<p>Make-dns-cert currently generates a very ugly record for this.</p>
+<h4 id="how-to">How to</h4>
+<p>As before, the first step is to figure out which key we want.</p>
+<p>%gpg --list-keys danm@prime.gushi.org
+Warning: using insecure memory!
+pub   1024D/624BB249 2000-10-02  &lt;-- I'm going to use this one.
+uid                  Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+uid                  Daniel Mahoney (Secondary Email) <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#103;&#117;&#115;&#104;&#105;&#64;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#103;&#117;&#115;&#104;&#105;&#64;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+sub   2048g/DE20C529 2000-10-02</p>
+<p>pub   1024R/309C17C5 1997-05-08
+uid                  Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+We export the key, but this time, it needs to be binary.</p>
+<p>%gpg --export 624BB249 &gt; 624BB249.pub.bin
+Warning: using insecure memory!
+%
+We run make-dns-cert on it. make-dns-cert comes with no manual or docs, but running with -h gives you all the clue you need.</p>
+<p>make-dns-cert
+    -f      fingerprint
+    -u      URL
+    -k      key file
+    -n      DNS name
+So then, make-dns-cert -n danm.prime.gushi.org. -k 624BB249.pub.bin</p>
+<p>$```make-dns-cert -n danm.prime.gushi.org. -k 624BB249.pub.bin</p>
+<pre><code>
+</code></pre>
+<p>danm.prime.gushi.org.   TYPE37  # 1298 0003 0000 00 9901A20439D8DAF1110400F770EC6AA006076334BEC6DB6FBB237DC194BC0AB8
+302C8953F04C28FC2085235D4F10EFA027234FBD63D142CCADD5213AD2B79A22C89ED9B4138370D8220D0F987F993A5364A4A7AC3D42F3765C384
+71DDD0FF3372E4AE6F7BEE1E18EF464A0BEB5BBE860A08238891455EBE7CB53D567E981F78ADBD263206B0493ADCB74DD00A0FF0E9A1CD245415E
+CEF59435162AFCE4CDD14BC70400EA38FF501256E773DEA299404854D99F4EDB2757AA911A9C77C68AB8D6622E517A556C43D21F0523C568F016C
+D0DB89EF435F0D53B4E07434213F899E6578955DC2C147931E7B6901C9FD8A02705417D69A879B3CC196D2AC2EAEF311192EE89ABAF5A60942167
+B4625735FCBDFB5DE0E3AC1236A53FA4D7CDD7D75F5DE85AF50400867D9546B28B79AF10541053CF4AB06A6171BFD21458BFD12AF1AE2B2401CAD
+8851661F8AF6602F80EDAC99C79616BE1F910F4156242003779C68D7A079A8B18F89DD293E1B247E7420471300A4A0730AA61DE281CCC211FC405
+A0A8A79877999FF9042AD892AB927DA371E8883BBB370AB7A97841408C3486BB18598CF2559BB42844616E69656C20502E204D61686F6E6579203
+C64616E6D407072696D652E67757368692E6F72673E884E04101102000E050239D8DAF1040B030102021901000A0910FBBE5A30624BB249FA2E00
+9B057503ED498695AE5ED73CA1B98EBAEE13F717E500A0921E0D92724459100266FEBBC29E911C8B0F530BB43244616E69656C204D61686F6E657
+920285365636F6E6461727920456D61696C29203C67757368694067757368692E6F72673E8860041311020020050245D49FD7021B23060B090807
+030204150208030416020301021E01021780000A0910FBBE5A30624BB249158400A082C8AF43DA8B85F740D6B1A6E9FF0B4490520B8C00A08F77D
+21FBF86C842963E8090DC0646D1DD7F95C9B9020D0439D8DAF4100800F64257B7087F081772A2BAD6A942F305E8F95311394FB6F16EB94B3820DA
+01A756A314E98F4055F3D007C6CB43A994ADF74C648649F80C83BD65E917D4A1D350F8F5595FDC76524F3D3D8DDBCE99E1579259CDFDB8AE744FC
+5FC76BC83C5473061CE7CC966FF15F9BBFD915EC701AAD35B9E8DA0A5723AD41AF0BF4600582BE5F488FD584E49DBCD20B49DE49107366B336C38
+0D451D0F7C88B31C7C5B2D8EF6F3C923C043F0A55B188D8EBB558CB85D38D334FD7C175743A31D186CDE33212CB52AFF3CE1B1294018118D7C84A
+70A72D686C40319C807297ACA950CD9969FABD00A509B0246D3083D66A45D419F9C7CBD894B221926BAABA25EC355E9320B3B00020207FF5E1A3C
+C5DA00E1E94EC8EF6C7FE9B49D944C71D8BBC817DD8E64A7344B9E48392E0B833B3B1DB7E6D5A38BE2826DEF0060F78C6417871EAF1CFBCBC47D2
+7E93718D975E0A3A36D868C021D6B771740CE2918307D69D614BBF0632DC31932EA31397A7F3B04618C9A76C2F38265C7037E303EDD8AEF03D069
+208E3FE9C4EA77D83E6311ED36C013D58C54E914B263A459E22D463A0288510C4752B99C163EEA0A55686979691AB0D9F9AA0C06C834446D7A723
+EC534D819301382621ACF8930C74E9FD28C8797718AEC2C30CF601E24194B799234104A3D6239657B1D4AD545BDAA637F61541435CB51B4D138FB
+F55E1A9FD2EED860E4459D6795B6FCCA23155A8846041811020006050239D8DAF4000A0910FBBE5A30624BB249415A009E37BCFDC64E76CBF6A86
+82B85EA161BD1DFB793DF00A0C471BC7B9723535CD855D8FF1EB93F01E251B698</p>
+<pre><code>
+The program prints that all on one line.
+
+Immediately, we notice a few things.
+
+The record type isn't &quot;CERT&quot;, it's &quot;TYPE37&quot;. This confused me for a while until I discovered RFC3597 Basically, it's a way that a DNS server can handle a resource 
+record it doesn't know about, by giving it some special fields like the &quot;#&quot;, as well as a length (which is the 1298 you see there).
+
+The rest of the record is on one line. I wrapped it for the purposes of brevity. If I were using this in a zonefile, I would need to be careful that I wrapped it on a byte-boundary (every two characters is a byte). If I miss the boundary, named will refuse to load it, dnssec-signzone won't touch it, etc.
+
+So the thing is ugly and you don't want to touch it. The easiest way to work with it is to drop all that into a file:
+
+$```make-dns-cert -n danm.prime.gushi.org. -k 624BB249.pub.bin &gt; 624BB249.big.cert
+</code></pre>
+<p>And then either read it into your editor, or tack it on like this:</p>
+<p>%cat 624BB249.big.cert &gt;&gt; your.zonefile
+Be sure to make a backup first. Either way, you never have to copy/paste the raw hex and worry about newlines being inserted where you don't want them.</p>
+<p>Before you reload your zone, you might want to use named-checkzone on it first:</p>
+<p>prime# named-checkzone gushi.org gushi.org.hosts
+zone gushi.org/IN: loaded serial 2009102909
+OK
+prime#
+Voice of experience: You may want to dial the TTL (which controls how long servers will cache your data) way down on the record above. It's not hard, just put a number before the TYPE37, with a space, i.e:</p>
+<p>danm.prime.gushi.org. 30 TYPE37
+This way if it all goes terribly wrong, or you need to make changes, it won't be cached for very long.</p>
+<p>If it looks okay, bump your serial number and reload.</p>
+<h4 id="testing_1">Testing</h4>
+<p>As above, you can dig, but you won't be able to easily read the results:</p>
+<p>$```
+dig +short danm.prime.gushi.org CERT</p>
+<pre><code>
+</code></pre>
+<p>PGP 0 0 mQGiBDnY2vERBAD3cOxqoAYHYzS+xttvuyN9wZS8CrgwLIlT8Ewo/CCF I11PEO+gJyNPvWPRQsyt1SE60reaIsie2bQTg3DYIg0PmH+ZOlNkpKes 
+PULzdlw4Rx3dD/M3Lkrm977h4Y70ZKC+tbvoYKCCOIkUVevny1PVZ+mB 94rb0mMgawSTrct03QCg/w6aHNJFQV7O9ZQ1Fir85M3RS8cEAOo4/1AS 
+Vudz3qKZQEhU2Z9O2ydXqpEanHfGirjWYi5RelVsQ9IfBSPFaPAWzQ24 nvQ18NU7TgdDQhP4meZXiVXcLBR5Mee2kByf2KAnBUF9aah5s8wZbSrC 
+6u8xEZLuiauvWmCUIWe0Ylc1/L37XeDjrBI2pT+k183X119d6Fr1BACG fZVGsot5rxBUEFPPSrBqYXG/0hRYv9Eq8a4rJAHK2IUWYfivZgL4DtrJ 
+nHlha+H5EPQVYkIAN3nGjXoHmosY+J3Sk+GyR+dCBHEwCkoHMKph3igc zCEfxAWgqKeYd5mf+QQq2JKrkn2jceiIO7s3CrepeEFAjDSGuxhZjPJV 
+m7QoRGFuaWVsIFAuIE1haG9uZXkgPGRhbm1AcHJpbWUuZ3VzaGkub3Jn PohOBBARAgAOBQI52NrxBAsDAQICGQEACgkQ+75aMGJLskn6LgCbBXUD 
+7UmGla5e1zyhuY667hP3F+UAoJIeDZJyRFkQAmb+u8KekRyLD1MLtDJE YW5pZWwgTWFob25leSAoU2Vjb25kYXJ5IEVtYWlsKSA8Z3VzaGlAZ3Vz 
+aGkub3JnPohgBBMRAgAgBQJF1J/XAhsjBgsJCAcDAgQVAggDBBYCAwEC HgECF4AACgkQ+75aMGJLskkVhACggsivQ9qLhfdA1rGm6f8LRJBSC4wA 
+oI930h+/hshClj6AkNwGRtHdf5XJuQINBDnY2vQQCAD2Qle3CH8IF3Ki utapQvMF6PlTETlPtvFuuUs4INoBp1ajFOmPQFXz0AfGy0OplK33TGSG 
+SfgMg71l6RfUodNQ+PVZX9x2Uk89PY3bzpnhV5JZzf24rnRPxfx2vIPF RzBhznzJZv8V+bv9kV7HAarTW56NoKVyOtQa8L9GAFgr5fSI/VhOSdvN 
+ILSd5JEHNmszbDgNRR0PfIizHHxbLY7288kjwEPwpVsYjY67VYy4XTjT NP18F1dDox0YbN4zISy1Kv884bEpQBgRjXyEpwpy1obEAxnIByl6ypUM 
+2Zafq9AKUJsCRtMIPWakXUGfnHy9iUsiGSa6q6Jew1XpMgs7AAICB/9e GjzF2gDh6U7I72x/6bSdlExx2LvIF92OZKc0S55IOS4Lgzs7Hbfm1aOL 
+4oJt7wBg94xkF4cerxz7y8R9J+k3GNl14KOjbYaMAh1rdxdAzikYMH1p 1hS78GMtwxky6jE5en87BGGMmnbC84JlxwN+MD7diu8D0Gkgjj/pxOp3 
+2D5jEe02wBPVjFTpFLJjpFniLUY6AohRDEdSuZwWPuoKVWhpeWkasNn5 qgwGyDREbXpyPsU02BkwE4JiGs+JMMdOn9KMh5dxiuwsMM9gHiQZS3mS 
+NBBKPWI5ZXsdStVFvapjf2FUFDXLUbTROPv1Xhqf0u7YYORFnWeVtvzK IxVaiEYEGBECAAYFAjnY2vQACgkQ+75aMGJLsklBWgCeN7z9xk52y/ao 
+aCuF6hYb0d+3k98AoMRxvHuXI1Nc2FXY/x65PwHiUbaY</p>
+<pre><code>
+It's still ugly, but it's not AS ugly because it's base64, which includes spaces, at least, and is easier to search for a pattern. Base64 can also be easily wrapped on any boundary, which is nice.
+
+You can run your existing exported key through a base64 converter, like the one built into the openssl binary, if you want to compare:
+
+</code></pre>
+<p>%cat 624BB249.pub.bin | openssl enc -base64</p>
+<pre><code></code></pre>
+<p>mQGiBDnY2vERBAD3cOxqoAYHYzS+xttvuyN9wZS8CrgwLIlT8Ewo/CCFI11PEO+g
+JyNPvWPRQsyt1SE60reaIsie2bQTg3DYIg0PmH+ZOlNkpKesPULzdlw4Rx3dD/M3
+Lkrm977h4Y70ZKC+tbvoYKCCOIkUVevny1PVZ+mB94rb0mMgawSTrct03QCg/w6a
+(...etc...)
+OPv1Xhqf0u7YYORFnWeVtvzKIxVaiEYEGBECAAYFAjnY2vQACgkQ+75aMGJLsklB
+WgCeN7z9xk52y/aoaCuF6hYb0d+3k98AoMRxvHuXI1Nc2FXY/x65PwHiUbaY</p>
+<pre><code>
+Now, while you could compare things byte-by-byte here, what I've done as a &quot;casual check&quot; is just pick random strings in the text and see if they match up. For example, you can see that &quot;reaIsie2&quot; is present in both. They both start with and end with similar strings on every line. The real test, of course, is to see if GPG recognizes it as a valid key.
+
+By the way, since I use DNSSEC, dnssec-signzone rewrites this record into the proper &quot;presentation format&quot; for me, which is base64. If you want a similar function, you can use named-compilezone to get some of the same effects, or you can use the shell script I provide later in this document, with which you don't even need make-dns-cert.
+
+Testing with gpg
+
+As above, the command to test this is remarkably simple:
+
+</code></pre>
+<p>%rm /tmp/gpg-*</p>
+<pre><code></code></pre>
+<p>%echo "foo" | gpg --no-default-keyring --keyring /tmp/gpg-$$ --encrypt --armor --auto-key-locate cert -r danm@prime.gushi.org</p>
+<pre><code>
+</code></pre>
+<p>gpg: keyring <code>/tmp/gpg-39996' created
+gpg: key 624BB249: public key "Daniel P. Mahoney &lt;danm@prime.gushi.org&gt;" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+gpg: automatically retrieved</code>danm@prime.gushi.org' via DNS CERT
+gpg: DE20C529: There is no assurance this key belongs to the named user</p>
+<p>pub  2048g/DE20C529 2000-10-02 Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+Primary key fingerprint: C206 3054 5492 95F3 3490  37FF FBBE 5A30 624B B249
+     Subkey fingerprint: CE40 B786 81E2 5CB9 F7D3  1318 9488 EB58 DE20 C529</p>
+<pre><code>
+It is NOT certain that the key belongs to the person named
+in the user ID.  If you *really* know what you are doing,
+you may answer the next question with yes.
+
+
+Use this key anyway? (y/N) y
+
+</code></pre>
+<p>-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.4.10 (FreeBSD)</p>
+<p>hQIOA5SI61jeIMUpEAf/Sx7MKWm+e9EpUTSrDaBp4nJfDcBeqbYJulPRbDZz7eVW
+2+ol6sG0jWjuirbG1YppZccEr9mgqaQujdSXb/bleD8POS0TEWuf3aPswFQvHf90
+NLEzHt6BnfLoeobXXxyCflNaGX8zW+XgJtwZqAc2+jietuz8MOUhrf5m17CsW/wZ
+IuEqwaek+K1irJp+w3rhaE08Jzb/S4CCifeW9J3mK57chQoPOu7Nz3rY666YKp/3
+9T9StOgmFiNpvtFPNy4N7hHMHvbQwRsKlnkl+a7n0Aq2+OF4d1+/k2EE4uSGgcz0
+oHvee8DnuOx3P92mO4Jz5/0O0lwBD7I51iOjzUurTAgAiIM5sHV8/QFCVzH9Ule+
+gd8Wo5momcphkU/AXpce5Xgi/Vm4oGQ0x0queii8afUrzkpeN5SuwgQfAdOPiXW5
+2bo527jBllxOxjeBasfky82XheTnLzbAQNvQNTEM9zE7zCl1LQJUZEJ1hVzcOevI
+s+cm/AaGII9VkrAtSt3aLSRZuRJHFmhGvYd2Hz5WzcV1YFjXXP1eLwfetDBlaeB9
+/K5v4hZBkIZPbHX0DcLVrP96mCIT4wCBYSJw+I6n0E6Fz3IfybQG2HMfqWp966/c
+00ijx/aRDh42Dr/fTropuzzFzQr7weYDa1JnN3Zoftv6Zb/n+NcrmMiDCH8jJV6E
+uMkaeeB5Mv7ssDQ9kPhO989CHFcznrE1lgOxjX8=
+=NTLY
+-----END PGP MESSAGE-----</p>
+<pre><code>%
+Okay, as above, try to decrypt that with your private key.
+
+### IPGP CERT Records
+
+Also known as: The &quot;little&quot; or &quot;short&quot; CERT record. (These terms are purely my own). 
+Relevant RFCs: RFC 2538, RFC 4398, specifically sections 2.1 and 3.3
+
+IPGP certs are interesting. It's basically the same pieces of infomation that are in the PKA record, as above, except that it's supported by an RFC. Despite the RFC compliance, I am not sure if any non-gpg client knows to look for them. However, because it's a DNS cert, make-dns-cert encodes the information in binary, and your DNS server will see it in base64. So verifying it visually is harder than verifying either of the above.
+
+#### Advantages
+
+Small, easy-to-transmit records.
+
+Can use the same uri as the PKA record.
+
+#### Disadvantages
+
+Relies on the URI scheme. I haven't yet been able to get a definitive list of what uri schemes are supported, although I've seen http and finger. I've also seen reports that unless gpg is compiled against curl, http 1.1 is not supported (what this actually means is that any host that supports SSL will probably work, because of some of the nuances of SSL).
+
+With PGP certs and IPGP certs, GPG will only parse the first key it gets, so if you publish both, and one doesn't work, there's no failover. I've argued that this should be fixed.
+
+Requires make-dns-cert, which is not built in GPG by default. (But see &quot;A Better Way&quot; below)
+
+Requires publication in your main DNS zone.
+
+Despite being RFC compliant, GPG has additional trust vectors for PKA but not this, despite the fact that they share basically the same information.
+
+Harder to verify with dig.
+
+### Howto
+
+</code></pre>
+<ol>
+<li>Note that some of these steps are redundant. If you're already doing a PKA key, skip to step 5.</li>
+</ol>
+<pre><code>
+</code></pre>
+<ol>
+<li>Dig:</li>
+</ol>
+<p>%gpg --list-keys danm@prime.gushi.org
+Warning: using insecure memory!
+pub   1024D/624BB249 2000-10-02  &lt;-- I'm going to use this one.
+uid                  Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+uid                  Daniel Mahoney (Secondary Email) <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#103;&#117;&#115;&#104;&#105;&#64;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#103;&#117;&#115;&#104;&#105;&#64;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+sub   2048g/DE20C529 2000-10-02</p>
+<p>pub   1024R/309C17C5 1997-05-08
+uid                  Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a></p>
+<pre><code>
+</code></pre>
+<ol>
+<li>Export the key to a file (I use keyid.pub.asc, but it can be anything)</li>
+</ol>
+<p>%gpg --export --armor 624BB249 &gt; 624BB249.pub.asc
+Warning: using insecure memory!
+%</p>
+<pre><code>
+</code></pre>
+<ol>
+<li>Get the fingerprint for your key:</li>
+</ol>
+<p>%gpg --list-keys --fingerprint 624BB249</p>
+<p>gpg: WARNING: using insecure memory!
+gpg: please see http://www.gnupg.org/faq.html for more information
+pub   1024D/624BB249 2000-10-02
+      Key fingerprint = C206 3054 5492 95F3 3490  37FF FBBE 5A30 624B B249 &lt;-- That bit is your fingerprint.
+uid                  Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+uid                  Daniel Mahoney (Secondary Email) <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#103;&#117;&#115;&#104;&#105;&#64;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#103;&#117;&#115;&#104;&#105;&#64;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+sub   2048g/DE20C529 2000-10-02</p>
+<pre><code>
+</code></pre>
+<ol>
+<li>As above, run make-dns-cert. This time we use the -n, -f, and -u options:</li>
+</ol>
+<p>%make-dns-cert -n danm.prime.gushi.org. -f C2063054549295F3349037FFFBBE5A30624BB249 -u http://prime.gushi.org/danm.pubkey.txt
+danm.prime.gushi.org.   TYPE37  # 64 0006 0000 00 14 C2063054549295F3349037FFFBBE5A30624BB249 
+687474703A2F2F7072696D652E67757368692E6F72672F64616E6D2E7075626B65792E747874
+%</p>
+<pre><code></code></pre>
+<ol>
+<li>Put the above in DNS. All on one line. Optionally add a TTL.</li>
+</ol>
+<pre><code></code></pre>
+<ol>
+<li>IMPORTANT: make sure you don't have any other CERT records with the same label (i.e. a "big" cert, as above). While it won't break things, you have no control over which (of multiple) people will get.</li>
+</ol>
+<pre><code></code></pre>
+<ol>
+<li>Reload your zone, and test. Testing will probably look VERY MUCH like the above, but here are the steps anyway:</li>
+</ol>
+<pre><code>### Testing
+
+</code></pre>
+<ol>
+<li>Dig:</li>
+</ol>
+<p>%dig +short danm.prime.gushi.org CERT
+6 0 0 FMIGMFRUkpXzNJA3//u+WjBiS7JJaHR0cDovL3ByaW1lLmd1c2hpLm9y Zy9kYW5tLnB1YmtleS50eHQ=
+Sadly, I haven't come across an easy way to decipher it yet, but there's always gpg.</p>
+<pre><code></code></pre>
+<ol>
+<li>GPG:</li>
+</ol>
+<p>Since we're fetching the same kind of record, the command is exactly the same as before:</p>
+<p>%echo "foo" | gpg --no-default-keyring --keyring /tmp/gpg-$$ --encrypt --armor --auto-key-locate cert -r  danm@prime.gushi.org
+gpg: WARNING: using insecure memory!
+gpg: please see http://www.gnupg.org/faq.html for more information
+gpg: keyring <code>/tmp/gpg-39996' created
+gpg: requesting key 624BB249 from http server prime.gushi.org
+gpg: key 624BB249: public key "Daniel P. Mahoney &lt;danm@prime.gushi.org&gt;" imported
+gpg: public key of ultimately trusted key CF45887D not found
+gpg: 3 marginal(s) needed, 1 complete(s) needed, PGP trust model
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+gpg: Total number processed: 1
+gpg:               imported: 1
+gpg: automatically retrieved</code>danm@prime.gushi.org' via DNS CERT
+gpg: DE20C529: There is no assurance this key belongs to the named user</p>
+<p>pub  2048g/DE20C529 2000-10-02 Daniel P. Mahoney <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;">&#100;&#97;&#110;&#109;&#64;&#112;&#114;&#105;&#109;&#101;&#46;&#103;&#117;&#115;&#104;&#105;&#46;&#111;&#114;&#103;</a>
+Primary key fingerprint: C206 3054 5492 95F3 3490  37FF FBBE 5A30 624B B249
+     Subkey fingerprint: CE40 B786 81E2 5CB9 F7D3  1318 9488 EB58 DE20 C529</p>
+<p>It is NOT certain that the key belongs to the person named
+in the user ID.  If you <em>really</em> know what you are doing,
+you may answer the next question with yes.</p>
+<p>Use this key anyway? (y/N) y
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.4.10 (FreeBSD)</p>
+<p>hQIOA5SI61jeIMUpEAgApZurJi3hZmDaUFjB2j93eX/lTl96xq6T//sz6nT6jcTx
+IPnq1RN8IrIQPjDBByHdqOZBT5hhblr9xi7NKIIv3W4q4L0z0fJx7NERPZNvn/H0
+DkTwfDgAvCRxcKjenpLSwKZFwLjyfS7wjlDr3HFX7Tila0hbzplHslvgTE0QMcd7
+7oNmEyOL3z+yZr/afQGp2wpzDv4YB9zOiNHcHcenqX0yrtiqKozZ9VAldi53rb/q
+f38lwInbveyAcEQkE2iFwhRsbMR4VLcsBoxY6D9brsBprt23ey8Rnv+bQ9IAR0VN
+/WYzU4zUUqb8HmpNFXQLEgH8A2BENw+bxkVYHjSfWQf/cBSGAzfBQQVJ7qp4tN0Z
+FRVe51dokbU4NM9tGBdCzFHWARVkQX/Ulekd4F3sxBR/sum1UOT2xl2THVBz7/Pq
+UCrTRPA0uH4dIbL5JpfGZhqsJ079+wmUWUtJIiO2wXi7ePEA/DrBC6p7jlmjyYN/
+AeSKcPoTeLX+zryV5bECx4RO6S56EEcy0Ns0pASGMsgUnKL6Adrv3Y6ea3ZAOQMn
+H9Uo28BKTKNUvUaBpN8cV8jIbKYPPW9i04kvEQRqs5rdamERCY1vVTqYTrcLsNqz
+fF3KopX+V82X1oE2QuGdFfd8mK57ZXJL3VRUrfohQjhfYNKzougiP46rQQv79MYT
+j8kazWyJUuufm6NVco1/35Zdp1UhHu8qTgXxrjo=
+=zY9G
+-----END PGP MESSAGE-----
+%</p>
+<pre><code>Strangely, the output doesn't say what PKA does (a PKA retrieval has a line about fetching via HTTP), however, by checking my webserver logs, I can see it retrieved it from there:
+
+</code></pre>
+<p>%tail -200 /usr/local/apache/logs/prime.gushi.org.log | grep pubkey | tail -1
+prime.gushi.org 72.9.101.130 - - [28/Oct/2009:23:50:43 -0400] "GET /danm.pubkey.txt HTTP/1.1" 200 4337 "-" "-"
+%
+```
+As usual, test decryption, etc. You're done.</p>
+<h2 id="further-steps">Further Steps</h2>
+<p>Figure out which of these are useful to you, and use them.</p>
+<p>When someone asks for your public key, tell them to run the above command instead of mailing them your key or sending them a keyserver URL.</p>
+<p>Consider using the pka-related verify-options.</p>
+<p>Look into embracing DNSSEC. With a signed root, there's a good trust-path vector here. Who knows, maybe some day GPG will be dnssec-aware so it will give more credit to a secure DNS transaction. Without a signed root, there are still ways to have those who care about security use it, through services such as ISC's DLV registry.</p>
+<p>On DNSSEC: At present, GPG cannot see the difference between an insecure response (one from an unsigned zone) and a correctly validated one from a signed zone. (In a signed zone, an unsigned or malformed will simply get a SERVFAIL dns response). Look into sponsoring development of GPG to make it as an application more aware of this.</p>
+<h3 id="a-better-way-to-generate-records">A better way to generate records</h3>
+<p>In reading over a lot of these commands, I've come across a few problems with the tools involved. They either require you to assemble large records by hand, or manipulate huge files.</p>
+<p>DNS has also come a long way since these tools were written, and RFCs have solidified that have determined the "presentation format" (i.e. the "master file format") of what CERT records should look like.</p>
+<p>On top of everything, the make-dns-cert tool is not built by default, and is not present in most binary distributions (RPM's, deb packages, FreeBSD's ports).</p>
+<p>Thus, I took it upon myself to rewrite make-dns-cert as a shell script.</p>
+<h3 id="advantages_2">Advantages</h3>
+<p>Extracts your key for you (takes a keyid as the argument).</p>
+<p>Formats all three record types for you, you can pipe it right into your zone file.</p>
+<p>Takes email address as an argument, generates record label.</p>
+<p>No compiling needed.</p>
+<p>Should work with most systems. Requires openssl and sed, a few other standard utilities.</p>
+<p>Generates base64-ified CERT records, split into easy, manageable pieces.</p>
+<p>Generates DNS-friendly comments, so repeating tasks are easy to reference.</p>
+<p>(Eventually) available as a tarball, or as a paste-and-go script.</p>
+<p>Arguments are in logical DNS record order emailaddress keyid [url].</p>
+<p>Will generate an IPGP CERT record without a URI (this is legal per RFC4398).</p>
+<p>You can see sample output here, and you can view the script itself here. Depending on your MIME settings, you can probably get a download link if you go here. If you see the script rather than getting a download prompt, you can just save-as.</p>
+<p>README, Changelog, TODO coming soon.</p>
+<h3 id="other-notes">Other notes</h3>
+<p>I'm not 100 percent sure (mainly because I haven't tried), but with IPGP cert, and PKA, I believe I could in theory point at a keyserver directly, for example, specify a uri of http://pgp.mit.edu:11371/pks/lookup?op=get&amp;search=0xB0307039309C17C5. I'm a bit dubious about the question marks and equals-signs, or if I might have to uri-encode things. It's something to be tried.</p>
+<p>I'm trying to convince the GPG people that this would be much better adopted if the make-dns-cert tool was built/included by default, or if its function were included in gpg rather than a third-party tool. This is analagous as to how dnssec-keygen is used to generate SSHFP DNS records.</p>
+<p>It doesn't do any actual cryptography, just some binary conversion, so in theory it could be rewritten in pure-perl, so there's nothing to compile.</p>
+<p>I've made the argument to the GPG developers that if multiple CERT records are available, all should be tried if one fails. So far, if multiple exist, only the first received is parsed, and of course, DNS round-robins the answers by default.</p>
+<p>It took me quite a lot of trial and error to realize that there's a difference between "modern" RSA keys, like this:</p>
+<pre><code>%gpg --list-keys --fingerprint gushi@prime.gushi.org
+pub   2048R/CF45887D 2009-10-29
+      Key fingerprint = FCB0 485E 050D DDFA 83C6  76E3 E722 3C05 CF45 887D
+uid                  Gushi Test &lt;gushi@prime.gushi.org&gt;
+sub   2048R/C9761244 2009-10-29
+</code></pre>
+<p>and ancient RSA keys like this pgp2.6.2 monster:</p>
+<pre><code>%gpg --list-keys --fingerprint danm@prime.gushi.org
+pub   1024R/309C17C5 1997-05-08
+       Key fingerprint = 04 4B 1A 2E C4 62 95 73  73 A4 EA D0 08 A4 45 76
+uid                  Daniel P. Mahoney &lt;danm@prime.gushi.org&gt;
+</code></pre>
+<p>Note the lack of a subkey there. Note the weird fingerprint. I have not been able to get this key to properly export with gpg. If someone knows the Deep Magic, let me know.</p>
+<h3 id="references">References</h3>
+<h4 id="blog-posts-and-list-threads">Blog posts and list threads</h4>
+<p>While researching this I came across little more than a few blog posts, and a few short discussions on the gpg-devel mailing list.</p>
+<p>A blog entry that seems to have things mostly right.</p>
+<p>GPG Mailing List Discussion which seems to date to when these features were first added.</p>
+<p>My own thread on the gnupg-users mailing list that led up to this doc.</p>
+<p>A slideshow of a talk given on PKA (really the only doc I could find with regard to PKA). Note that this is a postscript doc, for reasons I cannot fathom.</p>
+<h4 id="rfcs">RFCs</h4>
+<p>RFC 3597 defines the odd format of the records that make-dns-cert generates, if it confuses you.</p>
+<p>RFC 2538, which was superseded by RFC 4398, defines the format for a CERT record.</p>
+<h4 id="todo">Todo</h4>
+<p>At least one GPG enthusiast has suggested to me that any tools I write to handle keys should simply be able to insert them using nsupdate. I don't disagree, but there's a complicated metric there as some of these require manipulation of a site's main zone, or at the very least, many subzones. In doing this I'd also like to find out a bit about how to do nsupdate with sig(0) and KEY records, which with the right policies would mean I could do this without touching named.conf. That may be the subject of a whole other howto.</p>
+<p>(Done) I need to get the shell script cleaned up a bit more, and generate proper docs, and start tracking it with version control.</p>
+<p>I should probably get the gumption up to formally license all this stuff. For right now, I declare it under the ISC License.</p>
+<p>I'd like to track down the full list of supported URI types for PKA/IPGP CERT records. There doesn't seem to be a defined standard for it.</p>
+<h4 id="epilogue">Epilogue</h4>
+<h5 id="about-the-author">About the author</h5>
+<p>Dan Mahoney is a Systems Admin in the Bay Area, California. In his spare time he enjoys thinking for those brief fleeting moments what he would do if he had more free time. Keyid 624BB249, or email address danm@prime.gushi.org.</p>
+<h5 id="about-this-document">About this Document</h5>
+<p>This document was written in gnu nano, and HTML was generated using Markdown.</p>
+<p>Markdown rocks.</p>
+<p>Originally published on my livejournal at http://gushi.livejournal.com/524199.html, its main home is at http://www.gushi.org/make-dns-cert/HOWTO.html, which is where later versions will be published.</p>
+<p>Free to use, comments to the above email address are welcome.</p>
+<p>$Id: HOWTO.txt,v 1.6 2010/05/19 20:14:49 danm Exp $</p>
+<p>Valid XHTML 1.0 Strict</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
