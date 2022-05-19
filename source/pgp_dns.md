@@ -1,3 +1,13 @@
+<!--
+REF: https://www.gushi.org/make-dns-cert/HOWTO.html
+-->
+<!-- Indent
+<div style="padding-left: 20px;">
+TEXT1
+</br></br>
+TEXT2
+</br></br></div>
+-->
 ## The complete guide to publishing PGP keys in DNS
 
 ### Introduction
@@ -14,19 +24,13 @@ For a long time, GPG has had a way to publish keys in DNS, but it hasn't been we
 
 * Have learned a bit more about DNS
 
-<div style="padding-left: 20px;">
 The target audience for this guide is a technical one. It's expected you understand what DNS is, and what an RFC and a resource record is.
-</br></br>
-There are three ways to publish a PGP key in DNS. Most modern versions of GPG can retrieve from all three, although it's not enabled by default. There are no compile-time options you need to enable it, and it's simple to turn on. Of the three key-publishing methods, there are two that you probably shouldn't use at the same time, and there are advantages and disadvantages to each, which I hope to outline below, both in general and for each method.
-</br></br></div>
 
-<!--
-<div style="padding-left: 20px;">
-TEXT1
-</br></br>
-TEXT2
-</br></br></div>
--->
+There are three ways to publish a PGP key in DNS. Most modern versions of GPG can retrieve from all three, although it's not enabled by default.
+
+There are no compile-time options you need to enable it, and it's simple to turn on.
+
+Of the three key-publishing methods, there are two that you probably shouldn't use at the same time, and there are advantages and disadvantages to each, which I hope to outline below, both in general and for each method.
 
 ### Advantages to DNS publishing of your keys
 
@@ -105,26 +109,32 @@ Not RFC standard.
 
 Figure out which key you want to export:
 
-%gpg --list-keys danm@prime.gushi.org
+```
+gpg --list-keys danm@prime.gushi.org
 Warning: using insecure memory!
 pub   1024D/624BB249 2000-10-02  <-- I'm going to use this one.
 uid                  Daniel P. Mahoney <danm@prime.gushi.org>
 uid                  Daniel Mahoney (Secondary Email) <gushi@gushi.org>
 sub   2048g/DE20C529 2000-10-02
 
-
 pub   1024R/309C17C5 1997-05-08
 uid                  Daniel P. Mahoney <danm@prime.gushi.org>
+```
+
 Export the key to a file (I use keyid.pub.asc, but it can be anything)
 
-%gpg --export --armor 624BB249 > 624BB249.pub.asc
+```
+gpg --export --armor 624BB249 > 624BB249.pub.asc
 Warning: using insecure memory!
-%
+```
+
 Get the fingerprint for your key:
 
-%gpg --list-keys --fingerprint 624BB249
+```
+gpg --list-keys --fingerprint 624BB249
+```
 
-
+```
 gpg: WARNING: using insecure memory!
 gpg: please see http://www.gnupg.org/faq.html for more information
 pub   1024D/624BB249 2000-10-02
@@ -132,15 +142,35 @@ pub   1024D/624BB249 2000-10-02
 uid                  Daniel P. Mahoney <danm@prime.gushi.org>
 uid                  Daniel Mahoney (Secondary Email) <gushi@gushi.org>
 sub   2048g/DE20C529 2000-10-02
+```
+
 Copy the file somewhere, like your webspace. It need not live on the same server. It needs to be accessable by the url you create in the next step.
 
-%cp 624BB249.pub.asc public_html/danm.pubkey.txt
+```
+cp 624BB249.pub.asc public_html/danm.pubkey.txt
+```
+
 Make up your text record. The format is:
 
+```
 danm._pka.prime.gushi.org.  TXT
 "v=pka1;fpr=C2063054549295F3349037FFFBBE5A30624BB249;uri=http://prime.gushi.org/danm.pubkey.txt"
-We'll take this in several parts. The record label is simply the email address with "._pka." replacing the "@".
-danm@prime.gushi.org becomes danm._pka.prime.gushi.org. Don't forget the trailing dot, if you're using the fully qualified name. I recommend sticking with fully-qualified, for simplicity.
+```
+
+We'll take this in several parts.
+
+The record label is simply the email address with "._pka." replacing the "@".
+
+```
+danm@prime.gushi.org becomes danm._pka.prime.gushi.org.
+```
+
+<span style="color:red">
+*Don't forget the trailing dot, if you're using the fully qualified name.*
+</br>
+*I recommend sticking with fully-qualified, for simplicity.*
+</span>
+
 
 The body of the record is also simple. The v portion is just a version. There's only one version as far as I can tell, 'pka1'. The fpr is the fingerprint, with all whitespace stripped, and in uppercase. The uri is the location a key can be retrieved from. All the "names" are lowercase, separated by semicolons.
 
